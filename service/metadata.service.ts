@@ -8,8 +8,6 @@ import 'rxjs/Rx';
 import { MDDefinition } from '../object/metadata/MDDefinition';
 import { MDInstanceDefinition } from '../object/metadata/MDInstanceDefinition';
 import { OutgoingMetadataInstance } from '../object/metadata-form/OutgoingMetadataInstance';
-import { MetadataFormParser } from '../parser/metadata-form.parser';
-import { MetadataForm } from '../object/metadata-form/MetadataForm';
 import { PegasusStore } from '../store/pegasus.store';
 import { MDElement } from '../object/metadata/MDElement';
 import { MetadataDefinitionList } from '../object/metadata/MetadataDefinitionList';
@@ -72,26 +70,22 @@ export class MetadataService {
       });
   }
 
-  addMetadataInstance(taxonomy: string, form: MetadataForm, username: string) {
-    const payload = MetadataFormParser.parseToOutgoing(form, this.definition);
-    const id = this.getIDs(form);
+  addMetadataInstance(taxonomy: string, outgoing: OutgoingMetadataInstance, id: string, username: string) {
     const user_header = new Headers();
     user_header.append('Content-Type', 'application/json');
     user_header.append('username', username);
 
     return this.http.post(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json`,
-      payload, { headers: user_header}).toPromise()
+      outgoing, { headers: user_header}).toPromise()
   }
 
-  updateMetadataInstance(taxonomy: string, form: MetadataForm, username: string) {
-    const payload = MetadataFormParser.parseToOutgoing(form, this.definition);
-    const id = this.getIDs(form);
+  updateMetadataInstance(taxonomy: string, outgoing: OutgoingMetadataInstance, id: string, username: string) {
     const user_header = new Headers();
     user_header.append('Content-Type', 'application/json');
     user_header.append('username', username);
 
     return this.http.post(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json&override=true`,
-      payload, { headers: user_header}).toPromise()
+      outgoing, { headers: user_header}).toPromise()
   }
 
   loadInstanceLinks(taxonomy: string, username: string) {
@@ -172,22 +166,5 @@ export class MetadataService {
 
       this.linksFromDefinitionHelper(element.elements, username);
     }
-  }
-
-  private getIDs(form: MetadataForm): string {
-    return form.elements
-    .filter(e => e.multiple[0] != null)
-    .filter(e => e.multiple[0].uriParameter != null)
-    .sort((a, b) => {
-      if (a.multiple[0].uriParameter < b.multiple[0].uriParameter) {
-        return -1;
-      } else if (a.multiple[0].uriParameter > b.multiple[0].uriParameter) {
-        return 1;
-      } else {
-        return 0;
-      }
-    })
-    .map(e => e.multiple[0].valueGroup.value)
-    .join('/');
   }
 }
