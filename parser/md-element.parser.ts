@@ -25,6 +25,10 @@ export class MDElementParser {
             [].concat(raw['element']).forEach(e => elements.push(MDElementParser.parse(e)));
         }
 
+        const requiredLanguages = [];
+        if (raw['required-language'] !== undefined) {
+            [].concat(raw['required-language']).forEach(rl => requiredLanguages.push({name: rl['@name']}))
+        }
 
         const element: MDElement = {
             format: raw['@format'],
@@ -41,7 +45,8 @@ export class MDElementParser {
             displayName: displayNameJSON ? MDDescriptionParser.parse(displayNameJSON) : null,
             pattern: raw['@pattern'],
             enums: enums,
-            elements: elements
+            elements: elements,
+            requiredLanguages: requiredLanguages
         };
 
         return element;

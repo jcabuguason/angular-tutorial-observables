@@ -61,7 +61,9 @@ export class MetadataService {
     user_header.append('Content-Type', 'application/json');
     user_header.append('username', username);
 
-    this.http.get(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}/?${version}&format=json`)
+    const versionParam = version ? `version=${version}` : ''
+
+    this.http.get(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}/?${versionParam}&format=json`)
       .toPromise()
       .then(result => {
         result = result.json();

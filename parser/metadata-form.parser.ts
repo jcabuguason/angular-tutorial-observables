@@ -62,7 +62,7 @@ export class MetadataFormParser {
     if (dateValue == null) {
       return null;
     }
-    if (timeValue === '') {
+    if (timeValue === '' || timeValue == null) {
         timeValue = 'T00:00:00.000Z';
     } else {
       timeValue = 'T'.concat(timeValue).concat('Z');
