@@ -59,7 +59,7 @@ export class MetadataService {
     user_header.append('Content-Type', 'application/json');
     user_header.append('username', username);
 
-    const versionParam = version ? `version=${version}` : ''
+    const versionParam = version ? `version=${version}` : '';
 
     this.http.get(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}/?${versionParam}&format=json`)
       .toPromise()
@@ -76,7 +76,7 @@ export class MetadataService {
     user_header.append('username', username);
 
     return this.http.post(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json`,
-      outgoing, { headers: user_header}).toPromise()
+      outgoing, { headers: user_header}).toPromise();
   }
 
   updateMetadataInstance(taxonomy: string, outgoing: OutgoingMetadataInstance, id: string, username: string) {
@@ -85,7 +85,7 @@ export class MetadataService {
     user_header.append('username', username);
 
     return this.http.post(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json&override=true`,
-      outgoing, { headers: user_header}).toPromise()
+      outgoing, { headers: user_header}).toPromise();
   }
 
   loadInstanceLinks(taxonomy: string, username: string) {
