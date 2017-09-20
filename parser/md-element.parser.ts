@@ -10,9 +10,11 @@ export class MDElementParser {
         // TODO: description format changes for eaach metadata
         const description = [].concat(raw['description']);
         const descriptionJSON = description
+            .filter(obj => obj != null)
             .find(obj => obj['@name'] === 'description');
 
         const displayNameJSON = description
+            .filter(obj => obj != null)
             .find(obj => obj['@name'] === 'display-name');
 
         const enums: string[] = [];
