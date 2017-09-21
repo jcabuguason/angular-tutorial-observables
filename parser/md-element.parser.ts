@@ -45,7 +45,7 @@ export class MDElementParser {
             value: raw['@value'],
             description: descriptionJSON ? MDDescriptionParser.parse(descriptionJSON) : null,
             displayName: displayNameJSON ? MDDescriptionParser.parse(displayNameJSON) : null,
-            pattern: raw['@pattern'],
+            pattern: String(raw['@pattern']),
             enums: enums,
             elements: elements,
             requiredLanguages: requiredLanguages
