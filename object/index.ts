@@ -8,3 +8,4 @@ export { MDLanguage } from './metadata/MDLanguage';
 export { MetadataDefinitionList } from './metadata/MetadataDefinitionList';
 export { MetadataDefinitionHistory } from './metadata/MetadataDefinitionHistory';
 export { MetadataInstanceHistory } from './metadata/MetadataInstanceHistory';
+export { LanguageConstants } from './LanguageConstants';
