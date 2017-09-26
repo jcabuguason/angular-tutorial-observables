@@ -6,5 +6,9 @@ export interface MDInstanceElement {
     name: string;
     uom: string;
     value: string;
+    language: {
+        english: string,
+        french: string
+    }
     instelements: MDInstanceElement[];
 }

@@ -27,9 +27,12 @@ export class MDElementParser {
             [].concat(raw['element']).forEach(e => elements.push(MDElementParser.parse(e)));
         }
 
-        const requiredLanguages = [];
+        let english: boolean;
+        let french: boolean;
         if (raw['required-language'] !== undefined) {
-            [].concat(raw['required-language']).forEach(rl => requiredLanguages.push({name: rl['@name']}))
+            const requiredLanguages = [].concat(raw['required-language']).map(lang => lang['@name']);
+            english = requiredLanguages.indexOf('en') !== -1;
+            french = requiredLanguages.indexOf('fr') !== -1;
         }
 
         const element: MDElement = {
@@ -37,7 +40,7 @@ export class MDElementParser {
             group: raw['@group'],
             id: raw['@id'],
             index: raw['@index'],
-            languageSensitive: raw['@language-sensitive'],
+            languageSensitive: raw['@language-sensitive'] === 'true' ? true : false,
             max: String(raw['@max']),
             min: String(raw['@min']),
             name: raw['@name'],
@@ -48,7 +51,10 @@ export class MDElementParser {
             pattern: raw['@pattern'],
             enums: enums,
             elements: elements,
-            requiredLanguages: requiredLanguages
+            requiredLanguages: {
+                english: english,
+                french: french
+            }
         };
 
         return element;

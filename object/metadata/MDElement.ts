@@ -20,5 +20,8 @@ export interface MDElement {
     pattern?: string;
     enums?: string[];
     elements?: MDElement[];
-    requiredLanguages?: { name: 'en'|'fr' }[];
+    requiredLanguages?: { 
+        english: boolean;
+        french: boolean;
+    };
 }
