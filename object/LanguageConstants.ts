@@ -38,5 +38,49 @@ export const LanguageConstants = {
   'instance_version': {
     'en': 'Instance Version',
     'fr': 'Version de L\'instance'
+  },
+  'add_metadata': {
+    'en': 'Add Metadata Instance',
+    'fr': 'Ajouter une instance de métadonnées'
+  },
+  'reason_for': {
+    'en': 'Reason for change',
+    'fr': 'Raison du changement'
+  },
+  'effective_start': {
+    'en': 'Effective start',
+    'fr': 'Démarrage effectif'
+  },
+  'effective_end': {
+    'en': 'Effective end',
+    'fr': 'Fin effective'
+  },
+  'taxonomy': {
+    'en': 'Taxonomy',
+    'fr': 'Taxonomie'
+  },
+  'collapse_all': {
+    'en': 'Collapse All',
+    'fr': 'Réduire tout'
+  },
+  'update_metadata': {
+    'en': 'Update Metadata Instance',
+    'fr': 'Mise à jour de l\'instance de métadonnées'
+  },
+  'instance_id': {
+    'en': 'Instance ID',
+    'fr': 'ID de l\'instance'
+  },
+  'submit': {
+    'en': 'Submit',
+    'fr': 'Soumettre'
+  },
+  'view_metadata': {
+    'en': 'View Metadata Instance',
+    'fr': 'Afficher l\'instance de métadonnées'
+  },
+  'query_param': {
+    'en': 'Please insert a query parameter for an instance of ',
+    'fr': 'Veuillez insérer un paramètre de requête pour une instance de '
   }
 }
