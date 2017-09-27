@@ -1,18 +1,42 @@
 export const LanguageConstants = {
-  'main': ['Metadata Instance', 'Instance de Métadonnées'],
-  'add': ['Add', 'Ajouter'],
-  'view': ['View', 'Vue'],
-  'update': ['Update', 'Mettre à jour'],
-  'definition': ['Definition', 'Définition'],
-  'metadata': ['Metadata', 'Métadonnées'],
-  'welcome': [
-    'Pegasus is capable of managing metadata instances with the following features:',
-    'Pegasus est capable de gérer les instances de métadonnées avec les fonctionnalités suivantes:'
-  ],
-  'noneFound': [
-    'No instances found for this definition. Please choose a different one.',
-    'Aucune occurrence n\'a été trouvée pour cette définition. Choisissez un autre.'
-  ],
-  'definition_version': ['Definition Version', 'Version de Définition'],
-  'instance_version': ['Instance Version', 'Version de L\'instance'],
+  'main': {
+    'en': 'Metadata Instance',
+    'fr': 'Instance de Métadonnées'
+  },
+  'add': {
+    'en': 'Add',
+    'fr': 'Ajouter'
+  },
+  'view': {
+    'en': 'View',
+    'fr': 'Vue'
+  },
+  'update': {
+    'en': 'Update',
+    'fr': 'Mettre à jour'
+  },
+  'definition': {
+    'en': 'Definition',
+    'fr': 'Définition'
+  },
+  'metadata': {
+    'en': 'Metadata',
+    'fr': 'Métadonnées'
+  },
+  'welcome': {
+    'en': 'Pegasus is capable of managing metadata instances with the following features:',
+    'fr': 'Pegasus est capable de gérer les instances de métadonnées avec les fonctionnalités suivantes:'
+  },
+  'noneFound': {
+    'en': 'No instances found for this definition. Please choose a different one.',
+    'fr': 'Aucune occurrence n\'a été trouvée pour cette définition. Choisissez un autre.'
+  },
+  'definition_version': {
+    'en': 'Definition Version',
+    'fr': 'Version de Définition'
+  },
+  'instance_version': {
+    'en': 'Instance Version',
+    'fr': 'Version de L\'instance'
+  }
 }
