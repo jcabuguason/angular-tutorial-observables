@@ -82,5 +82,47 @@ export const LanguageConstants = {
   'query_param': {
     'en': 'Please insert a query parameter for an instance of ',
     'fr': 'Veuillez insérer un paramètre de requête pour une instance de '
+  },
+  'language': {
+    'en': 'English',
+    'fr': 'Français'
+  },
+  'contact': {
+    'en': 'Contact Us',
+    'fr': 'Contactez nous'
+  },
+  'about': {
+    'en': 'About',
+    'fr': 'Sur'
+  },
+  'about_this': {
+    'en': 'About this site',
+    'fr': 'À propos de ce message'
+  },
+  'questions': {
+    'en': 'Questions or comments?',
+    'fr': 'Questions ou commentaires?'
+  },
+  'about_pegasus': {
+    'en': 'About Pegasus',
+    'fr': 'À propos de Pegasus'
+  },
+  'about_web': {
+    'en': 'About the Web Standards',
+    'fr': 'À propos des normes Web'
+  },
+  'stay_connected': {
+    'en': 'Stay connected',
+    'fr': 'Rester connecté'
+  },
+  'stability': {
+    'en': 'DMS Stability',
+    'fr': 'Stabilité DMS'
+  },
+  'tranparency': {
+    'en': 'Transparency',
+    'fr': 'Transparence'
   }
+
+
 }
