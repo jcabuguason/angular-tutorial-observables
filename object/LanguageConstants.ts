@@ -122,5 +122,9 @@ export const LanguageConstants = {
   'transparency': {
     'en': 'Transparency',
     'fr': 'Transparence'
+  },
+  'date_modified': {
+    'en': 'Date Modified',
+    'fr': 'Date Modifiée'
   }
 }
