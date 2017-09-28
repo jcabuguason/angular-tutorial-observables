@@ -119,10 +119,8 @@ export const LanguageConstants = {
     'en': 'DMS Stability',
     'fr': 'Stabilité DMS'
   },
-  'tranparency': {
+  'transparency': {
     'en': 'Transparency',
     'fr': 'Transparence'
   }
-
-
 }
