@@ -129,7 +129,7 @@ export const LanguageConstants = {
   },
   'login': {
     'en': 'Login',
-    'fr': 's\'identifier'
+    'fr': 'S\'identifier'
   },
   'domain': {
     'en': 'Domain',
@@ -145,6 +145,6 @@ export const LanguageConstants = {
   },
   'confirm': {
     'en': 'Confirm',
-    'fr': 'confirmer'
+    'fr': 'Confirmer'
   }
 }
