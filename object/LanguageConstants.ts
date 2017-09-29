@@ -131,6 +131,10 @@ export const LanguageConstants = {
     'en': 'Login',
     'fr': 'S\'identifier'
   },
+  'logout': {
+    'en': 'Logout',
+    'fr': 'Connectez - Out'
+  },
   'domain': {
     'en': 'Domain',
     'fr': 'Domaine'
