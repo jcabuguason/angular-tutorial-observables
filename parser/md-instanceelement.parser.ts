@@ -13,8 +13,13 @@ export class MDInstanceElementParser {
     let english;
     let french;
     if (raw['language'] !== undefined) {
-      english = raw['language'].find(l => l['@name'] === 'en')['@value']
-      french = raw['language'].find(l => l['@name'] === 'fr')['@value']
+      if (raw['language'] instanceof Array) {
+        english = raw['language'].find(l => l['@name'] === 'en')['@value'];
+        french = raw['language'].find(l => l['@name'] === 'fr')['@value'];
+      } else {
+        english = raw['language']['@name'] === 'en' ? raw['language']['@name']['@value'] : 'MSNG';
+        french = raw['language']['@name'] === 'fr' ? raw['language']['@name']['@value'] : 'MSNG';
+      }
     }
 
     const instelement: MDInstanceElement = {
