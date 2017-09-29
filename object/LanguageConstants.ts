@@ -126,5 +126,25 @@ export const LanguageConstants = {
   'date_modified': {
     'en': 'Date Modified',
     'fr': 'Date Modifiée'
+  },
+  'login': {
+    'en': 'Login',
+    'fr': 's\'identifier'
+  },
+  'domain': {
+    'en': 'Domain',
+    'fr': 'Domaine'
+  },
+  'username': {
+    'en': 'Username',
+    'fr': 'Nom d\'utilisateur'
+  },
+  'password': {
+    'en': 'Password',
+    'fr': 'Mot de Passe'
+  },
+  'confirm': {
+    'en': 'Confirm',
+    'fr': 'confirmer'
   }
 }
