@@ -14,7 +14,7 @@ import { MetadataDefinitionList } from '../object/metadata/MetadataDefinitionLis
 import { MetadataDefinitionHistory } from '../object/metadata/MetadataDefinitionHistory';
 import { MetadataInstanceHistory } from '../object/metadata/MetadataInstanceHistory';
 
-const BASEURL = 'http://localhost:3000';
+const BASEURL = 'http://localhost:3000/core';
 
 @Injectable()
 export class MetadataService {
@@ -38,10 +38,7 @@ export class MetadataService {
     this.subscriptions = [];
   }
 
-  loadDefinition(taxonomy: string, version: string, username: string) {
-    const user_header = new Headers();
-    user_header.append('Content-Type', 'application/json');
-    user_header.append('username', username);
+  loadDefinition(taxonomy: string, version: string) {
 
     this.http.get(`${BASEURL}/metadata/${taxonomy}/definition-xml-2.0/${version}?format=json`)
       .toPromise()
@@ -51,17 +48,15 @@ export class MetadataService {
         this.store.dispatch(action);
       });
 
-    this.linksFromDefinition(username);
+    this.linksFromDefinition();
   }
 
-  loadInstance(taxonomy: string, id: string, version: string, username: string) {
-    const user_header = new Headers();
-    user_header.append('Content-Type', 'application/json');
-    user_header.append('username', username);
+  loadInstance(taxonomy: string, id: string, version: string) {
 
     const versionParam = version ? `version=${version}` : '';
 
-    this.http.get(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}/?${versionParam}&format=json`)
+    this.http
+      .get(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}/?${versionParam}&format=json`)
       .toPromise()
       .then(result => {
         result = result.json();
@@ -70,29 +65,20 @@ export class MetadataService {
       });
   }
 
-  addMetadataInstance(taxonomy: string, outgoing: OutgoingMetadataInstance, id: string, username: string) {
-    const user_header = new Headers();
-    user_header.append('Content-Type', 'application/json');
-    user_header.append('username', username);
-
-    return this.http.post(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json`,
-      outgoing, { headers: user_header}).toPromise();
+  addMetadataInstance(taxonomy: string, outgoing: OutgoingMetadataInstance, id: string) {
+    return this.http
+      .post(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json`, outgoing)
+      .toPromise();
   }
 
-  updateMetadataInstance(taxonomy: string, outgoing: OutgoingMetadataInstance, id: string, username: string) {
-    const user_header = new Headers();
-    user_header.append('Content-Type', 'application/json');
-    user_header.append('username', username);
-
-    return this.http.post(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json&override=true`,
-      outgoing, { headers: user_header}).toPromise();
+  updateMetadataInstance(taxonomy: string, outgoing: OutgoingMetadataInstance, id: string) {
+    return this.http
+      .post(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json&override=true`, outgoing)
+      .toPromise();
   }
 
-  loadInstanceLinks(taxonomy: string, username: string) {
+  loadInstanceLinks(taxonomy: string) {
     taxonomy = taxonomy.replace('/definition-xml-2.0', '/instance-xml-2.0');
-    const user_header = new Headers();
-    user_header.append('Content-Type', 'application/json');
-    user_header.append('username', username);
 
     const loadedLinks = this.http
       .get(`${BASEURL}/metadata/instances?dataset=${taxonomy}`)
@@ -144,11 +130,11 @@ export class MetadataService {
     this.subscriptions = [];
   }
 
-  linksFromDefinition(username: string) {
+  linksFromDefinition() {
     const subscription = this.definition$
       .filter(definition => definition != null)
       .subscribe((definition: MDDefinition) => {
-        this.linksFromDefinitionHelper(definition.elements, username);
+        this.linksFromDefinitionHelper(definition.elements);
       });
 
     this.subscriptions.push(subscription);
@@ -158,13 +144,13 @@ export class MetadataService {
     return this.instanceLinks[id];
   }
 
-  private linksFromDefinitionHelper(elements: MDElement[], username: string) {
+  private linksFromDefinitionHelper(elements: MDElement[]) {
     for (const element of elements) {
       if (element.format === 'link') {
-        this.instanceLinks[element.id] = this.loadInstanceLinks(element.value, username);
+        this.instanceLinks[element.id] = this.loadInstanceLinks(element.value);
       }
 
-      this.linksFromDefinitionHelper(element.elements, username);
+      this.linksFromDefinitionHelper(element.elements);
     }
   }
 }
