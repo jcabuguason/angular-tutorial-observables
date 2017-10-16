@@ -26,6 +26,8 @@ export class MetadataService {
   subscriptions: Subscription[];
   // TODO: Dictionary Object?
 
+  httpOptions = {withCredentials: true};
+
   constructor(
     private http: Http,
     private store: Store<PegasusStore>
@@ -40,7 +42,7 @@ export class MetadataService {
 
   loadDefinition(taxonomy: string, version: string) {
 
-    this.http.get(`${BASEURL}/metadata/${taxonomy}/definition-xml-2.0/${version}?format=json`)
+    this.http.get(`${BASEURL}/metadata/${taxonomy}/definition-xml-2.0/${version}?format=json`, this.httpOptions)
       .toPromise()
       .then(result => {
         result = result.json();
@@ -56,7 +58,7 @@ export class MetadataService {
     const versionParam = version ? `version=${version}` : '';
 
     this.http
-      .get(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}/?${versionParam}&format=json`)
+      .get(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}/?${versionParam}&format=json`, this.httpOptions)
       .toPromise()
       .then(result => {
         result = result.json();
@@ -67,13 +69,13 @@ export class MetadataService {
 
   addMetadataInstance(taxonomy: string, outgoing: OutgoingMetadataInstance, id: string) {
     return this.http
-      .post(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json`, outgoing)
+      .post(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json`, outgoing, this.httpOptions)
       .toPromise();
   }
 
   updateMetadataInstance(taxonomy: string, outgoing: OutgoingMetadataInstance, id: string) {
     return this.http
-      .post(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json&override=true`, outgoing)
+      .post(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json&override=true`, outgoing, this.httpOptions)
       .toPromise();
   }
 
@@ -81,7 +83,7 @@ export class MetadataService {
     taxonomy = taxonomy.replace('/definition-xml-2.0', '/instance-xml-2.0');
 
     const loadedLinks = this.http
-      .get(`${BASEURL}/metadata/instances?dataset=${taxonomy}`)
+      .get(`${BASEURL}/metadata/instances?dataset=${taxonomy}`, this.httpOptions)
       .map(res => res.json())
       .toPromise()
       .then((instanceLinks: string) => {
@@ -103,7 +105,7 @@ export class MetadataService {
 
   getDefinitionHistory(uri: string) {
     return this.http
-      .get(`${BASEURL}/metadata/definitions/modification_history?definition_uri=${uri}`)
+      .get(`${BASEURL}/metadata/definitions/modification_history?definition_uri=${uri}`, this.httpOptions)
       .toPromise()
       .then(result => {
         return result.json() as MetadataDefinitionHistory[];
@@ -112,7 +114,7 @@ export class MetadataService {
 
   getInstanceHistory(uri: string) {
     return this.http
-      .get(`${BASEURL}/metadata/instances/modification_history?instance_uri=${uri}`)
+      .get(`${BASEURL}/metadata/instances/modification_history?instance_uri=${uri}`, this.httpOptions)
       .toPromise()
       .then(result => {
         return result.json() as MetadataInstanceHistory[];
