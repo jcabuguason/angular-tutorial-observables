@@ -96,7 +96,7 @@ export class MetadataService {
 
   getDefinitionList() {
     return this.http
-      .get(`${BASEURL}/metadata/definitions?dataset=all`)
+      .get(`${BASEURL}/metadata/definitions?dataset=all`, this.httpOptions)
       .toPromise()
       .then(result => {
         return result.json().definitions as MetadataDefinitionList[];
