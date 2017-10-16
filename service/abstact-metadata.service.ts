@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
-import { Http, Headers } from '@angular/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import 'rxjs/Rx';
 
 import { MDDefinition } from '../object/metadata/MDDefinition';
@@ -17,7 +17,8 @@ import { MetadataInstanceHistory } from '../object/metadata/MetadataInstanceHist
 const BASEURL = 'http://localhost:3000/core';
 
 @Injectable()
-export class MetadataService {
+export abstract class AbstractMetadataService {
+
   definition$: Observable<MDDefinition>;
   instance$: Observable<MDInstanceDefinition>;
   definition: MDDefinition;
@@ -29,8 +30,8 @@ export class MetadataService {
   httpOptions = {withCredentials: true};
 
   constructor(
-    private http: Http,
-    private store: Store<PegasusStore>
+    protected http: HttpClient,
+    protected store: Store<PegasusStore>
   ) {
     this.definition$ = store.select('metadataDefinition');
     this.instance$ = store.select('metadataInstance');
@@ -40,15 +41,25 @@ export class MetadataService {
     this.subscriptions = [];
   }
 
+  //
+  // Abstract Methods
+  //
+
+  abstract handleError(error: HttpErrorResponse) : void;
+
+  //
+  // Public Methods
+  //
+
   loadDefinition(taxonomy: string, version: string) {
 
     this.http.get(`${BASEURL}/metadata/${taxonomy}/definition-xml-2.0/${version}?format=json`, this.httpOptions)
       .toPromise()
       .then(result => {
-        result = result.json();
         const action = ({type: 'LOAD_DEFINITION', payload: result});
         this.store.dispatch(action);
-      });
+      })
+      .catch(error => this.handleError(error));
 
     this.linksFromDefinition();
   }
@@ -61,22 +72,24 @@ export class MetadataService {
       .get(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}/?${versionParam}&format=json`, this.httpOptions)
       .toPromise()
       .then(result => {
-        result = result.json();
         const action = ({type: 'LOAD_INSTANCE', payload: result});
         this.store.dispatch(action);
-      });
+      })
+      .catch(error => this.handleError(error));
   }
 
   addMetadataInstance(taxonomy: string, outgoing: OutgoingMetadataInstance, id: string) {
     return this.http
       .post(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json`, outgoing, this.httpOptions)
-      .toPromise();
+      .toPromise()
+      .catch(error => this.handleError(error));
   }
 
   updateMetadataInstance(taxonomy: string, outgoing: OutgoingMetadataInstance, id: string) {
     return this.http
       .post(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json&override=true`, outgoing, this.httpOptions)
-      .toPromise();
+      .toPromise()
+      .catch(error => this.handleError(error));
   }
 
   loadInstanceLinks(taxonomy: string) {
@@ -84,40 +97,49 @@ export class MetadataService {
 
     const loadedLinks = this.http
       .get(`${BASEURL}/metadata/instances?dataset=${taxonomy}`, this.httpOptions)
-      .map(res => res.json())
       .toPromise()
       .then((instanceLinks: string) => {
         const links: string[] = instanceLinks.split('\n');
         links.pop();
         return links;
+      })
+      .catch(error => {
+        this.handleError(error);
+        return [];
       });
     return loadedLinks;
   }
 
   getDefinitionList() {
     return this.http
-      .get(`${BASEURL}/metadata/definitions?dataset=all`, this.httpOptions)
+      .get<{definitions: MetadataInstanceHistory[]}>(`${BASEURL}/metadata/definitions?dataset=all`, this.httpOptions)
       .toPromise()
       .then(result => {
-        return result.json().definitions as MetadataDefinitionList[];
+        return result.definitions;
+      })
+      .catch(error => {
+        this.handleError(error);
+        return [];
       });
   }
 
   getDefinitionHistory(uri: string) {
     return this.http
-      .get(`${BASEURL}/metadata/definitions/modification_history?definition_uri=${uri}`, this.httpOptions)
+      .get<MetadataDefinitionHistory[]>(`${BASEURL}/metadata/definitions/modification_history?definition_uri=${uri}`, this.httpOptions)
       .toPromise()
-      .then(result => {
-        return result.json() as MetadataDefinitionHistory[];
+      .catch(error => {
+        this.handleError(error);
+        return [];
       });
   }
 
   getInstanceHistory(uri: string) {
     return this.http
-      .get(`${BASEURL}/metadata/instances/modification_history?instance_uri=${uri}`, this.httpOptions)
+      .get<MetadataInstanceHistory[]>(`${BASEURL}/metadata/instances/modification_history?instance_uri=${uri}`, this.httpOptions)
       .toPromise()
-      .then(result => {
-        return result.json() as MetadataInstanceHistory[];
+      .catch(error => {
+        this.handleError(error);
+        return [];
       });
   }
 

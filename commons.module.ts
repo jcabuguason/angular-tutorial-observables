@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { MetadataService } from './service/metadata.service';
-
 @NgModule({
   imports: [
     CommonModule,
@@ -15,8 +13,7 @@ import { MetadataService } from './service/metadata.service';
 export class CommonsModule {
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: CommonsModule,
-      providers: [ MetadataService ]
+      ngModule: CommonsModule
     }
   }
 }

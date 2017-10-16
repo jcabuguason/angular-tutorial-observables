@@ -1,1 +1,1 @@
-export { MetadataService } from './metadata.service';
+export { AbstractMetadataService } from './abstact-metadata.service';
