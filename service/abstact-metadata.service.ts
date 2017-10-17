@@ -79,6 +79,7 @@ export abstract class AbstractMetadataService {
   }
 
   addMetadataInstance(taxonomy: string, outgoing: OutgoingMetadataInstance, id: string) {
+    const otherOptions = Object.assign({responseType: 'text'}, this.httpOptions);
     return this.http
       .post(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json`, outgoing, this.httpOptions)
       .toPromise()
@@ -86,6 +87,7 @@ export abstract class AbstractMetadataService {
   }
 
   updateMetadataInstance(taxonomy: string, outgoing: OutgoingMetadataInstance, id: string) {
+    const otherOptions = Object.assign({responseType: 'text'}, this.httpOptions);
     return this.http
       .post(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json&override=true`, outgoing, this.httpOptions)
       .toPromise()
@@ -94,18 +96,19 @@ export abstract class AbstractMetadataService {
 
   loadInstanceLinks(taxonomy: string) {
     taxonomy = taxonomy.replace('/definition-xml-2.0', '/instance-xml-2.0');
+    const otherOptions = Object.assign({responseType: 'text'}, this.httpOptions);
 
     const loadedLinks = this.http
-      .get(`${BASEURL}/metadata/instances?dataset=${taxonomy}`, this.httpOptions)
+      .get(`${BASEURL}/metadata/instances?dataset=${taxonomy}`, otherOptions)
       .toPromise()
       .then((instanceLinks: string) => {
-        const links: string[] = instanceLinks.split('\n');
+        const links: string[] = instanceLinks.split('\\n');
         links.pop();
         return links;
       })
       .catch(error => {
         this.handleError(error);
-        return [];
+        return [] as string[];
       });
     return loadedLinks;
   }
