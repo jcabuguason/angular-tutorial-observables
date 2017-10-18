@@ -81,7 +81,7 @@ export abstract class AbstractMetadataService {
   addMetadataInstance(taxonomy: string, outgoing: OutgoingMetadataInstance, id: string) {
     const otherOptions = Object.assign({responseType: 'text'}, this.httpOptions);
     return this.http
-      .post(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json`, outgoing, this.httpOptions)
+      .post(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json`, outgoing, otherOptions)
       .toPromise()
       .catch(error => this.handleError(error));
   }
@@ -89,7 +89,7 @@ export abstract class AbstractMetadataService {
   updateMetadataInstance(taxonomy: string, outgoing: OutgoingMetadataInstance, id: string) {
     const otherOptions = Object.assign({responseType: 'text'}, this.httpOptions);
     return this.http
-      .post(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json&override=true`, outgoing, this.httpOptions)
+      .post(`${BASEURL}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json&override=true`, outgoing, otherOptions)
       .toPromise()
       .catch(error => this.handleError(error));
   }
