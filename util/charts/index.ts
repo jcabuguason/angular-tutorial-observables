@@ -1,1 +1,1 @@
-export { BarChartComponent } from './bar-chart.component';
+export { BarChartModule } from './bar-chart.component';
