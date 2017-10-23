@@ -45,7 +45,7 @@ export abstract class AbstractMetadataService {
   // Abstract Methods
   //
 
-  abstract handleError(error: HttpErrorResponse) : void;
+  abstract handleError(error: HttpErrorResponse): Promise<never>;
 
   //
   // Public Methods
