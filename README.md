@@ -1,6 +1,14 @@
-# MyComponentLibrary
+# Angular Commons
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.5.5.
+
+## Packaging
+
+- Run `npm run packagr` to create a library for this component.
+- Then run `npm pack` inside the `dist` directory to create a sharable `tgz` file.
+- Components using Angular Commons will run `npm install ../path/to/this/dist/*.tgz` and later import the needed modules from this library.
+
+---
 
 ## Development server
 

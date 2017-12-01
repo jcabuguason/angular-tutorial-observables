@@ -8,7 +8,8 @@
     "build": "ng build",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "test": "karma start ./karma.conf.js"
+    "test": "karma start ./karma.conf.js",
+    "packagr": "ng-packagr -p ng-package.json"
   },
   "private": true,
   "dependencies": {
