@@ -121,13 +121,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "app",
+      "commons",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "app",
+      "commons",
       "kebab-case"
     ],
     "angular-whitespace": [true, "check-interpolation"],
