@@ -1,10 +1,13 @@
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { PlaceHolderComponent } from './modules/place-holder/place-holder.component';
+
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent
+        AppComponent,
+        PlaceHolderComponent
       ],
     }).compileComponents();
   }));
