@@ -12,7 +12,7 @@ import { PlaceHolderComponent } from './modules/place-holder/place-holder.compon
   ],
   imports: [
     BrowserModule,
-    PlaceHolderComponent
+    PlaceHolderModule
   ],
   providers: [],
   bootstrap: [AppComponent]
