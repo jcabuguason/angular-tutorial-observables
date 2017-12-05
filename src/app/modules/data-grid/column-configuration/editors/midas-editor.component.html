@@ -1,0 +1,17 @@
+<div #container *ngIf="this" class="container" tabindex="0">
+  <div *ngIf="this.element?.value">
+    Value: {{this.element.value}}
+  </div>
+  <div *ngIf="this.element?.overallQASummary">
+    Qa: <app-qa-renderer [qa]="this.element.overallQASummary"></app-qa-renderer>
+  </div>
+  <div *ngFor="let current of this.element?.supplementaryInfo">
+    Df: <app-df-renderer [dataFlag]="current.dataFlag"></app-df-renderer>
+  </div>
+  <div *ngIf="this.element?.qaFlagOverride">
+    Qof: <app-qof-renderer [qof]="this.element.qaFlagOverride"></app-qof-renderer>
+  </div>
+  <div *ngIf="this.element?.valueOverride">
+    Vof: <app-vof-renderer [vof]="this.element.valueOverride"></app-vof-renderer>
+  </div>
+</div>
