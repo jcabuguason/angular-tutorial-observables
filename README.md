@@ -1,6 +1,14 @@
-# MSCDMSCommonsAngular
+# Angular Commons
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.6.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.5.5.
+
+## Packaging
+
+- Run `npm run packagr` to create a library for this component.
+- Then run `npm pack` inside the `dist` directory to create a sharable `tgz` file.
+- Components using Angular Commons will run `npm install ../path/to/this/dist/*.tgz` and later import the needed modules from this library.
+
+---
 
 ## Development server
 
@@ -8,7 +16,7 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 ## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|module`.
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 ## Build
 
@@ -21,7 +29,6 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 ## Running end-to-end tests
 
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
 
 ## Further help
 

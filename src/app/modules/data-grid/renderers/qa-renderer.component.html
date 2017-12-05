@@ -1,0 +1,8 @@
+<!-- Should use glyphicon / font-awesome / our own icons to represent Qa values -->
+<!-- Also switch from plain title to tool-tip when possible -->
+<span *ngIf="qa !== 'undefined'"
+      class="badge qa{{qa}}"
+      title="Qa Value is {{qa}}">
+    {{qa}}
+</span>
+

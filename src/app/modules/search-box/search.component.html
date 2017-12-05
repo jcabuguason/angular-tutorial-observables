@@ -1,0 +1,40 @@
+<div class="advancedSearchBox"> 
+
+    <!-- selected search parameter -->
+    <div class="selected-parameters" *ngFor = "let p of displayParams; index as i">
+        <!-- parameters -->
+        <div class="search-parameter" >
+            <div> {{ p.key }}: </div>
+            <input [(ngModel)]="p.value" #valueInput placeholder={{p.searchParam.placeholder}} class="value-input"
+                    (keyup)="searchForChoices(valueInput.value, i)" (keyup.enter)="addValueToDisplay(valueInput.value, i)"
+                    (click)="searchForChoices(valueInput.value, i)">
+            <button (click)="removeDisplay(i)">x</button>
+
+            <!-- available choices -->
+            <li *ngFor="let c of p.displayChoices" >
+                <span (click)="addValueToDisplay(c, i)" > {{ c }} </span>
+            </li>
+
+        </div>
+    </div>
+
+    <!-- the actual "search box" -->
+    <input [(ngModel)]="searchString" #searchBox placeholder="Search..." class="search-parameter-input"
+        (click)="searchForParameter(searchBox.value, true)"
+        (keyup)="searchForParameter(searchBox.value, false)" (keyup.enter)="addNewParameter(searchBox.value)">
+        
+</div>
+
+<!-- suggestions as you type in the search box -->
+<div class="search-parameter-suggestions" *ngFor="let suggestion of suggestedParams">
+    <span class="search-parameter" (click)="addSuggestedParameter(suggestion)"> {{suggestion.name}}</span>
+</div>
+
+
+<!-- Instead of this, it would be submit -->
+<div>
+    <button (click)="getTaxonomy()">Submit</button>
+    <li *ngFor="let m of message">
+        <span> {{m}} </span>
+    </li>
+</div>
