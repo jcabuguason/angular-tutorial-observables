@@ -26,9 +26,6 @@
     "@angular/router": "^5.0.0",
     "@ngrx/store": "4.1.0",
     "@swimlane/ngx-charts": "6.0.2",
-    "ag-grid": "^14.2.0",
-    "ag-grid-angular": "^14.2.0",
-    "ag-grid-enterprise": "^14.2.0",
     "axios": "^0.17.0",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
@@ -80,5 +77,10 @@
     "webpack": "^3.8.1",
     "webpack-angular-externals": "^1.0.2",
     "webpack-rxjs-externals": "^1.0.0"
+  },
+  "peerDependencies": {
+    "ag-grid": "^14.2.0",
+    "ag-grid-angular": "^14.2.0",
+    "ag-grid-enterprise": "^14.2.0"
   }
 }
