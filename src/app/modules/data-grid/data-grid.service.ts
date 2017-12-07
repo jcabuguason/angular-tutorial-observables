@@ -5,8 +5,6 @@ import { ColumnConfigurationContainer } from './column-configuration/column-conf
 
 import { DefaultColumnConfiguration } from './column-configuration/default-column-configuration.class';
 import { VUColumnConfiguration } from './column-configuration/vu-column-configuration.class';
-import { NMTColumnConfiguration } from './column-configuration/nmt-column-configuration.class';
-import { MidasColumnConfiguration } from './column-configuration/midas-column-configuration.class';
 import { AccordianColumnConfiguration } from './column-configuration/accordian-column-configuration.class';
 
 import NodeLookups from './node.const';
@@ -32,15 +30,13 @@ export class DataGridService {
     constructor() {
         this.columnConfigurationOptions.push(new ColumnConfigurationContainer('accordian', new AccordianColumnConfiguration()));
         this.columnConfigurationOptions.push(new ColumnConfigurationContainer('vu', new VUColumnConfiguration()));
-        this.columnConfigurationOptions.push(new ColumnConfigurationContainer('nmt', new NMTColumnConfiguration()));
-        this.columnConfigurationOptions.push(new ColumnConfigurationContainer('midas', new MidasColumnConfiguration()));
 
         this.defaultColumnConfiguration = new DefaultColumnConfiguration();
         this.columnConfigurationOptions.push(new ColumnConfigurationContainer('default', this.defaultColumnConfiguration));
         this.columnConfiguration = new DefaultColumnConfiguration();
     }
 
-    getColumnConfigurations(): object {
+    getDefaultColumnConfigurations(): object {
         const configs: string[] = [];
         for (const configuration of this.columnConfigurationOptions) {
             configs.push(configuration.name);
@@ -52,7 +48,12 @@ export class DataGridService {
       return this.columnConfiguration;
     }
 
-    setColumnConfiguration(config: string) {
+    setColumnConfiguration(columnConfig: ElementColumnConfiguration) {
+        this.columnConfiguration = columnConfig;
+    }
+
+    // Only works for Column Configs set up by Commons (Defaults)
+    setColumnConfigurationByString(config: string) {
         this.columnConfiguration = null;
         for (const configuration of this.columnConfigurationOptions) {
             if (config === configuration.name) {

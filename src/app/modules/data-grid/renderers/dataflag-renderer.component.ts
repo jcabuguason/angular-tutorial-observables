@@ -3,8 +3,8 @@ import {Component, Input} from '@angular/core';
 import {ICellRendererAngularComp} from 'ag-grid-angular';
 
 @Component({
-    selector: 'app-df-renderer',
-    template: `<span title="DataFlag" class="df wip badge">{{dataFlag}}</span>`,
+    selector: 'commons-df-renderer',
+    template: `<span title="DataFlag" class="df wip badge">{{ dataFlag }}</span>`,
     styleUrls: ['./general-renderer.component.css']
 })
 export class DataFlagRendererComponent implements ICellRendererAngularComp {

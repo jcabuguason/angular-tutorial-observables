@@ -3,7 +3,7 @@ import {Component, Input} from '@angular/core';
 import {ICellRendererAngularComp} from 'ag-grid-angular';
 
 @Component({
-    selector: 'app-qa-renderer',
+    selector: 'commons-qa-renderer',
     templateUrl: './qa-renderer.component.html',
     styleUrls: ['./general-renderer.component.css', './qa-renderer.component.css']
 })

@@ -5,8 +5,8 @@ import { ColumnConfigurationContainer } from './column-configuration/column-conf
 
 import { DefaultColumnConfiguration } from './column-configuration/default-column-configuration.class';
 import { VUColumnConfiguration } from './column-configuration/vu-column-configuration.class';
-import { NMTColumnConfiguration } from './column-configuration/nmt-column-configuration.class';
-import { MidasColumnConfiguration } from './column-configuration/midas-column-configuration.class';
+// import { NMTColumnConfiguration } from './column-configuration/nmt-column-configuration.class';
+// import { MidasColumnConfiguration } from './column-configuration/midas-column-configuration.class';
 import { AccordianColumnConfiguration } from './column-configuration/accordian-column-configuration.class';
 
 import NodeLookups from './node.const';
@@ -34,8 +34,8 @@ export class DataGridAggregateService {
     constructor() {
         this.columnConfigurationOptions.push(new ColumnConfigurationContainer('accordian', new AccordianColumnConfiguration()));
         this.columnConfigurationOptions.push(new ColumnConfigurationContainer('vu', new VUColumnConfiguration()));
-        this.columnConfigurationOptions.push(new ColumnConfigurationContainer('nmt', new NMTColumnConfiguration()));
-        this.columnConfigurationOptions.push(new ColumnConfigurationContainer('midas', new MidasColumnConfiguration()));
+        // this.columnConfigurationOptions.push(new ColumnConfigurationContainer('nmt', new NMTColumnConfiguration()));
+        // this.columnConfigurationOptions.push(new ColumnConfigurationContainer('midas', new MidasColumnConfiguration()));
 
         this.defaultColumnConfiguration = new DefaultColumnConfiguration();
         this.columnConfigurationOptions.push(new ColumnConfigurationContainer('default', this.defaultColumnConfiguration));

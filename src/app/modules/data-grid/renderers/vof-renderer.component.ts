@@ -3,8 +3,8 @@ import {Component, Input} from '@angular/core';
 import {ICellRendererAngularComp} from 'ag-grid-angular';
 
 @Component({
-    selector: 'app-vof-renderer',
-    template: `<span title="Value Override Flag" class="wip vof badge">{{vof}}</span>`,
+    selector: 'commons-vof-renderer',
+    template: `<span title="Value Override Flag" class="wip vof badge">{{ vof }}</span>`,
     styleUrls: ['./general-renderer.component.css']
 })
 export class VofRendererComponent implements ICellRendererAngularComp {

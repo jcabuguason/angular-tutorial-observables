@@ -3,8 +3,8 @@ import {Component, Input} from '@angular/core';
 import {ICellRendererAngularComp} from 'ag-grid-angular';
 
 @Component({
-    selector: 'app-qof-renderer',
-    template: `<span title="Qa Override Flag" class="wip qof badge">{{qof}}</span>`,
+    selector: 'commons-qof-renderer',
+    template: `<span title="Qa Override Flag" class="wip qof badge">{{ qof }}</span>`,
     styleUrls: ['./general-renderer.component.css'],
 })
 export class QofRendererComponent implements ICellRendererAngularComp {
