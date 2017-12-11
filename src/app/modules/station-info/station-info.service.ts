@@ -21,7 +21,6 @@ export class StationInfoService {
       const parsed: Station = <Station> station;
 
       for (const item of parsed.member.Metadata.result.elements.element) {
-        console.log('Name: ' + item['@name']);
         switch (item['@name']) {
           case 'station_name': {
             this.stationName = item['@value'];
