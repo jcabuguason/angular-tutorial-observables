@@ -13,8 +13,8 @@ import NodeLookups from './node.const';
 export class DataGridService {
 
     readonly elementNodeStartIndex: number = 2;
-    readonly elementNodeDepth: number = 3;
-    readonly headerNodeDepth: number = 3;
+    readonly elementNodeDepth: number = 4;
+    readonly headerNodeDepth: number = 6 - this.elementNodeDepth;
 
     private columnConfigurationOptions: ColumnConfigurationContainer[] = [];
     private defaultColumnConfiguration: ElementColumnConfiguration;
@@ -91,29 +91,27 @@ export class DataGridService {
 
     // Get the child node, or create it if it doesn't exist
     private getChildNode(currentNodes: any[], headerName: string, nodeNumber: string): object {
-        // Locating current node
+
         for (const currentNode of currentNodes) {
-            if (nodeNumber === currentNode.node) {
-                if (currentNode.field === undefined) {
-                  return currentNode;
-                } else {
-                  const childClone = Object.assign({}, currentNode);
-                  const childNode: object = {'nested': true};
-                  currentNode.headerName = headerName;
-                  currentNode.children = [childClone, childNode];
-                  return childNode;
-                }
+            if (currentNode.nodeNumber === nodeNumber) {
+              if (currentNode.terminal === 'true' ) {
+                break;
+              }
+              else {
+                return currentNode;
+              }
             }
         }
 
-        // Create new node if doesn't exist
-        const childNode: object = {
+        const newNode: object = {
           'headerName': headerName,
-          'node': nodeNumber
-        };
-        currentNodes.push(childNode);
+          'terminal': 'unknown',
+          'nodeNumber': nodeNumber
+        }
 
-        return childNode;
+        currentNodes.push(newNode);
+
+        return newNode;
 
     }
 
@@ -227,6 +225,9 @@ export class DataGridService {
     }
 
     private buildColumn(element: DataElements, headerID: string) {
+      if (this.columnsGenerated.indexOf(headerID) !== -1) {
+        return;
+      }
       const nodes = element.elementID.split('.');
       let currentNodes: any[] = this.columnDefs;
       let workingNode;
@@ -237,6 +238,7 @@ export class DataGridService {
 
           // End processing if no header field is found
           if (headerName === undefined) {
+              workingNode.terminal = 'false';
               break;
           }
 
@@ -247,20 +249,20 @@ export class DataGridService {
               workingNode.children = [];
           }
 
-          // Work with child nodes
-          if (workingNode.nested) {
-            workingNode.node = nodes[i + 1];
-            workingNode.headerName = this.generateHeaderString(nodes, i);
-          }
-          // currentNodes = workingNode.children;
+          currentNodes = workingNode.children;
 
-          currentNodes = (workingNode.nested) ? [workingNode] : workingNode.children;
+      }
 
+      workingNode.elementID = element.elementID;
+
+      if (workingNode.terminal === 'unknown') {
+          workingNode.terminal = 'true';
       }
 
       if (!workingNode.children.length) {
-        workingNode.headerName += this.createSubHeader(headerDepth, nodes);
+          workingNode.headerName += this.createSubHeader(headerDepth, nodes);
       }
+
 
       // Generate layer children if needed
       let columnToAdd;
@@ -309,9 +311,9 @@ export class DataGridService {
 
         for (const element of parsed.dataElements) {
           const headerID = ColumnConfigurationContainer.findHeaderID(element);
-          if (this.columnsGenerated.indexOf(headerID) === -1) {
+
             this.buildColumn(element, headerID);
-          }
+
           output += this.columnConfiguration.createElementData(element, headerID);
 
           if (element !== parsed.dataElements[parsed.dataElements.length - 1]) {
