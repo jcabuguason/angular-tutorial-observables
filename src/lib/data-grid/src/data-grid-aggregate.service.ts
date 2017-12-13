@@ -5,23 +5,26 @@ import { ColumnConfigurationContainer } from './column-configuration/column-conf
 
 import { DefaultColumnConfiguration } from './column-configuration/default-column-configuration.class';
 import { VUColumnConfiguration } from './column-configuration/vu-column-configuration.class';
+// import { NMTColumnConfiguration } from './column-configuration/nmt-column-configuration.class';
+// import { MidasColumnConfiguration } from './column-configuration/midas-column-configuration.class';
 import { AccordianColumnConfiguration } from './column-configuration/accordian-column-configuration.class';
 
 import NodeLookups from './node.const';
 
+// NOTE: Copy of the old Service from master branch.
+// Pasted in for testing against the new, no-aggregate approach when grabbing live data from ES end-point
 @Injectable()
-export class DataGridService {
+export class DataGridAggregateService {
 
     readonly elementNodeStartIndex: number = 2;
     readonly elementNodeDepth: number = 3;
-    readonly headerNodeDepth: number = 6 - this.elementNodeDepth;
+    readonly headerNodeDepth: number = 3;
 
     private columnConfigurationOptions: ColumnConfigurationContainer[] = [];
     private defaultColumnConfiguration: ElementColumnConfiguration;
     private columnsGenerated: string[] = [];
 
     private columnConfiguration: ElementColumnConfiguration;
-    private identityHeader;
 
     public rowData: object[] = [];
     public columnDefs: any[] = this.getStaticHeaders();
@@ -31,13 +34,15 @@ export class DataGridService {
     constructor() {
         this.columnConfigurationOptions.push(new ColumnConfigurationContainer('accordian', new AccordianColumnConfiguration()));
         this.columnConfigurationOptions.push(new ColumnConfigurationContainer('vu', new VUColumnConfiguration()));
+        // this.columnConfigurationOptions.push(new ColumnConfigurationContainer('nmt', new NMTColumnConfiguration()));
+        // this.columnConfigurationOptions.push(new ColumnConfigurationContainer('midas', new MidasColumnConfiguration()));
 
         this.defaultColumnConfiguration = new DefaultColumnConfiguration();
         this.columnConfigurationOptions.push(new ColumnConfigurationContainer('default', this.defaultColumnConfiguration));
         this.columnConfiguration = new DefaultColumnConfiguration();
     }
 
-    getDefaultColumnConfigurations(): object {
+    getColumnConfigurations(): object {
         const configs: string[] = [];
         for (const configuration of this.columnConfigurationOptions) {
             configs.push(configuration.name);
@@ -49,12 +54,7 @@ export class DataGridService {
       return this.columnConfiguration;
     }
 
-    setColumnConfiguration(columnConfig: ElementColumnConfiguration) {
-        this.columnConfiguration = columnConfig;
-    }
-
-    // Only works for Column Configs set up by Commons (Defaults)
-    setColumnConfigurationByString(config: string) {
+    setColumnConfiguration(config: string) {
         this.columnConfiguration = null;
         for (const configuration of this.columnConfigurationOptions) {
             if (config === configuration.name) {
@@ -92,27 +92,29 @@ export class DataGridService {
 
     // Get the child node, or create it if it doesn't exist
     private getChildNode(currentNodes: any[], headerName: string, nodeNumber: string): object {
-
+        // Locating current node
         for (const currentNode of currentNodes) {
-            if (currentNode.nodeNumber === nodeNumber) {
-              if (currentNode.terminal === 'true' ) {
-                break;
-              }
-              else {
-                return currentNode;
-              }
+            if (nodeNumber === currentNode.node) {
+                if (currentNode.field === undefined) {
+                  return currentNode;
+                } else {
+                  const childClone = Object.assign({}, currentNode);
+                  const childNode: object = {'nested': true};
+                  currentNode.headerName = headerName;
+                  currentNode.children = [childClone, childNode];
+                  return childNode;
+                }
             }
         }
 
-        const newNode: object = {
+        // Create new node if doesn't exist
+        const childNode: object = {
           'headerName': headerName,
-          'terminal': 'unknown',
-          'nodeNumber': nodeNumber
-        }
+          'node': nodeNumber
+        };
+        currentNodes.push(childNode);
 
-        currentNodes.push(newNode);
-
-        return newNode;
+        return childNode;
 
     }
 
@@ -137,28 +139,55 @@ export class DataGridService {
     private getStaticHeaders(): any[] {
         const staticHeaders: any[] = [];
 
-        this.identityHeader = {
+        const identityHeader = {
           'headerName': 'Identity',
           'children': []
         };
 
-        staticHeaders.push(this.identityHeader);
+        staticHeaders.push(identityHeader);
 
         const stationHeader = {
           'headerName': 'Station',
           'field': 'station',
           'width': 100,
-          'pinned': true
+          'pinned': true,
         };
-        this.identityHeader.children.push(stationHeader);
+
+        identityHeader.children.push(stationHeader);
 
         const dateTimeHeader = {
           'headerName': 'Instance Date',
           'field': 'obsDateTime',
           'width': 220,
-          'pinned': true
+          'pinned': true,
         };
-        this.identityHeader.children.push(dateTimeHeader);
+
+        identityHeader.children.push(dateTimeHeader);
+
+        const uriHeader = {
+          'headerName':  'URI',
+          'field':  'uri',
+          'width':  1000,
+          'columnGroupShow':  'open',
+        };
+        identityHeader.children.push(uriHeader);
+
+        const latitudeHeader = {
+          'headerName': 'Latitude',
+          'field': 'latitude',
+          'width': 80,
+          'columnGroupShow': 'open',
+        };
+        identityHeader.children.push(latitudeHeader);
+
+        const longitudeHeader = {
+          'headerName': 'Longitude',
+          'field': 'longitude',
+          'width': 80,
+          'columnGroupShow': 'open',
+        };
+
+        identityHeader.children.push(longitudeHeader);
 
         return staticHeaders;
 
@@ -198,10 +227,7 @@ export class DataGridService {
         : this.formatHeaderName(firstDraft);
     }
 
-    private buildElementColumn(element: DataElements, headerID: string) {
-      if (this.columnsGenerated.indexOf(headerID) !== -1) {
-        return;
-      }
+    private buildColumn(element: DataElements, headerID: string) {
       const nodes = element.elementID.split('.');
       let currentNodes: any[] = this.columnDefs;
       let workingNode;
@@ -212,7 +238,6 @@ export class DataGridService {
 
           // End processing if no header field is found
           if (headerName === undefined) {
-              workingNode.terminal = 'false';
               break;
           }
 
@@ -223,20 +248,20 @@ export class DataGridService {
               workingNode.children = [];
           }
 
-          currentNodes = workingNode.children;
+          // Work with child nodes
+          if (workingNode.nested) {
+            workingNode.node = nodes[i + 1];
+            workingNode.headerName = this.generateHeaderString(nodes, i);
+          }
+          // currentNodes = workingNode.children;
 
-      }
+          currentNodes = (workingNode.nested) ? [workingNode] : workingNode.children;
 
-      workingNode.elementID = element.elementID;
-
-      if (workingNode.terminal === 'unknown') {
-          workingNode.terminal = 'true';
       }
 
       if (!workingNode.children.length) {
-          workingNode.headerName += this.createSubHeader(headerDepth, nodes);
+        workingNode.headerName += this.createSubHeader(headerDepth, nodes);
       }
-
 
       // Generate layer children if needed
       let columnToAdd;
@@ -265,48 +290,29 @@ export class DataGridService {
       this.columnsGenerated.push(headerID);
     }
 
-    private buildMetadataColumn(headerID: string) {
-      if (this.columnsGenerated.indexOf(headerID) !== -1) {
-        return;
-      }
-
-      const header = {
-        'headerName': headerID,
-        'field': headerID,
-        'width': 80,
-        'columnGroupShow': 'open',
-      };
-
-      this.identityHeader.children.push(header);
-
-
-      this.columnsGenerated.push(headerID);
-    }
-
     private gridifyObs(obs: object): string {
 
         const parsed: DMSObs = <DMSObs> obs;
 
         let output = '{';
-        output += '"obsDateTime": "' + parsed.obsDateTime + '",';
         output += '"uri": "' + parsed.identity + '",';
+        output += '"obsDateTime": "' + parsed.obsDateTime + '",';
 
         for (const element of parsed.metadataElements) {
-            if (element.name === 'stn_nam') {
+            if (element.name === 'lat') {
+               output += '"latitude": "' + element.value + '",';
+            } else if (element.name === 'long') {
+               output += '"longitude": "' + element.value + '",';
+            } else if (element.name === 'stn_nam') {
                output += '"station": "' + element.value + '",';
-            }
-            else if (element.name !== undefined) {
-               const headerID = this.formatHeaderName(element.name);
-               this.buildMetadataColumn(headerID);
-               output += '"' + headerID +'": "' + element.value + '",';
             }
         }
 
         for (const element of parsed.dataElements) {
           const headerID = ColumnConfigurationContainer.findHeaderID(element);
-
-          this.buildElementColumn(element, headerID);
-
+          if (!this.columnsGenerated.includes(headerID)) {
+            this.buildColumn(element, headerID);
+          }
           output += this.columnConfiguration.createElementData(element, headerID);
 
           if (element !== parsed.dataElements[parsed.dataElements.length - 1]) {

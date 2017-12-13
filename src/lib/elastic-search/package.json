@@ -1,0 +1,12 @@
+{
+  "ngPackage": {
+    "lib": {
+      "externals": {
+        "date-fns": "date-fns"
+      }
+    }
+  },
+  "peerDependencies": {
+    "date-fns": "^1.29.0"
+  }
+}
