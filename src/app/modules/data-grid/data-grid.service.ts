@@ -13,7 +13,7 @@ import NodeLookups from './node.const';
 export class DataGridService {
 
     readonly elementNodeStartIndex: number = 2;
-    readonly elementNodeDepth: number = 4;
+    readonly elementNodeDepth: number = 3;
     readonly headerNodeDepth: number = 6 - this.elementNodeDepth;
 
     private columnConfigurationOptions: ColumnConfigurationContainer[] = [];
