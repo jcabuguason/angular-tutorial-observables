@@ -21,6 +21,7 @@ export class DataGridService {
     private columnsGenerated: string[] = [];
 
     private columnConfiguration: ElementColumnConfiguration;
+    private identityHeader;
 
     public rowData: object[] = [];
     public columnDefs: any[] = this.getStaticHeaders();
@@ -136,55 +137,28 @@ export class DataGridService {
     private getStaticHeaders(): any[] {
         const staticHeaders: any[] = [];
 
-        const identityHeader = {
+        this.identityHeader = {
           'headerName': 'Identity',
           'children': []
         };
 
-        staticHeaders.push(identityHeader);
+        staticHeaders.push(this.identityHeader);
 
         const stationHeader = {
           'headerName': 'Station',
           'field': 'station',
           'width': 100,
-          'pinned': true,
+          'pinned': true
         };
-
-        identityHeader.children.push(stationHeader);
+        this.identityHeader.children.push(stationHeader);
 
         const dateTimeHeader = {
           'headerName': 'Instance Date',
           'field': 'obsDateTime',
           'width': 220,
-          'pinned': true,
+          'pinned': true
         };
-
-        identityHeader.children.push(dateTimeHeader);
-
-        const uriHeader = {
-          'headerName':  'URI',
-          'field':  'uri',
-          'width':  1000,
-          'columnGroupShow':  'open',
-        };
-        identityHeader.children.push(uriHeader);
-
-        const latitudeHeader = {
-          'headerName': 'Latitude',
-          'field': 'latitude',
-          'width': 80,
-          'columnGroupShow': 'open',
-        };
-        identityHeader.children.push(latitudeHeader);
-
-        const longitudeHeader = {
-          'headerName': 'Longitude',
-          'field': 'longitude',
-          'width': 80,
-          'columnGroupShow': 'open',
-        };
-
-        identityHeader.children.push(longitudeHeader);
+        this.identityHeader.children.push(dateTimeHeader);
 
         return staticHeaders;
 
@@ -224,7 +198,7 @@ export class DataGridService {
         : this.formatHeaderName(firstDraft);
     }
 
-    private buildColumn(element: DataElements, headerID: string) {
+    private buildElementColumn(element: DataElements, headerID: string) {
       if (this.columnsGenerated.indexOf(headerID) !== -1) {
         return;
       }
@@ -291,28 +265,46 @@ export class DataGridService {
       this.columnsGenerated.push(headerID);
     }
 
+    private buildMetadataColumn(headerID: string) {
+      if (this.columnsGenerated.indexOf(headerID) !== -1) {
+        return;
+      }
+
+      const header = {
+        'headerName': headerID,
+        'field': headerID,
+        'width': 80,
+        'columnGroupShow': 'open',
+      };
+
+      this.identityHeader.children.push(header);
+
+
+      this.columnsGenerated.push(headerID);
+    }
+
     private gridifyObs(obs: object): string {
 
         const parsed: DMSObs = <DMSObs> obs;
 
         let output = '{';
-        output += '"uri": "' + parsed.identity + '",';
         output += '"obsDateTime": "' + parsed.obsDateTime + '",';
 
         for (const element of parsed.metadataElements) {
-            if (element.name === 'lat') {
-               output += '"latitude": "' + element.value + '",';
-            } else if (element.name === 'long') {
-               output += '"longitude": "' + element.value + '",';
-            } else if (element.name === 'stn_nam') {
+            if (element.name === 'stn_nam') {
                output += '"station": "' + element.value + '",';
+            }
+            else if (element.name !== undefined) {
+               const headerID = this.formatHeaderName(element.name);
+               this.buildMetadataColumn(headerID);
+               output += '"' + headerID +'": "' + element.value + '",';
             }
         }
 
         for (const element of parsed.dataElements) {
           const headerID = ColumnConfigurationContainer.findHeaderID(element);
 
-            this.buildColumn(element, headerID);
+          this.buildElementColumn(element, headerID);
 
           output += this.columnConfiguration.createElementData(element, headerID);
 
