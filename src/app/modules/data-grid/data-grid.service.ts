@@ -289,6 +289,7 @@ export class DataGridService {
 
         let output = '{';
         output += '"obsDateTime": "' + parsed.obsDateTime + '",';
+        output += '"uri": "' + parsed.identity + '",';
 
         for (const element of parsed.metadataElements) {
             if (element.name === 'stn_nam') {
