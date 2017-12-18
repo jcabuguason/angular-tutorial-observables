@@ -7,10 +7,10 @@ export class EquivalentKeywords {
      * @param equivalents The other equivalent words
      */
     constructor(
-        private key: string, 
+        private key: string,
         private equivalents: string[]
     ) { }
-    
+
     getKey(): string {
         return this.key;
     }
