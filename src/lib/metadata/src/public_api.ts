@@ -1,0 +1,10 @@
+export { MetadataConfig, METADATA_CONFIG } from './metadata.config';
+export { MetadataService } from './service/metadata.service';
+export { IdentificationElement } from './model/IdentificationElement';
+export { MDElement } from './model/MDElement';
+export { MDDefinition } from './model/MDDefinition';
+export { MDInstanceElement } from './model/MDInstanceElement';
+export { MDInstanceDefinition } from './model/MDInstanceDefinition';
+export { MetadataDefinitionList } from './model/MetadataDefinitionList';
+export { MetadataDefinitionHistory } from './model/MetadataDefinitionHistory';
+export { MetadataInstanceHistory } from './model/MetadataInstanceHistory';
