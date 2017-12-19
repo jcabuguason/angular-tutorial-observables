@@ -1,4 +1,7 @@
 {
   "name": "msc-dms-commons-angular",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "publishConfig": {
+    "registry": "http://dms-zeus.cmc.ec.gc.ca/nexus/repository/npm-private/"
+  }
 }
