@@ -1,2 +1,2 @@
-export { SearchService } from './search.service';
-export { SearchComponent } from './search.component';
+export * from './search.service';
+export * from './search.component';

@@ -220,7 +220,7 @@ export class DataGridAggregateService {
         }
     }
 
-    private generateHeaderString(nodes:string[], index: number) {
+    private generateHeaderString(nodes: string[], index: number) {
       const firstDraft = this.getNodeHeader((index + 1), nodes[index]);
       return (firstDraft === undefined)
         ? firstDraft
@@ -310,7 +310,7 @@ export class DataGridAggregateService {
 
         for (const element of parsed.dataElements) {
           const headerID = ColumnConfigurationContainer.findHeaderID(element);
-          if (!this.columnsGenerated.includes(headerID)) {
+          if (this.columnsGenerated.indexOf(headerID) === -1) {
             this.buildColumn(element, headerID);
           }
           output += this.columnConfiguration.createElementData(element, headerID);
@@ -327,35 +327,35 @@ export class DataGridAggregateService {
 
 }
 
-export interface DMSElementSummary {
+interface DMSElementSummary {
     aggregations: Aggregation;
 }
 
-export interface Aggregation {
+interface Aggregation {
     dataElements: ESDataElements;
 }
 
-export interface ESDataElements {
+interface ESDataElements {
     index: ElementIndex;
 }
 
-export interface ElementIndex {
+interface ElementIndex {
     buckets: Buckets[];
 }
 
-export interface Buckets {
+interface Buckets {
     key: string;
     maxIndex: Index;
     minIndex: Index;
 }
 
-export interface Index {
+interface Index {
     value: number;
 }
 
 
 
-export interface DMSObs {
+interface DMSObs {
     identity: string;
     obsDateTime: string;
     location: Location;
@@ -368,14 +368,14 @@ export interface DMSObs {
     dataElements: DataElements[];
 }
 
-export interface Author {
+interface Author {
     build: string;
     name: string;
     version: number;
 }
 
 // TODO: This is outdated, will be fixed when we add models to commons?
-export interface DataElements {
+interface DataElements {
     name: string;
     value: string;
     unit: string;
@@ -384,17 +384,17 @@ export interface DataElements {
     indexValue: number;
 }
 
-export interface Location {
+interface Location {
     type: string;
     coordinates: string;
 }
 
-export interface MetadataElements {
+interface MetadataElements {
     name: string;
     value: string;
     unit: string;
 }
-export interface RawMessage {
+interface RawMessage {
     header: string;
     message: string;
 }
