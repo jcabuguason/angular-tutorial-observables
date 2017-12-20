@@ -6,7 +6,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 - Run `npm run build:lib` to create a library for this component.
 - This will create a sharable `tgz` file.
-- For local development, this tgz can be installed into other projects with `npm install <local-path-to-commons>/msc-dms-commons-angular-<version>.tgz`
+- For local development, this tgz can be installed into other projects with `npm install 'file:<local-path-to-commons>/msc-dms-commons-angular-<version>.tgz'`
 
 ---
 
