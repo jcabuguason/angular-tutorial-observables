@@ -1,1 +1,1 @@
-export { LanguageConstants } from './LanguageConstants';
+export * from './LanguageConstants';

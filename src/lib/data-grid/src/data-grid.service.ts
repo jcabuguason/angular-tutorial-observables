@@ -298,7 +298,7 @@ export class DataGridService {
             else if (element.name !== undefined) {
                const headerID = this.formatHeaderName(element.name);
                this.buildMetadataColumn(headerID);
-               output += '"' + headerID +'": "' + element.value + '",';
+               output += '"' + headerID + '": "' + element.value + '",';
             }
         }
 
@@ -321,35 +321,35 @@ export class DataGridService {
 
 }
 
-export interface DMSElementSummary {
+interface DMSElementSummary {
     aggregations: Aggregation;
 }
 
-export interface Aggregation {
+interface Aggregation {
     dataElements: ESDataElements;
 }
 
-export interface ESDataElements {
+interface ESDataElements {
     index: ElementIndex;
 }
 
-export interface ElementIndex {
+interface ElementIndex {
     buckets: Buckets[];
 }
 
-export interface Buckets {
+interface Buckets {
     key: string;
     maxIndex: Index;
     minIndex: Index;
 }
 
-export interface Index {
+interface Index {
     value: number;
 }
 
 
 
-export interface DMSObs {
+interface DMSObs {
     identity: string;
     obsDateTime: string;
     location: Location;
@@ -362,14 +362,14 @@ export interface DMSObs {
     dataElements: DataElements[];
 }
 
-export interface Author {
+interface Author {
     build: string;
     name: string;
     version: number;
 }
 
 // TODO: This is outdated, will be fixed when we add models to commons?
-export interface DataElements {
+interface DataElements {
     name: string;
     value: string;
     unit: string;
@@ -378,17 +378,17 @@ export interface DataElements {
     indexValue: number;
 }
 
-export interface Location {
+interface Location {
     type: string;
     coordinates: string;
 }
 
-export interface MetadataElements {
+interface MetadataElements {
     name: string;
     value: string;
     unit: string;
 }
-export interface RawMessage {
+interface RawMessage {
     header: string;
     message: string;
 }

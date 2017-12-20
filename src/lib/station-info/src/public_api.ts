@@ -1,1 +1,1 @@
-export { StationInfoModule } from './station-info.module';
+export * from './station-info.module';

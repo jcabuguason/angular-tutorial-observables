@@ -1,2 +1,3 @@
-export { LockService } from './lock.service';
-export { LockHeartbeatService } from './lock-heartbeat.service';
+export * from './lock.service';
+export * from './lock-heartbeat.service';
+export * from './lock.config';

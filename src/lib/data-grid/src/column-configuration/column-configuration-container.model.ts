@@ -1,6 +1,7 @@
 import { ElementColumnConfiguration } from './element-column-configuration.interface';
 
 export class ColumnConfigurationContainer {
+
   constructor( public name: string, public configuration: ElementColumnConfiguration) {
   }
 
@@ -14,7 +15,7 @@ export class ColumnConfigurationContainer {
   }
 
   static findHeaderID(element): string {
-    return this.convertHeader(element.elementID, element.indexValue);
+    return ColumnConfigurationContainer.convertHeader(element.elementID, element.indexValue);
   }
 
   static valueOrDash(data, key: string): string {

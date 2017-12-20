@@ -5,7 +5,7 @@ import {ICellRendererAngularComp} from 'ag-grid-angular';
 @Component({
     selector: 'commons-qa-renderer',
     templateUrl: './qa-renderer.component.html',
-    styleUrls: ['./qa-renderer.component.css']
+    styleUrls: ['./qa-renderer.component.scss']
 })
 export class QaRendererComponent implements ICellRendererAngularComp {
   // Used if the component is called in another template
