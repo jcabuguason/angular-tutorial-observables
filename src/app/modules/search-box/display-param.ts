@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
 import { SearchParameter } from './search-parameter';
+import { SearchDatetime } from './search-datetime';
+import { SearchHoursRange } from './search-hours-range';
 
 export class DisplayParameter {
     /**
@@ -11,7 +12,7 @@ export class DisplayParameter {
      */
     constructor(
         private key: string,
-        private value: string,
+        public value: string,
         private displayChoices: string[],
         private searchParam: SearchParameter
     ) { }
@@ -29,6 +30,12 @@ export class DisplayParameter {
     }
 
     getSearchParam(): SearchParameter {
+        if (this.searchParam.getType() === 'SearchDatetime') {
+          return this.searchParam as SearchDatetime;
+        }
+        if (this.searchParam.getType() === 'SearchHoursRange') {
+          return this.searchParam as SearchHoursRange;
+        }
         return this.searchParam;
     }
 

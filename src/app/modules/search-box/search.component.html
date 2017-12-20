@@ -1,40 +1,61 @@
-<div class="advancedSearchBox"> 
+<div class="advancedSearchBox">
 
     <!-- selected search parameter -->
-    <div class="selected-parameters" *ngFor = "let p of displayParams; index as i">
+    <div class="selected-parameters" *ngFor = "let p of searchService.displayParams; index as i">
         <!-- parameters -->
         <div class="search-parameter" >
-            <div> {{ p.key }}: </div>
-            <input [(ngModel)]="p.value" #valueInput placeholder={{p.searchParam.placeholder}} class="value-input"
-                    (keyup)="searchForChoices(valueInput.value, i)" (keyup.enter)="addValueToDisplay(valueInput.value, i)"
-                    (click)="searchForChoices(valueInput.value, i)">
-            <button (click)="removeDisplay(i)">x</button>
+            <div> {{ p.getKey() }}: </div>
+            <div *ngIf="p.getSearchParam().getType() === 'SearchParameter'">
+                <input [(ngModel)]="p.value" #valueInput placeholder={{p.getSearchParam().getPlaceholder()}} class="value-input"
+                (keyup)="searchService.showSuggestedChoices(valueInput.value, i)" (keyup.enter)="searchService.addValueToDisplay(valueInput.value, i)"
+                (click)="searchService.showSuggestedChoices(valueInput.value, i)">
+
+            </div>
+
+            <div *ngIf="p.getSearchParam().getType() === 'SearchDatetime'">
+                <input type="date" value pattern="^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$"
+                [(ngModel)]="p.getSearchParam().date">
+
+                <input type="number" size="2" min="00" max="23" placeholder="HH"
+                [(ngModel)]="p.getSearchParam().hour" > :
+                <!-- need choices for hours -->
+                <input type="number" size="2" min="00" max="59" placeholder="MM"
+                [(ngModel)]="p.getSearchParam().minute" >
+            </div>
+
+            <div *ngIf="p.getSearchParam().getType() === 'SearchHoursRange'">
+                <input type="number" min="0" max="36"
+                [(ngModel)]="p.getSearchParam().hoursBefore" placeholder="hrs before"> /
+                <input type="number" min="0" max="36"
+                [(ngModel)]="p.getSearchParam().hoursAfter" placeholder="hrs after">
+            </div>
+
+            <button (click)="searchService.removeDisplay(i)">x</button>
 
             <!-- available choices -->
-            <li *ngFor="let c of p.displayChoices" >
-                <span (click)="addValueToDisplay(c, i)" > {{ c }} </span>
+            <li *ngFor="let c of p.getDisplayChoices()" >
+                <span (click)="searchService.addValueToDisplay(c, i)" > {{ c }} </span>
             </li>
 
         </div>
     </div>
 
     <!-- the actual "search box" -->
-    <input [(ngModel)]="searchString" #searchBox placeholder="Search..." class="search-parameter-input"
-        (click)="searchForParameter(searchBox.value, true)"
-        (keyup)="searchForParameter(searchBox.value, false)" (keyup.enter)="addNewParameter(searchBox.value)">
-        
+    <input [(ngModel)]="searchService.searchString" #searchBox placeholder="Search..." class="search-parameter-input"
+        (click)="searchService.showSuggestedParameters(searchBox.value, true)"
+        (keyup)="searchService.showSuggestedParameters(searchBox.value, false)" (keyup.enter)="searchService.addNewParameter(searchBox.value)">
+
 </div>
 
 <!-- suggestions as you type in the search box -->
-<div class="search-parameter-suggestions" *ngFor="let suggestion of suggestedParams">
-    <span class="search-parameter" (click)="addSuggestedParameter(suggestion)"> {{suggestion.name}}</span>
+<div class="search-parameter-suggestions" *ngFor="let suggestion of searchService.suggestedParams">
+    <span class="search-parameter" (click)="searchService.addSuggestedParameter(suggestion)"> {{suggestion.getName()}}</span>
 </div>
 
 
-<!-- Instead of this, it would be submit -->
 <div>
-    <button (click)="getTaxonomy()">Submit</button>
-    <li *ngFor="let m of message">
+    <button (click)="searchService.submitSearch()">Submit</button>
+    <li *ngFor="let m of searchService.message">
         <span> {{m}} </span>
     </li>
 </div>
