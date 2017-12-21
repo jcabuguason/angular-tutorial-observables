@@ -11,9 +11,9 @@ export class VofRendererComponent implements ICellRendererAngularComp {
     @Input() vof: string;
 
     agInit(params: any): void {
-      if (params.data[params.taxonomy] !== undefined) {
-        this.vof = params.data[params.taxonomy]['valueOverride'];
-      }
+        if (params.data[params.taxonomy] && params.data[params.taxonomy]['statusIndicators']) {
+          this.vof = params.data[params.taxonomy]['statusIndicators']['valueOverride'];
+        }
     }
 
     refresh(): boolean {
