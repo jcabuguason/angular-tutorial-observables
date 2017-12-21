@@ -23,7 +23,7 @@ export class SearchService {
     taxonomies = TAXONOMIES;
 
     // result taxonomies from the search
-    resultTaxonomies: string[];
+    resultTaxonomies: string[] = [];
 
     // available search parameters to choose from
     availableParams = SEARCH_LIST;
@@ -325,12 +325,10 @@ export class SearchService {
             }
         }
 
-        // just for showing results for now. can be removed later
-        // for (const t of taxResult) {
-        //     if (!this.message.includes(t.getTaxonomy())) {
-        //         this.message.push(t.getTaxonomy());
-        //         this.resultTaxonomies.push(t.getTaxonomy());
-        //     }
-        // }
+        for (const t of taxResult) {
+            if (this.resultTaxonomies.indexOf(t.getTaxonomy()) > -1) {
+                this.resultTaxonomies.push(t.getTaxonomy());
+            }
+        }
     }
 }

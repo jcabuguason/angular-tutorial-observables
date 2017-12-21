@@ -1,10 +1,8 @@
-import { Component } from '@angular/core';
-
 export class SearchTaxonomy {
 
     /**
      * TODO: should have config to set the defaults
-     * @param taxonomy The taxonomy (ex: "/msc/observation/atmospheric/surface_weather/ca-1.1-ascii")
+     * @param taxonomy The taxonomy (ex: '/msc/observation/atmospheric/surface_weather/ca-1.1-ascii')
      * @param keywords Special words to associate taxonomy with (must also be a valid choice in the search categories).
      * @param phases Phases that can be returned from the search (decoded-xml-2.0, decoded_qa-xml-2.0, etc). Default is all.
      */
@@ -20,8 +18,8 @@ export class SearchTaxonomy {
      * Splits up the taxonomy
      * @param taxonomy The taxonomy
      */
-    splitToKeywords(taxonomy: string){
-        const keywords = taxonomy.split('/').filter(k => k !== "");
+    splitToKeywords(taxonomy: string) {
+        const keywords = taxonomy.split(':').filter(k => k !== '');
         return keywords;
     }
 
@@ -32,17 +30,18 @@ export class SearchTaxonomy {
     getKeywords(): string[] {
         return this.keywords;
     }
-    
+
     includesKeyword(word: string) {
-        return this.keywords.indexOf(word) !== -1;
+        const index = this.keywords.indexOf(word);
+        return index > -1;
     }
 }
 
 /** not really used yet */
 const defaultPhases: string[] = [
-    "decoded-xml-2.0",
-    "decoded_qa-xml-2.0",
-    "decoded_qa_full-xml-2.0",
-    "decoded_enhanced-xml-2.0",
-    "decoded_qa_enhanced-xml-2.0"
-]
+    'decoded-xml-2.0',
+    'decoded_qa-xml-2.0',
+    'decoded_qa_full-xml-2.0',
+    'decoded_enhanced-xml-2.0',
+    'decoded_qa_enhanced-xml-2.0'
+];
