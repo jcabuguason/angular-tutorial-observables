@@ -11,8 +11,8 @@ import 'rxjs/add/observable/throw';
 import { LockHeartbeatService } from './lock-heartbeat.service';
 import { LockConfig, LOCK_CONFIG } from './lock.config';
 import { LockService } from './lock.service';
-import { TextDialogComponent } from '../../text-dialog/src/text-dialog.component';
-import { AquireLockResponse } from './model/aquire-lock-response.model';
+import { TextDialogComponent } from '../../core/text-dialog/src/text-dialog.component';
+import { AcquireLockResponse } from './model/acquire-lock-response.model';
 import { ReleaseLockResponse } from './model/release-lock-response.model';
 import { LockInfoResponse } from './model/lock-info-response.model';
 
@@ -22,7 +22,7 @@ describe('LockHeartbeatService', () => {
   let lockServiceStub: LockServiceStub;
 
   interface LockServiceStub {
-    aquireLock: Observable<AquireLockResponse>;
+    aquireLock: Observable<AcquireLockResponse>;
     releaseLock: Observable<ReleaseLockResponse>;
     lockInfo: Observable<LockInfoResponse>;
   }
@@ -85,23 +85,23 @@ describe('LockHeartbeatService', () => {
 
     let x = 0;
 
-    spyOn(lockService, 'aquireLock').and.returnValue(lockServiceStub.aquireLock);
+    spyOn(lockService, 'acquireLock').and.returnValue(lockServiceStub.aquireLock);
     spyOn(lockService, 'releaseLock').and.returnValue(lockServiceStub.releaseLock);
 
     service.startLockHeartbeat(['1'], 'metadata', () => x++);
 
     tick(29);
-    expect(lockService.aquireLock).toHaveBeenCalledTimes(6);
+    expect(lockService.acquireLock).toHaveBeenCalledTimes(6);
     expect(lockService.releaseLock).toHaveBeenCalledTimes(0);
     expect(x).toBe(0);
 
     tick(31);
-    expect(lockService.aquireLock).toHaveBeenCalledTimes(12);
+    expect(lockService.acquireLock).toHaveBeenCalledTimes(12);
     expect(lockService.releaseLock).toHaveBeenCalledTimes(1);
     expect(x).toBe(0);
 
     tick(60);
-    expect(lockService.aquireLock).toHaveBeenCalledTimes(12);
+    expect(lockService.acquireLock).toHaveBeenCalledTimes(12);
     expect(x).toBe(0);
 
     flush();
@@ -110,25 +110,25 @@ describe('LockHeartbeatService', () => {
   it('should reset the idle timer after a action', fakeAsync(() => {
     let x = 0;
 
-    spyOn(lockService, 'aquireLock').and.returnValue(lockServiceStub.aquireLock);
+    spyOn(lockService, 'acquireLock').and.returnValue(lockServiceStub.aquireLock);
     spyOn(lockService, 'releaseLock').and.returnValue(lockServiceStub.releaseLock);
 
     service.startLockHeartbeat(['1'], 'metadata', () => x++);
 
     tick(30);
-    expect(lockService.aquireLock).toHaveBeenCalledTimes(7);
+    expect(lockService.acquireLock).toHaveBeenCalledTimes(7);
     expect(lockService.releaseLock).toHaveBeenCalledTimes(0);
     expect(x).toBe(0);
 
     document.documentElement.click();
 
     tick(30);
-    expect(lockService.aquireLock).toHaveBeenCalledTimes(13);
+    expect(lockService.acquireLock).toHaveBeenCalledTimes(13);
     expect(lockService.releaseLock).toHaveBeenCalledTimes(0);
     expect(x).toBe(0);
 
     tick(30);
-    expect(lockService.aquireLock).toHaveBeenCalledTimes(18);
+    expect(lockService.acquireLock).toHaveBeenCalledTimes(18);
     expect(lockService.releaseLock).toHaveBeenCalledTimes(1);
     expect(x).toBe(0);
   }));
@@ -136,21 +136,21 @@ describe('LockHeartbeatService', () => {
   it('should lock the user', fakeAsync(() => {
      let x = 0;
 
-    const aquireLock = spyOn(lockService, 'aquireLock').and.returnValue(lockServiceStub.aquireLock);
+    const aquireLock = spyOn(lockService, 'acquireLock').and.returnValue(lockServiceStub.aquireLock);
     spyOn(lockService, 'releaseLock').and.returnValue(lockServiceStub.releaseLock);
     spyOn(lockService, 'lockInfo').and.returnValue(lockServiceStub.lockInfo);
 
     service.startLockHeartbeat(['1'], 'metadata', () => x++);
 
     tick(30);
-    expect(lockService.aquireLock).toHaveBeenCalledTimes(7);
+    expect(lockService.acquireLock).toHaveBeenCalledTimes(7);
     expect(lockService.releaseLock).toHaveBeenCalledTimes(0);
     expect(x).toBe(0);
 
     aquireLock.and.returnValue(Observable.throw(new HttpErrorResponse({status: 423})));
 
     tick(30);
-    expect(lockService.aquireLock).toHaveBeenCalledTimes(8);
+    expect(lockService.acquireLock).toHaveBeenCalledTimes(8);
     expect(lockService.releaseLock).toHaveBeenCalledTimes(1);
     expect(x).toBe(1);
 

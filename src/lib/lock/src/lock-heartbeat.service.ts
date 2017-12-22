@@ -13,13 +13,13 @@ import 'rxjs/add/observable/forkJoin';
 
 import { LOCK_CONFIG, LockConfig } from './lock.config';
 import { LockService } from './lock.service';
-import { TextDialogComponent } from '../../text-dialog/src/text-dialog.component';
+import { TextDialogComponent } from '@msc-dms-commons-angular/core/text-dialog';
 
 @Injectable()
 export class LockHeartbeatService {
 
   private static readonly INTERRUPTS = ['click', 'mousemove', 'keydown', 'scroll'];
-  private static readonly ONE_MINUTE = 6000;
+  private static readonly ONE_MINUTE = 60000;
 
   private heartbeat$: Observable<number>;
   private userActivity$: Observable<any>;
@@ -56,7 +56,7 @@ export class LockHeartbeatService {
     this.heartbeatSubscription = this.heartbeat$
       .pipe(
         takeUntil(this.unsubscribe),
-        mergeMap(() => this.lockService.aquireLock({resource_id: resourceIDs, type, reset_enabled: true}))
+        mergeMap(() => this.lockService.acquireLock({resource_id: resourceIDs, type, reset_enabled: true}))
       )
       .subscribe(
         response => {},
@@ -108,7 +108,8 @@ export class LockHeartbeatService {
           const warningMinutes = this.config.warning / LockHeartbeatService.ONE_MINUTE;
           this.warningDialogRef = this.dialog.open(TextDialogComponent, {
             data: {
-              message: `You have been idle for ${appMinutes} minutes. You will lose your lock in ${warningMinutes} minutes.`
+              message: `You have been idle for ${appMinutes - warningMinutes} minutes.` +
+                 `You will lose your lock in ${warningMinutes} minutes.`
             }
           });
         });
@@ -122,10 +123,10 @@ export class LockHeartbeatService {
       )
       .subscribe(
         value => {
-          if (this.warningDialogRef) {
-            this.warningDialogRef.close();
-            this.startWarningTimeout();
-          }
+          // if (this.warningDialogRef) {
+          //   this.warningDialogRef.close();
+          //   this.startWarningTimeout();
+          // }
         },
         err => {
           this.heartbeatSubscription.unsubscribe();
@@ -165,6 +166,6 @@ export class LockHeartbeatService {
   }
 
   private handleUnknownError(error) {
-    console.log('Unknown error: ' + error);
+    console.log('Unknown error: ', error);
   }
 }
