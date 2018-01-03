@@ -326,7 +326,7 @@ export class SearchService {
         }
 
         for (const t of taxResult) {
-            if (this.resultTaxonomies.indexOf(t.getTaxonomy()) > -1) {
+            if (this.resultTaxonomies.indexOf(t.getTaxonomy()) === -1) {
                 this.resultTaxonomies.push(t.getTaxonomy());
             }
         }
