@@ -12,6 +12,7 @@
 
 # dependencies
 /node_modules
+/.npm-packages
 
 # IDEs and editors
 /.idea
