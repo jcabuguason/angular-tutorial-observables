@@ -6,7 +6,16 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 - Run `npm run build:lib` to create a library for this component.
 - This will create a sharable `tgz` file.
-- Install this into other projects with `npm install 'file:<local-path-to-commons>/msc-dms-commons-angular-<version>.tgz'`
+- For local development, this tgz can be installed into other projects with `npm install '<local-path-to-commons>/msc-dms-commons-angular-<version>.tgz'`
+
+## Development process
+
+All shared modules should be placed be under /src/lib/core/
+
+If another project wants to import from core, `import { ... } from 'msc-dms-commons-angular/core/<module_name>`  
+If another module within commons wants to import from core, `import { ... } from @msc-dms-commons-angular/core/<module_name>`
+
+When developing a module that uses a shared module, there will be errors when importing. This happens because the shared module is not found in node_modules yet. It can be ignored or you can run `npm run build:core` to fix it.
 
 ## Jenkins Builds
 

@@ -5,8 +5,5 @@
         "@angular/material": "@angular/material"
       }
     }
-  },
-  "peerDependencies": {
-    "@angular/material": "^5.0.1"
   }
 }

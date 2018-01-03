@@ -1,4 +1,4 @@
-export interface AquireLockResponse {
+export interface AcquireLockResponse {
   locked_resources: string[];
   type: string;
   user: string;

@@ -9,7 +9,9 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "test": "karma start ./karma.conf.js",
-    "build:lib": "ng-packagr -p ./src/lib/ng-package.json && npm pack ./dist/lib"
+    "build:lib": "npm run build:core && npm run build:commons && npm pack ./dist/lib",
+    "build:core": "ng-packagr -p ./src/lib/core/ng-package.json && npm link ./dist/core",
+    "build:commons": "ng-packagr -p ./src/lib/ng-package.json"
   },
   "private": true,
   "dependencies": {
