@@ -85,25 +85,25 @@ export class ElasticSearchService {
     if (parameters.type != null) {
       params = params.set('type', parameters.type);
     }
-    else if (parameters.size != null) {
+    if (parameters.size != null) {
       params = params.set('size', String(parameters.size));
     }
-    else if (parameters.from != null) {
+    if (parameters.from != null) {
       params = params.set('from', format(parameters.from, 'YYYYMMDDHHmm'));
     }
-    else if (parameters.to != null) {
+    if (parameters.to != null) {
       params = params.set('to', format(parameters.to, 'YYYYMMDDHHmm'));
     }
-    else if (parameters.datetimeType != null) {
+    if (parameters.datetimeType != null) {
       params = params.set('datetimeType', parameters.datetimeType);
     }
-    else if (parameters.sortFields != null) {
+    if (parameters.sortFields != null) {
       params = params.set('sortFields', parameters.sortFields);
     }
-    else if (parameters.startIndex != null) {
+    if (parameters.startIndex != null) {
       params = params.set('startIndex', parameters.startIndex);
     }
-    else if (parameters.includeAggregations != null) {
+    if (parameters.includeAggregations != null) {
       params = params.set('includeAggregations', String(parameters.includeAggregations));
     }
     return params;
