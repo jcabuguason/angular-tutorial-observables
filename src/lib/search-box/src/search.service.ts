@@ -201,8 +201,7 @@ export class SearchService {
         }
       }
 
-      const smodel: SearchModel = new SearchModel(this.resultTaxonomies, stnNames, startDate, endDate);
-      return smodel;
+      return new SearchModel(this.resultTaxonomies, stnNames, startDate, endDate);
     }
 
     submitSearch() {
@@ -224,6 +223,7 @@ export class SearchService {
       return exists;
     }
 
+    // helper function for getTaxonomy
     // combine parameters of the same value
     private combineParameters() {
         let param: SearchParameter;
@@ -237,23 +237,14 @@ export class SearchService {
         for (const p of this.displayParams) {
             param = p.getSearchParam();
 
-            if (param.getType() === 'SearchDatetime') {
+            if (param.getType() === 'SearchDatetime' || param.getType() === 'SearchHoursRange' ) {
                 // datetime and hours range are handled differently
-                // there can only be one occurence for each datetime and hours range
-                // these are just temporary values to determine if all fields are filled in
                 const temp = param as SearchDatetime;
-                // TODO: need better way to determine if the fields are filled in
-                displayedValue = temp.isUnfilled()
-                    ? ''
-                    : temp.date + ' ' + temp.hour + ':' + temp.minute;
-
-            } else if (param.getType() === 'SearchHoursRange') {
-                const temp = param as SearchHoursRange;
-                displayedValue = temp.isUnfilled()
-                    ? ''
-                    : temp.hoursBefore + '/' + temp.hoursAfter;
+                if (temp.isUnfilled()) {
+                  this.removeDisplay(this.displayParams.indexOf(p));
+                }
+                continue;
             } else {
-                // param.getType() === 'SearchParameter'
                 displayedValue = p.getValue();
             }
 
@@ -295,6 +286,7 @@ export class SearchService {
         let temp: SearchTaxonomy[] = [];
         let missing: string[] = [];
         this.message = [];
+        this.resultTaxonomies = [];
 
         if (this.displayParams !== null) {
             this.combineParameters();
