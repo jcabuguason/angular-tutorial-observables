@@ -33,14 +33,15 @@ export class SearchDatetime extends SearchParameter {
             this.hour = this.fixValue(this.hour, 0, 23);
             this.minute = this.fixValue(this.minute, 0, 59);
             const splitDate = this.date.split('-');
-            const epoch = Date.UTC(
+            datetime = new Date(
                 +splitDate[0],
                 +splitDate[1] - 1,
                 +splitDate[2],
                 this.hour,
                 this.minute
             );
-            datetime = new Date(epoch);
+            // Handle Invalid Date
+            if (isNaN(datetime.getTime())) { datetime = null; }
         }
         return datetime;
     }
