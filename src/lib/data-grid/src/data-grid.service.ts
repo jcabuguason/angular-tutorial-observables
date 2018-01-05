@@ -77,6 +77,13 @@ export class DataGridService {
         this.reloadGrid();
     }
 
+    removeAllData() {
+        this.rowData = [];
+        this.columnsGenerated = [];
+        this.columnDefs = this.getStaticHeaders();
+        this.reloadGrid();
+    }
+
     reloadGrid() {
         this.reloadRequested.emit();
     }
