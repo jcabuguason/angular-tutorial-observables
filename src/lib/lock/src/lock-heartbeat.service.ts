@@ -26,6 +26,7 @@ export class LockHeartbeatService {
   private unsubscribe: Subject<void>;
   private heartbeatSubscription: Subscription;
   private warningDialogRef: MatDialogRef<TextDialogComponent>;
+  private hasLock: boolean;
 
   constructor(
     @Inject(LOCK_CONFIG)
@@ -39,9 +40,11 @@ export class LockHeartbeatService {
     });
     this.userActivity$ = Observable.merge(...events$);
     this.unsubscribe = new Subject<void>();
+    this.hasLock = false;
   }
 
   startLockHeartbeat(resourceIDs: string[], type: string, handleUnsuccessfulLock: () => void) {
+    this.hasLock = false;
     this.startHeartbeat(resourceIDs, type, handleUnsuccessfulLock);
     this.startWarningTimeout();
     this.startApplicationTimeout(resourceIDs, type, handleUnsuccessfulLock);
@@ -49,7 +52,6 @@ export class LockHeartbeatService {
 
   removeLockHeartbeat() {
     this.unsubscribe.next();
-    this.unsubscribe.complete();
   }
 
   private startHeartbeat(resourceIDs: string[], type: string, handleUnsuccessfulLock: () => void) {
@@ -59,8 +61,13 @@ export class LockHeartbeatService {
         mergeMap(() => this.lockService.acquireLock({resource_id: resourceIDs, type, reset_enabled: true}))
       )
       .subscribe(
-        response => {},
+        response => {
+          this.hasLock = true;
+        },
         (error: HttpErrorResponse) => {
+
+          this.hasLock = false;
+
           if (error.status === 423) {
 
             const lockInfos = resourceIDs.map((resourceID) => {
@@ -112,6 +119,14 @@ export class LockHeartbeatService {
                  `You will lose your lock in ${warningMinutes} minutes.`
             }
           });
+
+          this.warningDialogRef.afterClosed()
+            .pipe(take(1))
+            .subscribe(() => {
+              if (this.hasLock) {
+                this.startWarningTimeout();
+              }
+            });
         });
   }
 
@@ -122,14 +137,10 @@ export class LockHeartbeatService {
         timeout(this.config.applicationTTL)
       )
       .subscribe(
-        value => {
-          // if (this.warningDialogRef) {
-          //   this.warningDialogRef.close();
-          //   this.startWarningTimeout();
-          // }
-        },
+        value => {},
         err => {
           this.heartbeatSubscription.unsubscribe();
+          this.hasLock = false;
 
           this.lockService.releaseLock({resource_id: resourceIDs, type})
             .subscribe(
