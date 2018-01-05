@@ -1,2 +1,6 @@
-<p> {{data.message}} </p>
-<p class="context" *ngIf="data.context"> {{data.context}} </p>
+<div>
+  <div *ngFor="let message of data.message">{{message}}</div>
+</div>
+<div class="context" *ngIf="data.context">
+  <div *ngFor="let context of data.context">{{context}}</div>
+</div>
