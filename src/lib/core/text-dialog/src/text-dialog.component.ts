@@ -2,8 +2,8 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material';
 
 export interface TextDialogData {
-  message?: string;
-  context?: string;
+  message?: string[];
+  context?: string[];
 }
 
 @Component({

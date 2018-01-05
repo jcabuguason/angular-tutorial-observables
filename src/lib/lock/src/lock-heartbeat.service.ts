@@ -69,18 +69,26 @@ export class LockHeartbeatService {
 
             Observable.forkJoin(lockInfos).subscribe((lockInfoResponses) => {
 
-              let lockMessage = 'Unable to aquire lock:\n';
-              for (const info of lockInfoResponses) {
-                lockMessage += `${info.user_first_name} ${info.user_last_name}, has already locked ${info.resource_id}.\n`;
-                lockMessage += `The resource will be freed at ${info.timeout}.\n`;
-              }
-              lockMessage += `Try again later.`;
+              if (lockInfoResponses.length > 0) {
 
-              this.dialog.open(TextDialogComponent, {
-                data: {
-                  message: lockMessage
+                const lockMessage: string[] = [];
+                const commonLockInfo = lockInfoResponses[0];
+                const lockName = `${commonLockInfo.user_first_name} ${commonLockInfo.user_last_name}`;
+                const lockTimeout = commonLockInfo.timeout;
+
+                lockMessage.push(`${lockName} has alrady locked the following resources:`);
+                for (const info of lockInfoResponses) {
+                  lockMessage.push(`    * ${info.resource_id}`);
                 }
-              });
+                lockMessage.push(`The resource will be freed at ${lockTimeout}.`);
+                lockMessage.push(`Please try again later.`);
+
+                this.dialog.open(TextDialogComponent, {
+                  data: {
+                    message: lockMessage
+                  }
+                });
+              }
 
             });
 
@@ -108,8 +116,10 @@ export class LockHeartbeatService {
           const warningMinutes = this.config.warning / LockHeartbeatService.ONE_MINUTE;
           this.warningDialogRef = this.dialog.open(TextDialogComponent, {
             data: {
-              message: `You have been idle for ${appMinutes - warningMinutes} minutes.` +
-                 `You will lose your lock in ${warningMinutes} minutes.`
+              message: [
+                `You have been idle for ${appMinutes - warningMinutes} minutes.`,
+                `You will lose your lock in ${warningMinutes} minutes.`
+              ]
             }
           });
         });
@@ -137,7 +147,9 @@ export class LockHeartbeatService {
                 const appMinutes = this.config.applicationTTL / LockHeartbeatService.ONE_MINUTE;
                 const dialogRef = this.dialog.open(TextDialogComponent, {
                   data: {
-                    message: `You have been idle for ${appMinutes} minutes, so your lock has been removed. Click to attempt to regain lock.`
+                    message: [
+                      `You have been idle for ${appMinutes} minutes, so your lock has been removed. Click to attempt to regain lock.`
+                    ]
                   }
                 });
 
