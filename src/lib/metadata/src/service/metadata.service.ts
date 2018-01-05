@@ -68,14 +68,13 @@ export class MetadataService {
   // it should tied to a taxonomy
   loadInstanceLinks(taxonomy: string) {
     taxonomy = taxonomy.replace('/definition-xml-2.0', '/instance-xml-2.0');
-    const otherOptions = Object.assign({responseType: 'text'}, this.httpOptions);
 
     // TODO: try to change this to observable only
     return this.http
-      .get(`${this.config.endpoint}/metadata/instances?dataset=${taxonomy}`, otherOptions)
+      .get<string>(`${this.config.endpoint}/metadata/instances?dataset=${taxonomy}`, this.httpOptions)
       .toPromise()
-      .then((instanceLinks: string) => {
-        const links: string[] = instanceLinks.split('\\n');
+      .then((instanceLinks) => {
+        const links: string[] = instanceLinks.split('\n');
         links.pop();
         return links;
       })
