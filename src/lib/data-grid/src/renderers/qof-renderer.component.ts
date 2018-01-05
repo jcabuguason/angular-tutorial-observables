@@ -11,10 +11,10 @@ export class QofRendererComponent implements ICellRendererAngularComp {
     @Input() qof: string;
 
     agInit(params: any): void {
-      if (params.data[params.taxonomy] !== undefined) {
-        this.qof = params.data[params.taxonomy]['qaFlagOverride'];
+        if (params.data[params.taxonomy] && params.data[params.taxonomy]['statusIndicators']) {
+          this.qof = params.data[params.taxonomy]['statusIndicators']['qaFlagOverride'];
+        }
       }
-    }
 
     refresh(): boolean {
         return false;
