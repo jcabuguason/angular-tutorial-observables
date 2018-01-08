@@ -24,7 +24,7 @@ export class DataGridService {
     private identityHeader;
 
     public rowData: object[] = [];
-    public columnDefs: any[] = this.getStaticHeaders();
+    public columnDefs: any[];
 
     public reloadRequested = new EventEmitter();
 
@@ -51,6 +51,10 @@ export class DataGridService {
 
     setColumnConfiguration(columnConfig: ElementColumnConfiguration) {
         this.columnConfiguration = columnConfig;
+
+        this.identityHeader = this.columnConfiguration.getIdentityHeaders();
+        this.columnDefs = [];
+        this.columnDefs.push(this.identityHeader);
     }
 
     // Only works for Column Configs set up by Commons (Defaults)
@@ -64,6 +68,9 @@ export class DataGridService {
         if (this.columnConfiguration == null) {
             this.columnConfiguration = this.defaultColumnConfiguration;
         }
+        this.identityHeader = this.columnConfiguration.getIdentityHeaders();
+        this.columnDefs = [];
+        this.columnDefs.push(this.identityHeader);
     }
 
     addRowData(obs: object) {
@@ -97,8 +104,7 @@ export class DataGridService {
             if (currentNode.nodeNumber === nodeNumber) {
               if (currentNode.terminal === 'true' ) {
                 break;
-              }
-              else {
+              } else {
                 return currentNode;
               }
             }
@@ -108,7 +114,7 @@ export class DataGridService {
           'headerName': headerName,
           'terminal': 'unknown',
           'nodeNumber': nodeNumber
-        }
+        };
 
         currentNodes.push(newNode);
 
@@ -131,37 +137,6 @@ export class DataGridService {
         } else if (nodeNumber === 7) {
             return NodeLookups.node7[nodeHeader];
         }
-    }
-
-    // Creates the static headers
-    private getStaticHeaders(): any[] {
-        const staticHeaders: any[] = [];
-
-        this.identityHeader = {
-          'headerName': 'Identity',
-          'children': []
-        };
-
-        staticHeaders.push(this.identityHeader);
-
-        const stationHeader = {
-          'headerName': 'Station',
-          'field': 'station',
-          'width': 100,
-          'pinned': true
-        };
-        this.identityHeader.children.push(stationHeader);
-
-        const dateTimeHeader = {
-          'headerName': 'Instance Date',
-          'field': 'obsDateTime',
-          'width': 220,
-          'pinned': true
-        };
-        this.identityHeader.children.push(dateTimeHeader);
-
-        return staticHeaders;
-
     }
 
     private createSubHeader(headerDepth: number, nodes: string[]) {
@@ -191,7 +166,7 @@ export class DataGridService {
         }
     }
 
-    private generateHeaderString(nodes:string[], index: number) {
+    private generateHeaderString(nodes: string[], index: number) {
       const firstDraft = this.getNodeHeader((index + 1), nodes[index]);
       return (firstDraft === undefined)
         ? firstDraft
@@ -294,8 +269,7 @@ export class DataGridService {
         for (const element of parsed.metadataElements) {
             if (element.name === 'stn_nam') {
                output += '"station": "' + element.value + '",';
-            }
-            else if (element.name !== undefined) {
+            } else if (element.name !== undefined) {
                const headerID = this.formatHeaderName(element.name);
                this.buildMetadataColumn(headerID);
                output += '"' + headerID + '": "' + element.value + '",';
