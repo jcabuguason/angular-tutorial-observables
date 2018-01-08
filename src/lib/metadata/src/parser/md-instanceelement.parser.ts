@@ -7,19 +7,21 @@ export class MDInstanceElementParser {
 
   static parse(raw): MDInstanceElement {
     const instelements: MDInstanceElement[] = [];
-    if (raw['element'] !== undefined) {
+    if (raw['element'] != null) {
       [].concat(raw['element']).forEach(e => instelements.push(MDInstanceElementParser.parse(e)));
     }
 
     let english;
     let french;
-    const languageJSON = [].concat(raw['lanaguage']);
-    try {
-      english = raw['language'].find(l => l['@name'] === 'en')['@value'];
-      french = raw['language'].find(l => l['@name'] === 'fr')['@value'];
-    }
-    catch (error) {
-      throw new ParseError('Improper format of description: ' + raw + '\n\t' + error);
+    if (raw['lanaguage'] != null) {
+      const languageJSON = [].concat(raw['lanaguage']);
+      try {
+        english = languageJSON.find(l => l['@name'] === 'en')['@value'];
+        french = languageJSON.find(l => l['@name'] === 'fr')['@value'];
+      }
+      catch (error) {
+        throw new ParseError('Improper format of description: ' + raw + '\n\t' + error);
+      }
     }
 
     const instelement: MDInstanceElement = {

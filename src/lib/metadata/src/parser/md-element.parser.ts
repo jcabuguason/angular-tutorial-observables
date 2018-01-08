@@ -7,62 +7,62 @@ import { ParseError } from '../error/ParseError';
 @Injectable()
 export class MDElementParser {
 
-    static parse(raw): MDElement {
+  static parse(raw): MDElement {
 
-      try {
-        const description = [].concat(raw['description']);
-        const descriptionJSON = description
-            .filter(obj => obj != null)
-            .find(obj => obj['@name'] === 'description');
+    try {
+      const description = [].concat(raw['description']);
+      const descriptionJSON = description
+        .filter(obj => obj != null)
+        .find(obj => obj['@name'] === 'description');
 
-        const displayNameJSON = description
-            .filter(obj => obj != null)
-            .find(obj => obj['@name'] === 'display-name');
+      const displayNameJSON = description
+        .filter(obj => obj != null)
+        .find(obj => obj['@name'] === 'display-name');
 
-        const enums: string[] = [];
-        if (raw.enum !== undefined) {
-            raw['enum'].forEach(e => enums.push(e['@value']));
-        }
-
-        const elements: MDElement[] = [];
-        if (raw.element !== undefined) {
-            [].concat(raw['element']).forEach(e => elements.push(MDElementParser.parse(e)));
-        }
-
-        let english: boolean;
-        let french: boolean;
-        if (raw['required-language'] !== undefined) {
-            const requiredLanguages = [].concat(raw['required-language']).map(lang => lang['@name']);
-            english = requiredLanguages.indexOf('en') !== -1;
-            french = requiredLanguages.indexOf('fr') !== -1;
-        }
-
-        const element: MDElement = {
-            format: raw['@format'],
-            group: raw['@group'],
-            id: raw['@id'],
-            index: raw['@index'],
-            languageSensitive: raw['@language-sensitive'] === 'true' ? true : false,
-            max: String(raw['@max']),
-            min: String(raw['@min']),
-            name: raw['@name'],
-            uom: raw['@uom'],
-            value: raw['@value'],
-            description: descriptionJSON ? MDDescriptionParser.parse(descriptionJSON) : null,
-            displayName: displayNameJSON ? MDDescriptionParser.parse(displayNameJSON) : null,
-            pattern: raw['@pattern'],
-            enums: enums,
-            elements: elements,
-            requiredLanguages: {
-                english: english,
-                french: french
-            }
-        };
-
-        return element;
+      const enums: string[] = [];
+      if (raw.enum !== undefined) {
+        [].concat(raw['enum']).forEach(e => enums.push(e['@value']));
       }
-      catch (error) {
-        throw new ParseError('Improper format of description: ' + raw + '\n\t' + error);
+
+      const elements: MDElement[] = [];
+      if (raw.element !== undefined) {
+        [].concat(raw['element']).forEach(e => elements.push(MDElementParser.parse(e)));
       }
+
+      let english: boolean;
+      let french: boolean;
+      if (raw['required-language'] !== undefined) {
+        const requiredLanguages = [].concat(raw['required-language']).map(lang => lang['@name']);
+        english = requiredLanguages.indexOf('en') !== -1;
+        french = requiredLanguages.indexOf('fr') !== -1;
+      }
+
+      const element: MDElement = {
+        format: raw['@format'],
+        group: raw['@group'],
+        id: raw['@id'],
+        index: raw['@index'],
+        languageSensitive: raw['@language-sensitive'] === 'true' ? true : false,
+        max: String(raw['@max']),
+        min: String(raw['@min']),
+        name: raw['@name'],
+        uom: raw['@uom'],
+        value: raw['@value'],
+        description: descriptionJSON ? MDDescriptionParser.parse(descriptionJSON) : null,
+        displayName: displayNameJSON ? MDDescriptionParser.parse(displayNameJSON) : null,
+        pattern: raw['@pattern'],
+        enums: enums,
+        elements: elements,
+        requiredLanguages: {
+            english: english,
+            french: french
+        }
+      };
+
+      return element;
     }
+    catch (error) {
+      throw new ParseError('Improper format of element: ' + JSON.stringify(raw) + '\n\t' + error);
+    }
+  }
 }
