@@ -1,29 +1,60 @@
+import { SearchParameter } from './search-parameter';
+
 export class SearchTaxonomy {
-keywords: string[];
+    private allSearchWords: SearchTaxonomyWord[] = [];
     /**
-     * TODO: should have config to set the defaults
-     * @param taxonomy The taxonomy (ex: '/msc/observation/atmospheric/surface_weather/ca-1.1-ascii')
+     * @param taxonomy The taxonomy (ex: 'dms_data:msc:observation:atmospheric:surface_weather:ca-1.1-ascii')
+     * @param allSearchParams All searchable parameters and choices
      * @param searchWords words to associate taxonomy with
      * @param phases Phases that can be returned from the search (decoded-xml-2.0, decoded_qa-xml-2.0, etc). Default is all.
      */
     constructor(
         private taxonomy: string,
-        private searchWords: SearchTaxonomyWord[],
+        private allSearchParams: SearchParameter[],
+        private extraSearchWords: string[] = [],
         private phases: string[] = defaultPhases
     ) {
+        const taxonomyKeys = this.splitToKeywords(taxonomy);
+        this.categorize(allSearchParams, taxonomyKeys);
+        this.categorize(allSearchParams, extraSearchWords);
+
+        // no need to keep these values anymore
+        delete this.allSearchParams;
+        delete this.extraSearchWords;
     }
 
     getTaxonomy(): string {
         return this.taxonomy;
     }
 
-    includesSearchWord(name: string, value: string) {
-        const s = this.searchWords.filter(item => item.getName() === name && item.includesValue(value));
+    includesSearchWord(name: string, value: string): boolean {
+        const s = this.allSearchWords.filter(item => item.getName() === name && item.includesValue(value));
         return s.length > 0;
     }
 
-    getSearchWords() {
-      return this.searchWords;
+    getSearchWords(): SearchTaxonomyWord[] {
+      return this.allSearchWords;
+    }
+
+    private splitToKeywords(taxonomy: string): string[] {
+      return taxonomy.split(':').filter(k => k !== '');
+    }
+
+    private categorize(searchParams: SearchParameter[], words: string[]) {
+      if (!searchParams) { return; }
+
+      words.forEach(word => {
+          const category = searchParams.filter(param => param.getChoices().indexOf(word) > -1 );
+
+          category.forEach(cat => {
+              const included = this.allSearchWords.filter(item => item.getName() === cat.getName());
+              if (included.length > 0) {
+                  included[0].addValue(word);
+              } else {
+                  this.allSearchWords.push(new SearchTaxonomyWord(cat.getName(), [word]));
+              }
+          });
+      });
     }
 
 }

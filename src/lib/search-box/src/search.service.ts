@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, Inject, EventEmitter } from '@angular/core';
 
 import { DisplayParameter } from './display-param';
 
@@ -11,22 +11,22 @@ import { EquivalentKeywords } from './equivalent-keywords';
 
 import { SearchModel } from './search.model';
 
-/** TODO: this would need to be an actual config */
-import { SEARCH_LIST } from './mock-config';
-import { TAXONOMIES } from './mock-config';
-import { ALL_EQUIVS } from './mock-config';
+import { SEARCH_BOX_CONFIG, SearchBoxConfig } from './search-box.config';
 
 @Injectable()
 export class SearchService {
 
     // all taxonomies
-    taxonomies = TAXONOMIES;
+    taxonomies: SearchTaxonomy[] = [];
 
     // result taxonomies from the search
     resultTaxonomies: SearchTaxonomy[] = [];
 
     // available search parameters to choose from
-    availableParams = SEARCH_LIST;
+    availableParams: SearchParameter[] = [];
+
+    // equivalent words (ex. dnd, national defence)
+    equivalentWords: EquivalentKeywords[] = [];
 
     // the main input box
     searchString = '';
@@ -42,7 +42,13 @@ export class SearchService {
 
     searchRequested = new EventEmitter();
 
-    constructor() { }
+    constructor(
+        @Inject(SEARCH_BOX_CONFIG)
+        private config: SearchBoxConfig) {
+            this.taxonomies = this.config.taxonomies;
+            this.availableParams = this.config.search_list;
+            this.equivalentWords = this.config.equivalent_words;
+        }
 
     /** Searches for the parameter */
     searchParameters(searchKey: string, list: SearchParameter[]) {
@@ -87,7 +93,7 @@ export class SearchService {
     addNewParameter(searchString: string) {
         this.message = [];
 
-        for (const word of ALL_EQUIVS){
+        for (const word of this.equivalentWords){
             if (word.getEquivalents().indexOf(searchString) > -1) {
                 searchString = word.getKey();
                 break;
@@ -139,7 +145,7 @@ export class SearchService {
         if (!value) { return; }
 
         // check if has equivalent word
-        for (const word of ALL_EQUIVS){
+        for (const word of this.equivalentWords){
             if (word.getEquivalents().indexOf(value) > -1) {
                 value = word.getKey();
                 break;
@@ -181,6 +187,7 @@ export class SearchService {
       const taxonomies: string[] = [];
       let startDate;
       let endDate;
+      let numObs = 100;
 
       this.determineTaxonomies(true);
       this.resultTaxonomies.forEach(value => {
@@ -193,6 +200,9 @@ export class SearchService {
                 stnNames.push(s);
             }
         }
+        if (p.getName() === 'number of observations') {
+            numObs = Number(p.getSelected());
+        }
         if (p.getType() === 'SearchDatetime') {
             if (p.getName() === 'start datetime') {
                 startDate = (p as SearchDatetime).getFullDatetime();
@@ -201,10 +211,7 @@ export class SearchService {
             }
         }
       }
-
-      const smodel: SearchModel = new SearchModel(taxonomies, stnNames, startDate, endDate);
-      console.log(smodel);
-      return new SearchModel(taxonomies, stnNames, startDate, endDate);
+      return new SearchModel(taxonomies, stnNames, startDate, endDate, numObs);
     }
 
     submitSearch() {
@@ -271,6 +278,9 @@ export class SearchService {
                 continue;
             } else {
                 displayedValue = p.getValue();
+                if (param.getName() === 'number of observations') {
+                    displayedValue = this.limitValue(Number(displayedValue), 0, 1000);
+                }
             }
 
             // skip and remove any null values from the UI too
@@ -307,7 +317,7 @@ export class SearchService {
 
     /** Gets the taxonomies based on words that are associated with it */
     private determineTaxonomies(submitSearch: boolean = false) {
-        let taxResult: SearchTaxonomy[] = TAXONOMIES;
+        let taxResult: SearchTaxonomy[] = this.taxonomies;
         let temp: SearchTaxonomy[] = [];
         let missing: string[] = [];
         this.message = [];
@@ -332,6 +342,10 @@ export class SearchService {
             }
 
             for (const p of this.availableParams) {
+                if (p.getType() === 'SearchDatetime' || p.getType() === 'SearchHoursRange' ||
+                    p.getName() === 'station name' || p.getName() === 'number of observations' ) {
+                    continue;
+                }
                 if (p.getSelected().length) {
                     // if searching two values that belong to the same category, it would return the combined result
                     temp = [];
@@ -349,5 +363,18 @@ export class SearchService {
                 this.resultTaxonomies.push(t);
             }
         }
+    }
+
+    private limitValue(input, min, max) {
+        input = isNaN(input)
+            ? 0
+            : input;
+
+        if (Math.max(input, max) === input) {
+            return max;
+        } else if (Math.min(input, min) === input) {
+            return min;
+        }
+        return input;
     }
 }
