@@ -200,7 +200,7 @@ export class SearchService {
                 stnNames.push(s);
             }
         }
-        if (p.getName() === 'number of observations' && !p.getSelected()) {
+        if (p.getName() === 'number of observations' && p.getSelected().length > 0) {
             numObs = Number(p.getSelected());
         }
         if (p.getType() === 'SearchDatetime') {
