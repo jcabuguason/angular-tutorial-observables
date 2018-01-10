@@ -187,7 +187,7 @@ export class SearchService {
       const taxonomies: string[] = [];
       let startDate;
       let endDate;
-      let numObs = 100;
+      let numObs = 300;
 
       this.determineTaxonomies(true);
       this.resultTaxonomies.forEach(value => {
@@ -367,7 +367,7 @@ export class SearchService {
 
     private limitValue(input, min, max) {
         input = isNaN(input)
-            ? 0
+            ? 300
             : input;
 
         if (Math.max(input, max) === input) {
