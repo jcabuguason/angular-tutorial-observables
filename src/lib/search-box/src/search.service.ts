@@ -6,7 +6,7 @@ import { SearchParameter } from './search-parameter';
 import { SearchDatetime } from './search-datetime';
 import { SearchHoursRange } from './search-hours-range';
 
-import { SearchTaxonomy } from './search-taxonomy';
+import { SearchTaxonomy, SearchTaxonomyWord } from './search-taxonomy';
 import { EquivalentKeywords } from './equivalent-keywords';
 
 import { SearchModel } from './search.model';
@@ -23,13 +23,13 @@ export class SearchService {
     taxonomies = TAXONOMIES;
 
     // result taxonomies from the search
-    resultTaxonomies: string[] = [];
+    resultTaxonomies: SearchTaxonomy[] = [];
 
     // available search parameters to choose from
     availableParams = SEARCH_LIST;
 
     // the main input box
-    searchString: string;
+    searchString = '';
 
     // suggestions that show up while typing
     suggestedParams: SearchParameter[] = [];
@@ -61,7 +61,7 @@ export class SearchService {
 
     /** Suggestions that show up for different categories/parameters */
     showSuggestedParameters(searchString: string, showAll: boolean) {
-      this.suggestedParams = showAll && !searchString.length
+      this.suggestedParams = showAll && !searchString
           ? this.availableParams.filter(item => item.getTimesUsed() < item.getTimesUsable())
           : this.searchParameters(searchString, this.availableParams);
     }
@@ -73,17 +73,14 @@ export class SearchService {
         const choices = this.searchChoices(searchString, param);
         let newChoices: string[];
 
-        // display all choices if nothing was entered
-        if (searchString === undefined || searchString === '') {
-            newChoices = param.getChoices().filter(c => !this.valueAlreadyExists(c));
-            display.setDisplayChoices(newChoices);
-        } else if (choices.indexOf(searchString) > -1) {
-            // no need to display choices again if entered value is an exact match
+        if (choices && choices.indexOf(searchString) > -1) {
             display.removeAllDisplayChoices();
         } else {
-            newChoices = choices.filter(c => !this.valueAlreadyExists(c));
+            const possibleChoices = (searchString) ? choices : param.getChoices();
+            newChoices = possibleChoices.filter(c => !this.valueAlreadyExists(c) && !this.isBadValue(c));
             display.setDisplayChoices(newChoices);
         }
+
     }
 
     /** Entering any word and find the parameter/choice it matches with */
@@ -150,7 +147,7 @@ export class SearchService {
         }
 
         const param = this.displayParams[index].getSearchParam();
-        if (param.isRestricted() && param.getChoices().indexOf(value) < 0) {
+        if (param.isRestricted() && param.getChoices().indexOf(value) < 0 && this.isBadValue(value)) {
             this.message.push('Please select one of the available options');
             return;
         }
@@ -181,10 +178,14 @@ export class SearchService {
 
     getSearchModel(): SearchModel {
       const stnNames: string[] = [];
+      const taxonomies: string[] = [];
       let startDate;
       let endDate;
 
-      this.getTaxonomy();
+      this.determineTaxonomies(true);
+      this.resultTaxonomies.forEach(value => {
+          taxonomies.push(value.getTaxonomy());
+      });
 
       for (const p of this.availableParams) {
         if (p.getName() === 'station name') {
@@ -201,7 +202,9 @@ export class SearchService {
         }
       }
 
-      return new SearchModel(this.resultTaxonomies, stnNames, startDate, endDate);
+      const smodel: SearchModel = new SearchModel(taxonomies, stnNames, startDate, endDate);
+      console.log(smodel);
+      return new SearchModel(taxonomies, stnNames, startDate, endDate);
     }
 
     submitSearch() {
@@ -221,6 +224,28 @@ export class SearchService {
       });
 
       return exists;
+    }
+
+    /** Searches if value cannot be used
+     * ex. if 'msc' was chosen before, you should only be able to use other words related to msc taxonomies
+    */
+    private isBadValue(value: string) {
+        if (!value) { return false; }
+
+        this.determineTaxonomies();
+
+        if (this.resultTaxonomies.length === 0) { return false; }
+
+        const allWords = [];
+
+        this.resultTaxonomies.forEach((item, i) => {
+            const searchWords: SearchTaxonomyWord[] = item.getSearchWords();
+            searchWords.forEach((word) => {
+              allWords.push(... word.getValues());
+            });
+        });
+
+        return allWords.indexOf(value) === -1;
     }
 
     // helper function for getTaxonomy
@@ -281,7 +306,7 @@ export class SearchService {
     }
 
     /** Gets the taxonomies based on words that are associated with it */
-    private getTaxonomy() {
+    private determineTaxonomies(submitSearch: boolean = false) {
         let taxResult: SearchTaxonomy[] = TAXONOMIES;
         let temp: SearchTaxonomy[] = [];
         let missing: string[] = [];
@@ -289,37 +314,39 @@ export class SearchService {
         this.resultTaxonomies = [];
 
         if (this.displayParams !== null) {
-            this.combineParameters();
-            missing = this.missingParameters();
+            if (submitSearch) {
+                this.combineParameters();
+                missing = this.missingParameters();
 
-            if (missing.length > 0) {
-                this.message.push('Missing some required search fields: ');
-                for (const m of missing){
-                    this.message.push(m);
+                if (missing.length > 0) {
+                    this.message.push('Missing some required search fields: ');
+                    for (const m of missing){
+                        this.message.push(m);
+                    }
+                    return;
                 }
-                return;
+            } else {
+                for (const p of this.availableParams) {
+                    p.removeAllSelected();
+                }
             }
 
             for (const p of this.availableParams) {
-                if (p.getSelected() !== []) {
-                    if (p.getSelected().length === 1) {
-                        temp = taxResult.filter(t => t.includesKeyword(p.getSelectedAt(0)));
-                        taxResult = temp;
-                    } else if (p.getSelected().length > 1) {
-                        // if searching two values that belong to the same category, it would return the combined result
-                        for (const value of p.getSelected()) {
-                            const filtered = taxResult.filter(t => t.includesKeyword(value));
-                            temp = this.combineArrays(temp, filtered);
-                        }
-                        taxResult = temp;
+                if (p.getSelected().length) {
+                    // if searching two values that belong to the same category, it would return the combined result
+                    temp = [];
+                    for (const value of p.getSelected()) {
+                        const filtered = taxResult.filter(t => t.includesSearchWord(p.getName(), value));
+                        temp = this.combineArrays(temp, filtered);
                     }
+                    taxResult = temp;
                 }
             }
         }
 
         for (const t of taxResult) {
-            if (this.resultTaxonomies.indexOf(t.getTaxonomy()) === -1) {
-                this.resultTaxonomies.push(t.getTaxonomy());
+            if (this.resultTaxonomies.indexOf(t) === -1) {
+                this.resultTaxonomies.push(t);
             }
         }
     }
