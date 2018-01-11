@@ -1,0 +1,6 @@
+<div *ngIf="identities" class="block" #container tabindex="0">
+  <!--<commons-station-info></commons-station-info>-->
+  <div *ngFor="let key of getKeySet(identities)">
+    {{key | uppercase}}: {{identities[key]}}
+  </div>
+</div>

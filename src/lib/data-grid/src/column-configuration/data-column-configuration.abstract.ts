@@ -1,3 +1,5 @@
+import { GridStationInfoComponent } from '../grid-station-info/grid-station-info.component';
+
 export abstract class DataColumnConfiguration {
 
     getIdentityHeaders() {
@@ -12,7 +14,10 @@ export abstract class DataColumnConfiguration {
           'headerName': 'Station',
           'field': 'station',
           'width': 100,
-          'pinned': true
+          'pinned': true,
+          // Not actually editable, just the name of the Framework for double-clicking a cell for info
+          'editable': true,
+          'cellEditorFramework': GridStationInfoComponent,
         };
         identityHeader.children.push(stationHeader);
 

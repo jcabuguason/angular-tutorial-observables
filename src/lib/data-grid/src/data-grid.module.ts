@@ -5,6 +5,7 @@ import { QaRendererComponent } from './renderers/qa-renderer.component';
 import { DataFlagRendererComponent } from './renderers/dataflag-renderer.component';
 import { QofRendererComponent } from './renderers/qof-renderer.component';
 import { VofRendererComponent } from './renderers/vof-renderer.component';
+import { GridStationInfoComponent } from './grid-station-info/grid-station-info.component';
 
 
 @NgModule({
@@ -13,6 +14,7 @@ import { VofRendererComponent } from './renderers/vof-renderer.component';
     DataFlagRendererComponent,
     QofRendererComponent,
     VofRendererComponent,
+    GridStationInfoComponent,
   ],
   imports: [
     CommonModule,
@@ -22,6 +24,7 @@ import { VofRendererComponent } from './renderers/vof-renderer.component';
     DataFlagRendererComponent,
     QofRendererComponent,
     VofRendererComponent,
+    GridStationInfoComponent,
   ]
 })
 export class DataGridModule { }

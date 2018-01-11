@@ -87,7 +87,7 @@ export class DataGridService {
     removeAllData() {
         this.rowData = [];
         this.columnsGenerated = [];
-        this.columnDefs = this.getStaticHeaders();
+        this.columnDefs = this.columnConfiguration.getIdentityHeaders();
         this.reloadGrid();
     }
 
