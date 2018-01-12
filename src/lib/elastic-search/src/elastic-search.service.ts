@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 
 import { format } from 'date-fns';
 import { map } from 'rxjs/operators';
@@ -17,11 +17,16 @@ import { ObservationsFromElementsParams } from './model/observations-from-elemen
 @Injectable()
 export class ElasticSearchService {
 
+  private commonHeaders: HttpHeaders;
+
   constructor(
     @Inject(ELASTIC_SEARCH_CONFIG)
     private config: ElasticSearchConfig,
     private http: HttpClient
-  ) { }
+  ) {
+    this.commonHeaders = new HttpHeaders();
+    this.commonHeaders.append('Accept-Encoding', 'gzip');
+  }
 
   getAllSearchableAliases() {
     return this.http
@@ -37,7 +42,8 @@ export class ElasticSearchService {
     parameters: BasicObservationsParams = {}
   ): Observable<any> {
     const params = this.getCommonParams(parameters);
-    return this.http.get<any>(`${this.config.endpoint}/search/${version}/${index}`, { params });
+    const options = { params, headers: this.commonHeaders };
+    return this.http.get<any>(`${this.config.endpoint}/search/${version}/${index}`, options);
   }
 
   getUniqueStations(
@@ -46,7 +52,8 @@ export class ElasticSearchService {
     parameters: UniqueStationsParams = {}
   ): Observable<any> {
     const params = this.getCommonParams(parameters);
-    return this.http.get<any>(`${this.config.endpoint}/search/${version}/${index}/stations`, { params });
+    const options = { params, headers: this.commonHeaders };
+    return this.http.get<any>(`${this.config.endpoint}/search/${version}/${index}/stations`, options);
   }
 
   getObservationsFromStations(
@@ -57,7 +64,8 @@ export class ElasticSearchService {
   ): Observable<any> {
     const params = this.getCommonParams(parameters);
     const stationListString = stationList.join(',');
-    return this.http.get<any>(`${this.config.endpoint}/search/${version}/${index}/stations/${stationListString}`, { params });
+    const options = { params, headers: this.commonHeaders };
+    return this.http.get<any>(`${this.config.endpoint}/search/${version}/${index}/stations/${stationListString}`, options);
   }
 
   getUniqueElements(
@@ -66,7 +74,8 @@ export class ElasticSearchService {
     parameters: UniqueElementsParams = {}
   ): Observable<any> {
     const params = this.getCommonParams(parameters);
-    return this.http.get<any>(`${this.config.endpoint}/search/${version}/${index}/elements`, { params });
+    const options = { params, headers: this.commonHeaders };
+    return this.http.get<any>(`${this.config.endpoint}/search/${version}/${index}/elements`, options);
   }
 
   getObservationsFromElements(
@@ -77,7 +86,8 @@ export class ElasticSearchService {
   ): Observable<any> {
     const params = this.getCommonParams(parameters);
     const elementListString = elementList.join(',');
-    return this.http.get<any>(`${this.config.endpoint}/search/${version}/${index}/elements/${elementListString}`, { params });
+    const options = { params, headers: this.commonHeaders };
+    return this.http.get<any>(`${this.config.endpoint}/search/${version}/${index}/elements/${elementListString}`, options);
   }
 
   private getCommonParams(parameters: CommonElasticSearchParams): HttpParams {
