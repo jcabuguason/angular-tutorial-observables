@@ -91,6 +91,14 @@ export class DataGridService {
         this.reloadRequested.emit();
     }
 
+    getContextMenuItems() {
+        return this.columnConfiguration.getContextMenuItems();
+    }
+
+    getMainMenuItems() {
+        return this.columnConfiguration.getMainMenuItems();
+    }
+
     private resetHeader() {
         this.identityHeader = this.columnConfiguration.getIdentityHeaders();
         this.columnDefs = [];
