@@ -52,9 +52,7 @@ export class DataGridService {
     setColumnConfiguration(columnConfig: ElementColumnConfiguration) {
         this.columnConfiguration = columnConfig;
 
-        this.identityHeader = this.columnConfiguration.getIdentityHeaders();
-        this.columnDefs = [];
-        this.columnDefs.push(this.identityHeader);
+        this.resetHeader();
     }
 
     // Only works for Column Configs set up by Commons (Defaults)
@@ -68,9 +66,7 @@ export class DataGridService {
         if (this.columnConfiguration == null) {
             this.columnConfiguration = this.defaultColumnConfiguration;
         }
-        this.identityHeader = this.columnConfiguration.getIdentityHeaders();
-        this.columnDefs = [];
-        this.columnDefs.push(this.identityHeader);
+        this.resetHeader();
     }
 
     addRowData(obs: object) {
@@ -87,12 +83,26 @@ export class DataGridService {
     removeAllData() {
         this.rowData = [];
         this.columnsGenerated = [];
-        this.columnDefs = this.columnConfiguration.getIdentityHeaders();
+        this.resetHeader();
         this.reloadGrid();
     }
 
     reloadGrid() {
         this.reloadRequested.emit();
+    }
+
+    getContextMenuItems() {
+        return this.columnConfiguration.getContextMenuItems();
+    }
+
+    getMainMenuItems() {
+        return this.columnConfiguration.getMainMenuItems();
+    }
+
+    private resetHeader() {
+        this.identityHeader = this.columnConfiguration.getIdentityHeaders();
+        this.columnDefs = [];
+        this.columnDefs.push(this.identityHeader);
     }
 
     // Formats header name

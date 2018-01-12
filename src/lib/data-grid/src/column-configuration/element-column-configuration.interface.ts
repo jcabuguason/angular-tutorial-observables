@@ -11,4 +11,7 @@ export interface ElementColumnConfiguration {
 
   getIdentityHeaders();
 
+  getContextMenuItems();
+
+  getMainMenuItems();
 }
