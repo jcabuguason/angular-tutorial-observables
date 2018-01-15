@@ -5,6 +5,8 @@ export class SearchParameter {
     private type: string;
 
     private timesUsed: number;
+
+    private displayName: string;
     /* TODO: No functionality for this part yet */
     // /** Number of times this parameter can be used in a search, if undefined then there is no limit.. or change to default 10 */
     // timesUsable?: number;
@@ -17,6 +19,7 @@ export class SearchParameter {
       private timesUsable: number = 10,
       private placeholder: string = ''
     ) {
+        this.displayName = name;
         this.selected = [];
         this.type = 'SearchParameter';
         this.timesUsed = 0;
@@ -24,6 +27,14 @@ export class SearchParameter {
 
     getName(): string {
         return this.name;
+    }
+
+    getDisplayName(): string {
+        return this.displayName;
+    }
+
+    setDisplayName(displayName: string) {
+        this.displayName = displayName;
     }
 
     getChoices(): string[] {
