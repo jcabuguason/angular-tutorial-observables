@@ -25,11 +25,9 @@ export class GridStationInfoComponent implements ICellEditorAngularComp, AfterVi
   agInit(params: any) {
     this.params = params;
     this.identities = {};
-    this.getKeySet(params.node.data).forEach(key => {
-      if (!key.startsWith('e_')) {
-        this.identities[key] = params.node.data[key];
-      }
-    });
+    this.getKeySet(params.node.data)
+      .filter(key => !key.startsWith('e_'))
+      .forEach(key => this.identities[key] = params.node.data[key]);
   }
 
   getValue(): any {
