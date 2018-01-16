@@ -337,10 +337,10 @@ export class SearchService {
                     return;
                 }
             } else {
-                for (const p of this.availableParams) {
-                    p.removeAllSelected();
-                }
-                // this.combineParameters();
+                // for (const p of this.availableParams) {
+                //     p.removeAllSelected();
+                // }
+                this.combineParameters();
             }
 
             for (const p of this.availableParams) {
