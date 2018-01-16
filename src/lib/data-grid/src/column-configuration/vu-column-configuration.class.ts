@@ -1,6 +1,7 @@
 import { ElementColumnConfiguration } from './element-column-configuration.interface';
+import { DataColumnConfiguration } from './data-column-configuration.abstract';
 
-export class VUColumnConfiguration implements ElementColumnConfiguration {
+export class VUColumnConfiguration extends DataColumnConfiguration implements ElementColumnConfiguration {
 
   createElementHeader(workingNode: any, elementTaxonomy: string) {
     workingNode.children.push({

@@ -1,6 +1,7 @@
 import { ElementColumnConfiguration } from './element-column-configuration.interface';
+import { DataColumnConfiguration } from './data-column-configuration.abstract';
 
-export class AccordianColumnConfiguration implements ElementColumnConfiguration {
+export class AccordianColumnConfiguration extends DataColumnConfiguration implements ElementColumnConfiguration {
   createElementHeader(workingNode: any, columnID: string) {
     workingNode.children.push({
       'headerName': 'Value',

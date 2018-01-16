@@ -1,4 +1,5 @@
 export interface ElementColumnConfiguration {
+
   // Optional function for changing header menu items
   getMenuItems?: (params: any)  => any;
 
@@ -8,4 +9,9 @@ export interface ElementColumnConfiguration {
   // Transforms given element data into format suitable for the grid
   createElementData(element, columndID?: string);
 
+  getIdentityHeaders();
+
+  getContextMenuItems();
+
+  getMainMenuItems();
 }
