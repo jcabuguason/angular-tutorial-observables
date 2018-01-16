@@ -3,8 +3,6 @@ export class SearchDatetime extends SearchParameter {
     date: string;
     hour: number;
     minute: number;
-    hourOptions: number[] = [];
-    minuteOptions: number[] = [];
     constructor(
         name: string,
         choices: string[],
@@ -58,5 +56,24 @@ export class SearchDatetime extends SearchParameter {
           return min;
         }
         return input;
+    }
+
+    setFullDatetime(date: Date) {
+        this.date = this.formatDate(date);
+        this.hour = date.getHours();
+        this.minute = date.getMinutes();
+    }
+
+    // formats to yyyy-MM-dd
+    private formatDate(date: Date): string {
+        return date.getFullYear() + '-'
+            + this.padZero(date.getMonth() + 1) + '-'
+            + this.padZero(date.getDate());
+    }
+
+    private padZero(num: number) {
+        return (num < 10)
+            ? `0${num}`
+            : num;
     }
 }
