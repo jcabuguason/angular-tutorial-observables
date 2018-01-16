@@ -44,7 +44,7 @@ export class SearchService {
 
     constructor(
         @Inject(SEARCH_BOX_CONFIG)
-        private config: SearchBoxConfig) {
+        public config: SearchBoxConfig) {
             this.taxonomies = this.config.taxonomies;
             this.availableParams = this.config.search_list;
             this.equivalentWords = this.config.equivalent_words;
@@ -54,7 +54,7 @@ export class SearchService {
     searchParameters(searchKey: string, list: SearchParameter[]) {
         searchKey = searchKey.trim();
         if (!searchKey) { return; }
-        return list.filter(item => item.getName().indexOf(searchKey) > -1)
+        return list.filter(item => item.getDisplayName().indexOf(searchKey) > -1)
                    .filter(item => item.getTimesUsed() < item.getTimesUsable());
     }
 
@@ -108,7 +108,7 @@ export class SearchService {
         // check if it was already in a predefined category
         for (const param of this.availableParams){
             // category
-            if (param.getName() === searchString) {
+            if (param.getDisplayName() === searchString) {
                 this.addSuggestedParameter(param);
                 return;
             } else if (param.getChoices().indexOf(searchString) > -1) {
@@ -122,7 +122,7 @@ export class SearchService {
     /** Parameter chosen from suggestedParams */
     addSuggestedParameter(parameter: SearchParameter, value: string = '') {
         if (parameter.getTimesUsed() < parameter.getTimesUsable()) {
-            const param: DisplayParameter = new DisplayParameter(parameter.getName(), '', [], parameter);
+            const param: DisplayParameter = new DisplayParameter(parameter.getDisplayName(), '', [], parameter);
 
             this.displayParams.push(param);
 
@@ -195,18 +195,18 @@ export class SearchService {
       });
 
       for (const p of this.availableParams) {
-        if (p.getName() === 'station name') {
+        if (p.getName() === 'stnName') {
             for (const s of p.getSelected()) {
                 stnNames.push(s);
             }
         }
-        if (p.getName() === 'number of observations' && p.getSelected().length > 0) {
+        if (p.getName() === 'size' && p.getSelected().length) {
             numObs = Number(p.getSelected());
         }
         if (p.getType() === 'SearchDatetime') {
-            if (p.getName() === 'start datetime') {
+            if (p.getName() === 'from') {
                 startDate = (p as SearchDatetime).getFullDatetime();
-            } else if (p.getName() === 'end datetime') {
+            } else if (p.getName() === 'to') {
                 endDate = (p as SearchDatetime).getFullDatetime();
             }
         }
@@ -239,6 +239,7 @@ export class SearchService {
     private isBadValue(value: string) {
         if (!value) { return false; }
 
+        this.resultTaxonomies = [];
         this.determineTaxonomies();
 
         if (this.resultTaxonomies.length === 0) { return false; }
@@ -257,7 +258,7 @@ export class SearchService {
 
     // helper function for getTaxonomy
     // combine parameters of the same value
-    private combineParameters() {
+    private combineParameters(submitSearch: boolean = false) {
         let param: SearchParameter;
         let displayedValue: string;
 
@@ -277,14 +278,14 @@ export class SearchService {
                 }
                 continue;
             } else {
-                displayedValue = p.getValue();
-                if (param.getName() === 'number of observations') {
-                    displayedValue = this.limitValue(Number(displayedValue), 0, 1000);
+                if (param.getName() === 'size') {
+                    p.setValue(this.limitValue(Number(p.getValue()), 0, 1000));
                 }
+                displayedValue = p.getValue();
             }
 
             // skip and remove any null values from the UI too
-            if (displayedValue === '') {
+            if (displayedValue === '' && submitSearch) {
                 this.removeDisplay(this.displayParams.indexOf(p));
                 continue;
             }
@@ -300,7 +301,7 @@ export class SearchService {
             if (p.isRequired()) {
                 const found = this.displayParams.filter(item => item.getSearchParam() === p);
                 if (found.length === 0) {
-                    missing.push(p.getName());
+                    missing.push(p.getDisplayName());
                 }
             }
         }
@@ -325,7 +326,7 @@ export class SearchService {
 
         if (this.displayParams !== null) {
             if (submitSearch) {
-                this.combineParameters();
+                this.combineParameters(true);
                 missing = this.missingParameters();
 
                 if (missing.length > 0) {
@@ -339,16 +340,17 @@ export class SearchService {
                 for (const p of this.availableParams) {
                     p.removeAllSelected();
                 }
+                // this.combineParameters();
             }
 
             for (const p of this.availableParams) {
                 if (p.getType() === 'SearchDatetime' || p.getType() === 'SearchHoursRange' ||
-                    p.getName() === 'station name' || p.getName() === 'number of observations' ) {
+                    p.getName() === 'stnName' || p.getName() === 'size' ) {
                     continue;
                 }
                 if (p.getSelected().length) {
                     // if searching two values that belong to the same category, it would return the combined result
-                    temp = [];
+                    if (submitSearch) { temp = []; }
                     for (const value of p.getSelected()) {
                         const filtered = taxResult.filter(t => t.includesSearchWord(p.getName(), value));
                         temp = this.combineArrays(temp, filtered);

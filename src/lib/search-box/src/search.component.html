@@ -49,7 +49,7 @@
 
 <!-- suggestions as you type in the search box -->
 <div class="search-parameter-suggestions" *ngFor="let suggestion of searchService.suggestedParams">
-    <span class="search-parameter" (click)="searchService.addSuggestedParameter(suggestion)"> {{suggestion.getName()}}</span>
+    <span class="search-parameter" (click)="searchService.addSuggestedParameter(suggestion)"> {{suggestion.getDisplayName()}}</span>
 </div>
 
 
