@@ -44,7 +44,7 @@ export class SearchService {
 
     constructor(
         @Inject(SEARCH_BOX_CONFIG)
-        protected config: SearchBoxConfig) {
+        public config: SearchBoxConfig) {
             this.taxonomies = this.config.taxonomies;
             this.availableParams = this.config.search_list;
             this.equivalentWords = this.config.equivalent_words;
@@ -219,7 +219,7 @@ export class SearchService {
     }
 
     /** Searches if value has already been entered before */
-    protected valueAlreadyExists(value: string, index: number = -1) {
+    private valueAlreadyExists(value: string, index: number = -1) {
       if (!value) { return false; }
 
       let exists = false;
@@ -236,7 +236,7 @@ export class SearchService {
     /** Searches if value cannot be used
      * ex. if 'msc' was chosen before, you should only be able to use other words related to msc taxonomies
     */
-    protected isBadValue(value: string) {
+    private isBadValue(value: string) {
         if (!value) { return false; }
 
         this.resultTaxonomies = [];
@@ -258,7 +258,7 @@ export class SearchService {
 
     // helper function for getTaxonomy
     // combine parameters of the same value
-    protected combineParameters(submitSearch: boolean = false) {
+    private combineParameters(submitSearch: boolean = false) {
         let param: SearchParameter;
         let displayedValue: string;
 
@@ -295,7 +295,7 @@ export class SearchService {
     }
 
     // check any missing required parameters
-    protected missingParameters(): string[] {
+    private missingParameters(): string[] {
         const missing: string[] = [];
         for (const p of this.availableParams){
             if (p.isRequired()) {
@@ -309,7 +309,7 @@ export class SearchService {
     }
 
     /** arrayName.concat doesn't always work that well, so combine it like this */
-    protected combineArrays(array1: any[], array2: any[]) {
+    private combineArrays(array1: any[], array2: any[]) {
         for (const item of array2){
             array1.push(item);
         }
@@ -317,7 +317,7 @@ export class SearchService {
     }
 
     /** Gets the taxonomies based on words that are associated with it */
-    protected determineTaxonomies(submitSearch: boolean = false) {
+    private determineTaxonomies(submitSearch: boolean = false) {
         let taxResult: SearchTaxonomy[] = this.taxonomies;
         let temp: SearchTaxonomy[] = [];
         let missing: string[] = [];
@@ -367,7 +367,7 @@ export class SearchService {
         }
     }
 
-    protected limitValue(input, min, max) {
+    private limitValue(input, min, max) {
         input = isNaN(input)
             ? 300
             : input;
