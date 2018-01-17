@@ -23,10 +23,13 @@ export class DataGridService {
     private columnConfiguration: ElementColumnConfiguration;
     private identityHeader;
 
+    private userDisplayColumns: string[];
+
     public rowData: object[] = [];
     public columnDefs: any[];
 
     public reloadRequested = new EventEmitter();
+
 
     constructor() {
         this.columnConfigurationOptions.push(new ColumnConfigurationContainer('accordian', new AccordianColumnConfiguration()));
@@ -67,6 +70,10 @@ export class DataGridService {
             this.columnConfiguration = this.defaultColumnConfiguration;
         }
         this.resetHeader();
+    }
+
+    setUserDisplayColumns(userDC: string[]) {
+        this.userDisplayColumns = userDC;
     }
 
     addRowData(obs: object) {
@@ -115,13 +122,11 @@ export class DataGridService {
     }
 
     // Get the child node, or create it if it doesn't exist
-    private getChildNode(currentNodes: any[], headerName: string, nodeNumber: string): object {
+    private getChildNode(currentNodes: any[], headerName: string, nodeNumber: string, elementID: string): object {
 
         for (const currentNode of currentNodes) {
             if (currentNode.nodeNumber === nodeNumber) {
-              if (currentNode.terminal === 'true' ) {
-                break;
-              } else {
+              if (currentNode.elementID === undefined || elementID === currentNode.elementID) {
                 return currentNode;
               }
             }
@@ -129,7 +134,6 @@ export class DataGridService {
 
         const newNode: object = {
           'headerName': headerName,
-          'terminal': 'unknown',
           'nodeNumber': nodeNumber
         };
 
@@ -204,11 +208,10 @@ export class DataGridService {
 
           // End processing if no header field is found
           if (headerName === undefined) {
-              workingNode.terminal = 'false';
               break;
           }
 
-          workingNode = this.getChildNode(currentNodes, headerName, nodes[i]);
+          workingNode = this.getChildNode(currentNodes, headerName, nodes[i], element.elementID);
 
           // Build child node array
           if (workingNode.children === undefined) {
@@ -219,16 +222,14 @@ export class DataGridService {
 
       }
 
-      workingNode.elementID = element.elementID;
+      if (workingNode.elementID === undefined) {
 
-      if (workingNode.terminal === 'unknown') {
-          workingNode.terminal = 'true';
+        workingNode.elementID = element.elementID;
+
+        if (!workingNode.children.length) {
+            workingNode.headerName += this.createSubHeader(headerDepth, nodes);
+        }
       }
-
-      if (!workingNode.children.length) {
-          workingNode.headerName += this.createSubHeader(headerDepth, nodes);
-      }
-
 
       // Generate layer children if needed
       let columnToAdd;
@@ -248,9 +249,15 @@ export class DataGridService {
           columnToAdd = {
             'headerName': 'Basic',
             'children': [],
+            'elementID': element.elementID
           };
+          workingNode.elementID = undefined;
           workingNode.children.unshift(columnToAdd);
         }
+      }
+
+      if (this.userDisplayColumns !== undefined && (this.userDisplayColumns.indexOf(element.elementID) < 0)) {
+        columnToAdd.hide = true;
       }
 
       this.columnConfiguration.createElementHeader(columnToAdd, headerID);
@@ -270,7 +277,6 @@ export class DataGridService {
       };
 
       this.identityHeader.children.push(header);
-
 
       this.columnsGenerated.push(headerID);
     }

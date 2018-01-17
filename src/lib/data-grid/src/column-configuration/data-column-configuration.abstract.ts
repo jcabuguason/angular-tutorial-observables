@@ -7,7 +7,8 @@ export abstract class DataColumnConfiguration {
 
         identityHeader = {
           'headerName': 'Identity',
-          'children': []
+          'children': [],
+          'suppressToolPanel': true
         };
 
         const stationHeader = {
