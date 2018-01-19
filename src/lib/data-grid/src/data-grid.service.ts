@@ -257,6 +257,7 @@ export class DataGridService {
       }
 
       if ((this.userDisplayColumns !== undefined) &&
+          (this.userDisplayColumns !== null ) &&
           (this.userDisplayColumns !== [] ) &&
           (this.userDisplayColumns.indexOf(element.elementID) < 0)) {
         columnToAdd.hide = true;
