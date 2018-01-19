@@ -9,7 +9,7 @@ import { SearchHoursRange } from './search-hours-range';
 import { SearchTaxonomy, SearchTaxonomyWord } from './search-taxonomy';
 import { EquivalentKeywords } from './equivalent-keywords';
 
-import { SearchModel } from './search.model';
+import { SearchModel, SearchElement } from './search.model';
 
 import { SEARCH_BOX_CONFIG, SearchBoxConfig } from './search-box.config';
 
@@ -42,6 +42,12 @@ export class SearchService {
 
     searchRequested = new EventEmitter();
 
+    MSC_ID = '1.7.86.0.0.0.0';
+    ICAO_ID = '1.7.102.0.0.0.0';
+    TC_ID = '1.7.84.0.0.0.0';
+    SYNOP_ID = '1.7.82.0.0.0.0';
+    PROV_ID = '1.7.117.0.0.0.0';
+
     constructor(
         @Inject(SEARCH_BOX_CONFIG)
         public config: SearchBoxConfig) {
@@ -49,21 +55,6 @@ export class SearchService {
             this.availableParams = this.config.search_list;
             this.equivalentWords = this.config.equivalent_words;
         }
-
-    /** Searches for the parameter */
-    searchParameters(searchKey: string, list: SearchParameter[]) {
-        searchKey = searchKey.trim();
-        if (!searchKey) { return; }
-        return list.filter(item => item.getDisplayName().indexOf(searchKey) > -1)
-                   .filter(item => item.getTimesUsed() < item.getTimesUsable());
-    }
-
-    /** Searches for the dropdown selection in the parameter*/
-    searchChoices(searchValue: string, parameter: SearchParameter) {
-        searchValue = searchValue.trim();
-        if (!searchValue) { return; }
-        return parameter.getChoices().filter(item => item.indexOf(searchValue) > -1);
-    }
 
     /** Suggestions that show up for different categories/parameters */
     showSuggestedParameters(searchString: string, showAll: boolean) {
@@ -83,7 +74,7 @@ export class SearchService {
             display.removeAllDisplayChoices();
         } else {
             const possibleChoices = (searchString) ? choices : param.getChoices();
-            newChoices = possibleChoices.filter(c => !this.valueAlreadyExists(c) && !this.isBadValue(c));
+            newChoices = possibleChoices.filter(c => !this.valueAlreadyExists(c, index) && !this.isBadValue(c, index));
             display.setDisplayChoices(newChoices);
         }
 
@@ -119,24 +110,6 @@ export class SearchService {
         this.message.push('Could not find keyword. Try selecting a category first.');
     }
 
-    /** Parameter chosen from suggestedParams */
-    addSuggestedParameter(parameter: SearchParameter, value: string = '') {
-        if (parameter.getTimesUsed() < parameter.getTimesUsable()) {
-            const param: DisplayParameter = new DisplayParameter(parameter.getDisplayName(), '', [], parameter);
-
-            this.displayParams.push(param);
-
-            this.addValueToDisplay(value, this.displayParams.length - 1);
-
-            // don't show the drop list since something has already been selected
-            this.suggestedParams = null;
-            // clear the main input box until next input
-            this.searchString = '';
-
-            parameter.increaseTimesUsed();
-        }
-    }
-
     /** Can be used by clicking value, or typing in manually without clicking suggestion */
     addValueToDisplay(value: string, index: number) {
         this.searchString = '';
@@ -153,7 +126,7 @@ export class SearchService {
         }
 
         const param = this.displayParams[index].getSearchParam();
-        if (param.isRestricted() && param.getChoices().indexOf(value) < 0 && this.isBadValue(value)) {
+        if (param.isRestricted() && param.getChoices().indexOf(value) < 0 && this.isBadValue(value, index)) {
             this.message.push('Please select one of the available options');
             return;
         }
@@ -184,26 +157,39 @@ export class SearchService {
 
     getSearchModel(): SearchModel {
       const stnNames: string[] = [];
-      const taxonomies: string[] = [];
+      const elements: SearchElement[] = [];
       let startDate;
       let endDate;
       let numObs = 300;
+      let operator: string;
 
       this.determineTaxonomies(true);
-      this.resultTaxonomies.forEach(value => {
-          taxonomies.push(value.getTaxonomy());
-      });
+      const taxonomies = this.resultTaxonomies.map(value => value.getTaxonomy());
 
       for (const p of this.availableParams) {
-        if (p.getName() === 'stnName') {
-            for (const s of p.getSelected()) {
-                stnNames.push(s);
-            }
-        }
-        if (p.getName() === 'size' && p.getSelected().length) {
+        if (p.getName() === 'stnName' && !p.getSelected().length) {
+            p.getSelected().forEach(s => {
+                elements.push(
+                    new SearchElement(this.determineStdPkgId(s),
+                        s.toUpperCase(),
+                        'metadataElements')
+                    );
+                }
+            );
+            operator = 'AND';
+        } else if (p.getName() === 'province' && p.getSelected().length) {
+            p.getSelected().forEach(s => {
+                elements.push(
+                    new SearchElement (this.PROV_ID,
+                        s.toUpperCase(),
+                        'metadataElements')
+                    );
+                }
+            );
+            operator = 'AND';
+        } else if (p.getName() === 'size' && p.getSelected().length) {
             numObs = Number(p.getSelected());
-        }
-        if (p.getType() === 'SearchDatetime') {
+        } else if (p.getType() === 'SearchDatetime') {
             if (p.getName() === 'from') {
                 startDate = (p as SearchDatetime).getFullDatetime();
             } else if (p.getName() === 'to') {
@@ -211,11 +197,66 @@ export class SearchService {
             }
         }
       }
-      return new SearchModel(taxonomies, stnNames, startDate, endDate, numObs);
+      return new SearchModel(taxonomies, elements, startDate, endDate, numObs, operator);
     }
 
     submitSearch() {
         this.searchRequested.emit(this.getSearchModel());
+    }
+
+    /** Searches for the parameter */
+    private searchParameters(searchKey: string, list: SearchParameter[]) {
+        searchKey = searchKey.trim();
+        if (!searchKey) { return []; }
+        return list.filter(item => item.getDisplayName().indexOf(searchKey) > -1)
+                   .filter(item => item.getTimesUsed() < item.getTimesUsable());
+    }
+
+    /** Searches for the dropdown selection in the parameter*/
+    private searchChoices(searchValue: string, parameter: SearchParameter) {
+        searchValue = searchValue.trim();
+        if (!searchValue) { return []; }
+        return parameter.getChoices().filter(item => item.indexOf(searchValue) > -1);
+    }
+
+    /** Parameter chosen from suggestedParams */
+    private addSuggestedParameter(parameter: SearchParameter, value: string = '') {
+        if (parameter.getTimesUsed() < parameter.getTimesUsable()) {
+            const param: DisplayParameter = new DisplayParameter(parameter.getDisplayName(), '', [], parameter);
+
+            this.displayParams.push(param);
+
+            this.addValueToDisplay(value, this.displayParams.length - 1);
+
+            // don't show the drop list since something has already been selected
+            this.suggestedParams = null;
+            // clear the main input box until next input
+            this.searchString = '';
+
+            parameter.increaseTimesUsed();
+        }
+    }
+
+    // determines the std-pkg-id depending on the station entered
+    private determineStdPkgId(stationID: string) {
+        const defaultID = this.MSC_ID;
+        const mscRegex = /^[a-zA-Z0-9]{7}/;
+        const icaoRegex = /^[a-zA-Z]{4}/;
+        const tcRegex = /^[a-zA-Z]{3}/;
+        const synopRegex = /^[0-9]{5}/;
+
+        switch (stationID) {
+            case String(stationID.match(mscRegex)) :
+                return this.MSC_ID;
+            case String(stationID.match(icaoRegex)) :
+                return this.ICAO_ID;
+            case String(stationID.match(tcRegex)) :
+                return this.TC_ID;
+            case String(stationID.match(synopRegex)) :
+                return this.SYNOP_ID;
+            default:
+                return defaultID;
+        }
     }
 
     /** Searches if value has already been entered before */
@@ -236,8 +277,9 @@ export class SearchService {
     /** Searches if value cannot be used
      * ex. if 'msc' was chosen before, you should only be able to use other words related to msc taxonomies
     */
-    private isBadValue(value: string) {
-        if (!value) { return false; }
+    private isBadValue(value: string, index: number) {
+        const param = this.displayParams[index].getSearchParam();
+        if (!value || this.canIgnoreParam(param)) { return false; }
 
         this.resultTaxonomies = [];
         this.determineTaxonomies();
@@ -344,10 +386,8 @@ export class SearchService {
             }
 
             for (const p of this.availableParams) {
-                if (p.getType() === 'SearchDatetime' || p.getType() === 'SearchHoursRange' ||
-                    p.getName() === 'stnName' || p.getName() === 'size' ) {
-                    continue;
-                }
+                if (this.canIgnoreParam(p)) { continue; }
+
                 if (p.getSelected().length) {
                     // if searching two values that belong to the same category, it would return the combined result
                     if (submitSearch) { temp = []; }
@@ -378,5 +418,12 @@ export class SearchService {
             return min;
         }
         return input;
+    }
+
+    // these parameters does not affect the taxonomy determined by the search component
+    // they will be sent into ES instead
+    private canIgnoreParam(param: SearchParameter): boolean {
+        return (param.getType() === 'SearchDatetime' || param.getType() === 'SearchHoursRange' ||
+                param.getName() === 'stnName' || param.getName() === 'size' || param.getName() === 'province');
     }
 }
