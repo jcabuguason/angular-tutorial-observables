@@ -167,7 +167,7 @@ export class SearchService {
       const taxonomies = this.resultTaxonomies.map(value => value.getTaxonomy());
 
       for (const p of this.availableParams) {
-        if (p.getName() === 'stnName' && p.getSelected().length) {
+        if (p.getName() === 'stnName' && p.getSelected()) {
             p.getSelected().forEach(s => {
                 elements.push(
                     new SearchElement(this.determineStdPkgId(s),
@@ -177,7 +177,7 @@ export class SearchService {
                 }
             );
             operator = 'AND';
-        } else if (p.getName() === 'province' && p.getSelected().length) {
+        } else if (p.getName() === 'province' && p.getSelected()) {
             p.getSelected().forEach(s => {
                 elements.push(
                     new SearchElement (this.PROV_ID,
