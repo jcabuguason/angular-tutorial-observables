@@ -12,11 +12,16 @@ export class SearchModel {
 export class SearchElement {
   constructor (
     public elementID: string,
-    public value: string,
-    public type: string
+    // 'dataElements' or 'metadataElements'
+    public elementType: string,
+    // could be 'value', 'unit', 'overallQASummary', etc
+    public valueType?: string,
+    // the actual value
+    public value?: string,
   ) { }
   // used by ES
   elementToString(): string {
-    return 'elementID=' + this.elementID + '|value=' + this.value + '|type=' + this.type;
+    return 'elementID=' + this.elementID + '|' + this.valueType + '=' + this.value
+      + '|type=' + this.elementType;
   }
 }

@@ -167,22 +167,24 @@ export class SearchService {
       const taxonomies = this.resultTaxonomies.map(value => value.getTaxonomy());
 
       for (const p of this.availableParams) {
-        if (p.getName() === 'stnName' && p.getSelected()) {
+        if (p.getName() === 'stnName' && p.getSelected().length > 0) {
             p.getSelected().forEach(s => {
                 elements.push(
                     new SearchElement(this.determineStdPkgId(s),
-                        s.toUpperCase(),
-                        'metadataElements')
+                        'metadataElements',
+                        'value',
+                        s.toUpperCase())
                     );
                 }
             );
             operator = 'AND';
-        } else if (p.getName() === 'province' && p.getSelected()) {
+        } else if (p.getName() === 'province' && p.getSelected().length > 0) {
             p.getSelected().forEach(s => {
                 elements.push(
                     new SearchElement (this.PROV_ID,
-                        s.toUpperCase(),
-                        'metadataElements')
+                        'metadataElements',
+                        'value',
+                        s.toUpperCase())
                     );
                 }
             );
