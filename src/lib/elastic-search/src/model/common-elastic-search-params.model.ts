@@ -8,5 +8,4 @@ export interface CommonElasticSearchParams {
   datetimeType?: ElasticSearchDateTimeType;
   sortFields?: string;
   startIndex?: string;
-  includeAggregations?: boolean;
 }
