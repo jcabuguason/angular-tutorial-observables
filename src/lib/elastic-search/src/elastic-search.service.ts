@@ -84,7 +84,10 @@ export class ElasticSearchService {
     elementList: string[],
     parameters: ObservationsFromElementsParams = {}
   ): Observable<any> {
-    const params = this.getCommonParams(parameters);
+    let params = this.getCommonParams(parameters);
+    if (parameters.operator != null) {
+      params = params.set('operator', parameters.operator);
+    }
     const elementListString = elementList.join(',');
     const options = { params, headers: this.commonHeaders };
     return this.http.get<any>(`${this.config.endpoint}/search/${version}/${index}/elements/${elementListString}`, options);
@@ -112,9 +115,6 @@ export class ElasticSearchService {
     }
     if (parameters.startIndex != null) {
       params = params.set('startIndex', parameters.startIndex);
-    }
-    if (parameters.includeAggregations != null) {
-      params = params.set('includeAggregations', String(parameters.includeAggregations));
     }
     return params;
   }
