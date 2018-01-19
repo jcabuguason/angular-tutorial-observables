@@ -256,7 +256,9 @@ export class DataGridService {
         }
       }
 
-      if (this.userDisplayColumns !== undefined && (this.userDisplayColumns.indexOf(element.elementID) < 0)) {
+      if ((this.userDisplayColumns != null ) &&
+          (this.userDisplayColumns.length ) &&
+          (this.userDisplayColumns.indexOf(element.elementID) < 0)) {
         columnToAdd.hide = true;
       }
 
@@ -343,8 +345,6 @@ interface Buckets {
 interface Index {
     value: number;
 }
-
-
 
 interface DMSObs {
     identity: string;
