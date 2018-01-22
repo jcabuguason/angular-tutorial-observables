@@ -242,23 +242,15 @@ export class SearchService {
     // determines the std-pkg-id depending on the station entered
     private determineStdPkgId(stationID: string) {
         const defaultID = this.MSC_ID;
-        const mscRegex = /^[a-zA-Z0-9]{7}/;
-        const icaoRegex = /^[a-zA-Z]{4}/;
-        const tcRegex = /^[a-zA-Z]{3}/;
-        const synopRegex = /^[0-9]{5}/;
+        const stationTypes = [
+            { id: this.MSC_ID, regex: /^[a-zA-Z0-9]{7}/ },
+            { id: this.ICAO_ID, regex: /^[a-zA-Z]{4}/ },
+            { id: this.TC_ID, regex: /^[a-zA-Z]{3}/ },
+            { id: this.SYNOP_ID, regex: /^[0-9]{5}/ },
+        ];
 
-        switch (stationID) {
-            case String(stationID.match(mscRegex)) :
-                return this.MSC_ID;
-            case String(stationID.match(icaoRegex)) :
-                return this.ICAO_ID;
-            case String(stationID.match(tcRegex)) :
-                return this.TC_ID;
-            case String(stationID.match(synopRegex)) :
-                return this.SYNOP_ID;
-            default:
-                return defaultID;
-        }
+        const result = stationTypes.filter(stnType => stationID.match(stnType.regex));
+        return result.length > 0 ? result[0].id : defaultID;
     }
 
     /** Searches if value has already been entered before */
