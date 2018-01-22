@@ -21,7 +21,10 @@ export class SearchElement {
   ) { }
   // used by ES
   elementToString(): string {
-    return 'elementID=' + this.elementID + '|' + this.valueType + '=' + this.value
-      + '|type=' + this.elementType;
+    let result = 'elementID=' + this.elementID + '|type=' + this.elementType;
+    if (this.valueType && this.value) {
+      result += '|' + this.valueType + '=' + this.value;
+    }
+    return result;
   }
 }
