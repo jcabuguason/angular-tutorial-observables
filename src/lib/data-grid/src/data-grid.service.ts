@@ -302,15 +302,13 @@ export class DataGridService {
         }
 
         for (const element of parsed.dataElements) {
-          const headerID = ColumnConfigurationContainer.findHeaderID(element);
-
-          this.buildElementColumn(element, headerID);
-
-          output += this.columnConfiguration.createElementData(element, headerID);
-
-          if (element !== parsed.dataElements[parsed.dataElements.length - 1]) {
-              output += ',';
-          }
+            if (element.elementID == null) { continue; }
+            const headerID = ColumnConfigurationContainer.findHeaderID(element);
+            this.buildElementColumn(element, headerID);
+            output += this.columnConfiguration.createElementData(element, headerID);
+            if (element !== parsed.dataElements[parsed.dataElements.length - 1]) {
+                output += ',';
+            }
         }
 
         output += '}';
