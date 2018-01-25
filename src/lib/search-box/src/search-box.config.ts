@@ -8,6 +8,7 @@ export interface SearchBoxConfig {
   search_list: SearchParameter[];
   taxonomies: SearchTaxonomy[];
   equivalent_words: EquivalentKeywords[];
+  search_btn_text?: string;  // text to display for search button
 }
 
 export const SEARCH_BOX_CONFIG = new InjectionToken<SearchBoxConfig>('search-box.config');

@@ -42,6 +42,8 @@ export class SearchService {
 
     searchRequested = new EventEmitter();
 
+    searchBtnText: string;
+
     MSC_ID = '1.7.86.0.0.0.0';
     ICAO_ID = '1.7.102.0.0.0.0';
     TC_ID = '1.7.84.0.0.0.0';
@@ -54,6 +56,7 @@ export class SearchService {
             this.taxonomies = this.config.taxonomies;
             this.availableParams = this.config.search_list;
             this.equivalentWords = this.config.equivalent_words;
+            this.searchBtnText = this.config.search_btn_text;
         }
 
     /** Suggestions that show up for different categories/parameters */
@@ -297,37 +300,63 @@ export class SearchService {
     private combineParameters(submitSearch: boolean = false) {
         let param: SearchParameter;
         let displayedValue: string;
-
+        let combined = true;
         // clear previous selected values
-        for (const p of this.availableParams) {
-            p.removeAllSelected();
-        }
+        this.availableParams.forEach(p => p.removeAllSelected());
 
-        for (const p of this.displayParams) {
+        this.displayParams.forEach((p, index) => {
             param = p.getSearchParam();
 
             if (param.getType() === 'SearchDatetime' || param.getType() === 'SearchHoursRange' ) {
                 // datetime and hours range are handled differently
                 const temp = param as SearchDatetime;
                 if (temp.isUnfilled()) {
-                  this.removeDisplay(this.displayParams.indexOf(p));
+                  this.removeDisplay(index);
                 }
-                continue;
             } else {
                 if (param.getName() === 'size') {
                     p.setValue(this.limitValue(Number(p.getValue()), 0, 1000));
                 }
                 displayedValue = p.getValue();
-            }
 
-            // skip and remove any null values from the UI too
-            if (displayedValue === '' && submitSearch) {
-                this.removeDisplay(this.displayParams.indexOf(p));
-                continue;
+                if (submitSearch) {
+                    // skip and remove any null values from the UI too
+                    if (displayedValue === '') {
+                        this.removeDisplay(index);
+                    } else {
+                        const valid = this.validValuesOnSubmit(displayedValue, index);
+                        if (!valid) {
+                            combined = false;
+                        }
+                    }
+                } else {
+                    param.addSelected(displayedValue);
+                }
             }
+        });
+        return combined;
+    }
 
-            param.addSelected(displayedValue);
+    private validValuesOnSubmit(value, index) {
+        const displayParam = this.displayParams[index];
+        const param = displayParam.getSearchParam();
+        // check if has equivalent word
+        const equivs = this.equivalentWords.filter(word => word.getEquivalents().indexOf(value) > -1);
+        value = equivs.length > 0 ? equivs[0].getKey() : value;
+
+        if (param.isRestricted() && param.getChoices().indexOf(value) < 0) {
+            this.message.push('Please select one of the available options for ' + param.getDisplayName());
+            return false;
         }
+
+        if (this.valueAlreadyExists(value, index)) {
+            this.message.push(value + ' was already entered!');
+            return false;
+        }
+
+        displayParam.setValue(value);
+        param.addSelected(value);
+        return true;
     }
 
     // check any missing required parameters
@@ -362,14 +391,18 @@ export class SearchService {
 
         if (this.displayParams !== null) {
             if (submitSearch) {
-                this.combineParameters(true);
+                const combined = this.combineParameters(true);
+                if (!combined) {
+                    taxResult = [];
+                    return;
+                }
+
                 missing = this.missingParameters();
 
                 if (missing.length > 0) {
                     this.message.push('Missing some required search fields: ');
-                    for (const m of missing){
-                        this.message.push(m);
-                    }
+                    missing.forEach(m => this.message.push(m));
+                    taxResult = [];
                     return;
                 }
             } else {
@@ -379,10 +412,8 @@ export class SearchService {
                 // this.combineParameters();
             }
 
-            for (const p of this.availableParams) {
-                if (this.canIgnoreParam(p)) { continue; }
-
-                if (p.getSelected().length) {
+            this.availableParams.forEach(p => {
+                if (!this.canIgnoreParam(p) && p.getSelected().length) {
                     // if searching two values that belong to the same category, it would return the combined result
                     if (submitSearch) { temp = []; }
                     for (const value of p.getSelected()) {
@@ -391,14 +422,14 @@ export class SearchService {
                     }
                     taxResult = temp;
                 }
-            }
+            });
         }
 
-        for (const t of taxResult) {
+        taxResult.forEach(t => {
             if (this.resultTaxonomies.indexOf(t) === -1) {
                 this.resultTaxonomies.push(t);
             }
-        }
+        });
     }
 
     private limitValue(input, min, max) {
