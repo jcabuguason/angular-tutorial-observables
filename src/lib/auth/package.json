@@ -1,0 +1,14 @@
+{
+  "ngPackage": {
+    "lib": {
+      "externals": {
+        "crypto-js": "crypto-js",
+        "@ngrx/store": "@ngrx/store"
+      }
+    }
+  },
+  "peerDependencies": {
+    "crypto-js": "^3.1.9-1",
+    "@ngrx/store": "^5.0.0"
+  }
+}
