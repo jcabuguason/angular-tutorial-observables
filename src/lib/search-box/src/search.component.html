@@ -33,9 +33,11 @@
             <button (click)="searchService.removeDisplay(i)">x</button>
 
             <!-- available choices -->
-            <li *ngFor="let c of p.getDisplayChoices()" >
-                <span (click)="searchService.addValueToDisplay(c, i)" > {{ c }} </span>
-            </li>
+            <span *ngIf="p.getDisplayChoices().length" class="pop-up">
+                <li *ngFor="let c of p.getDisplayChoices()" >
+                    <span (click)="searchService.addValueToDisplay(c, i)" > {{ c }} </span>
+                </li>
+            </span>
 
         </div>
     </div>
