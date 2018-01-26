@@ -241,13 +241,28 @@ export class DataGridService {
         if (workingNode.children === undefined) {
           workingNode.children = [];
         }
+
+        if (columnToAdd.headerName === 'Official') {
+            for (const node of workingNode.children) {
+                node.columnGroupShow = 'open';
+            }
+        } else {
+            for (const node of workingNode.children) {
+                if (node.headerName === 'Official') {
+                    columnToAdd.columnGroupShow = 'open';
+                    break;
+                }
+            }
+        }
+
         workingNode.children.push(columnToAdd);
+
       } else {
         columnToAdd = workingNode;
         // Avoid overwritting layered/official columns
-        if (workingNode.children.length && workingNode.children[0].headerName !== 'Basic') {
+        if (workingNode.children.length && workingNode.children[0].headerName !== 'Default') {
           columnToAdd = {
-            'headerName': 'Basic',
+            'headerName': 'Default',
             'children': [],
             'elementID': element.elementID
           };
@@ -256,6 +271,7 @@ export class DataGridService {
         }
       }
 
+      // Checking if this element exists in user element list
       if ((this.userDisplayColumns != null ) &&
           (this.userDisplayColumns.length ) &&
           (this.userDisplayColumns.indexOf(element.elementID) < 0)) {
