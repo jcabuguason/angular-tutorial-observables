@@ -77,6 +77,19 @@ https://github.com/dnauck/angular-advanced-searchbox/blob/master/src/angular-adv
   width: 100px;
 }
 
+.pop-up {
+  position: fixed;
+  z-index: 6;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 0 5px;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  max-height: 250px; 
+  overflow-y: auto;
+}
+
 /* .search-parameter-suggestions .title {
   display: block;
   float: left;
