@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { MDElement } from '../model/MDElement';
 import { MDDescriptionParser } from '../parser/md-description.parser';
 import { ParseError } from '../error/ParseError';
+import { MDEnum } from '../model/MDEnum';
 
 @Injectable()
 export class MDElementParser {
@@ -19,9 +20,19 @@ export class MDElementParser {
         .filter(obj => obj != null)
         .find(obj => obj['@name'] === 'display-name');
 
-      const enums: string[] = [];
+      let enums: MDEnum[] = [];
       if (raw.enum !== undefined) {
-        [].concat(raw['enum']).forEach(e => enums.push(e['@value']));
+        enums = [].concat(raw['enum'])
+          .map(e => {
+            const enumLang = [].concat(e['language']).filter((lang) => lang != null);
+            const enumEnglish = enumLang.find((lang) => lang['@name'] === 'en');
+            const enumFrench = enumLang.find((lang) => lang['@name'] === 'fr');
+            return {
+              value: e['@value'],
+              english: enumEnglish == null ? null : enumEnglish['@value'],
+              french: enumFrench == null ? null : enumFrench['@value']
+            };
+          });
       }
 
       const elements: MDElement[] = [];
