@@ -6,3 +6,8 @@
   color: #dd3333;
   width: 600px;
 }
+
+.text-dialog {
+  max-height: 70vh;
+  overflow-y: scroll;
+}
