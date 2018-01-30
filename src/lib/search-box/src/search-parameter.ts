@@ -49,6 +49,10 @@ export class SearchParameter {
       return this.required;
     }
 
+    setRequired(required: boolean) {
+        this.required = required;
+    }
+
     getPlaceholder(): string {
         return this.placeholder;
     }
