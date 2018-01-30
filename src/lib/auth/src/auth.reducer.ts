@@ -27,5 +27,5 @@ export interface AuthState {
 }
 
 export const selectFeatureAuthState = createFeatureSelector<AuthState>('auth');
-export const selectAuthState = createSelector(selectFeatureAuthState, (state: AuthState) => state.auth);
+export const selectAuthState = createSelector(selectFeatureAuthState, (state: AuthState) => state ? state.auth : null);
 
