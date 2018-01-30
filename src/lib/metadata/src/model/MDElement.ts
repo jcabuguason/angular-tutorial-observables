@@ -1,4 +1,5 @@
 import { MDDescription } from './MDDescription';
+import { MDEnum } from './MDEnum';
 
 export interface MDElement {
     format: string;
@@ -14,7 +15,7 @@ export interface MDElement {
     description: MDDescription;
     displayName: MDDescription;
     pattern?: string;
-    enums?: string[];
+    enums?: MDEnum[];
     elements?: MDElement[];
     requiredLanguages?: {
         english: boolean;
