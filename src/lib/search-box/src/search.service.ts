@@ -209,6 +209,18 @@ export class SearchService {
         this.searchRequested.emit(this.getSearchModel());
     }
 
+    // check any missing required parameters
+    missingParameters(): string[] {
+        const missing = this.availableParams
+            .filter(p => p.isRequired())
+            .filter(p => {
+                const found = this.displayParams.filter(item => item.getSearchParam() === p);
+                return found === undefined || found.length < 1;
+            })
+            .map(p => p.getDisplayName());
+        return missing;
+    }
+
     /** Searches for the parameter */
     private searchParameters(searchKey: string, list: SearchParameter[]) {
         searchKey = searchKey.trim();
@@ -357,20 +369,6 @@ export class SearchService {
         displayParam.setValue(value);
         param.addSelected(value);
         return true;
-    }
-
-    // check any missing required parameters
-    private missingParameters(): string[] {
-        const missing: string[] = [];
-        for (const p of this.availableParams){
-            if (p.isRequired()) {
-                const found = this.displayParams.filter(item => item.getSearchParam() === p);
-                if (found.length === 0) {
-                    missing.push(p.getDisplayName());
-                }
-            }
-        }
-        return missing;
     }
 
     /** arrayName.concat doesn't always work that well, so combine it like this */
