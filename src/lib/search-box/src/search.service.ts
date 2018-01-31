@@ -13,8 +13,6 @@ import { SearchModel, SearchElement } from './search.model';
 
 import { SEARCH_BOX_CONFIG, SearchBoxConfig } from './search-box.config';
 
-import { Store } from '@ngrx/store';
-
 @Injectable()
 export class SearchService {
 
@@ -55,22 +53,15 @@ export class SearchService {
 
     constructor(
         @Inject(SEARCH_BOX_CONFIG)
-        public config: SearchBoxConfig,
-        private store: Store) {
+        public config: SearchBoxConfig) {
             this.taxonomies = this.config.taxonomies;
             this.availableParams = this.config.search_list;
             this.equivalentWords = this.config.equivalent_words;
             this.searchBtnText = this.config.search_btn_text;
         }
 
-    /** Suggestions that show up for different categories/parameters */
-    showSuggestedParameters(searchString: string, showAll: boolean) {
-      this.suggestedParams = showAll && !searchString
-          ? this.availableParams.filter(item => item.getTimesUsed() < item.getTimesUsable())
-          : this.searchParameters(searchString, this.availableParams);
-    }
-
-    executeParams(qParams) {
+    /** Executes parameters for a search request */
+    executeSearch(qParams) {
         const index = (Array.isArray(qParams.index)) ? qParams.index : [qParams.index];
         const size = (qParams.size !== undefined) ? qParams.size : 30;
 
@@ -83,9 +74,14 @@ export class SearchService {
         this.addMetadataElement(qParams.mscid, this.MSC_ID, elements);
         this.addMetadataElement(qParams.climid, this.CLIM_ID, elements);
 
-        const search = new SearchModel(index, elements, from, to, size, 'AND');
+        this.submitModel(new SearchModel(index, elements, from, to, size, 'AND'));
+    }
 
-        this.store.dispatch(new SearchAction(search));
+    /** Suggestions that show up for different categories/parameters */
+    showSuggestedParameters(searchString: string, showAll: boolean) {
+      this.suggestedParams = showAll && !searchString
+          ? this.availableParams.filter(item => item.getTimesUsed() < item.getTimesUsable())
+          : this.searchParameters(searchString, this.availableParams);
     }
 
     /** Choices that show up (index is for displayParams) */
@@ -228,7 +224,11 @@ export class SearchService {
     }
 
     submitSearch() {
-        this.searchRequested.emit(this.getSearchModel());
+        this.submitModel(this.getSearchModel());
+    }
+
+    submitModel(model: SearchModel) {
+        this.searchRequested.emit(model);
     }
 
     // check any missing required parameters
@@ -472,12 +472,14 @@ export class SearchService {
                 param.getName() === 'stnName' || param.getName() === 'size' || param.getName() === 'province');
     }
 
+    /* Adds a metadata element to search parameters */
     private addMetadataElement(param, elementID, elements) {
         ((Array.isArray(param)) ? param : [param])
             .filter(id => id != null)
             .forEach(id => elements.push(new SearchElement(elementID, 'metadataElements', 'value', id)));
     }
 
+    /* Creates a valid date parameter, or undefined if unable to create a valid date */
     private getDateParam(param) {
         if (param == null) { return param; }
 
