@@ -13,6 +13,8 @@ import { SearchModel, SearchElement } from './search.model';
 
 import { SEARCH_BOX_CONFIG, SearchBoxConfig } from './search-box.config';
 
+import { Store } from '@ngrx/store';
+
 @Injectable()
 export class SearchService {
 
@@ -45,6 +47,7 @@ export class SearchService {
     searchBtnText: string;
 
     MSC_ID = '1.7.86.0.0.0.0';
+    CLIM_ID = '1.7.85.0.0.0.0';
     ICAO_ID = '1.7.102.0.0.0.0';
     TC_ID = '1.7.84.0.0.0.0';
     SYNOP_ID = '1.7.82.0.0.0.0';
@@ -52,7 +55,8 @@ export class SearchService {
 
     constructor(
         @Inject(SEARCH_BOX_CONFIG)
-        public config: SearchBoxConfig) {
+        public config: SearchBoxConfig,
+        private store: Store) {
             this.taxonomies = this.config.taxonomies;
             this.availableParams = this.config.search_list;
             this.equivalentWords = this.config.equivalent_words;
@@ -64,6 +68,24 @@ export class SearchService {
       this.suggestedParams = showAll && !searchString
           ? this.availableParams.filter(item => item.getTimesUsed() < item.getTimesUsable())
           : this.searchParameters(searchString, this.availableParams);
+    }
+
+    executeParams(qParams) {
+        const index = (Array.isArray(qParams.index)) ? qParams.index : [qParams.index];
+        const size = (qParams.size !== undefined) ? qParams.size : 30;
+
+        // Required Date Format:  2018-01-09T05:00:00.000Z
+        const from = this.getDateParam(qParams.from);
+        const to = this.getDateParam(qParams.to);
+
+        const elements: SearchElement[] = [];
+
+        this.addMetadataElement(qParams.mscid, this.MSC_ID, elements);
+        this.addMetadataElement(qParams.climid, this.CLIM_ID, elements);
+
+        const search = new SearchModel(index, elements, from, to, size, 'AND');
+
+        this.store.dispatch(new SearchAction(search));
     }
 
     /** Choices that show up (index is for displayParams) */
@@ -449,4 +471,18 @@ export class SearchService {
         return (param.getType() === 'SearchDatetime' || param.getType() === 'SearchHoursRange' ||
                 param.getName() === 'stnName' || param.getName() === 'size' || param.getName() === 'province');
     }
+
+    private addMetadataElement(param, elementID, elements) {
+        ((Array.isArray(param)) ? param : [param])
+            .filter(id => id != null)
+            .forEach(id => elements.push(new SearchElement(elementID, 'metadataElements', 'value', id)));
+    }
+
+    private getDateParam(param) {
+        if (param == null) { return param; }
+
+        const date = new Date(param);
+        return (date.toString() === 'Invalid Date') ? undefined : date;
+    }
+
 }
