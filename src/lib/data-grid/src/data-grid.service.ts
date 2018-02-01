@@ -305,15 +305,15 @@ export class DataGridService {
 
         let output = '{';
         output += '"obsDateTime": "' + parsed.obsDateTime + '",';
-        output += '"uri": "' + parsed.identity + '",';
+        output += '"uri": "' + parsed.identity + '"';
 
         for (const element of parsed.metadataElements) {
             if (element.name === 'stn_nam') {
-               output += '"station": "' + element.value + '",';
+               output += ',"station": "' + element.value + '"';
             } else if (element.name !== undefined) {
                const headerID = this.formatHeaderName(element.name);
                this.buildMetadataColumn(headerID);
-               output += '"' + headerID + '": "' + element.value + '",';
+               output += ',"' + headerID + '": "' + element.value + '"';
             }
         }
 
@@ -321,10 +321,7 @@ export class DataGridService {
             if (element.elementID == null) { continue; }
             const headerID = ColumnConfigurationContainer.findHeaderID(element);
             this.buildElementColumn(element, headerID);
-            output += this.columnConfiguration.createElementData(element, headerID);
-            if (element !== parsed.dataElements[parsed.dataElements.length - 1]) {
-                output += ',';
-            }
+            output += ',' + this.columnConfiguration.createElementData(element, headerID);
         }
 
         output += '}';
