@@ -62,19 +62,13 @@ export class SearchService {
 
     /** Executes parameters for a search request */
     executeSearch(qParams) {
+        this.addRequestParams(qParams);
+
         const index = (Array.isArray(qParams.index)) ? qParams.index : [qParams.index];
-        const size = (qParams.size !== undefined) ? qParams.size : 30;
+        const model: SearchModel = this.getSearchModel();
+        model.taxonomy = index;
 
-        // Required Date Format:  2018-01-09T05:00:00.000Z
-        const from = this.getDateParam(qParams.from);
-        const to = this.getDateParam(qParams.to);
-
-        const elements: SearchElement[] = [];
-
-        this.addMetadataElement(qParams.mscid, this.MSC_ID, elements);
-        this.addMetadataElement(qParams.climid, this.CLIM_ID, elements);
-
-        this.submitModel(new SearchModel(index, elements, from, to, size, 'AND'));
+        this.submitModel(model);
     }
 
     /** Suggestions that show up for different categories/parameters */
@@ -472,11 +466,46 @@ export class SearchService {
                 param.getName() === 'stnName' || param.getName() === 'size' || param.getName() === 'province');
     }
 
-    /* Adds a metadata element to search parameters */
-    private addMetadataElement(param, elementID, elements) {
-        ((Array.isArray(param)) ? param : [param])
-            .filter(id => id != null)
-            .forEach(id => elements.push(new SearchElement(elementID, 'metadataElements', 'value', id)));
+    /** Populate search box with information from specific URL parameters, except index */
+    private addRequestParams(qParams) {
+        const mscid = qParams.mscid;
+        const climid = qParams.climid;
+        const from = this.getDateParam(qParams.from);
+        const to = this.getDateParam(qParams.to);
+        const size = (qParams.size !== undefined) ? qParams.size : 300;
+
+        const newParams = [
+            { 'values' : [mscid, climid], 'param': this.availableParams.filter(p => p.getName() === 'stnName') },
+            { 'values' : [from], 'param': this.availableParams.filter(p => p.getType() === 'SearchDatetime' && p.getName() === 'from') },
+            { 'values' : [to], 'param': this.availableParams.filter(p => p.getType() === 'SearchDatetime' && p.getName() === 'to') },
+            { 'values' : [size], 'param': this.availableParams.filter(p => p.getName() === 'size') }
+        ];
+
+        // filter out any parameters that don't exist from the search config
+        newParams.filter(obj => obj.param.length > 0)
+            .forEach(obj => {
+                // disregard any undefined values read in from qParams
+                obj.values.filter(val => val)
+                    // add it to the search box
+                    .forEach(val => {
+                        this.addRequestParamValue(obj.param[0], val);
+                    });
+            });
+    }
+
+    /* Adds a values to search parameters */
+    private addRequestParamValue(searchParam: SearchParameter, values) {
+        if (searchParam.getType() === 'SearchDatetime' && !Array.isArray(values) && values) {
+            this.addSuggestedParameter(searchParam);
+            (searchParam as SearchDatetime).setFullDatetime(values);
+            return;
+        }
+
+        ((Array.isArray(values)) ? values : [values])
+            .filter(val => val != null)
+            .forEach(val => {
+                this.addSuggestedParameter(searchParam, val);
+            });
     }
 
     /* Creates a valid date parameter, or undefined if unable to create a valid date */
