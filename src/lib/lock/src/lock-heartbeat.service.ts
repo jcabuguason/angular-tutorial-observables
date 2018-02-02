@@ -13,7 +13,7 @@ import 'rxjs/add/observable/forkJoin';
 
 import { LOCK_CONFIG, LockConfig } from './lock.config';
 import { LockService } from './lock.service';
-import { TextDialogComponent } from '@msc-dms-commons-angular/core/text-dialog';
+import { TextDialogComponent } from 'msc-dms-commons-angular/core/text-dialog';
 
 @Injectable()
 export class LockHeartbeatService {

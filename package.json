@@ -10,8 +10,9 @@
     "e2e": "ng e2e",
     "test": "karma start ./karma.conf.js",
     "build:lib": "npm run build:core && npm run build:commons && npm pack ./dist/lib",
-    "build:core": "ng-packagr -p ./src/lib/core/ng-package.json && npm link ./dist/core",
-    "build:commons": "ng-packagr -p ./src/lib/ng-package.json"
+    "build:core": "ng-packagr -p ./src/lib/core/ng-package.json && npm run link:core ",
+    "build:commons": "ng-packagr -p ./src/lib/ng-package.json",
+    "link:core": "rimraf ./node_modules/msc-dms-commons-angular && mkdirp ./node_modules/msc-dms-commons-angular/core && ncp ./dist/core ./node_modules/msc-dms-commons-angular/core"
   },
   "private": true,
   "dependencies": {
@@ -73,8 +74,11 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-spec-reporter": "0.0.31",
     "karma-webpack": "^2.0.6",
+    "mkdirp": "^0.5.1",
+    "ncp": "^2.0.0",
     "ng-packagr": "2.0.0-rc.6",
     "protractor": "~5.1.2",
+    "rimraf": "^2.6.2",
     "source-map-loader": "^0.2.3",
     "ts-loader": "^3.2.0",
     "ts-node": "~3.2.0",

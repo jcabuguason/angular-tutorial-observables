@@ -2,7 +2,8 @@
   "ngPackage": {
     "lib": {
       "externals": {
-        "@angular/material": "@angular/material"
+        "@angular/material": "@angular/material",
+        "msc-dms-commons-angular/core/text-dialog": "msc-dms-commons-angular/core/text-dialog"
       }
     }
   }
