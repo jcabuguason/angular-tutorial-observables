@@ -101,6 +101,13 @@ export class SearchService {
 
     }
 
+    /** Don't show the choices except given index */
+    removeAllSuggestedChoices(exceptIndex: number = -1) {
+        this.displayParams
+            .filter((param, index) => index !== exceptIndex)
+            .forEach(param => param.removeAllDisplayChoices());
+    }
+
     /** Entering any word and find the parameter/choice it matches with */
     addNewParameter(searchString: string) {
         this.message = [];
@@ -329,8 +336,14 @@ export class SearchService {
         return allWords.indexOf(value) === -1;
     }
 
-    // helper function for getTaxonomy
-    // combine parameters of the same value
+    /** check for any added parameters that are not used */
+    private emptyParameters(): string[] {
+        return this.displayParams
+            .filter(p => !p.getValue().trim())
+            .map(p => p.getKey());
+    }
+
+    /** helper function for getTaxonomy, combine parameters of the same value */
     private combineParameters(submitSearch: boolean = false) {
         let param: SearchParameter;
         let displayedValue: string;
@@ -406,11 +419,20 @@ export class SearchService {
         let taxResult: SearchTaxonomy[] = this.taxonomies;
         let temp: SearchTaxonomy[] = [];
         let missing: string[] = [];
+        let empty: string[] = [];
         this.message = [];
         this.resultTaxonomies = [];
 
         if (this.displayParams !== null) {
             if (submitSearch) {
+                empty = this.emptyParameters();
+                if (empty.length > 0) {
+                    this.message.push('Categories added but does not have a value: ');
+                    empty.forEach(e => this.message.push(e));
+                    taxResult = [];
+                    return;
+                }
+
                 const combined = this.combineParameters(true);
                 if (!combined) {
                     taxResult = [];
