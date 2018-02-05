@@ -65,13 +65,13 @@ export class SearchService {
         this.addRequestParams(qParams);
 
         const model: SearchModel = this.getSearchModel();
-        const indicies = (Array.isArray(qParams.index)) ? qParams.index : [qParams.index]
-            .filter(index => index);
+        const indices = (Array.isArray(qParams.index)) ? qParams.index : [qParams.index]
+            .filter(index => index !== undefined);
 
-        if (indicies && indicies.length > 0) {
-            const newIndicies = indicies.filter(index => model.taxonomy.indexOf(index) !== -1);
-            if (newIndicies.length === indicies.length) {
-                model.taxonomy = newIndicies;
+        if (indices && indices.length > 0) {
+            const newIndices = indices.filter(index => model.taxonomy.indexOf(index) !== -1);
+            if (newIndices.length === indices.length) {
+                model.taxonomy = newIndices;
             } else {
                 this.message.push('Error: Invalid URL parameters for index');
                 return;
@@ -478,44 +478,38 @@ export class SearchService {
 
     /** Populate search box with information from specific URL parameters, except index */
     private addRequestParams(qParams) {
-        const mscid = qParams.mscid;
-        const climid = qParams.climid;
+        const mscids = qParams.mscid;
+        const climids = qParams.climid;
         const from = this.getDateParam(qParams.from);
         const to = this.getDateParam(qParams.to);
         const size = qParams.size;
 
         const newParams = [
-            { 'values' : [mscid, climid], 'param': this.availableParams.filter(p => p.getName() === 'stnName') },
-            { 'values' : [from], 'param': this.availableParams.filter(p => p.getType() === 'SearchDatetime' && p.getName() === 'from') },
-            { 'values' : [to], 'param': this.availableParams.filter(p => p.getType() === 'SearchDatetime' && p.getName() === 'to') },
-            { 'values' : [size], 'param': this.availableParams.filter(p => p.getName() === 'size') }
+            { 'value' : climids, 'param': this.availableParams.filter(p => p.getName() === 'stnName') },
+            { 'value' : mscids, 'param': this.availableParams.filter(p => p.getName() === 'stnName') },
+            { 'value' : from, 'param': this.availableParams.filter(p => p.getType() === 'SearchDatetime' && p.getName() === 'from') },
+            { 'value' : to, 'param': this.availableParams.filter(p => p.getType() === 'SearchDatetime' && p.getName() === 'to') },
+            { 'value' : size, 'param': this.availableParams.filter(p => p.getName() === 'size') }
         ];
 
         // filter out any parameters that don't exist from the search config
-        newParams.filter(obj => obj.param.length > 0)
-            .forEach(obj => {
-                // disregard any undefined values read in from qParams
-                obj.values.filter(val => val)
-                    // add it to the search box
-                    .forEach(val => {
-                        this.addRequestParamValue(obj.param[0], val);
-                    });
-            });
+        newParams.filter(obj => obj.param.length > 0 && obj.value !== undefined)
+            .forEach(obj => this.applyParameter(obj.param[0], obj.value));
     }
 
-    /* Adds a values to search parameters */
-    private addRequestParamValue(searchParam: SearchParameter, values) {
-        if (searchParam.getType() === 'SearchDatetime' && !Array.isArray(values) && values) {
+    private applyParameter(searchParam: SearchParameter, value) {
+        if (searchParam.getType() === 'SearchDatetime') {
             this.addSuggestedParameter(searchParam);
-            (searchParam as SearchDatetime).setFullDatetime(values);
+            (searchParam as SearchDatetime).setFullDatetime(value);
             return;
         }
-
-        ((Array.isArray(values)) ? values : [values])
-            .filter(val => val != null)
-            .forEach(val => {
-                this.addSuggestedParameter(searchParam, val);
-            });
+        if (searchParam.getName() === 'stnName') {
+            ((Array.isArray(value)) ? value : [value])
+                .filter(id => id != null)
+                .forEach(id => this.addSuggestedParameter(searchParam, id));
+            return;
+        }
+        this.addSuggestedParameter(searchParam, value);
     }
 
     /* Creates a valid date parameter, or undefined if unable to create a valid date */
