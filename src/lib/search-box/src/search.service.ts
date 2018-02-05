@@ -64,9 +64,19 @@ export class SearchService {
     executeSearch(qParams) {
         this.addRequestParams(qParams);
 
-        const index = (Array.isArray(qParams.index)) ? qParams.index : [qParams.index];
         const model: SearchModel = this.getSearchModel();
-        model.taxonomy = index;
+        const indicies = (Array.isArray(qParams.index)) ? qParams.index : [qParams.index]
+            .filter(index => index);
+
+        if (indicies && indicies.length > 0) {
+            const newIndicies = indicies.filter(index => model.taxonomy.indexOf(index) !== -1);
+            if (newIndicies.length === indicies.length) {
+                model.taxonomy = newIndicies;
+            } else {
+                this.message.push('Error: Invalid URL parameters for index');
+                return;
+            }
+        }
 
         this.submitModel(model);
     }
@@ -472,7 +482,7 @@ export class SearchService {
         const climid = qParams.climid;
         const from = this.getDateParam(qParams.from);
         const to = this.getDateParam(qParams.to);
-        const size = (qParams.size !== undefined) ? qParams.size : 300;
+        const size = qParams.size;
 
         const newParams = [
             { 'values' : [mscid, climid], 'param': this.availableParams.filter(p => p.getName() === 'stnName') },
