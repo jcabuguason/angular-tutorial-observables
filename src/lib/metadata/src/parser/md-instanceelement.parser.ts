@@ -13,14 +13,16 @@ export class MDInstanceElementParser {
 
     let english;
     let french;
-    if (raw['lanaguage'] != null) {
-      const languageJSON = [].concat(raw['lanaguage']);
+    if (raw['language'] != null) {
+      const languageJSON = [].concat(raw['language']);
       try {
-        english = languageJSON.find(l => l['@name'] === 'en')['@value'];
-        french = languageJSON.find(l => l['@name'] === 'fr')['@value'];
+        english = languageJSON.find(l => l['@name'] === 'en');
+        french = languageJSON.find(l => l['@name'] === 'fr');
+        english = english != null ? english['@value'] : null;
+        french = french != null ? french['@value'] : null;
       }
       catch (error) {
-        throw new ParseError('Improper format of description: ' + raw + '\n\t' + error);
+        throw new ParseError('Improper format of language values: ' + raw + '\n\t' + error);
       }
     }
 
