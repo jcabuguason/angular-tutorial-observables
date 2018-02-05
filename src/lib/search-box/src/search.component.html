@@ -1,9 +1,9 @@
-<div class="advancedSearchBox" (keyup.enter)="searchService.submitSearch()">
+<div class="advancedSearchBox" (keyup.enter)="searchService.submitSearch(); searchService.removeAllSuggestedChoices()">
 
     <!-- selected search parameter -->
     <div class="selected-parameters" *ngFor = "let p of searchService.displayParams; index as i">
         <!-- parameters -->
-        <div class="search-parameter" >
+        <div class="search-parameter" (click)="searchService.removeAllSuggestedChoices(i)">
             <div> {{ p.getKey() }}: </div>
             <div *ngIf="p.getSearchParam().getType() === 'SearchParameter'">
                 <input [(ngModel)]="p.value" #valueInput placeholder={{p.getSearchParam().getPlaceholder()}} class="value-input"
@@ -44,7 +44,7 @@
 
     <!-- the actual "search box" -->
     <input [(ngModel)]="searchService.searchString" #searchBox placeholder="Search..." class="search-parameter-input"
-        (click)="searchService.showSuggestedParameters(searchBox.value, true)"
+        (click)="searchService.showSuggestedParameters(searchBox.value, true); searchService.removeAllSuggestedChoices()"
         (keyup)="searchService.showSuggestedParameters(searchBox.value, false)">
 
 </div>
