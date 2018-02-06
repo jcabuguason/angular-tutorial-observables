@@ -338,9 +338,16 @@ export class SearchService {
 
     /** check for any added parameters that are not used */
     private emptyParameters(): string[] {
-        return this.displayParams
+        const dateParams = this.displayParams
+            .filter(p => p.getSearchParam().getType() === 'SearchDatetime')
+            .filter(p => (p.getSearchParam() as SearchDatetime).isUnfilled())
+            .map(p => p.getKey());
+        const searchParams = this.displayParams
+            .filter(p => p.getSearchParam().getType() === 'SearchParameter')
             .filter(p => !p.getValue().trim())
             .map(p => p.getKey());
+
+        return this.combineArrays(dateParams, searchParams);
     }
 
     /** helper function for getTaxonomy, combine parameters of the same value */
