@@ -62,24 +62,26 @@ export class SearchService {
 
     /** Executes parameters for a search request */
     executeSearch(qParams) {
-        this.addRequestParams(qParams);
-
-        const model: SearchModel = this.getSearchModel();
         const indices = (Array.isArray(qParams.index)) ? qParams.index : [qParams.index]
             .filter(index => index !== undefined);
+        const newIndices = indices.filter(index => this.taxonomyExists(index));
 
-        if (indices.length > 0) {
-            const newIndices = indices.filter(index => this.taxonomyExists(index));
-            if (newIndices.length > 0) {
-                model.taxonomy = newIndices;
-            } else {
-                this.message.push('Error: Invalid URL parameters for index');
-                return;
-            }
+        if (indices.length > 0 && newIndices.length > 0) {
+            this.handleNewIndices(indices);
+        } else {
+            this.message.push('Error: Invalid URL parameters for index');
+            return;
         }
+
+        this.addRequestParams(qParams);
+        const model: SearchModel = this.getSearchModel();
+        model.taxonomy = newIndices;
 
         this.submitModel(model);
     }
+
+    /** Any extra functionality when reading in URI index parameter */
+    handleNewIndices(indices) { }
 
     /** Suggestions that show up for different categories/parameters */
     showSuggestedParameters(searchString: string, showAll: boolean) {
