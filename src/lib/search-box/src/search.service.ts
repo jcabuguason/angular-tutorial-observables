@@ -68,8 +68,8 @@ export class SearchService {
         const indices = (Array.isArray(qParams.index)) ? qParams.index : [qParams.index]
             .filter(index => index !== undefined);
 
-        if (indices && indices.length > 0) {
-            const newIndices = indices.filter(index => this.taxonomies.indexOf(index) !== -1);
+        if (indices.length > 0) {
+            const newIndices = indices.filter(index => this.taxonomyExists(index));
             if (newIndices.length > 0) {
                 model.taxonomy = newIndices;
             } else {
@@ -245,6 +245,10 @@ export class SearchService {
             })
             .map(p => p.getDisplayName());
         return missing;
+    }
+
+    taxonomyExists(taxonomy: string): boolean {
+        return this.taxonomies.some(t => t.getTaxonomy() === taxonomy);
     }
 
     /** Searches for the parameter */
@@ -501,15 +505,13 @@ export class SearchService {
         if (searchParam.getType() === 'SearchDatetime') {
             this.addSuggestedParameter(searchParam);
             (searchParam as SearchDatetime).setFullDatetime(value);
-            return;
-        }
-        if (searchParam.getName() === 'stnName') {
+        } else if (searchParam.getName() === 'stnName') {
             ((Array.isArray(value)) ? value : [value])
                 .filter(id => id != null)
                 .forEach(id => this.addSuggestedParameter(searchParam, id));
-            return;
+        } else {
+            this.addSuggestedParameter(searchParam, value);
         }
-        this.addSuggestedParameter(searchParam, value);
     }
 
     /* Creates a valid date parameter, or undefined if unable to create a valid date */
