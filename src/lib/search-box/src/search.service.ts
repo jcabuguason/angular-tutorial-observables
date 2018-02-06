@@ -62,19 +62,23 @@ export class SearchService {
 
     /** Executes parameters for a search request */
     executeSearch(qParams) {
-        const index = (Array.isArray(qParams.index)) ? qParams.index : [qParams.index];
-        const size = (qParams.size !== undefined) ? qParams.size : 30;
+        this.addRequestParams(qParams);
 
-        // Required Date Format:  2018-01-09T05:00:00.000Z
-        const from = this.getDateParam(qParams.from);
-        const to = this.getDateParam(qParams.to);
+        const model: SearchModel = this.getSearchModel();
+        const indices = (Array.isArray(qParams.index)) ? qParams.index : [qParams.index]
+            .filter(index => index !== undefined);
 
-        const elements: SearchElement[] = [];
+        if (indices.length > 0) {
+            const newIndices = indices.filter(index => this.taxonomyExists(index));
+            if (newIndices.length > 0) {
+                model.taxonomy = newIndices;
+            } else {
+                this.message.push('Error: Invalid URL parameters for index');
+                return;
+            }
+        }
 
-        this.addMetadataElement(qParams.mscid, this.MSC_ID, elements);
-        this.addMetadataElement(qParams.climid, this.CLIM_ID, elements);
-
-        this.submitModel(new SearchModel(index, elements, from, to, size, 'AND'));
+        this.submitModel(model);
     }
 
     /** Suggestions that show up for different categories/parameters */
@@ -248,6 +252,10 @@ export class SearchService {
             })
             .map(p => p.getDisplayName());
         return missing;
+    }
+
+    taxonomyExists(taxonomy: string): boolean {
+        return this.taxonomies.some(t => t.getTaxonomy() === taxonomy);
     }
 
     /** Searches for the parameter */
@@ -501,11 +509,38 @@ export class SearchService {
                 param.getName() === 'stnName' || param.getName() === 'size' || param.getName() === 'province');
     }
 
-    /* Adds a metadata element to search parameters */
-    private addMetadataElement(param, elementID, elements) {
-        ((Array.isArray(param)) ? param : [param])
-            .filter(id => id != null)
-            .forEach(id => elements.push(new SearchElement(elementID, 'metadataElements', 'value', id)));
+    /** Populate search box with information from specific URL parameters, except index */
+    private addRequestParams(qParams) {
+        const mscids = qParams.mscid;
+        const climids = qParams.climid;
+        const from = this.getDateParam(qParams.from);
+        const to = this.getDateParam(qParams.to);
+        const size = qParams.size;
+
+        const newParams = [
+            { 'value' : climids, 'param': this.availableParams.filter(p => p.getName() === 'stnName') },
+            { 'value' : mscids, 'param': this.availableParams.filter(p => p.getName() === 'stnName') },
+            { 'value' : from, 'param': this.availableParams.filter(p => p.getType() === 'SearchDatetime' && p.getName() === 'from') },
+            { 'value' : to, 'param': this.availableParams.filter(p => p.getType() === 'SearchDatetime' && p.getName() === 'to') },
+            { 'value' : size, 'param': this.availableParams.filter(p => p.getName() === 'size') }
+        ];
+
+        // filter out any parameters that don't exist from the search config
+        newParams.filter(obj => obj.param.length > 0 && obj.value !== undefined)
+            .forEach(obj => this.applyParameter(obj.param[0], obj.value));
+    }
+
+    private applyParameter(searchParam: SearchParameter, value) {
+        if (searchParam.getType() === 'SearchDatetime') {
+            this.addSuggestedParameter(searchParam);
+            (searchParam as SearchDatetime).setFullDatetime(value);
+        } else if (searchParam.getName() === 'stnName') {
+            ((Array.isArray(value)) ? value : [value])
+                .filter(id => id != null)
+                .forEach(id => this.addSuggestedParameter(searchParam, id));
+        } else {
+            this.addSuggestedParameter(searchParam, value);
+        }
     }
 
     /* Creates a valid date parameter, or undefined if unable to create a valid date */
