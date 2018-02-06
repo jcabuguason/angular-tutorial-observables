@@ -69,8 +69,8 @@ export class SearchService {
             .filter(index => index !== undefined);
 
         if (indices && indices.length > 0) {
-            const newIndices = indices.filter(index => model.taxonomy.indexOf(index) !== -1);
-            if (newIndices.length === indices.length) {
+            const newIndices = indices.filter(index => this.taxonomies.indexOf(index) !== -1);
+            if (newIndices.length > 0) {
                 model.taxonomy = newIndices;
             } else {
                 this.message.push('Error: Invalid URL parameters for index');
