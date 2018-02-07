@@ -71,7 +71,6 @@ https://github.com/dnauck/angular-advanced-searchbox/blob/master/src/angular-adv
   display: inline-block;
 }
 
-
 .value-input {
   /* should be changed to be auto width from length typed */
   width: 100px;
@@ -88,23 +87,18 @@ https://github.com/dnauck/angular-advanced-searchbox/blob/master/src/angular-adv
   -moz-border-radius: 4px;
   max-height: 250px; 
   overflow-y: auto;
+  width: 110px;
 }
 
-/* .search-parameter-suggestions .title {
-  display: block;
-  float: left;
-  height: 25px;
-  margin: 7px 7px 0 0;
-  background-color: transparent;
-  color: rgb(224, 219, 219);
-  font-weight: bold;
-  padding: 0 5px;
-  font-size: 14px;
-  line-height: 25px;
-} */
+ul {
+  padding: 0;
+  margin:0;
+}
 
-/* 
-.search-parameter-suggestions .search-parameter {
-  cursor: pointer;
-  background-color: #ececec;
-} */
+li {
+  list-style-type: none;
+}
+
+li:hover {
+  background-color: #f1f0f0;
+}

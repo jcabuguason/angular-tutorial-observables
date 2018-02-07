@@ -10,6 +10,12 @@
                 (keyup)="searchService.showSuggestedChoices(valueInput.value, i)" 
                 (click)="searchService.showSuggestedChoices(valueInput.value, i)">
 
+                <!-- available choices -->
+                <span *ngIf="p.getDisplayChoices().length" class="pop-up">
+                  <ul *ngFor="let c of p.getDisplayChoices()" >
+                      <li (click)="searchService.addValueToDisplay(c, i)" > {{ c }} </li>
+                  </ul>
+                </span>
             </div>
 
             <div *ngIf="p.getSearchParam().getType() === 'SearchDatetime'">
@@ -31,13 +37,6 @@
             </div>
 
             <button (click)="searchService.removeDisplay(i)">x</button>
-
-            <!-- available choices -->
-            <span *ngIf="p.getDisplayChoices().length" class="pop-up">
-                <li *ngFor="let c of p.getDisplayChoices()" >
-                    <span (click)="searchService.addValueToDisplay(c, i)" > {{ c }} </span>
-                </li>
-            </span>
 
         </div>
     </div>
