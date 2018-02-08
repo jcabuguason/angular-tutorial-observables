@@ -1,37 +1,34 @@
 import { GridStationInfoComponent } from '../grid-station-info/grid-station-info.component';
+import { getTime } from 'date-fns';
 
 export abstract class DataColumnConfiguration {
 
     getIdentityHeaders() {
-        let identityHeader;
 
-        identityHeader = {
+        return {
           'headerName': 'Identity',
-          'children': [],
-          'suppressToolPanel': true
+          'suppressToolPanel': true,
+          'children': [
+            {
+              'headerName': 'Station',
+              'field': 'station',
+              'width': 100,
+              'pinned': true,
+              // Not actually editable, just the name of the Framework for double-clicking a cell for info
+              'editable': true,
+              'cellEditorFramework': GridStationInfoComponent,
+            },
+            {
+              'headerName': 'Instance Date',
+              'field': 'obsDateTime',
+              'width': 220,
+              'pinned': true,
+              'sort': 'asc',
+              'comparator': this.compareObsTime,
+              'cellRenderer': this.renderObsTime,
+            }
+          ]
         };
-
-        const stationHeader = {
-          'headerName': 'Station',
-          'field': 'station',
-          'width': 100,
-          'pinned': true,
-          // Not actually editable, just the name of the Framework for double-clicking a cell for info
-          'editable': true,
-          'cellEditorFramework': GridStationInfoComponent,
-        };
-        identityHeader.children.push(stationHeader);
-
-        const dateTimeHeader = {
-          'headerName': 'Instance Date',
-          'field': 'obsDateTime',
-          'width': 220,
-          'pinned': true
-        };
-        identityHeader.children.push(dateTimeHeader);
-
-        return identityHeader;
-
     }
 
     getContextMenuItems() {
@@ -93,5 +90,18 @@ export abstract class DataColumnConfiguration {
         });
         return menuItems;
       };
+    }
+
+    private renderObsTime(params) {
+      return `<a href="/core${params.data.uri}" target="_blank">${params.value}</a>`;
+    }
+
+    private compareObsTime(date1, date2): number {
+      const date1Time = getTime(date1);
+      const date2Time = getTime(date2);
+      if (isNaN(date1Time) && isNaN(date2Time)) { return 0; }
+      if (isNaN(date1Time)) { return -1; }
+      if (isNaN(date2Time)) { return 1; }
+      return date1Time - date2Time;
     }
 }
