@@ -70,7 +70,7 @@ export class LockHeartbeatService {
           if (error.status === 401) {
             this.handleUnauthorizedLock();
           } else {
-            this.handleUnknownError(error);
+            this.handleUnsuccessfulLock();
           }
         }
       );
@@ -135,7 +135,7 @@ export class LockHeartbeatService {
           } else if (error.status === 401) {
             this.handleUnauthorizedLock();
           } else {
-            this.handleUnknownError(error);
+            this.handleUnsuccessfulLock();
           }
         }
       );
@@ -192,7 +192,7 @@ export class LockHeartbeatService {
                 if (error.status === 401) {
                   this.handleUnauthorizedLock();
                 } else {
-                  this.handleUnknownError(error);
+                  this.handleUnsuccessfulLock();
                 }
               }
             );
