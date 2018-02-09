@@ -92,11 +92,11 @@ export abstract class DataColumnConfiguration {
       };
     }
 
-    private renderObsTime(params) {
+    renderObsTime(params) {
       return `<a href="/core${params.data.uri}" target="_blank">${params.value}</a>`;
     }
 
-    private compareObsTime(date1, date2): number {
+    compareObsTime(date1, date2): number {
       const date1Time = getTime(date1);
       const date2Time = getTime(date2);
       if (isNaN(date1Time) && isNaN(date2Time)) { return 0; }
