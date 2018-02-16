@@ -379,7 +379,7 @@ export class SearchService {
                 }
             } else {
                 if (param.getName() === 'size') {
-                    p.setValue(this.limitValue(Number(p.getValue()), 0, 1000));
+                    p.setValue(this.limitValue(p.getValue()));
                 }
                 displayedValue = p.getValue();
 
@@ -491,17 +491,18 @@ export class SearchService {
         });
     }
 
-    private limitValue(input, min, max) {
-        input = isNaN(input)
-            ? 300
-            : input;
-
-        if (Math.max(input, max) === input) {
-            return max;
-        } else if (Math.min(input, min) === input) {
-            return min;
+    private limitValue(input: string, min = 0, max = 1000): string {
+        const inputNum = Number(input);
+        if (isNaN(inputNum)) {
+            return '300';
         }
-        return input;
+        let newInput = inputNum;
+        if (Math.max(inputNum, max) === inputNum) {
+            newInput = max;
+        } else if (Math.min(inputNum, min) === inputNum) {
+            newInput = min;
+        }
+        return String(newInput);
     }
 
     // these parameters does not affect the taxonomy determined by the search component
