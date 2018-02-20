@@ -31,7 +31,7 @@ export class MetadataService {
 
   loadDefinition(taxonomy: string, version: string) {
     return this.http
-      .get(`${this.config.endpoint}/metadata/${taxonomy}/definition-xml-2.0/${version}?format=json`, this.httpOptions)
+      .get(`${this.config.endpoint}?url=/metadata/${taxonomy}/definition-xml-2.0/${version}?format=json`, this.httpOptions)
       .pipe(
         map(response => {
           const definition = MDDefinitionParser.parse(response);
@@ -46,7 +46,7 @@ export class MetadataService {
     const versionParam = version ? `version=${version}` : '';
 
     return this.http
-      .get(`${this.config.endpoint}/metadata/${taxonomy}/instance-xml-2.0/${id}/?${versionParam}&format=json`, this.httpOptions)
+      .get(`${this.config.endpoint}?url=/metadata/${taxonomy}/instance-xml-2.0/${id}/?${versionParam}&format=json`, this.httpOptions)
       .pipe(
         map(response => MDInstanceDefinitionParser.parse(response))
       );
@@ -55,13 +55,13 @@ export class MetadataService {
   addMetadataInstance(taxonomy: string, outgoing: OutgoingMetadataInstance, id: string) {
     const otherOptions = Object.assign({responseType: 'text'}, this.httpOptions);
     return this.http
-      .post(`${this.config.endpoint}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json`, outgoing, otherOptions);
+      .post(`${this.config.endpoint}?url=/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json`, outgoing, otherOptions);
   }
 
   updateMetadataInstance(taxonomy: string, outgoing: OutgoingMetadataInstance, id: string) {
     const otherOptions = Object.assign({responseType: 'text'}, this.httpOptions);
     return this.http
-      .post(`${this.config.endpoint}/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json&override=true`, outgoing, otherOptions);
+      .post(`${this.config.endpoint}?url=/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json&override=true`, outgoing, otherOptions);
   }
 
   // TODO: load instance links should not be tied to the service singleton
@@ -72,7 +72,7 @@ export class MetadataService {
 
     // TODO: try to change this to observable only
     return this.http
-      .get(`${this.config.endpoint}/metadata/instances?dataset=${taxonomy}`, otherOptions)
+      .get(`${this.config.endpoint}?url=/metadata/instances?dataset=${taxonomy}`, otherOptions)
       .toPromise()
       .then((instanceLinks: string) => {
         const links: string[] = instanceLinks.split('\n');
@@ -87,20 +87,20 @@ export class MetadataService {
   getDefinitionList() {
     // TODO: add definitions to MetadataInstanceHistory
     return this.http
-      .get<{definitions: MetadataInstanceHistory[]}>(`${this.config.endpoint}/metadata/definitions?dataset=all`, this.httpOptions)
+      .get<{definitions: MetadataInstanceHistory[]}>(`${this.config.endpoint}?url=/metadata/definitions?dataset=all`, this.httpOptions)
       .pipe(
         map(response => response.definitions)
       );
   }
 
   getDefinitionHistory(uri: string) {
-    const url = `${this.config.endpoint}/metadata/definitions/modification_history?definition_uri=${uri}`;
+    const url = `${this.config.endpoint}?url=/metadata/definitions/modification_history?definition_uri=${uri}`;
     return this.http
       .get<MetadataDefinitionHistory[]>(url, this.httpOptions);
   }
 
   getInstanceHistory(uri: string) {
-    const url = `${this.config.endpoint}/metadata/instances/modification_history?instance_uri=${uri}`;
+    const url = `${this.config.endpoint}?url=/metadata/instances/modification_history?instance_uri=${uri}`;
     return this.http
       .get<MetadataInstanceHistory[]>(url, this.httpOptions);
   }

@@ -25,8 +25,7 @@ export class AuthInterceptor implements  HttpInterceptor {
         map((authInfo) => {
           return request.clone({
             setHeaders: {
-              'username': authInfo.username,
-              'DMS-Local-Auth': authInfo.localHostKey['DMS-Local-Auth']
+              'username': authInfo.username
             }
           });
         }),
