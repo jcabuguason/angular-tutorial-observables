@@ -10,6 +10,7 @@ import 'rxjs/add/observable/timer';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/observable/of';
 
 import { LOCK_CONFIG, LockConfig } from './lock.config';
 import { LockService } from './lock.service';
@@ -99,13 +100,15 @@ export class LockHeartbeatService {
                 .pipe(
                   catchError((lockInfoError) => {
                     this.handleUnknownError(lockInfoError);
-                    return [];
+                    return Observable.of(null);
                   })
                 );
             });
 
             Observable.forkJoin(lockInfos).subscribe(
               (lockInfoResponses) => {
+
+                lockInfoResponses = lockInfoResponses.filter((info) => info != null);
 
                 if (lockInfoResponses.length > 0) {
 
