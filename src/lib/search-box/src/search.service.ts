@@ -276,7 +276,7 @@ export class SearchService {
     }
 
     /** Parameter chosen from suggestedParams */
-    private addSuggestedParameter(parameter: SearchParameter, value: string = '') {
+    addSuggestedParameter(parameter: SearchParameter, value: string = '') {
         if (parameter.getTimesUsed() < parameter.getTimesUsable()) {
             const param: DisplayParameter = new DisplayParameter(parameter.getDisplayName(), '', [], parameter);
 
