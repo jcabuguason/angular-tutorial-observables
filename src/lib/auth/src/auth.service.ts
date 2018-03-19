@@ -4,7 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import CryptoJS from 'crypto-js';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { AuthActionType, AuthState } from './auth.reducer';
 import { AUTH_CONFIG, AuthConfig } from './auth.config';
@@ -44,8 +44,11 @@ export class AuthService {
       );
   }
 
-  logout() {
-    this.store.dispatch({type: AuthActionType.LOGOUT});
+  logout(): Observable<{logout: boolean}> {
+    return this.http.post<{logout: boolean}>(this.config.logoutEndpoint, '')
+      .pipe(
+        tap(() => this.store.dispatch({type: AuthActionType.LOGOUT}))
+      );
   }
 
   getUserInfo(): Observable<AuthResponse> {

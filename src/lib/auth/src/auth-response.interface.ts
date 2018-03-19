@@ -1,9 +1,6 @@
 export interface AuthResponse {
   errorMesages: String[];
   isUserAuthenticated: boolean;
-  localHostKey: {
-    'DMS-Local-Auth': string;
-  };
   session: AuthSession;
   user_fullname: string;
   user_role: string;
