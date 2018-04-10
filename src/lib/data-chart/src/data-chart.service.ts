@@ -1,7 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-import { Highcharts } from 'angular-highcharts';
-
 @Injectable()
 export class DataChartService {
 
@@ -15,88 +13,68 @@ export class DataChartService {
         const elemSeries: ElementSeries[] = this.createElementSeries(chartElementIDs, observations);
         const charts: any[] = [];
 
-        for (const element of elemSeries) {
-            charts.push( {
-                chart: {
-                    type: 'spline'
-                },
-                title: {
-                    text: element.name
-                },
-                xAxis: {
-                    type: 'datetime',
-                    title: {
-                        text: 'Date'
-                    }
-                },
-                yAxis: {
-                    title: {
-                        text: element.name
-                    }
-                },
-                series: element.series
-            });
-
-        }
+        charts.push(...elemSeries.map(elem => this.elementToChart(elem)));
 
         this.chartColumnRequested.emit(charts);
     }
 
-    private createElementSeries(chartElementIDs: string[], observations): ElementSeries[] {
-        let climateID: string;
-        let obsTime: string;
-        const elemSeries: ElementSeries[] = [];
+    private elementToChart(element: ElementSeries) {
+        return {
+            chart: {
+                type: 'spline'
+            },
+            title: {
+                text: element.name
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: 'Date'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: element.name
+                }
+            },
+            series: element.series
+        };
 
+    }
+
+    private createElementSeries(chartElementIDs: string[], observations): ElementSeries[] {
+        const elemSeries: ElementSeries[] = [];
         for (const obs of observations
                              .sort((o1, o2) =>
                                 Date.parse(o1.obsDateTime) - Date.parse(o2.obsDateTime))) {
 
-            obsTime = obs.obsDateTime;
+            const climateID = obs.metadataElements.find(elem => elem.name === 'clim_id');
 
-            for (const element of obs.metadataElements) {
-                if (element.name === 'clim_id') {
-                    climateID = element.value;
+            for (const chartElementID of chartElementIDs) {
+                const thing = obs.dataElements.find((obsElem) => obsElem.elementID === chartElementID);
+
+                if (!!thing) {
+                    this.findChartSeries(this.findElementSeries(elemSeries, chartElementID), climateID)
+                        .data.push([Date.parse(obs.obsDateTime), Number(thing.value)]);
+
                 }
             }
-
-            for (const obsElement of obs.dataElements) {
-                for (const chartElementID of chartElementIDs) {
-                    if (obsElement.elementID === chartElementID) {
-                        this.getChartSeries(elemSeries, chartElementID, climateID)
-                            .data.push([Date.parse(obsTime), Number(obsElement.value)]);
-                    }
-                }
-            }
-
         }
-
         return elemSeries;
-
     }
 
-    private getElementSeries(elementSeries: ElementSeries[], elementID: string): ElementSeries {
-        for (const elemSer of elementSeries) {
-            if (elemSer.name === elementID) {
-                return elemSer;
-            }
-        }
-        const newSeries: ElementSeries = {name: elementID, series: []};
-        elementSeries.push(newSeries);
-        return newSeries;
+    private findElementSeries(elementSeries: ElementSeries[], elementID: string): ElementSeries {
+        const foundElem = elementSeries.find(elem => elem.name === elementID);
+
+        if (!!foundElem) { return foundElem; }
+        return elementSeries[elementSeries.push({name: elementID, series: []}) - 1];
     }
 
-    private getChartSeries(elementSeries: ElementSeries[], elementID: string, climateID: string): ChartSeries {
-        const elemSer = this.getElementSeries(elementSeries, elementID);
+    private findChartSeries(elemSer: ElementSeries, climateID: string): ChartSeries {
+        const foundChart = elemSer.series.find(chart => chart.name === climateID);
 
-        for (const chartSer of elemSer.series) {
-            if (chartSer.name === climateID) {
-                return chartSer;
-            }
-        }
-
-        const newSeries: ChartSeries = {name: climateID, data: []};
-        elemSer.series.push(newSeries);
-        return newSeries;
+        if (!!foundChart) { return foundChart; }
+        return elemSer.series[elemSer.series.push({name: climateID, data: []}) - 1];
     }
 }
 
@@ -110,4 +88,3 @@ export interface ChartSeries {
     name: string;
     data: any[];
 }
-

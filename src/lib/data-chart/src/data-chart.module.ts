@@ -9,7 +9,7 @@ import { DataChartService } from './data-chart.service';
     CommonModule
   ],
   providers: [
-      DataChartService
+    DataChartService
   ],
   exports: [
   ]
