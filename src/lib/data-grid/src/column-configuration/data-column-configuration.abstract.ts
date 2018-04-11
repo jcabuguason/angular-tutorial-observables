@@ -1,5 +1,6 @@
 import { GridStationInfoComponent } from '../grid-station-info/grid-station-info.component';
 import { getTime } from 'date-fns';
+import { DataGridService } from '../data-grid.service';
 
 export abstract class DataColumnConfiguration {
 
@@ -61,7 +62,7 @@ export abstract class DataColumnConfiguration {
       };
     }
 
-    getMainMenuItems() {
+    getMainMenuItems(gridService: DataGridService) {
       return function(params) {
         const menuItems = params.defaultItems.slice(0);
         menuItems.push('separator');
@@ -86,6 +87,12 @@ export abstract class DataColumnConfiguration {
             });
             // TODO: Make nicer UI (Material-Angular Snackbar?)
             alert('Avg: ' + sum / total + '\nMin: ' + min + '\nMax: ' + max);
+          }
+        });
+        menuItems.push({
+          name: 'Chart Element',
+          action: function() {
+            gridService.chartColumn(params.column.colDef.elementID);
           }
         });
         return menuItems;

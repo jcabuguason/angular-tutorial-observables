@@ -30,6 +30,8 @@ export class DataGridService {
 
     public reloadRequested = new EventEmitter();
 
+    public chartColumnRequested = new EventEmitter();
+
 
     constructor() {
         this.columnConfigurationOptions.push(new ColumnConfigurationContainer('accordian', new AccordianColumnConfiguration()));
@@ -98,12 +100,16 @@ export class DataGridService {
         this.reloadRequested.emit();
     }
 
+    chartColumn(param) {
+        this.chartColumnRequested.emit(param);
+    }
+
     getContextMenuItems() {
         return this.columnConfiguration.getContextMenuItems();
     }
 
     getMainMenuItems() {
-        return this.columnConfiguration.getMainMenuItems();
+        return this.columnConfiguration.getMainMenuItems(this);
     }
 
     private resetHeader() {

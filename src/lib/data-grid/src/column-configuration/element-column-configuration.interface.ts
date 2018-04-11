@@ -1,3 +1,5 @@
+import { DataGridService } from '../data-grid.service';
+
 export interface ElementColumnConfiguration {
 
   // Optional function for changing header menu items
@@ -13,5 +15,5 @@ export interface ElementColumnConfiguration {
 
   getContextMenuItems();
 
-  getMainMenuItems();
+  getMainMenuItems(gridService: DataGridService);
 }
