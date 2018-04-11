@@ -51,12 +51,11 @@ export class DataChartService {
             const climateID = obs.metadataElements.find(elem => elem.name === 'clim_id');
 
             for (const chartElementID of chartElementIDs) {
-                const thing = obs.dataElements.find((obsElem) => obsElem.elementID === chartElementID);
+                const foundElement = obs.dataElements.find((obsElem) => obsElem.elementID === chartElementID);
 
-                if (!!thing) {
+                if (!!foundElement) {
                     this.findChartSeries(this.findElementSeries(elemSeries, chartElementID), climateID)
-                        .data.push([Date.parse(obs.obsDateTime), Number(thing.value)]);
-
+                        .data.push([Date.parse(obs.obsDateTime), Number(foundElement.value)]);
                 }
             }
         }
@@ -67,14 +66,16 @@ export class DataChartService {
         const foundElem = elementSeries.find(elem => elem.name === elementID);
 
         if (!!foundElem) { return foundElem; }
-        return elementSeries[elementSeries.push({name: elementID, series: []}) - 1];
+        const newIndex = elementSeries.push({name: elementID, series: []}) - 1;
+        return elementSeries[newIndex];
     }
 
     private findChartSeries(elemSer: ElementSeries, climateID: string): ChartSeries {
         const foundChart = elemSer.series.find(chart => chart.name === climateID);
 
         if (!!foundChart) { return foundChart; }
-        return elemSer.series[elemSer.series.push({name: climateID, data: []}) - 1];
+        const newIndex =  elemSer.series.push({name: climateID, data: []}) - 1;
+        return elemSer.series[newIndex];
     }
 }
 
