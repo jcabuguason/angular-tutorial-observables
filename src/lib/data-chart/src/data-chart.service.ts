@@ -84,7 +84,6 @@ export interface ElementSeries {
     series: ChartSeries[];
 }
 
-// Series object will be an array of these
 export interface ChartSeries {
     name: string;
     data: any[];
