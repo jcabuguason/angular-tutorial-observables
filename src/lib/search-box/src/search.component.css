@@ -102,3 +102,7 @@ li {
 li:hover {
   background-color: #f1f0f0;
 }
+
+.hrs-input {
+  width: 90px;
+}

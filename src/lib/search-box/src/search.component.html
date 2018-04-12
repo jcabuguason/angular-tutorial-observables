@@ -31,9 +31,9 @@
 
             <div *ngIf="p.getSearchParam().getType() === 'SearchHoursRange'">
                 <input type="number" min="0" max="36"
-                [(ngModel)]="p.getSearchParam().hoursBefore" placeholder="hrs before"> /
+                [(ngModel)]="p.getSearchParam().hoursBefore" placeholder="hrs before" class="hrs-input"> /
                 <input type="number" min="0" max="36"
-                [(ngModel)]="p.getSearchParam().hoursAfter" placeholder="hrs after">
+                [(ngModel)]="p.getSearchParam().hoursAfter" placeholder="hrs after" class="hrs-input">
             </div>
 
             <button (click)="searchService.removeDisplay(i)">x</button>
