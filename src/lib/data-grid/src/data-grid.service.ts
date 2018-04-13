@@ -4,8 +4,6 @@ import { ElementColumnConfiguration } from './column-configuration/element-colum
 import { ColumnConfigurationContainer } from './column-configuration/column-configuration-container.model';
 
 import { DefaultColumnConfiguration } from './column-configuration/default-column-configuration.class';
-import { VUColumnConfiguration } from './column-configuration/vu-column-configuration.class';
-import { AccordianColumnConfiguration } from './column-configuration/accordian-column-configuration.class';
 
 import NodeLookups from './node.const';
 
@@ -16,61 +14,27 @@ export class DataGridService {
     readonly elementNodeDepth: number = 3;
     readonly headerNodeDepth: number = 6 - this.elementNodeDepth;
 
-    private columnConfigurationOptions: ColumnConfigurationContainer[] = [];
-    private defaultColumnConfiguration: ElementColumnConfiguration;
-    private columnsGenerated: string[] = [];
+    public columnsGenerated: string[] = [];
+    public rowData: object[] = [];
+    public columnDefs: any[];
+    public reloadRequested = new EventEmitter();
+    public chartColumnRequested = new EventEmitter();
 
     private columnConfiguration: ElementColumnConfiguration;
     private identityHeader;
-
-    private userDisplayColumns: string[];
-
-    public rowData: object[] = [];
-    public columnDefs: any[];
-
-    public reloadRequested = new EventEmitter();
-
-    public chartColumnRequested = new EventEmitter();
-
+    private userDisplayColumns: string[] = [];
 
     constructor() {
-        this.columnConfigurationOptions.push(new ColumnConfigurationContainer('accordian', new AccordianColumnConfiguration()));
-        this.columnConfigurationOptions.push(new ColumnConfigurationContainer('vu', new VUColumnConfiguration()));
-
-        this.defaultColumnConfiguration = new DefaultColumnConfiguration();
-        this.columnConfigurationOptions.push(new ColumnConfigurationContainer('default', this.defaultColumnConfiguration));
         this.columnConfiguration = new DefaultColumnConfiguration();
-    }
-
-    getDefaultColumnConfigurations(): object {
-        const configs: string[] = [];
-        for (const configuration of this.columnConfigurationOptions) {
-            configs.push(configuration.name);
-        }
-        return configs;
+        this.resetHeader();
     }
 
     getColumnConfiguration(): ElementColumnConfiguration {
-      return this.columnConfiguration;
+        return this.columnConfiguration;
     }
 
     setColumnConfiguration(columnConfig: ElementColumnConfiguration) {
         this.columnConfiguration = columnConfig;
-
-        this.resetHeader();
-    }
-
-    // Only works for Column Configs set up by Commons (Defaults)
-    setColumnConfigurationByString(config: string) {
-        this.columnConfiguration = null;
-        for (const configuration of this.columnConfigurationOptions) {
-            if (config === configuration.name) {
-                this.columnConfiguration = configuration.configuration;
-            }
-        }
-        if (this.columnConfiguration == null) {
-            this.columnConfiguration = this.defaultColumnConfiguration;
-        }
         this.resetHeader();
     }
 
@@ -79,13 +43,11 @@ export class DataGridService {
     }
 
     addRowData(obs: object) {
-        this.rowData.push(JSON.parse(this.gridifyObs(obs)));
+        this.rowData.push(this.convertToRowObject(<DMSObs> obs));
     }
 
     addAllData(obs: object[]) {
-        for (const data of obs) {
-            this.addRowData(data);
-        }
+        this.rowData.push(...obs.map((data) => this.convertToRowObject(<DMSObs> data)));
         this.reloadGrid();
     }
 
@@ -112,6 +74,55 @@ export class DataGridService {
         return this.columnConfiguration.getMainMenuItems(this);
     }
 
+    flattenObsIdentities(obs: DMSObs) {
+        const findValue = (name) => obs.metadataElements.filter(md => md.name === name).map(md => md.value)[0];
+        let rev: string;
+        const correction = findValue('cor');
+        if (correction !== undefined) {
+            const version = findValue('ver');
+            rev = (Number(version) > 0) ? `${correction}_v${version}` : correction;
+        }
+        return {
+            obsDateTime: obs.obsDateTime,
+            uri: obs.identity,
+            station: findValue('stn_nam'),
+            revision: rev,
+        };
+    }
+
+    flattenMetadataElements(mdElements: MetadataElements[]) {
+        const result = {};
+        for (const element of mdElements) {
+            if (element.name === 'stn_nam') {
+               result['station'] = element.value;
+            } else if (element.name !== undefined) {
+                result[element.name] = element.value;
+                this.buildMetadataColumn(element.name);
+            }
+        }
+        return result;
+    }
+
+    flattenDataElements(dataElements: DataElements[]) {
+        const result = {};
+        for (const element of dataElements) {
+            if (element.elementID == null || this.ignoreDataElement(element)) { continue; }
+            const headerID = ColumnConfigurationContainer.findHeaderID(element);
+            this.buildElementColumn(element, headerID);
+            const elementData = this.columnConfiguration.createElementData(element, headerID);
+            Object.keys(elementData).forEach(key => result[key] = elementData[key]);
+        }
+        return result;
+    }
+
+    convertToRowObject(obs: DMSObs) {
+        return {
+            ...this.flattenObsIdentities(obs),
+            ...this.flattenMetadataElements(obs.metadataElements),
+            ...this.flattenDataElements(obs.dataElements),
+        };
+    }
+
     private resetHeader() {
         this.identityHeader = this.columnConfiguration.getIdentityHeaders();
         this.columnDefs = [];
@@ -120,11 +131,8 @@ export class DataGridService {
 
     // Formats header name
     private formatHeaderName(headerName: string): string {
-        const pieces = headerName.split('_');
-        for (let i = 0; i < pieces.length; i++) {
-            pieces[i] = pieces[i].charAt(0).toUpperCase() + pieces[i].substr(1);
-        }
-        return pieces.join(' ');
+        const format = (piece: string) => piece.charAt(0).toUpperCase() + piece.slice(1);
+        return headerName.split('_').map(format).join(' ');
     }
 
     // Get the child node, or create it if it doesn't exist
@@ -294,78 +302,54 @@ export class DataGridService {
       }
 
       const header = {
-        'headerName': headerID,
+        'headerName': this.formatHeaderName(headerID),
         'field': headerID,
         'width': 80,
         'columnGroupShow': 'open',
       };
 
+      if (this.identityHeader.children === undefined) { this.identityHeader.children = []; }
       this.identityHeader.children.push(header);
 
       this.columnsGenerated.push(headerID);
     }
 
-    private gridifyObs(obs: object): string {
-
-        const parsed: DMSObs = <DMSObs> obs;
-
-        let output = '{';
-        output += '"obsDateTime": "' + parsed.obsDateTime + '",';
-        output += '"uri": "' + parsed.identity + '"';
-
-        for (const element of parsed.metadataElements) {
-            if (element.name === 'stn_nam') {
-               output += ',"station": "' + element.value + '"';
-            } else if (element.name !== undefined) {
-               const headerID = this.formatHeaderName(element.name);
-               this.buildMetadataColumn(headerID);
-               output += ',"' + headerID + '": "' + element.value + '"';
-            }
-        }
-
-        for (const element of parsed.dataElements) {
-            if (element.elementID == null) { continue; }
-            const headerID = ColumnConfigurationContainer.findHeaderID(element);
-            this.buildElementColumn(element, headerID);
-            output += ',' + this.columnConfiguration.createElementData(element, headerID);
-        }
-
-        output += '}';
-
-        return output;
+    private ignoreDataElement(element: DataElements): boolean {
+        return this.columnConfiguration.ignoreHideableColumns
+            && this.userDisplayColumns.indexOf(element.elementID) < 0;
     }
 
 }
 
-interface DMSElementSummary {
+export interface DMSElementSummary {
     aggregations: Aggregation;
 }
 
-interface Aggregation {
+export interface Aggregation {
     dataElements: ESDataElements;
 }
 
-interface ESDataElements {
+export interface ESDataElements {
     index: ElementIndex;
 }
 
-interface ElementIndex {
+export interface ElementIndex {
     buckets: Buckets[];
 }
 
-interface Buckets {
+export interface Buckets {
     key: string;
     maxIndex: Index;
     minIndex: Index;
 }
 
-interface Index {
+export interface Index {
     value: number;
 }
 
-interface DMSObs {
+export interface DMSObs {
     identity: string;
-    obsDateTime: string;
+    obsDateTime: string; // TODO: Switch to moment.js datetime?
     location: Location;
     receivedDate: string;
     parentIdentity: string;
@@ -376,14 +360,14 @@ interface DMSObs {
     dataElements: DataElements[];
 }
 
-interface Author {
+export interface Author {
     build: string;
     name: string;
     version: number;
 }
 
 // TODO: This is outdated, will be fixed when we add models to commons?
-interface DataElements {
+export interface DataElements {
     name: string;
     value: string;
     unit: string;
@@ -392,17 +376,17 @@ interface DataElements {
     indexValue: number;
 }
 
-interface Location {
+export interface Location {
     type: string;
     coordinates: string;
 }
 
-interface MetadataElements {
+export interface MetadataElements {
     name: string;
     value: string;
     unit: string;
 }
-interface RawMessage {
+export interface RawMessage {
     header: string;
     message: string;
 }
