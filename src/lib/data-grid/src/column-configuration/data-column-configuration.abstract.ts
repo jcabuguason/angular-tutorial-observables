@@ -42,25 +42,30 @@ export abstract class DataColumnConfiguration {
     };
   }
 
+  csvExcelExporter(params) {
+    const settings = { columnGroups: true };
+    return {
+      name: 'Export',
+      subMenu: [
+        {
+          name: 'CSV Export',
+          action: () => params.api.exportDataAsCsv(settings)
+        },
+        {
+          name: 'Excel Export',
+          action: () => params.api.exportDataAsExcel(settings)
+        }
+      ]
+    };
+  }
+
   getContextMenuItems() {
     return (params) => [
       'copy',
       'copyWithHeaders',
       'separator',
       'toolPanel',
-      {
-        name: 'Export',
-        subMenu: [
-          {
-            name: 'CSV Export',
-            action: () => params.api.exportDataAsCsv({columnGroups: true})
-          },
-          {
-            name: 'Excel Export',
-            action: () => params.api.exportDataAsExcel({columnGroups: true})
-          }
-        ]
-      }
+      this.csvExcelExporter(params),
     ];
   }
 
