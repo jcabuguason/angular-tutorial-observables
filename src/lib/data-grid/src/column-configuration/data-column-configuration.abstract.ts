@@ -60,12 +60,16 @@ export abstract class DataColumnConfiguration {
   }
 
   getContextMenuItems() {
-    return (params) => [
+    return (params) => this.addContextMenuItems(params);
+  }
+
+  addContextMenuItems(params): any {
+    return [
       'copy',
       'copyWithHeaders',
       'separator',
       'toolPanel',
-      this.csvExcelExporter(params),
+      this.csvExcelExporter(params)
     ];
   }
 
