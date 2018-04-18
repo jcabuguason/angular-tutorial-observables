@@ -14,7 +14,7 @@ describe('ElasticSearchService', () => {
   beforeEach(() => {
     config = {
       endpoint: 'http://www.test.com'
-    }
+    };
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
       providers: [
@@ -167,11 +167,6 @@ describe('ElasticSearchService', () => {
       it('should correctly set startIndex', () => {
         service.getBasicObservations('v1.0', 'testNetwork', {startIndex: '50'}).subscribe();
         httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?startIndex=50`);
-      });
-
-      it('should correctly set includeAggregations', () => {
-        service.getBasicObservations('v1.0', 'testNetwork', {includeAggregations: true}).subscribe();
-        httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?includeAggregations=true`);
       });
     });
 
