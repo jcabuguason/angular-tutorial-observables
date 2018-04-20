@@ -84,6 +84,7 @@ export class DataGridService {
         }
         return {
             obsDateTime: obs.obsDateTime,
+            receivedDateTime: obs.receivedDateTime,
             uri: obs.identity,
             station: findValue('stn_nam'),
             revision: rev,
@@ -351,7 +352,7 @@ export interface DMSObs {
     identity: string;
     obsDateTime: string; // TODO: Switch to moment.js datetime?
     location: Location;
-    receivedDate: string;
+    receivedDateTime: string;
     parentIdentity: string;
     author: Author;
     jsonVersion: string;
