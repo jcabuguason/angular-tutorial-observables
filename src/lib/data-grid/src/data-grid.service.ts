@@ -17,6 +17,7 @@ export class DataGridService {
     public columnsGenerated: string[] = [];
     public rowData: object[] = [];
     public columnDefs: any[];
+    public columnTypes = { 'identity': {} };
     public reloadRequested = new EventEmitter();
     public chartColumnRequested = new EventEmitter();
 
@@ -307,6 +308,7 @@ export class DataGridService {
         'field': headerID,
         'width': 80,
         'columnGroupShow': 'open',
+        'type': 'identity'
       };
 
       if (this.identityHeader.children === undefined) { this.identityHeader.children = []; }
