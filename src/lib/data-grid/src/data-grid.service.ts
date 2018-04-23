@@ -7,6 +7,8 @@ import { DefaultColumnConfiguration } from './column-configuration/default-colum
 
 import NodeLookups from './node.const';
 
+import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
+
 @Injectable()
 export class DataGridService {
 
@@ -74,19 +76,12 @@ export class DataGridService {
         return this.columnConfiguration.getMainMenuItems(this);
     }
 
-    flattenObsIdentities(obs: DMSObs) {
-        const findValue = (name) => obs.metadataElements.filter(md => md.name === name).map(md => md.value)[0];
-        let rev: string;
-        const correction = findValue('cor');
-        if (correction !== undefined) {
-            const version = findValue('ver');
-            rev = (Number(version) > 0) ? `${correction}_v${version}` : correction;
-        }
+    flattenObsIdentities = (obs: DMSObs) => {
         return {
             obsDateTime: obs.obsDateTime,
             uri: obs.identity,
-            station: findValue('stn_nam'),
-            revision: rev,
+            station: obsUtil.findMetadataValue(obs, 'stn_nam'),
+            revision: obsUtil.findRevision(obs),
         };
     }
 

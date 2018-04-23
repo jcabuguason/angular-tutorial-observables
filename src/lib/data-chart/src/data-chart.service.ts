@@ -1,26 +1,48 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
+import { Chart, Highcharts } from 'angular-highcharts';
+
+import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
+
 @Injectable()
 export class DataChartService {
 
-    public chartColumnRequested = new EventEmitter();
+    public wipeCharts = new EventEmitter();
 
     constructor() {}
 
     // Need to use the class structure that is currently in grid-service
-    chartColumn(chartElementIDs: string[], observations) {
+    chartColumn(elementFields: string[], observations, extraOptions: Highcharts.Options = {}): Chart[] {
+        const elemSeries: ElementSeries[] = this.createElementSeries(elementFields, observations);
 
-        const elemSeries: ElementSeries[] = this.createElementSeries(chartElementIDs, observations);
-        const charts: any[] = [];
-
-        charts.push(...elemSeries.map(elem => this.elementToChart(elem)));
-
-        this.chartColumnRequested.emit(charts);
+        return elemSeries.map(elem => new Chart(this.elementToChart(elem, extraOptions)));
     }
 
-    private elementToChart(element: ElementSeries) {
-        return {
+    /**
+     * Element fields are identified as 'e_1_2_3_4_5_6_7' with an optional '-L#' suffix for index layer
+     * This is getting passed in for now since element chart input comes from the grid
+     * For 2.5.8, element chart selection UI will be separate and will require changes to the State,
+     * making this function unneeded.
+    */
+    decryptField(field: string): ElementInfo {
+        const splitField = field.split('-L');
+        const res = <ElementInfo>{ elementID: splitField[0].replace('e_', '').replace(/_/g, '.') };
+        if (splitField.length > 1) { res.indexValue = Number(splitField[1]); }
+        return res;
+    }
+
+    chartLabel(climateID: string, info: ElementInfo): string {
+        let result = climateID;
+        if (info.hasOwnProperty('indexValue')) {
+            result += (info.indexValue === 0) ? ' (Official)' : ` (Layer ${info.indexValue})`;
+        }
+        return result;
+    }
+
+    private elementToChart(element: ElementSeries, extraOptions: Highcharts.Options) {
+        return Object.assign({
             chart: {
+                // TODO: set to bar for precips
                 type: 'spline'
             },
             title: {
@@ -32,59 +54,84 @@ export class DataChartService {
                     text: 'Date'
                 }
             },
-            yAxis: {
-                title: {
-                    text: element.name
-                }
+            series: element.series,
+            tooltip: {
+                pointFormat:
+                    '<span style="color:{point.color}">\u25CF</span> ' +
+                    '{series.name}: <b>{point.y}</b>, ' +
+                    'QA: <b>{point.qa}</b><br/>',
+                valueSuffix: ' {point.unit}'
             },
-            series: element.series
-        };
-
+            exporting: {
+                enabled: true,
+                sourceWidth: 1080,
+            }
+        }, extraOptions);
     }
 
-    private createElementSeries(chartElementIDs: string[], observations): ElementSeries[] {
+    private createElementSeries(elementFields: string[], observations): ElementSeries[] {
         const elemSeries: ElementSeries[] = [];
-        for (const obs of observations
-                             .sort((o1, o2) =>
-                                Date.parse(o1.obsDateTime) - Date.parse(o2.obsDateTime))) {
+        for (const obs of observations.filter(obsUtil.latestFromArray).sort(obsUtil.compareObsTimeFromObs)) {
 
-            const climateID = obs.metadataElements.find(elem => elem.name === 'clim_id');
+            const climateIdObj = obs.metadataElements.find(elem => elem.name === 'clim_id');
+            const climateID = (!!climateIdObj) ? climateIdObj.value : null;
 
-            for (const chartElementID of chartElementIDs) {
-                const foundElement = obs.dataElements.find((obsElem) => obsElem.elementID === chartElementID);
+            elementFields.map(current => this.decryptField(current)).forEach(field => {
+                const hasLayer = field.hasOwnProperty('indexValue');
+                const foundElem = obs.dataElements
+                    .find(elem => elem.elementID === field.elementID &&
+                        (!hasLayer || elem.indexValue === field.indexValue));
+                if (!!foundElem) {
 
-                if (!!foundElement) {
-                    this.findChartSeries(this.findElementSeries(elemSeries, chartElementID), climateID)
-                        .data.push([Date.parse(obs.obsDateTime), Number(foundElement.value)]);
+                    const elementChart = this.findElementSeries(elemSeries, field.elementID);
+                    this.findChartSeries(elementChart, this.chartLabel(climateID, field))
+                        .addPoint(obs.obsDateTime, foundElem);
                 }
-            }
+            });
         }
         return elemSeries;
     }
 
-    private findElementSeries(elementSeries: ElementSeries[], elementID: string): ElementSeries {
-        const foundElem = elementSeries.find(elem => elem.name === elementID);
-
-        if (!!foundElem) { return foundElem; }
-        const newIndex = elementSeries.push({name: elementID, series: []}) - 1;
-        return elementSeries[newIndex];
+    private findElementSeries = (elementSeries: ElementSeries[], elementID: string): ElementSeries => {
+        return this.findSeries(elementSeries, elementID, () => new ElementSeries(elementID));
     }
 
-    private findChartSeries(elemSer: ElementSeries, climateID: string): ChartSeries {
-        const foundChart = elemSer.series.find(chart => chart.name === climateID);
 
-        if (!!foundChart) { return foundChart; }
-        const newIndex =  elemSer.series.push({name: climateID, data: []}) - 1;
-        return elemSer.series[newIndex];
+    private findChartSeries = (elemSer: ElementSeries, climateID: string): ChartSeries => {
+        return this.findSeries(elemSer.series, climateID, () => new ChartSeries(climateID));
+    }
+
+    private findSeries = (series: any[], name: string, buildDefault: () => Series) => {
+        let index = series.findIndex(elem => elem.name === name);
+        if (index < 0) {
+            index = series.push(buildDefault()) - 1;
+        }
+        return series[index];
     }
 }
 
-export interface ElementSeries {
+export class Series {
     name: string;
-    series: ChartSeries[];
+    constructor(name: string) { this.name = name; }
 }
 
-export interface ChartSeries {
-    name: string;
-    data: any[];
+export class ElementSeries extends Series {
+    series: ChartSeries[] = [];
+}
+
+export class ChartSeries extends Series {
+    data: any[] = [];
+
+    addPoint = (date, element) => this.data.push({
+        x: Date.parse(date),
+        y: Number(element.value),
+        // custom fields
+        unit: element.unit || '',
+        qa: String(element.overallQASummary) || 'N/A',
+    })
+}
+
+export class ElementInfo {
+    elementID: string;
+    indexValue?: number;
 }
