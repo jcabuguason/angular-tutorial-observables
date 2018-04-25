@@ -31,8 +31,8 @@ export class DataChartService {
         return res;
     }
 
-    chartLabel(climateID: string, info: ElementInfo): string {
-        let result = climateID;
+    chartLabel(stnName: string, info: ElementInfo): string {
+        let result = stnName;
         if (info.hasOwnProperty('indexValue')) {
             result += (info.indexValue === 0) ? ' (Official)' : ` (Layer ${info.indexValue})`;
         }
@@ -42,8 +42,7 @@ export class DataChartService {
     private elementToChart(element: ElementSeries, extraOptions: Highcharts.Options) {
         return Object.assign({
             chart: {
-                // TODO: set to bar for precips
-                type: 'spline'
+                type: (element.isBar) ? 'column' : 'spline'
             },
             title: {
                 text: element.name
@@ -65,6 +64,7 @@ export class DataChartService {
             exporting: {
                 enabled: true,
                 sourceWidth: 1080,
+                filename: element.name,
             }
         }, extraOptions);
     }
@@ -73,8 +73,8 @@ export class DataChartService {
         const elemSeries: ElementSeries[] = [];
         for (const obs of observations.filter(obsUtil.latestFromArray).sort(obsUtil.compareObsTimeFromObs)) {
 
-            const climateIdObj = obs.metadataElements.find(elem => elem.name === 'clim_id');
-            const climateID = (!!climateIdObj) ? climateIdObj.value : null;
+            const stnNameObj = obs.metadataElements.find(elem => elem.name === 'stn_nam');
+            const stnName = (!!stnNameObj) ? stnNameObj.value : null;
 
             elementFields.map(current => this.decryptField(current)).forEach(field => {
                 const hasLayer = field.hasOwnProperty('indexValue');
@@ -84,7 +84,7 @@ export class DataChartService {
                 if (!!foundElem) {
 
                     const elementChart = this.findElementSeries(elemSeries, field.elementID);
-                    this.findChartSeries(elementChart, this.chartLabel(climateID, field))
+                    this.findChartSeries(elementChart, this.chartLabel(stnName, field))
                         .addPoint(obs.obsDateTime, foundElem);
                 }
             });
@@ -116,6 +116,8 @@ export class Series {
 }
 
 export class ElementSeries extends Series {
+    // Will be removed/changed when new Chart Selection UI is available
+    isBar: boolean = (this.name.split('.')[1] === '11');
     series: ChartSeries[] = [];
 }
 
@@ -127,7 +129,7 @@ export class ChartSeries extends Series {
         y: Number(element.value),
         // custom fields
         unit: element.unit || '',
-        qa: String(element.overallQASummary) || 'N/A',
+        qa: obsUtil.formatQAValue(element.overallQASummary)
     })
 }
 

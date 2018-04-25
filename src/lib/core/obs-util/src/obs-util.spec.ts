@@ -59,4 +59,12 @@ describe('ObsUtil', () => {
         expect(obsUtil.compareRevision('CCA', 'CCB')).toBe(-1);
         expect(obsUtil.compareRevision('CCA_v8', 'CCB_v4')).toBe(-1);
     });
+
+    it('should format QA Values', () => {
+        expect(obsUtil.formatQAValue(100)).toBe('100');
+        expect(obsUtil.formatQAValue(0)).toBe('0');
+        expect(obsUtil.formatQAValue(-1)).toBe('-1');
+        expect(obsUtil.formatQAValue(undefined)).toBe('N/A');
+        expect(obsUtil.formatQAValue(null)).toBe('N/A');
+    });
 });

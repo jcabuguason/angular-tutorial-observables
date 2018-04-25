@@ -60,3 +60,8 @@ export function latestFromArray(obs, index, arr) {
         .every(curr => compareRevisionFromObs(curr, obs));
 }
 
+export function formatQAValue(qa: number): string {
+    if (qa == null) { return 'N/A'; }
+    return String(qa);
+}
+

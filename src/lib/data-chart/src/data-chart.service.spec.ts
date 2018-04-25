@@ -27,19 +27,19 @@ describe('DataChartService', () => {
     });
 
     it('should create the plot label', () => {
-        expect(service.chartLabel('123456', {
+        expect(service.chartLabel('Toronto', {
             elementID: '7.7.7.7.7.7.7'
-        })).toBe('123456');
+        })).toBe('Toronto');
 
-        expect(service.chartLabel('777777', {
+        expect(service.chartLabel('Montreal', {
             elementID: '8.8.8.8.8.8.8',
             indexValue: 0
-        })).toBe('777777 (Official)');
+        })).toBe('Montreal (Official)');
 
-        expect(service.chartLabel('999999', {
+        expect(service.chartLabel('Vancouver', {
             elementID: '9.9.9.9.9.9.9',
             indexValue: 2
-        })).toBe('999999 (Layer 2)');
+        })).toBe('Vancouver (Layer 2)');
     });
 
     it('should decrypts a field', () => {
@@ -91,7 +91,7 @@ describe('DataChartService', () => {
         const avgAirChart = charts[1];
         expect(avgAirChart.options.title.text).toBe('1.19.265.2.1.1.0');
         expect(avgAirChart.options.series.length).toBe(2);
-        const wfgStnData = avgAirChart.options.series.find(series => series.name === '1037090');
+        const wfgStnData = avgAirChart.options.series.find(series => series.name === 'SARTINE ISLAND (AUT)');
         const dataPoint = (x, y, qa) => ({x: Date.parse(x), y: y, qa: qa, unit: '°C'});
         expect(wfgStnData).toBeDefined();
         expect(wfgStnData.data).toEqual([
