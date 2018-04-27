@@ -1,0 +1,27 @@
+<elements>
+
+	<element format="string" group="loadable-meta-elements" name="include" min="0" max="*"/>
+	<element format="string" group="loadable-meta-elements" name="exclude" min="0" max="*"/>
+
+	<element format="string" group="viewable-elements" name="include" min="0" max="*"/>
+	<element format="string" group="viewable-elements" name="exclude" min="0" max="*"/>
+
+	<element format="string" group="loadable-elements" name="include" min="0" max="*"/>
+	<element format="string" group="loadable-elements" name="exclude" min="0" max="*"/>
+
+	<element format="number" group="nesting" name="nesting-depth" min="0" max="1"/>
+	<element format="number" group="nesting" name="header-depth" min="0" max="1"/>
+
+	<element format="number" group="rename" name="node-rename" min="0" max="*">
+		<element format="number" group="rename" name="node-value" min="0" max="*">
+			<element format="string" group="rename" name="node-name" min="0" max="1"/>
+		</element>
+	</element>
+
+	<element format="string" group="rename" name="element-rename" min="0" max="*">
+		<element format="number" group="rename" name="node" min="0" max="*">
+			<element format="string" group="rename" name="node-name" min="0" max="1"/>
+		</element>
+	</element>
+	
+</elements>
