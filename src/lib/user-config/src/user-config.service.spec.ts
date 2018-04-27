@@ -1,6 +1,7 @@
 import { UserConfigService } from './user-config.service';
 import { MetadataService } from '../../metadata/src/service';
 import { MDInstanceDefinition } from '../../metadata/src/model';
+import { Lang, MetaElementVisibility, ElementVisibility } from './user-config.model';
 
 describe('UserConfigService', () => {
 
@@ -11,6 +12,22 @@ describe('UserConfigService', () => {
         parent: 'stub',
         identificationElements: [],
         elements: []
+    };
+
+    const includeExcludeConfig: MDInstanceDefinition = {
+        dataset: 'stub',
+        parent: 'stub',
+        identificationElements: [],
+        elements: [
+            {group: 'pin-meta-elements', name: 'include', value: '1\.2\.6.*', def_id: '', id: '', index: '', uom: '',
+                language: {english: '', french: ''}, instelements: []},
+            {group: 'load-meta-elements', name: 'exclude', value: '1\.2\.7.*', def_id: '', id: '', index: '', uom: '',
+                language: {english: '', french: ''}, instelements: []},
+            {group: 'load-elements', name: 'exclude', value: '1\.2\.8.*', def_id: '', id: '', index: '', uom: '',
+                language: {english: '', french: ''}, instelements: []},
+            {group: 'visible-elements', name: 'exclude', value: '1\.2\.9.*', def_id: '', id: '', index: '', uom: '',
+                language: {english: '', french: ''}, instelements: []},
+        ]
     };
 
     const nodeOrderConfig: MDInstanceDefinition = {
@@ -108,6 +125,22 @@ describe('UserConfigService', () => {
         ]
     };
 
+    const langRenameConfig: MDInstanceDefinition = {
+        dataset: 'stub',
+        parent: 'stub',
+        identificationElements: [],
+        elements: [
+            {group: 'node-rename', name: 'node-index', value: '3', def_id: '', id: '', index: '', uom: '',
+                language: {english: '', french: ''}, instelements: [
+                {group: 'node-rename', name: 'node-value', value: '6', def_id: '', id: '', index: '', uom: '',
+                    language: {english: '', french: ''}, instelements: [
+                    {group: 'node-rename', name: 'node-name', value: 'test', def_id: '', id: '', index: '', uom: '',
+                        language: {english: 'En', french: 'Fr'}, instelements: []},
+                    ]},
+                ]
+            },
+        ]
+    };
     beforeEach(() => {
         service = new UserConfigService(new MetadataService(null, null));
     });
@@ -117,6 +150,36 @@ describe('UserConfigService', () => {
         expect(service.getElementOrder()[0]).toBe('1.19.265.0.66.0.0');
         expect(service.getElementOrder()[1]).toBe('1.19.265.8.65.12.0');
         expect(service.getElementOrder()[2]).toBe('1.19.265.7.65.12.0');
+    });
+
+    it('Pinned metadata', () => {
+        service.loadConfig(includeExcludeConfig);
+        expect(service.getMetaElementVisibility('1.2.6.0.0.0.0')).toBe(MetaElementVisibility.PINNED);
+    });
+
+    it('No load metadata', () => {
+        service.loadConfig(includeExcludeConfig);
+        expect(service.getMetaElementVisibility('1.2.7.0.0.0.0')).toBe(MetaElementVisibility.NO_LOAD);
+    });
+
+    it('Default metadata', () => {
+        service.loadConfig(includeExcludeConfig);
+        expect(service.getMetaElementVisibility('1.2.3.0.0.0.0')).toBe(MetaElementVisibility.DEFAULT);
+    });
+
+    it('No load element', () => {
+        service.loadConfig(includeExcludeConfig);
+        expect(service.getElementVisibility('1.2.8.0.0.0.0')).toBe(ElementVisibility.NO_LOAD);
+    });
+
+    it('Hidden element', () => {
+        service.loadConfig(includeExcludeConfig);
+        expect(service.getElementVisibility('1.2.9.0.0.0.0')).toBe(ElementVisibility.HIDDEN);
+    });
+
+    it('Default element', () => {
+        service.loadConfig(includeExcludeConfig);
+        expect(service.getElementVisibility('1.2.3.0.0.0.0')).toBe(ElementVisibility.DEFAULT);
     });
 
     it('Default nesting level test', () => {
@@ -175,6 +238,17 @@ describe('UserConfigService', () => {
     it('Element Rename not at nested', () => {
         service.loadConfig(simpleRenameConfig);
         expect(service.getFormatedNodeName('1.19.265.8.65.12.0', 3)).toBe('Air Temperature');
+    });
+
+    it('English Node Rename', () => {
+        service.loadConfig(langRenameConfig);
+        expect(service.getFormatedNodeName('1.19.6.0.66.0.0', 3)).toBe('En');
+    });
+
+    it('French Node Rename', () => {
+        service.setLanguage(Lang.FRENCH);
+        service.loadConfig(langRenameConfig);
+        expect(service.getFormatedNodeName('1.19.6.0.66.0.0', 3)).toBe('Fr');
     });
 
 });

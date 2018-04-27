@@ -26,17 +26,8 @@ export class ElementName {
             .filter(elem => elem.name === 'node-name')
             .shift();
 
-        this.nodeNameEnglish = this.loadLangName(nameNode, Lang.ENGLISH);
-        this.nodeNameFrench = this.loadLangName(nameNode, Lang.FRENCH);
-    }
-
-    private loadLangName(nameNode: MDInstanceElement, lang: Lang): string {
-        const langName = nameNode.instelements
-            .filter(elem => elem.name === lang)
-            .map(elem => elem.value)
-            .shift();
-
-        return (!!langName) ? langName : nameNode.value;
+        this.nodeNameEnglish = nameNode.language.english ? nameNode.language.english : nameNode.value;
+        this.nodeNameFrench = nameNode.language.french ? nameNode.language.french : nameNode.value;
     }
 
     getName(lang: Lang): string {

@@ -83,11 +83,12 @@ export class UserConfigService {
 
     }
 
+    // Sets the language
     setLanguage(lang: Lang) {
         this.lang = lang;
     }
 
-    // Loads the given user configuration
+    // Loads the given user profile from the configured MR
     loadProfile(configName: string) {
         this.metadataService.loadInstance('', configName)
             .subscribe((param) => {
@@ -96,6 +97,7 @@ export class UserConfigService {
 
     }
 
+    // Loads the given user configuration
     loadConfig(mdInstance: MDInstanceDefinition) {
 
         this.resetDefaults();
@@ -278,7 +280,6 @@ export class UserConfigService {
             .shift();
     }
 
-    // Gets the specific node headers
     private getDefaultNodeName(nodeIndex: number, nodeValue: string): string {
         if (nodeIndex === 2) {
             return NodeLookups.node2[nodeValue];
