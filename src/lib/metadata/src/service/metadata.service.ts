@@ -41,7 +41,7 @@ export class MetadataService {
       );
   }
 
-  loadInstance(taxonomy: string, id: string, version: string) {
+  loadInstance(taxonomy: string, id: string, version?: string) {
 
     const versionParam = version ? `version=${version}` : '';
 
