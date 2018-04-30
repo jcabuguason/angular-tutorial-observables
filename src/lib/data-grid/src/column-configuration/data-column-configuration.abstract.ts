@@ -20,6 +20,7 @@ export abstract class DataColumnConfiguration {
           // Not actually editable, just the name of the Framework for double-clicking a cell for info
           'editable': true,
           'cellEditorFramework': GridStationInfoComponent,
+          'type': 'identity'
         },
         {
           'headerName': 'Instance Date',
@@ -29,6 +30,7 @@ export abstract class DataColumnConfiguration {
           'sort': 'asc',
           'comparator': obsUtil.compareObsTime,
           'cellRenderer': this.renderObsTime,
+          'type': 'identity'
         },
         // What about dailies that send back a completed revision?
         {
@@ -38,6 +40,7 @@ export abstract class DataColumnConfiguration {
           'width': 75,
           'sort': 'asc',
           'comparator': obsUtil.compareRevision,
+          'type': 'identity',
         },
       ],
     };
@@ -61,7 +64,11 @@ export abstract class DataColumnConfiguration {
   }
 
   getContextMenuItems() {
-    return (params) => [
+    return (params) => this.addContextMenuItems(params);
+  }
+
+  addContextMenuItems(params): any {
+    return [
       'copy',
       'copyWithHeaders',
       'separator',

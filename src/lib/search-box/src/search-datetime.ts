@@ -5,13 +5,10 @@ export class SearchDatetime extends SearchParameter {
     minute: number;
     constructor(
         name: string,
-        choices: string[],
-        restricted: boolean,
         required: boolean,
         timesUsable: number = 1,
-        placeholder: string = ''
     ) {
-        super(name, choices, restricted, required, timesUsable, placeholder);
+        super(name, [], true, required, timesUsable);
         this.setType('SearchDatetime');
     }
     resetValues() {
@@ -46,14 +43,12 @@ export class SearchDatetime extends SearchParameter {
     isEmpty(input) {
         return !input;
     }
-    fixValue(input, min, max) {
-        input = this.isEmpty(input)
-          ? 0
-          : input;
-        if (Math.max(input, max) === input) {
-          return max;
-        } else if (Math.min(input, min) === input) {
-          return min;
+    fixValue(input: number, min: number, max: number) {
+        input = this.isEmpty(input) ? 0 : input;
+        if (max <= input) {
+            return max;
+        } else if (input <= min) {
+            return min;
         }
         return input;
     }
