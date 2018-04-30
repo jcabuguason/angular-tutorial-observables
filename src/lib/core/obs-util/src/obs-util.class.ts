@@ -12,7 +12,8 @@ export function findRevision(obs) {
         const version = find('ver');
         return (Number(version) > 0) ? `${correction}_v${version}` : correction;
     } else {
-        return find('rev');
+        const rev = find('rev');
+        return rev || '';
     }
 }
 

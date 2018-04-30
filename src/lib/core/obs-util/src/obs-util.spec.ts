@@ -23,6 +23,11 @@ describe('ObsUtil', () => {
 
         // obs2 only 'rev' instead of 'cor'
         expect(obsUtil.findRevision(obs2)).toBe('orig_v2');
+
+        const revIndex = obs2.metadataElements.findIndex(md => md.name === 'rev');
+        const revObj = obs2.metadataElements.splice(revIndex, 1)[0];
+        expect(obsUtil.findRevision(obs2)).toBe('');
+        obs2.metadataElements.push(revObj);
     });
 
     it('should compare datetimes', () => {
@@ -58,6 +63,9 @@ describe('ObsUtil', () => {
 
         expect(obsUtil.compareRevision('CCA', 'CCB')).toBe(-1);
         expect(obsUtil.compareRevision('CCA_v8', 'CCB_v4')).toBe(-1);
+
+        expect(obsUtil.compareRevision('', 'orig')).toBe(-1);
+        expect(obsUtil.compareRevision('', 'CCA')).toBe(-1);
     });
 
     it('should format QA Values', () => {
