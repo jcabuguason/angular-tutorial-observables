@@ -17,6 +17,7 @@ export class DataGridService {
     public columnsGenerated: string[] = [];
     public rowData: object[] = [];
     public columnDefs: any[];
+    public columnTypes = { 'identity': {} };
     public reloadRequested = new EventEmitter();
     public chartColumnRequested = new EventEmitter();
 
@@ -84,6 +85,7 @@ export class DataGridService {
         }
         return {
             obsDateTime: obs.obsDateTime,
+            receivedDateTime: obs.receivedDateTime,
             uri: obs.identity,
             station: findValue('stn_nam'),
             revision: rev,
@@ -306,6 +308,7 @@ export class DataGridService {
         'field': headerID,
         'width': 80,
         'columnGroupShow': 'open',
+        'type': 'identity'
       };
 
       if (this.identityHeader.children === undefined) { this.identityHeader.children = []; }
@@ -351,7 +354,7 @@ export interface DMSObs {
     identity: string;
     obsDateTime: string; // TODO: Switch to moment.js datetime?
     location: Location;
-    receivedDate: string;
+    receivedDateTime: string;
     parentIdentity: string;
     author: Author;
     jsonVersion: string;
