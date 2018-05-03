@@ -58,6 +58,7 @@ export class SearchService {
             this.availableParams = this.config.search_list;
             this.equivalentWords = this.config.equivalent_words;
             this.searchBtnText = this.config.search_btn_text;
+            this.showAllSuggestedParameters();
         }
 
     /** Executes parameters for a search request */
@@ -119,10 +120,10 @@ export class SearchService {
     handleNewIndices(indices) { }
 
     /** Suggestions that show up for different categories/parameters */
-    showSuggestedParameters(searchString: string, showAll: boolean) {
-      this.suggestedParams = showAll && !searchString
-          ? this.availableParams.filter(item => item.getTimesUsed() < item.getTimesUsable())
-          : this.searchParameters(searchString, this.availableParams);
+    showAllSuggestedParameters() {
+        if (this.availableParams) {
+            this.suggestedParams = this.availableParams.filter(item => item.getTimesUsed() < item.getTimesUsable());
+        }
     }
 
     /** Choices that show up (index is for displayParams) */
@@ -222,6 +223,8 @@ export class SearchService {
 
         param.decreaseTimesUsed();
         this.displayParams.splice(index, 1);
+
+        this.showAllSuggestedParameters();
     }
 
     getSearchModel(): SearchModel {
@@ -295,14 +298,6 @@ export class SearchService {
         return this.taxonomies.some(t => t.getTaxonomy() === taxonomy);
     }
 
-    /** Searches for the parameter */
-    private searchParameters(searchKey: string, list: SearchParameter[]) {
-        searchKey = searchKey.trim();
-        if (!searchKey) { return []; }
-        return list.filter(item => item.getDisplayName().indexOf(searchKey) > -1)
-                   .filter(item => item.getTimesUsed() < item.getTimesUsable());
-    }
-
     /** Searches for the dropdown selection in the parameter*/
     private searchChoices(searchValue: string, parameter: SearchParameter) {
         searchValue = searchValue.trim();
@@ -319,12 +314,12 @@ export class SearchService {
 
             this.addValueToDisplay(value, this.displayParams.length - 1);
 
-            // don't show the drop list since something has already been selected
-            this.suggestedParams = null;
             // clear the main input box until next input
             this.searchString = '';
 
             parameter.increaseTimesUsed();
+
+            this.showAllSuggestedParameters();
         }
     }
 
