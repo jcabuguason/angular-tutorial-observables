@@ -2,7 +2,6 @@
   "ngPackage": {
     "lib": {
       "externals": {
-        "angular-highcharts": "angular-highcharts",
         "date-fns": "date-fns"
       }
     }

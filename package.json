@@ -28,6 +28,7 @@
     "@angular/platform-browser-dynamic": "^5.0.0",
     "@angular/router": "^5.0.0",
     "@ngrx/store": "^4.1.1",
+    "angular-highcharts": "^5.2.12",
     "axios": "^0.17.0",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
@@ -39,7 +40,6 @@
     "express-session": "^1.15.6",
     "helmet": "^3.9.0",
     "highcharts": "^6.0.7",
-    "highcharts-angular": "^1.0.2",
     "ldapjs": "^1.0.1",
     "rxjs": "^5.5.2",
     "zone.js": "^0.8.14"
