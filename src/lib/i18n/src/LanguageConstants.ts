@@ -15,6 +15,10 @@ export const LanguageConstants = {
       'en': 'About the Web Standards',
       'fr': 'À propos des normes Web'
   },
+  'active_flag': {
+    'en': 'Active Flag',
+    'fr': 'Drapeau Actif'
+  },
   'add': {
       'en': 'Add',
       'fr': 'Ajouter'
@@ -34,6 +38,14 @@ export const LanguageConstants = {
   'contact': {
       'en': 'Contact Us',
       'fr': 'Contactez nous'
+  },
+  'created_by': {
+    'en': 'Created By',
+    'fr': 'Créé par'
+  },
+  'creation_datetime': {
+    'en': 'Creation Datetime',
+    'fr': 'Date de création'
   },
   'date_modified': {
       'en': 'Date Modified',
@@ -58,6 +70,14 @@ export const LanguageConstants = {
   'effective_start': {
       'en': 'Effective start',
       'fr': 'Démarrage effectif'
+  },
+  'eff_end_datetime': {
+    'en': 'Effective end',
+    'fr': 'Fin effective'
+  },
+  'eff_start_datetime': {
+    'en': 'Effective start',
+    'fr': 'Démarrage effectif'
   },
   'errors': {
     'en': 'Errors',
@@ -115,6 +135,14 @@ export const LanguageConstants = {
       'en': 'Reason for change',
       'fr': 'Raison du changement'
   },
+  'reason_for_change': {
+    'en': 'Reason for change',
+    'fr': 'Raison du changement'
+  },
+  'short_label': {
+    'en': 'Short Label',
+    'fr': 'Étiquette courte'
+  },
   'stability': {
       'en': 'DMS Stability',
       'fr': 'Stabilité DMS'
@@ -126,6 +154,10 @@ export const LanguageConstants = {
   'submit': {
       'en': 'Submit',
       'fr': 'Soumettre'
+  },
+  'system_generated': {
+    'en': 'System Generated',
+    'fr': 'Système généré'
   },
   'taxonomy': {
       'en': 'Taxonomy',
@@ -146,6 +178,10 @@ export const LanguageConstants = {
   'username': {
       'en': 'Username',
       'fr': 'Nom d\'utilisateur'
+  },
+  'version': {
+    'en': 'Version',
+    'fr': 'Version'
   },
   'view': {
       'en': 'View',
