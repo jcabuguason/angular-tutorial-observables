@@ -1,7 +1,7 @@
 export const LanguageConstants = {
   'about': {
       'en': 'About',
-      'fr': 'Sur'
+      'fr': 'À propos'
   },
   'about_pegasus': {
       'en': 'About Pegasus',
@@ -9,7 +9,7 @@ export const LanguageConstants = {
   },
   'about_this': {
       'en': 'About this site',
-      'fr': 'À propos de ce message'
+      'fr': 'À propos de ce site'
   },
   'about_web': {
       'en': 'About the Web Standards',
@@ -17,7 +17,7 @@ export const LanguageConstants = {
   },
   'active_flag': {
     'en': 'Active Flag',
-    'fr': 'Drapeau Actif'
+    'fr': 'Actif'
   },
   'add': {
       'en': 'Add',
@@ -49,7 +49,7 @@ export const LanguageConstants = {
   },
   'date_modified': {
       'en': 'Date Modified',
-      'fr': 'Date Modifiée'
+      'fr': 'Date de modification'
   },
   'definition': {
       'en': 'Definition',
@@ -65,23 +65,23 @@ export const LanguageConstants = {
   },
   'effective_end': {
       'en': 'Effective end',
-      'fr': 'Fin effective'
+      'fr': 'Date de fin effective'
   },
   'effective_start': {
       'en': 'Effective start',
-      'fr': 'Démarrage effectif'
+      'fr': 'Date de début effective'
   },
   'eff_end_datetime': {
     'en': 'Effective end',
-    'fr': 'Fin effective'
+    'fr': 'Date de fin effective'
   },
   'eff_start_datetime': {
     'en': 'Effective start',
-    'fr': 'Démarrage effectif'
+    'fr': 'Date de début effective'
   },
   'errors': {
     'en': 'Errors',
-    'fr': 'Les erreurs'
+    'fr': 'Erreurs'
   },
   'input_required': {
     'en': 'Please input a value',
@@ -105,7 +105,7 @@ export const LanguageConstants = {
   },
   'logout': {
       'en': 'Logout',
-      'fr': 'Connectez - Out'
+      'fr': 'Déconnexion'
   },
   'main': {
       'en': 'Metadata Instance',
@@ -145,7 +145,7 @@ export const LanguageConstants = {
   },
   'stability': {
       'en': 'DMS Stability',
-      'fr': 'Stabilité DMS'
+      'fr': 'DMS Stability'
   },
   'stay_connected': {
       'en': 'Stay connected',
@@ -157,7 +157,7 @@ export const LanguageConstants = {
   },
   'system_generated': {
     'en': 'System Generated',
-    'fr': 'Système généré'
+    'fr': 'Généré par le système'
   },
   'taxonomy': {
       'en': 'Taxonomy',
@@ -185,7 +185,7 @@ export const LanguageConstants = {
   },
   'view': {
       'en': 'View',
-      'fr': 'Vue'
+      'fr': 'Voir'
   },
   'view_metadata': {
       'en': 'View Metadata Instance',
