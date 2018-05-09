@@ -48,6 +48,10 @@ export class AuthService {
     this.store.dispatch({type: AuthActionType.LOGOUT});
   }
 
+  getUserInfo(): Observable<AuthResponse> {
+    return this.http.get<AuthResponse>(this.config.getUserInfoEndpoint);
+  }
+
   private makeID(length: number) {
     const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
