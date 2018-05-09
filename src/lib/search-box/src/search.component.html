@@ -14,9 +14,9 @@
 
                 <!-- available choices -->
                 <span *ngIf="p.getDisplayChoices().length" class="pop-up">
-                <ul *ngFor="let c of p.getDisplayChoices()" >
-                    <li (click)="searchService.addValueToDisplay(c, i)" > {{ c }} </li>
-                </ul>
+                    <ul *ngFor="let c of p.getDisplayChoices()" >
+                        <li (click)="searchService.addValueToDisplay(c, i)" > {{ c }} </li>
+                    </ul>
                 </span>
             </div>
 

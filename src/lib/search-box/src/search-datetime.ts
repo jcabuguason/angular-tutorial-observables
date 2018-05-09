@@ -16,12 +16,11 @@ export class SearchDatetime extends SearchParameter {
         this.hour = null;
         this.minute = null;
     }
+
     isUnfilled() {
-        if (this.isEmpty(this.date)) {
-            return true;
-        }
-        return false;
+        return this.isEmpty(this.date);
     }
+
     getFullDatetime() {
         let datetime: Date;
         if (!this.isEmpty(this.date)) {
@@ -40,9 +39,17 @@ export class SearchDatetime extends SearchParameter {
         }
         return datetime;
     }
+
+    getDatetimeUrlFormat() {
+        return this.date + 'T'
+            + this.padZero(this.hour) + ':'
+            + this.padZero(this.minute);
+    }
+
     isEmpty(input) {
         return !input;
     }
+
     fixValue(input: number, min: number, max: number) {
         input = this.isEmpty(input) ? 0 : input;
         if (max <= input) {
