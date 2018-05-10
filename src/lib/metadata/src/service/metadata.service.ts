@@ -41,7 +41,11 @@ export class MetadataService {
       );
   }
 
+<<<<<<< HEAD
   loadInstance(taxonomy: string, id: string, version: string) {
+=======
+  loadInstance(taxonomy: string, id: string, version ?: string) {
+>>>>>>> Cleaned up some code based upon recommendations, added element order functionality, added parent-child profile functionality, added a few extra helper methods
 
     const versionParam = version ? `version=${version}` : '';
 

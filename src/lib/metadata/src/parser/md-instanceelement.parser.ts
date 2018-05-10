@@ -20,8 +20,7 @@ export class MDInstanceElementParser {
         french = languageJSON.find(l => l['@name'] === 'fr');
         english = english != null ? english['@value'] : null;
         french = french != null ? french['@value'] : null;
-      }
-      catch (error) {
+      } catch (error) {
         throw new ParseError('Improper format of language values: ' + raw + '\n\t' + error);
       }
     }

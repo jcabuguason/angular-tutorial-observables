@@ -20,12 +20,10 @@ export class MDInstanceDefinitionParser {
       eJSON = raw['member']['Metadata']['result']['elements']['element'];
       datasetJSON = raw['member']['Metadata']['metadata']['set']['general']['dataset']['@name'];
       parentJSON = raw['member']['Metadata']['metadata']['set']['general']['parent']['@href'];
-    }
-    catch (error) {
+    } catch (error) {
       if (error instanceof TypeError) {
         throw new ParseError('Metadata definition is incomplete: ' + raw + '\n\t' + error);
-      }
-      else {
+      } else {
         throw error;
       }
     }
@@ -39,8 +37,7 @@ export class MDInstanceDefinitionParser {
       for (const e of eJSON) {
         instelements.push(MDInstanceElementParser.parse(e));
       }
-    }
-    catch (error) {
+    } catch (error) {
       throw error;
     }
 
