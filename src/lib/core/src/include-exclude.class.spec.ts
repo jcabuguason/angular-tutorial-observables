@@ -14,30 +14,30 @@ describe('IncludeExclude', () => {
     });
 
     it('Test no include/exclude lists', () => {
-        expect(blankInclExcl.checkIncludeExclude('1.2.3.4.5.6.1')).toBe(true);
+        expect(blankInclExcl.checkIncludeExclude('1.2.3.4.5.6.1')).toBeTruthy();
     });
 
     it('Test include with include lists', () => {
-        expect(onlyIncl.checkIncludeExclude('1.2.3.4.5.6.2')).toBe(true);
+        expect(onlyIncl.checkIncludeExclude('1.2.3.4.5.6.2')).toBeTruthy();
     });
 
     it('Test exclude with include lists', () => {
-        expect(onlyIncl.checkIncludeExclude('1.2.8.4.5.6.3')).toBe(false);
+        expect(onlyIncl.checkIncludeExclude('1.2.8.4.5.6.3')).toBeFalsy();
     });
 
     it('Test include with exclude lists', () => {
-        expect(onlyExcl.checkIncludeExclude('1.2.8.4.5.6.4')).toBe(true);
+        expect(onlyExcl.checkIncludeExclude('1.2.8.4.5.6.4')).toBeTruthy();
     });
 
     it('Test exclude with exclude lists', () => {
-        expect(onlyExcl.checkIncludeExclude('1.2.3.4.5.6.5')).toBe(false);
+        expect(onlyExcl.checkIncludeExclude('1.2.3.4.5.6.5')).toBeFalsy();
     });
 
     it('Test include with include/exclude lists', () => {
-        expect(inclExcl.checkIncludeExclude('1.2.8.4.5.6.6')).toBe(true);
+        expect(inclExcl.checkIncludeExclude('1.2.8.4.5.6.6')).toBeTruthy();
     });
 
     it('Test exclude with include/exclude lists', () => {
-        expect(inclExcl.checkIncludeExclude('1.2.3.4.5.6.7')).toBe(false);
+        expect(inclExcl.checkIncludeExclude('1.2.3.4.5.6.7')).toBeFalsy();
     });
 });

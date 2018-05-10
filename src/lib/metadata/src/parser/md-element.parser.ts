@@ -71,8 +71,7 @@ export class MDElementParser {
       };
 
       return element;
-    }
-    catch (error) {
+    } catch (error) {
       throw new ParseError('Improper format of element: ' + JSON.stringify(raw) + '\n\t' + error);
     }
   }
