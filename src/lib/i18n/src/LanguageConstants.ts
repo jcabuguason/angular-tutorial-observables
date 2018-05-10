@@ -139,6 +139,10 @@ export const LanguageConstants = {
     'en': 'Reason for change',
     'fr': 'Raison du changement'
   },
+  'remove': {
+    'en': 'Remove',
+    'fr': 'Supprimer'
+  },
   'short_label': {
     'en': 'Short Label',
     'fr': 'Étiquette courte'
