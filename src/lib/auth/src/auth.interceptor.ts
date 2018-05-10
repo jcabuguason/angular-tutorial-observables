@@ -2,7 +2,7 @@ import { Injectable, Injector, Inject } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
 import { selectAuthState, AuthState } from './auth.reducer';
@@ -22,6 +22,7 @@ export class AuthInterceptor implements  HttpInterceptor {
     if (request.method === 'POST' && request.url !== this.config.endpoint) {
       return this.store.select(selectAuthState)
       .pipe(
+        take(1),
         map((authInfo) => {
           return request.clone({
             setHeaders: {
