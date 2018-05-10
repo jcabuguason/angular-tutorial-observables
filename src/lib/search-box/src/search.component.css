@@ -45,21 +45,6 @@ https://github.com/dnauck/angular-advanced-searchbox/blob/master/src/angular-adv
   margin: 0 2px;
 }
 
-.search-parameter-input {
-  display: inline-block;
-  /*  will need to be auto width later */
-  width: 300px;
-  height: 24px;
-  border: 0;
-  margin: 0;
-  padding: 0;
-}
-
-.search-parameter-input:focus {
-  box-shadow: none;
-  /* outline: none; */
-}
-
 /* makes it inline */
 .search-parameter-suggestions {
   cursor: auto;
@@ -105,4 +90,8 @@ li:hover {
 
 .hrs-input {
   width: 90px;
+}
+
+#submitSearchBtn {
+  height: 28px;
 }

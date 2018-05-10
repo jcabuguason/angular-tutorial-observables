@@ -29,8 +29,8 @@ describe('SearchService', () => {
     stnParam = new SearchParameter('stnName', [], false, false);
     provParam = new SearchParameter('province', provinces, true, false);
     sizeParam = new SearchParameter('size', [], false, false, 1);
-    startDateParam = new SearchDatetime('from', [], false, false, 1);
-    endDateParam = new SearchDatetime('to', [], false, false, 1);
+    startDateParam = new SearchDatetime('from', false, 1);
+    endDateParam = new SearchDatetime('to', false, 1);
 
     const searchList: SearchParameter[] = [
       orgParam,
@@ -61,12 +61,6 @@ describe('SearchService', () => {
     searchService = getTestBed().get(SearchService);
   });
 
-
-  it('should find categories containing "z"', () => {
-    const expected: SearchParameter[] = [orgParam, sizeParam];
-    searchService.showSuggestedParameters('z', true);
-    expect(searchService.suggestedParams).toEqual(expected);
-  });
 
   it('should find choices containing "a" for network category', () => {
     expect(searchService.displayParams.length).toEqual(0);
