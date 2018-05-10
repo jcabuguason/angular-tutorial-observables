@@ -196,9 +196,9 @@ export class SubHeaderConfig {
         element.instelements
             .filter(elem => elem.group === 'header')
             .forEach( elem => {
-                if (elem.group === 'header' && elem.name === 'sub-header-start') {
+                if (elem.name === 'sub-header-start') {
                     this.subHeaderStart = Number(elem.value);
-                } else if (elem.group === 'header' && elem.name === 'sub-header-end') {
+                } else if (elem.name === 'sub-header-end') {
                     this.subHeaderEnd = Number(elem.value);
                 }
             }
