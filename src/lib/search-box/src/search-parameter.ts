@@ -7,9 +7,6 @@ export class SearchParameter {
     private timesUsed: number;
 
     private displayName: string;
-    /* TODO: No functionality for this part yet */
-    // /** Number of times this parameter can be used in a search, if undefined then there is no limit.. or change to default 10 */
-    // timesUsable?: number;
 
     constructor(
       private name: string,
@@ -99,4 +96,7 @@ export class SearchParameter {
         this.selected = [];
     }
 
+    isUnfilled() {
+        return this.selected.length === 0;
+    }
 }

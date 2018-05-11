@@ -7,6 +7,8 @@ import { DefaultColumnConfiguration } from './column-configuration/default-colum
 
 import NodeLookups from './node.const';
 
+import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
+
 @Injectable()
 export class DataGridService {
 
@@ -17,6 +19,7 @@ export class DataGridService {
     public columnsGenerated: string[] = [];
     public rowData: object[] = [];
     public columnDefs: any[];
+    public columnTypes = { 'identity': {} };
     public reloadRequested = new EventEmitter();
     public chartColumnRequested = new EventEmitter();
 
@@ -74,19 +77,13 @@ export class DataGridService {
         return this.columnConfiguration.getMainMenuItems(this);
     }
 
-    flattenObsIdentities(obs: DMSObs) {
-        const findValue = (name) => obs.metadataElements.filter(md => md.name === name).map(md => md.value)[0];
-        let rev: string;
-        const correction = findValue('cor');
-        if (correction !== undefined) {
-            const version = findValue('ver');
-            rev = (Number(version) > 0) ? `${correction}_v${version}` : correction;
-        }
+    flattenObsIdentities = (obs: DMSObs) => {
         return {
             obsDateTime: obs.obsDateTime,
+            receivedDateTime: obs.receivedDateTime,
             uri: obs.identity,
-            station: findValue('stn_nam'),
-            revision: rev,
+            station: obsUtil.findMetadataValue(obs, 'stn_nam'),
+            revision: obsUtil.findRevision(obs),
         };
     }
 
@@ -306,6 +303,7 @@ export class DataGridService {
         'field': headerID,
         'width': 80,
         'columnGroupShow': 'open',
+        'type': 'identity'
       };
 
       if (this.identityHeader.children === undefined) { this.identityHeader.children = []; }
@@ -351,7 +349,7 @@ export interface DMSObs {
     identity: string;
     obsDateTime: string; // TODO: Switch to moment.js datetime?
     location: Location;
-    receivedDate: string;
+    receivedDateTime: string;
     parentIdentity: string;
     author: Author;
     jsonVersion: string;

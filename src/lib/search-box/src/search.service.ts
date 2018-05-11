@@ -80,6 +80,41 @@ export class SearchService {
         this.submitModel(model);
     }
 
+    /* Helper to populate dates from url params to search box.
+    Returns a list of { 'value': date, 'param': SearchParameter } that will be added */
+    addDateRequestParams(qParams) {
+        const from = this.getDateFromParam(qParams.from);
+        const to = this.getDateFromParam(qParams.to);
+
+        return [
+            { 'value' : from, 'param': this.availableParams.find(p => p.getType() === 'SearchDatetime' && p.getName() === 'from') },
+            { 'value' : to, 'param': this.availableParams.find(p => p.getType() === 'SearchDatetime' && p.getName() === 'to') }
+        ];
+    }
+    /* Helper to populate hour range from url params to search box.
+    Returns a list of { 'value': { 'hh_before': hh, 'hh_after': hh }, 'param': SearchParameter } that will be added */
+    addHourRangeRequestParams(qParams) {
+        if (qParams.hh_before == null && qParams.hh_after == null) { return []; }
+        const hours = (value) => isNaN(value) ? 0 : Number(value);
+        return [
+            {
+                'value': {
+                    'hh_before': hours(qParams.hh_before),
+                    'hh_after': hours(qParams.hh_after)
+                },
+                'param': this.availableParams.find(p => p.getType() === 'SearchHoursRange' && p.getName() === 'hoursRange')
+            }
+        ];
+    }
+
+    /* Creates a valid date parameter, or undefined if unable to create a valid date */
+    getDateFromParam(param) {
+        if (param == null) { return param; }
+
+        const date = new Date(param);
+        return (date.toString() === 'Invalid Date') ? undefined : date;
+    }
+
     /** Any extra functionality when reading in URI index parameter */
     handleNewIndices(indices) { }
 
@@ -276,7 +311,7 @@ export class SearchService {
     }
 
     /** Parameter chosen from suggestedParams */
-    private addSuggestedParameter(parameter: SearchParameter, value: string = '') {
+    addSuggestedParameter(parameter: SearchParameter, value: string = '') {
         if (parameter.getTimesUsed() < parameter.getTimesUsable()) {
             const param: DisplayParameter = new DisplayParameter(parameter.getDisplayName(), '', [], parameter);
 
@@ -348,16 +383,12 @@ export class SearchService {
 
     /** check for any added parameters that are not used */
     private emptyParameters(): string[] {
-        const dateParams = this.displayParams
-            .filter(p => p.getSearchParam().getType() === 'SearchDatetime')
-            .filter(p => (p.getSearchParam() as SearchDatetime).isUnfilled())
-            .map(p => p.getKey());
-        const searchParams = this.displayParams
-            .filter(p => p.getSearchParam().getType() === 'SearchParameter')
-            .filter(p => !p.getValue().trim())
-            .map(p => p.getKey());
-
-        return this.combineArrays(dateParams, searchParams);
+        return this.displayParams.filter(p => {
+            const param = p.getSearchParam();
+            return param.getType() === 'SearchParameter'
+                ? !p.getValue().trim()
+                : param.isUnfilled();
+        }).map(p => p.getKey());
     }
 
     /** helper function for getTaxonomy, combine parameters of the same value */
@@ -371,12 +402,9 @@ export class SearchService {
         this.displayParams.forEach((p, index) => {
             param = p.getSearchParam();
 
+            // datetime and hours range are handled differently
             if (param.getType() === 'SearchDatetime' || param.getType() === 'SearchHoursRange' ) {
-                // datetime and hours range are handled differently
-                const temp = param as SearchDatetime;
-                if (temp.isUnfilled()) {
-                  this.removeDisplay(index);
-                }
+                this.handleSpecialParams(param, index);
             } else {
                 if (param.getName() === 'size') {
                     p.setValue(this.limitValue(p.getValue()));
@@ -421,14 +449,6 @@ export class SearchService {
         displayParam.setValue(value);
         param.addSelected(value);
         return true;
-    }
-
-    /** arrayName.concat doesn't always work that well, so combine it like this */
-    private combineArrays(array1: any[], array2: any[]) {
-        for (const item of array2){
-            array1.push(item);
-        }
-        return array1;
     }
 
     /** Gets the taxonomies based on words that are associated with it */
@@ -477,7 +497,7 @@ export class SearchService {
                     if (submitSearch) { temp = []; }
                     for (const value of p.getSelected()) {
                         const filtered = taxResult.filter(t => t.includesSearchWord(p.getName(), value));
-                        temp = this.combineArrays(temp, filtered);
+                        temp = temp.concat(filtered);
                     }
                     taxResult = temp;
                 }
@@ -516,27 +536,29 @@ export class SearchService {
     private addRequestParams(qParams) {
         const mscids = qParams.mscid;
         const climids = qParams.climid;
-        const from = this.getDateParam(qParams.from);
-        const to = this.getDateParam(qParams.to);
         const size = qParams.size;
+        const findParam = (name) => this.availableParams.find(p => p.getName() === name);
+        const valueParamObj = (value, paramName) => ({ 'value': value, 'param': findParam(paramName) });
 
-        const newParams = [
-            { 'value' : climids, 'param': this.availableParams.filter(p => p.getName() === 'stnName') },
-            { 'value' : mscids, 'param': this.availableParams.filter(p => p.getName() === 'stnName') },
-            { 'value' : from, 'param': this.availableParams.filter(p => p.getType() === 'SearchDatetime' && p.getName() === 'from') },
-            { 'value' : to, 'param': this.availableParams.filter(p => p.getType() === 'SearchDatetime' && p.getName() === 'to') },
-            { 'value' : size, 'param': this.availableParams.filter(p => p.getName() === 'size') }
+        let newParams = [
+            valueParamObj(climids, 'stnName'),
+            valueParamObj(mscids, 'stnName'),
+            valueParamObj(size, 'size')
         ];
+        newParams = newParams.concat(this.addDateRequestParams(qParams), this.addHourRangeRequestParams(qParams));
 
         // filter out any parameters that don't exist from the search config
-        newParams.filter(obj => obj.param.length > 0 && obj.value !== undefined)
-            .forEach(obj => this.applyParameter(obj.param[0], obj.value));
+        newParams.filter(obj => obj.param != null && obj.value != null)
+            .forEach(obj => this.applyParameter(obj.param, obj.value));
     }
 
     private applyParameter(searchParam: SearchParameter, value) {
         if (searchParam.getType() === 'SearchDatetime') {
             this.addSuggestedParameter(searchParam);
             (searchParam as SearchDatetime).setFullDatetime(value);
+        } else if (searchParam.getType() === 'SearchHoursRange') {
+            this.addSuggestedParameter(searchParam);
+            (searchParam as SearchHoursRange).setHours(value.hh_before, value.hh_after);
         } else if (searchParam.getName() === 'stnName') {
             ((Array.isArray(value)) ? value : [value])
                 .filter(id => id != null)
@@ -546,12 +568,12 @@ export class SearchService {
         }
     }
 
-    /* Creates a valid date parameter, or undefined if unable to create a valid date */
-    private getDateParam(param) {
-        if (param == null) { return param; }
-
-        const date = new Date(param);
-        return (date.toString() === 'Invalid Date') ? undefined : date;
+    /* Helper for combineParameters*/
+    private handleSpecialParams(param, index) {
+        if (param.isUnfilled()) {
+            this.removeDisplay(index);
+        } else if (param.getType() === 'SearchHoursRange') {
+            (param as SearchHoursRange).limitRange();
+        }
     }
-
 }
