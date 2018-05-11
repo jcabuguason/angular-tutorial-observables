@@ -166,6 +166,7 @@ export const DEFINITION_PARSER_OUTPUT: MDDefinition = {
           value: '',
           enums: [],
           elements: [],
+          requiredLanguages: {english: undefined, french: undefined},
           description: {english: 'The domain name of the account.', french: 'Le nom de domaine du compte.'},
           displayName: {english: 'Domain', french: 'Domaine'}
         }],
