@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { Location } from '@angular/common';
 
 import { SearchComponent } from './search.component';
 import { SearchService } from './search.service';
@@ -23,7 +24,8 @@ describe('SearchComponent', () => {
       ],
       providers: [
         SearchService,
-        { provide: SEARCH_BOX_CONFIG, useValue: {}}
+        { provide: SEARCH_BOX_CONFIG, useValue: {}},
+        { provide: Location, useValue: { go: () => {}}}
       ]
     }).compileComponents()
     .then(() => {
