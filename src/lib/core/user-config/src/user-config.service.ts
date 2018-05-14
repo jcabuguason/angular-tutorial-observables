@@ -13,7 +13,7 @@ import { ElementNodeConfig,
         } from './user-config.model';
 
 import NodeLookups from './node.const';
-import { IncludeExclude } from '../../core/src/include-exclude.class';
+import { IncludeExclude } from '../../include-exclude/src/include-exclude.class';
 import { MDInstanceDefinition } from '../../metadata/src/model';
 import { MDInstanceElement } from '../../metadata/src/model';
 
@@ -204,10 +204,8 @@ export class UserConfigService {
             return ElementVisibility.HIDDEN;
         }
 
-        if (this.elementOrder.length > 0) {
-            if (!this.elementOrder.includes(elementID)) {
-                return ElementVisibility.HIDDEN;
-            }
+        if (this.elementOrder.length > 0 && this.elementOrder.indexOf(elementID) === -1) {
+            return ElementVisibility.HIDDEN;
         }
 
         return ElementVisibility.DEFAULT;

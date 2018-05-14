@@ -24,8 +24,7 @@ export class MDDescriptionParser {
 
       return element;
 
-    }
-    catch (error) {
+    } catch (error) {
       throw new ParseError('Improper format of description: ' + raw + '\n\t' + error);
     }
   }

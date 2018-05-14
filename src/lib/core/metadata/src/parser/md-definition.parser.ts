@@ -20,12 +20,10 @@ export class MDDefinitionParser {
       eJSON = raw['member']['Metadata']['result']['elements']['element'];
       dataset = raw['member']['Metadata']['metadata']['set']['general']['dataset']['@name'];
       id = raw['member']['Metadata']['metadata']['set']['general']['id']['@href'];
-    }
-    catch (error) {
+    } catch (error) {
       if (error instanceof TypeError) {
         throw new ParseError('Metadata definition is incomplete: ' + raw + '\n\t' + error);
-      }
-      else {
+      } else {
         throw error;
       }
     }
@@ -39,8 +37,7 @@ export class MDDefinitionParser {
       for (const e of eJSON) {
         elements.push(MDElementParser.parse(e));
       }
-    }
-    catch (error) {
+    } catch (error) {
       throw error;
     }
 
