@@ -2,6 +2,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 
 import { Chart, Highcharts } from 'angular-highcharts';
 
+import { UserConfigService } from 'msc-dms-commons-angular/core/metadata';
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 
 @Injectable()
@@ -9,7 +10,7 @@ export class DataChartService {
 
     public wipeCharts = new EventEmitter();
 
-    constructor() {}
+    constructor(private configService: UserConfigService) {}
 
     // Need to use the class structure that is currently in grid-service
     chartColumn(elementFields: string[], observations, extraOptions: Highcharts.Options = {}): Chart[] {
@@ -45,7 +46,7 @@ export class DataChartService {
                 type: (element.isBar) ? 'column' : 'spline'
             },
             title: {
-                text: element.name
+                text: this.configService.getFullFormattedHeader(element.name)
             },
             xAxis: {
                 type: 'datetime',
