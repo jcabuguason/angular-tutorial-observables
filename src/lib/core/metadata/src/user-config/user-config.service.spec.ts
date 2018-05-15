@@ -1,6 +1,6 @@
 import { UserConfigService } from './user-config.service';
-import { MetadataService } from '../../metadata/src/service';
-import { MDInstanceDefinition } from '../../metadata/src/model';
+import { MetadataService } from '../service';
+import { MDInstanceDefinition } from '../model';
 import { Lang, MetaElementVisibility, ElementVisibility } from './user-config.model';
 
 describe('UserConfigService', () => {
