@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
 
-import { MetadataService } from '../../metadata/src/service';
+import { MetadataService } from '../service';
 
-import { ElementNodeConfig,
-         GenericNodeConfig,
-         SubHeaderConfig,
-         ElementSubHeaderConfig,
-         MetaElementVisibility,
-         ElementVisibility,
-         ElementNameConfig,
-         Lang,
-        } from './user-config.model';
+import {
+    ElementNodeConfig,
+    GenericNodeConfig,
+    SubHeaderConfig,
+    ElementSubHeaderConfig,
+    MetaElementVisibility,
+    ElementVisibility,
+    ElementNameConfig,
+    Lang,
+} from './user-config.model';
 
 import NodeLookups from './node.const';
-import { IncludeExclude } from '../../include-exclude/src/include-exclude.class';
-import { MDInstanceDefinition } from '../../metadata/src/model';
-import { MDInstanceElement } from '../../metadata/src/model';
+import { IncludeExclude } from '../include-exclude/include-exclude.class';
+import { MDInstanceDefinition, MDInstanceElement } from '../model/';
 
 @Injectable()
 export class UserConfigService {

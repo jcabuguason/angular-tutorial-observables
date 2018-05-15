@@ -1,4 +1,4 @@
-import { MDInstanceElement } from '../../metadata/src/model';
+import { MDInstanceElement } from '../model';
 
 // Enum to dictate how an element should be displayed/loaded
 export enum ElementVisibility {
