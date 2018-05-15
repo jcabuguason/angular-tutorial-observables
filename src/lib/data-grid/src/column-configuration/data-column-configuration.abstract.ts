@@ -5,7 +5,7 @@ import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 
 export abstract class DataColumnConfiguration {
 
-  public ignoreHideableColumns = false;
+  public allowBlankDataColumns = false;
 
   getIdentityHeaders() {
     return {

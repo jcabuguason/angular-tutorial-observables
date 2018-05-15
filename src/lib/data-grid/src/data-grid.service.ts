@@ -5,18 +5,16 @@ import { ColumnConfigurationContainer } from './column-configuration/column-conf
 
 import { DefaultColumnConfiguration } from './column-configuration/default-column-configuration.class';
 
-import { UserConfigService } from 'msc-dms-commons-angular/core/metadata/user-config/user-config.service';
-
-import { ElementVisibility, MetaElementVisibility } from 'msc-dms-commons-angular/core/metadata/user-config/user-config.model';
+import {
+    UserConfigService,
+    ElementVisibility,
+    MetaElementVisibility
+} from 'msc-dms-commons-angular/core/metadata/';
 
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 
 @Injectable()
 export class DataGridService {
-
-    readonly elementNodeStartIndex: number = 2;
-    readonly elementNodeDepth: number = 3;
-    readonly headerNodeDepth: number = 6 - this.elementNodeDepth;
 
     public columnsGenerated: string[] = [];
     public rowData: object[] = [];
@@ -27,14 +25,9 @@ export class DataGridService {
 
     private columnConfiguration: ElementColumnConfiguration;
     private identityHeader;
-    private createBlankColumns = false;
 
-    constructor(
-        public userConfigService: UserConfigService,
-        public allowBlankColumns: boolean,
-    ) {
+    constructor(public userConfigService: UserConfigService) {
         this.columnConfiguration = new DefaultColumnConfiguration();
-        this.createBlankColumns = allowBlankColumns;
         this.resetHeader();
     }
 
@@ -91,11 +84,28 @@ export class DataGridService {
 
     flattenMetadataElements(mdElements: MetadataElements[]) {
         const result = {};
-        for (const element of mdElements) {
-            if (element.elementID == null || this.ignoreMetaElement(element.elementID)) { continue; }
-            const headerID = ColumnConfigurationContainer.findHeaderID(element);
-            this.buildMetadataColumn(element, headerID);
-        }
+        const configOrder = this.userConfigService.getElementOrder();
+        const createdMetaElements: MetadataElements[] = [];
+
+        const buildColumn = (element) => {
+            if (element.name != null && !this.ignoreMetaElement(element)) {
+                result[element.name] = element.value;
+                this.buildMetadataColumn(element, element.name);
+            }
+        };
+
+        configOrder.forEach(configElement => {
+            mdElements.filter(e => e.elementID === configElement)
+                .forEach(e => {
+                    buildColumn(e);
+                    createdMetaElements.push(e);
+                });
+        });
+
+        // remaining elements
+        mdElements.filter(e => createdMetaElements.indexOf(e) === -1)
+            .forEach(buildColumn);
+
         return result;
     }
 
@@ -105,7 +115,7 @@ export class DataGridService {
         const createdDataElements: DataElements[] = [];
 
         const buildColumn = (element) => {
-            if (!element.elementID == null && !this.ignoreDataElement(element.elementID)) {
+            if (!this.ignoreDataElement(element)) {
                 const headerID = ColumnConfigurationContainer.findHeaderID(element);
                 this.buildElementColumn(element, headerID);
                 const elementData = this.columnConfiguration.createElementData(element, headerID);
@@ -116,19 +126,17 @@ export class DataGridService {
         configOrder.forEach(configElement => {
             const elements = dataElements.filter(e => e.elementID === configElement);
             if (elements.length > 0) {
-                createdDataElements.push(...elements);
-                elements.forEach(e => buildColumn(e));
-            } else if (this.allowBlankColumns) {
+                elements.forEach(e => {
+                    buildColumn(e);
+                    createdDataElements.push(e);
+                });
+            } else if (this.columnConfiguration.allowBlankDataColumns) {
                 buildColumn({ elementID: configElement });
             }
         });
 
-        const remainingElements = dataElements.filter(e => createdDataElements.indexOf(e) === -1);
-        remainingElements.forEach(e => {
-            if (!e.elementID == null && !this.ignoreDataElement(e.elementID)) {
-                buildColumn(e);
-            }
-        });
+        dataElements.filter(e => createdDataElements.indexOf(e) === -1)
+            .forEach(buildColumn);
 
         return result;
     }
@@ -169,16 +177,11 @@ export class DataGridService {
 
     }
 
-    // Gets the specific node headers
-    private getNodeHeader(elementID: string, nodeNumber: number): string {
-        return this.userConfigService.getNodeName(elementID, nodeNumber);
-    }
-
     private generateHeaderString(elementID: string, index: number) {
-      const firstDraft = this.getNodeHeader(elementID, index);
-      return (firstDraft === undefined)
+      const firstDraft = this.userConfigService.getFormattedNodeName(elementID, index + 1);
+      return (firstDraft !== undefined)
         ? firstDraft
-        : this.userConfigService.getFormattedNodeName(elementID, index);
+        : this.userConfigService.getFormattedSubHeader(elementID);
     }
 
     private buildElementColumn(element: DataElements, headerID: string) {
@@ -192,7 +195,7 @@ export class DataGridService {
       let workingNode;
       const nestingDepth = this.userConfigService.getNestingDepth();
       // find workingNode to add to
-      for (let i = 2; i <= nestingDepth; i++) {
+      for (let i = 1; i <= nestingDepth; i++) {
           const headerName = this.generateHeaderString(elementID, i);
 
           // End processing if no header field is found
@@ -288,12 +291,16 @@ export class DataGridService {
       this.columnsGenerated.push(headerID);
     }
 
-    private ignoreMetaElement(elementID: string): boolean {
-        return this.userConfigService.getMetaElementVisibility(elementID) === MetaElementVisibility.NO_LOAD;
+    private ignoreMetaElement(element: MetadataElements): boolean {
+        return element.elementID != null
+            ? this.userConfigService.getMetaElementVisibility(element.elementID) === MetaElementVisibility.NO_LOAD
+            : false;
     }
 
-    private ignoreDataElement(elementID: string): boolean {
-        return this.userConfigService.getElementVisibility(elementID) === ElementVisibility.NO_LOAD;
+    private ignoreDataElement(element: DataElements): boolean {
+        return element.elementID != null
+            ? this.userConfigService.getElementVisibility(element.elementID) === ElementVisibility.NO_LOAD
+            : false;
     }
 
     private pinMetaElement(elementID: string): boolean {
