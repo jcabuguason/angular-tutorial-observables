@@ -149,6 +149,7 @@ export const DEFINITION_PARSER_OUTPUT: MDDefinition = {
         pattern: '',
         uom: 'unitless',
         value: '',
+        requiredLanguages: {english: undefined, french: undefined},
         description: {english: 'One viable authentication module for this user.',
           french: 'Un module d\'authentification viable pour cet utilisateur.'},
         displayName: {english: 'Authentication Module', french: 'Module d\'authentification'},
@@ -166,6 +167,7 @@ export const DEFINITION_PARSER_OUTPUT: MDDefinition = {
           value: '',
           enums: [],
           elements: [],
+          requiredLanguages: {english: undefined, french: undefined},
           description: {english: 'The domain name of the account.', french: 'Le nom de domaine du compte.'},
           displayName: {english: 'Domain', french: 'Domaine'}
         }],
@@ -253,6 +255,7 @@ export const ELEMENT_PARSER_OUTPUT = {
     pattern: '',
     uom: 'unitless',
     value: '',
+    requiredLanguages: {english: undefined, french: undefined},
     description: {english: 'One viable authentication module for this user.',
       french: 'Un module d\'authentification viable pour cet utilisateur.'},
     displayName: {english: 'Authentication Module', french: 'Module d\'authentification'},
@@ -349,6 +352,7 @@ export const INSTANCE_DEFINITION_PARSER_OUTPUT = {
         group: 'account',
         id: 'f2a20a197dd1a4f4',
         index: 1,
+        language: {english: undefined, french: undefined},
         instelements: [],
         name: 'last_name',
         uom: 'unitless',
@@ -361,12 +365,14 @@ export const INSTANCE_DEFINITION_PARSER_OUTPUT = {
         name: 'authentication',
         uom: 'unitless',
         value: 'das',
+        language: {english: undefined, french: undefined},
         instelements: [
             {
                 def_id: 'c8154bc1f47699af',
                 group: 'domain',
                 id: 'c1feff7cb66bb2ac',
                 index: 1,
+                language: {english: undefined, french: undefined},
                 instelements: [],
                 name: 'domain',
                 uom: 'unitless',
@@ -409,6 +415,7 @@ export const INSTANCE_ELEMENT_PARSER_OUTPUT = {
     name: 'last_name',
     uom: 'unitless',
     value: 'Test',
+    language: {english: undefined, french: undefined},
     instelements: [
         {
             def_id: 'c8154bc1f47699af',
@@ -418,6 +425,7 @@ export const INSTANCE_ELEMENT_PARSER_OUTPUT = {
             name: 'domain',
             uom: 'unitless',
             value: 'fd',
+            language: {english: undefined, french: undefined},
             instelements: []
         }
     ]

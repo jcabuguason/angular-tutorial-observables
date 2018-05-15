@@ -1,5 +1,7 @@
-<div class="advancedSearchBox" (keyup.enter)="searchService.submitSearch(); searchService.removeAllSuggestedChoices()">
+<div class="advancedSearchBox" tabindex="0" (keyup.enter)="searchService.submitSearch(); searchService.removeAllSuggestedChoices()">
 
+    <button id="submitSearchBtn" *ngIf="searchService.searchBtnText" (click)="searchService.submitSearch()">{{searchService.searchBtnText}}</button>
+    
     <!-- selected search parameter -->
     <div class="selected-parameters" *ngFor = "let p of searchService.displayParams; index as i">
         <!-- parameters -->
@@ -12,9 +14,9 @@
 
                 <!-- available choices -->
                 <span *ngIf="p.getDisplayChoices().length" class="pop-up">
-                  <ul *ngFor="let c of p.getDisplayChoices()" >
-                      <li (click)="searchService.addValueToDisplay(c, i)" > {{ c }} </li>
-                  </ul>
+                    <ul *ngFor="let c of p.getDisplayChoices()" >
+                        <li (click)="searchService.addValueToDisplay(c, i)" > {{ c }} </li>
+                    </ul>
                 </span>
             </div>
 
@@ -40,22 +42,13 @@
 
         </div>
     </div>
-
-    <!-- the actual "search box" -->
-    <input [(ngModel)]="searchService.searchString" #searchBox placeholder="Search..." class="search-parameter-input"
-        (click)="searchService.showSuggestedParameters(searchBox.value, true); searchService.removeAllSuggestedChoices()"
-        (keyup)="searchService.showSuggestedParameters(searchBox.value, false)">
-
 </div>
 
-<!-- suggestions as you type in the search box -->
+<!-- suggestions/categories that show up-->
 <div class="search-parameter-suggestions" *ngFor="let suggestion of searchService.suggestedParams">
     <span class="search-parameter" (click)="searchService.addSuggestedParameter(suggestion)"> {{suggestion.getDisplayName()}}</span>
 </div>
 
-<div>
-    <button *ngIf="searchService.searchBtnText" (click)="searchService.submitSearch()">{{searchService.searchBtnText}}</button>
-    <div *ngFor="let m of searchService.message">
-        <span> {{m}} </span>
-    </div>
+<div *ngFor="let m of searchService.message">
+    <span> {{m}} </span>
 </div>

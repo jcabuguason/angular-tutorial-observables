@@ -1,4 +1,5 @@
 import { Injectable, Inject, EventEmitter } from '@angular/core';
+import { Location } from '@angular/common';
 
 import { DisplayParameter } from './display-param';
 
@@ -53,31 +54,62 @@ export class SearchService {
 
     constructor(
         @Inject(SEARCH_BOX_CONFIG)
-        public config: SearchBoxConfig) {
+        public config: SearchBoxConfig,
+        public location: Location) {
             this.taxonomies = this.config.taxonomies;
             this.availableParams = this.config.search_list;
             this.equivalentWords = this.config.equivalent_words;
             this.searchBtnText = this.config.search_btn_text;
+            this.showAllSuggestedParameters();
         }
 
     /** Executes parameters for a search request */
     executeSearch(qParams) {
-        const indices = (Array.isArray(qParams.index)) ? qParams.index : [qParams.index]
-            .filter(index => index !== undefined);
-        const newIndices = indices.filter(index => this.taxonomyExists(index));
-
-        if (indices.length > 0 && newIndices.length > 0) {
-            this.handleNewIndices(indices);
-        } else {
-            this.message.push('Error: Invalid URL parameters for index');
-            return;
-        }
-
         this.addRequestParams(qParams);
-        const model: SearchModel = this.getSearchModel();
-        model.taxonomy = newIndices;
+        this.submitSearch();
+    }
 
-        this.submitModel(model);
+    /* Re-directs to url with search parameters */
+    updateUrl() {
+        const urlParams = new URLSearchParams();
+        this.createUrlParams().forEach(p => urlParams.append(p.name, p.value));
+        this.location.go('/?' + urlParams);
+    }
+
+    /* Returns the search parameters so it can be used in the url */
+    createUrlParams(): {name: string, value: string}[] {
+        const allParams = [];
+        const addUrlParam = (name, value) => allParams.push({'name': name, 'value': value});
+
+        this.displayParams.forEach(p => {
+            const param = p.getSearchParam();
+            const name = param.getName();
+
+            if (param.getType() === 'SearchDatetime') {
+                const date = param as SearchDatetime;
+                addUrlParam(name, date.getDatetimeUrlFormat());
+            } else if (param.getType() === 'SearchHoursRange') {
+                const hrs = param as SearchHoursRange;
+                addUrlParam('hh_before', hrs.hoursBefore);
+                addUrlParam('hh_after', hrs.hoursAfter);
+            } else {
+                addUrlParam(name, p.getValue().replace(/ /g, '-'));
+            }
+        });
+
+        return allParams;
+    }
+
+    /* Helper to determine which url params don't match search box field names. */
+    isSpecialUrlParam(name: string) {
+        return !this.availableParams
+            .filter(p => p.getType() !== 'SearchDatetime' && p.getType() !== 'SearchHoursRange')
+            .some(p => p.getName() === name);
+    }
+
+    /* Helper to populate url params that don't match search box field names or uses a special format */
+    addSpecialRequestParams(qParams) {
+        return this.addDateRequestParams(qParams).concat(this.addHourRangeRequestParams(qParams));
     }
 
     /* Helper to populate dates from url params to search box.
@@ -115,14 +147,11 @@ export class SearchService {
         return (date.toString() === 'Invalid Date') ? undefined : date;
     }
 
-    /** Any extra functionality when reading in URI index parameter */
-    handleNewIndices(indices) { }
-
     /** Suggestions that show up for different categories/parameters */
-    showSuggestedParameters(searchString: string, showAll: boolean) {
-      this.suggestedParams = showAll && !searchString
-          ? this.availableParams.filter(item => item.getTimesUsed() < item.getTimesUsable())
-          : this.searchParameters(searchString, this.availableParams);
+    showAllSuggestedParameters() {
+        if (this.availableParams) {
+            this.suggestedParams = this.availableParams.filter(item => item.getTimesUsed() < item.getTimesUsable());
+        }
     }
 
     /** Choices that show up (index is for displayParams) */
@@ -222,6 +251,8 @@ export class SearchService {
 
         param.decreaseTimesUsed();
         this.displayParams.splice(index, 1);
+
+        this.showAllSuggestedParameters();
     }
 
     getSearchModel(): SearchModel {
@@ -272,11 +303,14 @@ export class SearchService {
     }
 
     submitSearch() {
-        this.submitModel(this.getSearchModel());
-    }
-
-    submitModel(model: SearchModel) {
-        this.searchRequested.emit(model);
+        const model = this.getSearchModel();
+        // always need taxonomy for ES
+        if (model.taxonomy.length > 0 ) {
+            if (this.displayParams.length > 0) {
+                this.updateUrl();
+            }
+            this.searchRequested.emit(model);
+        }
     }
 
     // check any missing required parameters
@@ -295,14 +329,6 @@ export class SearchService {
         return this.taxonomies.some(t => t.getTaxonomy() === taxonomy);
     }
 
-    /** Searches for the parameter */
-    private searchParameters(searchKey: string, list: SearchParameter[]) {
-        searchKey = searchKey.trim();
-        if (!searchKey) { return []; }
-        return list.filter(item => item.getDisplayName().indexOf(searchKey) > -1)
-                   .filter(item => item.getTimesUsed() < item.getTimesUsable());
-    }
-
     /** Searches for the dropdown selection in the parameter*/
     private searchChoices(searchValue: string, parameter: SearchParameter) {
         searchValue = searchValue.trim();
@@ -319,12 +345,12 @@ export class SearchService {
 
             this.addValueToDisplay(value, this.displayParams.length - 1);
 
-            // don't show the drop list since something has already been selected
-            this.suggestedParams = null;
             // clear the main input box until next input
             this.searchString = '';
 
             parameter.increaseTimesUsed();
+
+            this.showAllSuggestedParameters();
         }
     }
 
@@ -532,20 +558,20 @@ export class SearchService {
                 param.getName() === 'stnName' || param.getName() === 'size' || param.getName() === 'province');
     }
 
-    /** Populate search box with information from specific URL parameters, except index */
+    /** Populate search box with information from specific URL parameters */
     private addRequestParams(qParams) {
-        const mscids = qParams.mscid;
-        const climids = qParams.climid;
-        const size = qParams.size;
         const findParam = (name) => this.availableParams.find(p => p.getName() === name);
         const valueParamObj = (value, paramName) => ({ 'value': value, 'param': findParam(paramName) });
 
-        let newParams = [
-            valueParamObj(climids, 'stnName'),
-            valueParamObj(mscids, 'stnName'),
-            valueParamObj(size, 'size')
-        ];
-        newParams = newParams.concat(this.addDateRequestParams(qParams), this.addHourRangeRequestParams(qParams));
+        let newParams = [];
+
+        for (const key in qParams) {
+            if (qParams[key] != null && !this.isSpecialUrlParam(key)) {
+                newParams.push(valueParamObj(qParams[key], key));
+            }
+        }
+
+        newParams = newParams.concat(this.addSpecialRequestParams(qParams));
 
         // filter out any parameters that don't exist from the search config
         newParams.filter(obj => obj.param != null && obj.value != null)
@@ -559,12 +585,11 @@ export class SearchService {
         } else if (searchParam.getType() === 'SearchHoursRange') {
             this.addSuggestedParameter(searchParam);
             (searchParam as SearchHoursRange).setHours(value.hh_before, value.hh_after);
-        } else if (searchParam.getName() === 'stnName') {
-            ((Array.isArray(value)) ? value : [value])
-                .filter(id => id != null)
-                .forEach(id => this.addSuggestedParameter(searchParam, id));
         } else {
-            this.addSuggestedParameter(searchParam, value);
+            ((Array.isArray(value)) ? value : [value])
+                .filter(val => val != null)
+                .map(val => val.replace(/-/g, ' '))
+                .forEach(val => this.addSuggestedParameter(searchParam, val));
         }
     }
 

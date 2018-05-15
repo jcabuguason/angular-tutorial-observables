@@ -1,4 +1,5 @@
-import { ComponentFixture, TestBed, async, fakeAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { Location } from '@angular/common';
 
 import { SearchComponent } from './search.component';
 import { SearchService } from './search.service';
@@ -23,14 +24,14 @@ describe('SearchComponent', () => {
       ],
       providers: [
         SearchService,
-        { provide: SEARCH_BOX_CONFIG, useValue: {}}
+        { provide: SEARCH_BOX_CONFIG, useValue: {}},
+        { provide: Location, useValue: { go: () => {}}}
       ]
     }).compileComponents()
     .then(() => {
       fixture = TestBed.createComponent(SearchComponent);
       searchComponent = fixture.componentInstance;
       searchService = fixture.debugElement.injector.get(SearchService);
-
     });
   }));
 
@@ -47,20 +48,6 @@ describe('SearchComponent', () => {
     box.nativeElement.dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter'}));
     expect(searchService.submitSearch).toHaveBeenCalled();
     expect(searchService.removeAllSuggestedChoices).toHaveBeenCalled();
-  });
-
-  it('searching parameters', () => {
-    const input = fixture.debugElement.query(By.css('.search-parameter-input'));
-    expect(input).toBeDefined();
-
-    spyOn(searchService, 'showSuggestedParameters');
-    spyOn(searchService, 'removeAllSuggestedChoices');
-
-    input.nativeElement.click();
-    expect(searchService.removeAllSuggestedChoices).toHaveBeenCalled();
-
-    input.nativeElement.dispatchEvent(new KeyboardEvent('keyup'));
-    expect(searchService.showSuggestedParameters).toHaveBeenCalled();
   });
 
   it('adding suggestions that show up on the bottom', () => {

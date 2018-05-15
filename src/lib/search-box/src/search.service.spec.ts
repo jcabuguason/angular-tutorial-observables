@@ -1,10 +1,12 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
+import { Location } from '@angular/common';
 
 import { SearchService } from './search.service';
 import { SearchBoxConfig, SEARCH_BOX_CONFIG } from './search-box.config';
 import { SearchTaxonomy } from './search-taxonomy';
 import { SearchParameter } from './search-parameter';
 import { SearchDatetime } from './search-datetime';
+import { SearchHoursRange } from './search-hours-range';
 import { SearchModel, SearchElement } from './search.model';
 import { EquivalentKeywords } from './equivalent-keywords';
 
@@ -21,7 +23,8 @@ describe('SearchService', () => {
     provParam: SearchParameter,
     sizeParam: SearchParameter,
     startDateParam: SearchDatetime,
-    endDateParam: SearchDatetime;
+    endDateParam: SearchDatetime,
+    hoursParam: SearchHoursRange;
 
   beforeEach(() => {
     orgParam = new SearchParameter('organization', organizations, true, false);
@@ -29,8 +32,9 @@ describe('SearchService', () => {
     stnParam = new SearchParameter('stnName', [], false, false);
     provParam = new SearchParameter('province', provinces, true, false);
     sizeParam = new SearchParameter('size', [], false, false, 1);
-    startDateParam = new SearchDatetime('from', [], false, false, 1);
-    endDateParam = new SearchDatetime('to', [], false, false, 1);
+    startDateParam = new SearchDatetime('from', false, 1);
+    endDateParam = new SearchDatetime('to', false, 1);
+    hoursParam = new SearchHoursRange('hoursRange', false);
 
     const searchList: SearchParameter[] = [
       orgParam,
@@ -39,7 +43,8 @@ describe('SearchService', () => {
       provParam,
       startDateParam,
       endDateParam,
-      sizeParam
+      sizeParam,
+      hoursParam
     ];
 
     const config: SearchBoxConfig = {
@@ -55,18 +60,13 @@ describe('SearchService', () => {
     TestBed.configureTestingModule({
       providers: [
         SearchService,
-      { provide: SEARCH_BOX_CONFIG, useValue: config }]
+        { provide: Location, useValue: { go: () => {}}},
+        { provide: SEARCH_BOX_CONFIG, useValue: config }]
     });
 
     searchService = getTestBed().get(SearchService);
   });
 
-
-  it('should find categories containing "z"', () => {
-    const expected: SearchParameter[] = [orgParam, sizeParam];
-    searchService.showSuggestedParameters('z', true);
-    expect(searchService.suggestedParams).toEqual(expected);
-  });
 
   it('should find choices containing "a" for network category', () => {
     expect(searchService.displayParams.length).toEqual(0);
@@ -105,11 +105,11 @@ describe('SearchService', () => {
   });
 
   it('should create search model from url params', () => {
-    const params = { mscid: '1234567', from: '2018-01-01T01:00', to: '2018-01-02T01:00',
-      index: 'dms_data:msc:observation:atmospheric:surface_weather:ca-1.1-ascii'};
+    const params = { stnName: '1234567', from: '2018-01-01T01:00', to: '2018-01-02T01:00',
+      network: 'ca'};
 
-    const expectedModel = new SearchModel([params.index],
-      [new SearchElement(searchService.MSC_ID, 'metadataElements', 'value', params.mscid)],
+    const expectedModel = new SearchModel(['dms_data:msc:observation:atmospheric:surface_weather:ca-1.1-ascii'],
+      [new SearchElement(searchService.MSC_ID, 'metadataElements', 'value', params.stnName)],
       new Date(params.from), new Date(params.to), 300, 'AND');
 
     searchService.searchRequested.subscribe(model => {
@@ -117,16 +117,6 @@ describe('SearchService', () => {
     });
 
     searchService.executeSearch(params);
-  });
-
-  it('no search model returned', () => {
-    spyOn(searchService, 'submitModel');
-
-    const params = { mscid: '1234567', from: '2018-01-01T01:00', to: '2018-01-02T01:00',
-      index: 'dms_data:msc:observation:atmospheric:surface_weather:ra-1.1-ascii'};
-
-    searchService.executeSearch(params);
-    expect(searchService.submitModel).toHaveBeenCalledTimes(0);
   });
 
   it('should limit size param to 1000', () => {
@@ -167,5 +157,35 @@ describe('SearchService', () => {
     expect(networkParam.getTimesUsed()).toEqual(2);
     expect(searchService.displayParams.filter(p => p.getSearchParam() === networkParam).length).toEqual(2);
   });
+
+  it('update url from search', () => {
+    searchService.addSuggestedParameter(stnParam, '123456');
+    searchService.addSuggestedParameter(stnParam, '987654');
+    searchService.addSuggestedParameter(sizeParam, '5');
+    searchService.addSuggestedParameter(startDateParam);
+    startDateParam.setFullDatetime(new Date('2018-01-01T00:00'));
+
+    spyOn(searchService.location, 'go');
+    searchService.submitSearch();
+
+    expect(searchService.location.go).toHaveBeenCalledWith('/?stnName=123456&stnName=987654&size=5&from=2018-01-01T00%3A00');
+  });
+
+  it('update hrs range from search', () => {
+    searchService.addSuggestedParameter(hoursParam);
+    hoursParam.setHours(5, 10);
+
+    spyOn(searchService.location, 'go');
+    searchService.submitSearch();
+    expect(searchService.location.go).toHaveBeenCalledWith('/?hh_before=5&hh_after=10');
+  });
+
+  it('read hours range from url', () => {
+    const params = { hh_before: '5', hh_after: '10'};
+    searchService.executeSearch(params);
+    expect(hoursParam.hoursBefore).toEqual(5);
+    expect(hoursParam.hoursAfter).toEqual(10);
+  });
+
 
 });

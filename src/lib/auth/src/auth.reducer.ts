@@ -11,12 +11,20 @@ export enum AuthActionType {
   LOGOUT = '[Commons] Logout'
 }
 
-export function authReducer(state: AuthResponse = null, action: AuthAction) {
+const initialState: AuthResponse = {
+  isUserAuthenticated: false,
+  errorMesages: [],
+  user_fullname: '',
+  user_role: '',
+  username: ''
+};
+
+export function authReducer(state: AuthResponse = initialState, action: AuthAction) {
   switch (action.type) {
     case AuthActionType.LOGIN:
       return action.payload;
     case AuthActionType.LOGOUT:
-      return null;
+      return initialState;
     default:
       return state;
   }
