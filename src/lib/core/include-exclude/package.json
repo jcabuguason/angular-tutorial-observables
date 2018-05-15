@@ -1,9 +1,0 @@
-{
-  "ngPackage": {
-    "lib": {
-      "externals": {
-        "@angular/material": "@angular/material"
-      }
-    }
-  }
-}
