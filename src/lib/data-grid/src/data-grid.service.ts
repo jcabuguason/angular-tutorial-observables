@@ -5,10 +5,9 @@ import { ColumnConfigurationContainer } from './column-configuration/column-conf
 
 import { DefaultColumnConfiguration } from './column-configuration/default-column-configuration.class';
 
-import { UserConfigService } from '../../user-config/src/user-config.service';
-import { ElementVisibility, MetaElementVisibility } from '../../user-config/src/user-config.model';
+import { UserConfigService } from 'msc-dms-commons-angular/core/metadata/user-config/user-config.service';
 
-import NodeLookups from './node.const';
+import { ElementVisibility, MetaElementVisibility } from 'msc-dms-commons-angular/core/metadata/user-config/user-config.model';
 
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 
@@ -32,7 +31,7 @@ export class DataGridService {
 
     constructor(
         public userConfigService: UserConfigService,
-        private allowBlankColumns: boolean,
+        public allowBlankColumns: boolean,
     ) {
         this.columnConfiguration = new DefaultColumnConfiguration();
         this.createBlankColumns = allowBlankColumns;
@@ -103,7 +102,7 @@ export class DataGridService {
     flattenDataElements(dataElements: DataElements[]) {
         const result = {};
         const configOrder = this.userConfigService.getElementOrder();
-        const createdDataElements = [];
+        const createdDataElements: DataElements[] = [];
 
         const buildColumn = (element) => {
             if (!element.elementID == null && !this.ignoreDataElement(element.elementID)) {
@@ -119,12 +118,12 @@ export class DataGridService {
             if (elements.length > 0) {
                 createdDataElements.push(...elements);
                 elements.forEach(e => buildColumn(e));
-            } else if (this.createBlankColumns) {
+            } else if (this.allowBlankColumns) {
                 buildColumn({ elementID: configElement });
             }
         });
 
-        const remainingElements = dataElements.filter(e => !createdDataElements.includes(e));
+        const remainingElements = dataElements.filter(e => createdDataElements.indexOf(e) === -1);
         remainingElements.forEach(e => {
             if (!e.elementID == null && !this.ignoreDataElement(e.elementID)) {
                 buildColumn(e);
