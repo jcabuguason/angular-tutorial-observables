@@ -112,8 +112,7 @@ export class UserConfigService {
 
         const localProfile = this.profiles
             .filter(profile => profile.elements
-                .filter(elem => elem.name === 'profile-name' && elem.value === configName)
-                .shift()
+                .find(elem => elem.name === 'profile-name' && elem.value === configName)
             )
             .shift();
 
@@ -175,7 +174,7 @@ export class UserConfigService {
 
             // Configuring sub-headers
             if (element.group === 'header' && element.name === 'show-sub-header') {
-                this.genericSubHeaderConfig = new SubHeaderConfig(Boolean(element.value === 'true'), element);
+                this.genericSubHeaderConfig = new SubHeaderConfig(element.value === 'true', element);
             }
             if (element.group === 'header' && element.name === 'element-sub-header') {
                 ElementSubHeaderConfig.updateConfig(this.elementSubHeaderConfigs, element);
@@ -265,21 +264,17 @@ export class UserConfigService {
 
     getSubHeaderConfig(elementID: string): SubHeaderConfig {
         return this.elementSubHeaderConfigs
-                .filter((config) => config.elementID === elementID)
-                .shift()
+                .find((config) => config.elementID === elementID)
             || this.genericSubHeaderConfig;
     }
 
 
     getFormattedNodeName(elementID: string, nodeIndex: number): string {
-        const nodeName = this.getNodeName(elementID, nodeIndex);
-
-        return (nodeName === '')
-            ? ''
-            : nodeName
-                .split('_')
-                .map((piece: string) => piece[0].toUpperCase() + piece.slice(1))
-                .join(' ');
+        return this.getNodeName(elementID, nodeIndex)
+            .split('_')
+            .filter(s => !!s)
+            .map((piece: string) => piece[0].toUpperCase() + piece.slice(1))
+            .join(' ');
     }
 
     getNodeName(elementID: string, nodeIndex: number): string {

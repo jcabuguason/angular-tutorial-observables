@@ -117,10 +117,6 @@ export class NodeIndexMap extends ElementName {
             ? currentConfig.update(element)
             : configs.push(new NodeIndexMap(element));
     }
-
-    update(element: MDInstanceElement) {
-        super.update(element);
-    }
 }
 
 // Container to handle generic node naming
@@ -171,10 +167,6 @@ export class NodeValueMap extends ElementName {
         (!!currentConfig)
             ? currentConfig.update(element)
             : configs.push(new NodeValueMap(element));
-    }
-
-    update(element: MDInstanceElement) {
-        super.update(element);
     }
 }
 

@@ -6,7 +6,8 @@ describe('MDInstanceDefinitionParser', () => {
   // missing expected fields for `elements: MDInstanceElement[];` like `languages`
   // Commenting out, this prevents test window from opening
   it('should return the correct value', () => {
-    expect(MDInstanceDefinitionParser.parse(INSTANCE_DEFINITION_PARSER_INPUT)).toEqual(INSTANCE_DEFINITION_PARSER_OUTPUT);
+    fail('Issues with index between int value from MR and string value in angular');
+    // expect(MDInstanceDefinitionParser.parse(INSTANCE_DEFINITION_PARSER_INPUT)).toEqual(INSTANCE_DEFINITION_PARSER_OUTPUT);
   });
 
 });
