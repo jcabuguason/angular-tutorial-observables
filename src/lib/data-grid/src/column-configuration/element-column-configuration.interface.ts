@@ -2,7 +2,7 @@ import { DataGridService } from '../data-grid.service';
 
 export interface ElementColumnConfiguration {
   // True iff elements not in the user config should not be able to be toggled on
-  ignoreHideableColumns;
+  allowBlankDataColumns;
 
   // Optional function for changing header menu items
   getMenuItems?: (params: any)  => any;

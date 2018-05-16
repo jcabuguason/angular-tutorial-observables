@@ -5,16 +5,16 @@ import { ColumnConfigurationContainer } from './column-configuration/column-conf
 
 import { DefaultColumnConfiguration } from './column-configuration/default-column-configuration.class';
 
-import NodeLookups from './node.const';
+import {
+    UserConfigService,
+    ElementVisibility,
+    MetaElementVisibility
+} from 'msc-dms-commons-angular/core/metadata/';
 
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 
 @Injectable()
 export class DataGridService {
-
-    readonly elementNodeStartIndex: number = 2;
-    readonly elementNodeDepth: number = 3;
-    readonly headerNodeDepth: number = 6 - this.elementNodeDepth;
 
     public columnsGenerated: string[] = [];
     public rowData: object[] = [];
@@ -25,9 +25,8 @@ export class DataGridService {
 
     private columnConfiguration: ElementColumnConfiguration;
     private identityHeader;
-    private userDisplayColumns: string[] = [];
 
-    constructor() {
+    constructor(public userConfigService: UserConfigService) {
         this.columnConfiguration = new DefaultColumnConfiguration();
         this.resetHeader();
     }
@@ -39,10 +38,6 @@ export class DataGridService {
     setColumnConfiguration(columnConfig: ElementColumnConfiguration) {
         this.columnConfiguration = columnConfig;
         this.resetHeader();
-    }
-
-    setUserDisplayColumns(userDC: string[]) {
-        this.userDisplayColumns = userDC;
     }
 
     addRowData(obs: object) {
@@ -89,26 +84,60 @@ export class DataGridService {
 
     flattenMetadataElements(mdElements: MetadataElements[]) {
         const result = {};
-        for (const element of mdElements) {
-            if (element.name === 'stn_nam') {
-               result['station'] = element.value;
-            } else if (element.name !== undefined) {
+        const configOrder = this.userConfigService.getElementOrder();
+        const createdMetaElements: MetadataElements[] = [];
+
+        const buildColumn = (element) => {
+            if (element.name != null && !this.ignoreMetaElement(element)) {
                 result[element.name] = element.value;
-                this.buildMetadataColumn(element.name);
+                this.buildMetadataColumn(element, element.name);
             }
-        }
+        };
+
+        configOrder.forEach(configElement => {
+            mdElements.filter(e => e.elementID === configElement)
+                .forEach(e => {
+                    buildColumn(e);
+                    createdMetaElements.push(e);
+                });
+        });
+
+        // remaining elements
+        mdElements.filter(e => createdMetaElements.indexOf(e) === -1)
+            .forEach(buildColumn);
+
         return result;
     }
 
     flattenDataElements(dataElements: DataElements[]) {
         const result = {};
-        for (const element of dataElements) {
-            if (element.elementID == null || this.ignoreDataElement(element)) { continue; }
-            const headerID = ColumnConfigurationContainer.findHeaderID(element);
-            this.buildElementColumn(element, headerID);
-            const elementData = this.columnConfiguration.createElementData(element, headerID);
-            Object.keys(elementData).forEach(key => result[key] = elementData[key]);
-        }
+        const configOrder = this.userConfigService.getElementOrder();
+        const createdDataElements: DataElements[] = [];
+
+        const buildColumn = (element) => {
+            if (!this.ignoreDataElement(element)) {
+                const headerID = ColumnConfigurationContainer.findHeaderID(element);
+                this.buildElementColumn(element, headerID);
+                const elementData = this.columnConfiguration.createElementData(element, headerID);
+                Object.keys(elementData).forEach(key => result[key] = elementData[key]);
+            }
+        };
+
+        configOrder.forEach(configElement => {
+            const elements = dataElements.filter(e => e.elementID === configElement);
+            if (elements.length > 0) {
+                elements.forEach(e => {
+                    buildColumn(e);
+                    createdDataElements.push(e);
+                });
+            } else if (this.columnConfiguration.allowBlankDataColumns) {
+                buildColumn({ elementID: configElement });
+            }
+        });
+
+        dataElements.filter(e => createdDataElements.indexOf(e) === -1)
+            .forEach(buildColumn);
+
         return result;
     }
 
@@ -124,12 +153,6 @@ export class DataGridService {
         this.identityHeader = this.columnConfiguration.getIdentityHeaders();
         this.columnDefs = [];
         this.columnDefs.push(this.identityHeader);
-    }
-
-    // Formats header name
-    private formatHeaderName(headerName: string): string {
-        const format = (piece: string) => piece.charAt(0).toUpperCase() + piece.slice(1);
-        return headerName.split('_').map(format).join(' ');
     }
 
     // Get the child node, or create it if it doesn't exist
@@ -154,75 +177,30 @@ export class DataGridService {
 
     }
 
-    // Gets the specific node headers
-    private getNodeHeader(nodeNumber: number, nodeHeader: string): string {
-        if (nodeNumber === 2) {
-            return NodeLookups.node2[nodeHeader];
-        } else if (nodeNumber === 3) {
-            return NodeLookups.node3[nodeHeader];
-        } else if (nodeNumber === 4) {
-            return NodeLookups.node4[nodeHeader];
-        } else if (nodeNumber === 5) {
-            return NodeLookups.node5[nodeHeader];
-        } else if (nodeNumber === 6) {
-            return NodeLookups.node6[nodeHeader];
-        } else if (nodeNumber === 7) {
-            return NodeLookups.node7[nodeHeader];
-        }
-    }
-
-    private createSubHeader(headerDepth: number, nodes: string[]) {
-        let headerNode = ' (';
-
-        for (let j = headerDepth; j < (headerDepth + this.headerNodeDepth); j++) {
-            const node = this.getNodeHeader((j + 1), nodes[j]);
-
-            if (node === undefined) {
-                break;
-            }
-
-            if (j !== headerDepth) {
-                headerNode += ',';
-            }
-
-            headerNode += node;
-
-        }
-
-        headerNode += ')';
-
-        if (headerNode !== ' ()') {
-            return headerNode;
-        } else {
-            return '';
-        }
-    }
-
-    private generateHeaderString(nodes: string[], index: number) {
-      const firstDraft = this.getNodeHeader((index + 1), nodes[index]);
-      return (firstDraft === undefined)
-        ? firstDraft
-        : this.formatHeaderName(firstDraft);
+    private generateHeaderString(elementID: string, index: number) {
+      return this.userConfigService.getFormattedNodeName(elementID, index);
     }
 
     private buildElementColumn(element: DataElements, headerID: string) {
       if (this.columnsGenerated.indexOf(headerID) !== -1) {
         return;
       }
+
+      const elementID = element.elementID;
       const nodes = element.elementID.split('.');
       let currentNodes: any[] = this.columnDefs;
       let workingNode;
-      const headerDepth = this.elementNodeStartIndex + this.elementNodeDepth - 1;
+      const nestingDepth = this.userConfigService.getNestingDepth();
       // find workingNode to add to
-      for (let i = (this.elementNodeStartIndex - 1); i < headerDepth; i++) {
-          const headerName = this.generateHeaderString(nodes, i);
+      for (let i = 2; i <= nestingDepth; i++) {
+          const headerName = this.generateHeaderString(elementID, i);
 
           // End processing if no header field is found
           if (headerName === undefined) {
               break;
           }
 
-          workingNode = this.getChildNode(currentNodes, headerName, nodes[i], element.elementID);
+          workingNode = this.getChildNode(currentNodes, headerName, nodes[i], elementID);
 
           // Build child node array
           if (workingNode.children === undefined) {
@@ -235,10 +213,10 @@ export class DataGridService {
 
       if (workingNode.elementID === undefined) {
 
-        workingNode.elementID = element.elementID;
+        workingNode.elementID = elementID;
 
         if (!workingNode.children.length) {
-            workingNode.headerName += this.createSubHeader(headerDepth, nodes);
+            workingNode.headerName += this.userConfigService.getFormattedSubHeader(elementID);
         }
       }
 
@@ -275,35 +253,33 @@ export class DataGridService {
           columnToAdd = {
             'headerName': 'Default',
             'children': [],
-            'elementID': element.elementID
+            'elementID': elementID
           };
           workingNode.elementID = undefined;
           workingNode.children.unshift(columnToAdd);
         }
       }
 
-      // Checking if this element exists in user element list
-      if ((this.userDisplayColumns != null ) &&
-          (this.userDisplayColumns.length ) &&
-          (this.userDisplayColumns.indexOf(element.elementID) < 0)) {
-        columnToAdd.hide = true;
+      if (this.hideDataElement(elementID)) {
+          columnToAdd.hide = true;
       }
 
       this.columnConfiguration.createElementHeader(columnToAdd, headerID);
       this.columnsGenerated.push(headerID);
     }
 
-    private buildMetadataColumn(headerID: string) {
+    private buildMetadataColumn(element, headerID) {
       if (this.columnsGenerated.indexOf(headerID) !== -1) {
         return;
       }
 
       const header = {
-        'headerName': this.formatHeaderName(headerID),
+        'headerName': this.userConfigService.getByElementName(element.elementID),
         'field': headerID,
         'width': 80,
         'columnGroupShow': 'open',
-        'type': 'identity'
+        'type': 'identity',
+        'pinned': this.pinMetaElement(element.elementID),
       };
 
       if (this.identityHeader.children === undefined) { this.identityHeader.children = []; }
@@ -312,9 +288,24 @@ export class DataGridService {
       this.columnsGenerated.push(headerID);
     }
 
+    private ignoreMetaElement(element: MetadataElements): boolean {
+        return element.elementID != null
+            ? this.userConfigService.getMetaElementVisibility(element.elementID) === MetaElementVisibility.NO_LOAD
+            : false;
+    }
+
     private ignoreDataElement(element: DataElements): boolean {
-        return this.columnConfiguration.ignoreHideableColumns
-            && this.userDisplayColumns.indexOf(element.elementID) < 0;
+        return element.elementID != null
+            ? this.userConfigService.getElementVisibility(element.elementID) === ElementVisibility.NO_LOAD
+            : false;
+    }
+
+    private pinMetaElement(elementID: string): boolean {
+        return this.userConfigService.getMetaElementVisibility(elementID) === MetaElementVisibility.PINNED;
+    }
+
+    private hideDataElement(elementID: string): boolean {
+        return this.userConfigService.getElementVisibility(elementID) === ElementVisibility.HIDDEN;
     }
 
 }
@@ -383,6 +374,7 @@ export interface MetadataElements {
     name: string;
     value: string;
     unit: string;
+    elementID: string;
 }
 export interface RawMessage {
     header: string;

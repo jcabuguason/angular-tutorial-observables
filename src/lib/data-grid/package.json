@@ -2,7 +2,8 @@
   "ngPackage": {
     "lib": {
       "externals": {
-        "date-fns": "date-fns"
+        "date-fns": "date-fns",
+        "msc-dms-commons-angular/core/metadata": "msc-dms-commons-angular/core/metadata"
       }
     }
   },
