@@ -716,8 +716,6 @@ export default class NodeLookups {
   };
 
     static node6 = {
-        '#Tax.': 'Code XML',
-        '#0': '0 ',
         '1': '1 min',
         '2': '2 min',
         '3': '5 min',
@@ -744,8 +742,6 @@ export default class NodeLookups {
   };
 
   static node7 = {
-      '#Tax.': 'Code XML',
-      '#0': '0 ',
       '1': '2 m',
       '2': '3.5 m',
       '3': '4.5 m',

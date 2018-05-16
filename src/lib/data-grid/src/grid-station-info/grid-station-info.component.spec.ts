@@ -5,7 +5,6 @@ import { GridStationInfoComponent } from './grid-station-info.component';
 describe('GridStationInfoComponent', () => {
   let component: GridStationInfoComponent;
   let fixture: ComponentFixture<GridStationInfoComponent>;
-
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ GridStationInfoComponent ]
