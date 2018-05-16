@@ -23,16 +23,16 @@ describe('DataGridService', () => {
             return [blankElement];
         }
         getNestingDepth() {
-            return 2;
+            return 3;
         }
         getFormattedNodeName(elementID, index) {
-            return 'formatted node ' + elementID;
+            return 'node ' + elementID;
         }
         getFormattedSubHeader(elementID) {
-            return 'formatted sub header ' + elementID;
+            return ',sub header ' + elementID;
         }
-        getSubHeader(elementID) {
-            return 'sub header ' + elementID;
+        getByElementName(element) {
+            return '';
         }
         getMetaElementVisibility(elementID) { }
         getElementVisibility(elementID) {
@@ -72,7 +72,7 @@ describe('DataGridService', () => {
 
         service.addRowData(hits[0]);
         expect(service.rowData.length).toBe(1);
-        expect(service.columnDefs.length).toBe(12);
+        expect(service.columnDefs.length).toBe(37);
 
         const row = service.rowData[0];
         expect(row['clim_id']).toBe('1021270');
@@ -83,7 +83,9 @@ describe('DataGridService', () => {
         expect(service.columnDefs
             .filter(col => col.headerName !== 'Identity')
             .map(col => Number(col.nodeNumber))
-        ).toEqual([11, 19, 12, 5, 20, 17, 23, 6, 24, 13, 2]);
+        ).toEqual([ 171, 271, 206, 207, 208, 209, 212, 213, 214, 211, 265,
+            267, 66, 287, 252, 304, 176, 179, 180, 302, 305, 306, 307, 72,
+            303, 320, 314, 340, 339, 338, 326, 323, 215, 216, 217, 19 ]);
     });
 
     it('should add a list of obs', () => {
@@ -124,24 +126,19 @@ describe('DataGridService', () => {
         expect(getKey(someDisplayCols[0])).toBe('MSNG');
         expect(getKey(someDisplayCols[1])).toBe('100900.0');
         expect(getKey(noLoadElement)).toBeUndefined();
-        expect(service.columnDefs.length).toBe(12);
+        expect(service.columnDefs.length).toBe(37);
     });
 
     it('should hide non-displayed rows if configured', () => {
         service.addRowData(hits[0]);
-
-        const row = service.rowData[0];
-        const getKey = (eti: string) => row['e_' + eti.replace(/\./g, '_')];
-        expect(getKey('1.12.212.0.0.0.0')).toBe('100900.0');
-        expect(getKey('1.12.214.0.0.0.0')).toBe('0');
 
         // only for one-layer of children headers
         const isHidden = (headerName, eti) => service.columnDefs
             .find(n => n.headerName === headerName).children
             .find(n => n.elementID === eti).hide;
 
-        expect(isHidden('formatted node 1.13.215.0.0.0.0', '1.13.215.0.0.0.0')).toBeTruthy();
-        expect(service.columnDefs.length).toBe(12);
+        expect(isHidden('node 1.13.215.0.0.0.0', '1.13.215.0.0.0.0')).toBeTruthy();
+        expect(service.columnDefs.length).toBe(37);
     });
 
     it('allow blank columns', () => {
@@ -151,7 +148,7 @@ describe('DataGridService', () => {
         const row = service.rowData[0];
         const getKey = (eti: string) => row['e_' + eti.replace(/\./g, '_')];
         expect(getKey(blankElement)).toBeUndefined();
-        expect(service.columnDefs.length).toBe(13);
+        expect(service.columnDefs.length).toBe(38);
     });
 
 });

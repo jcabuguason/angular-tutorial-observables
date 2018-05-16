@@ -178,10 +178,7 @@ export class DataGridService {
     }
 
     private generateHeaderString(elementID: string, index: number) {
-      const firstDraft = this.userConfigService.getFormattedNodeName(elementID, index + 1);
-      return (firstDraft !== undefined)
-        ? firstDraft
-        : this.userConfigService.getFormattedSubHeader(elementID);
+      return this.userConfigService.getFormattedNodeName(elementID, index);
     }
 
     private buildElementColumn(element: DataElements, headerID: string) {
@@ -195,7 +192,7 @@ export class DataGridService {
       let workingNode;
       const nestingDepth = this.userConfigService.getNestingDepth();
       // find workingNode to add to
-      for (let i = 1; i <= nestingDepth; i++) {
+      for (let i = 2; i <= nestingDepth; i++) {
           const headerName = this.generateHeaderString(elementID, i);
 
           // End processing if no header field is found
@@ -277,7 +274,7 @@ export class DataGridService {
       }
 
       const header = {
-        'headerName': this.userConfigService.getSubHeader(element.elementID),
+        'headerName': this.userConfigService.getByElementName(element.elementID),
         'field': headerID,
         'width': 80,
         'columnGroupShow': 'open',
