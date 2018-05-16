@@ -110,11 +110,10 @@ export class UserConfigService {
 
     private loadProfile(configName: string) {
 
+        const matchesConfig = (elem) => (elem.name === 'profile-name' && elem.value === configName);
+
         const localProfile = this.profiles
-            .filter(profile => profile.elements
-                .find(elem => elem.name === 'profile-name' && elem.value === configName)
-            )
-            .shift();
+            .find(profile => profile.elements.some(matchesConfig));
 
         if (!!localProfile) {
             this.loadInstance(localProfile);
