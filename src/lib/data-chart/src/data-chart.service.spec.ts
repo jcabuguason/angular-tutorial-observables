@@ -4,6 +4,13 @@ import { Observable } from 'rxjs/Observable';
 import { Chart } from 'angular-highcharts';
 
 import { DataChartService } from './data-chart.service';
+import { UserConfigService } from 'msc-dms-commons-angular/core/metadata';
+
+class MockConfigService {
+    getFullFormattedHeader(elementID: string) {
+        return 'mock ' + elementID;
+    }
+}
 
 describe('DataChartService', () => {
     let service: DataChartService;
@@ -20,6 +27,7 @@ describe('DataChartService', () => {
         TestBed.configureTestingModule({
             providers: [
                 DataChartService,
+                { provide: UserConfigService, useClass: MockConfigService }
             ],
         });
 
@@ -66,7 +74,7 @@ describe('DataChartService', () => {
         expect(charts.length).toBe(1);
         const chart = charts[0];
         expect(chart.options.chart.type).toBe('spline');
-        expect(chart.options.title.text).toBe('1.5.66.8.60.7.0');
+        expect(chart.options.title.text).toBe('mock 1.5.66.8.60.7.0');
         expect(chart.options.series.length).toBe(2);
         expect(chart.options.series[0].data.length).toBe(4);
         expect(chart.options.series[1].data.length).toBe(4);
@@ -89,7 +97,7 @@ describe('DataChartService', () => {
         );
         expect(charts.length).toBe(2);
         const avgAirChart = charts[1];
-        expect(avgAirChart.options.title.text).toBe('1.19.265.2.1.1.0');
+        expect(avgAirChart.options.title.text).toBe('mock 1.19.265.2.1.1.0');
         expect(avgAirChart.options.series.length).toBe(2);
         const wfgStnData = avgAirChart.options.series.find(series => series.name === 'SARTINE ISLAND (AUT)');
         const dataPoint = (x, y, qa) => ({x: Date.parse(x), y: y, qa: qa, unit: '°C'});
