@@ -46,6 +46,7 @@ export class DataGridService {
 
     addAllData(obs: object[]) {
         this.rowData.push(...obs.map((data) => this.convertToRowObject(<DMSObs> data)));
+        this.sortColumns();
         this.reloadGrid();
     }
 
@@ -84,8 +85,6 @@ export class DataGridService {
 
     flattenMetadataElements(mdElements: MetadataElements[]) {
         const result = {};
-        const configOrder = this.userConfigService.getElementOrder();
-        const createdMetaElements: MetadataElements[] = [];
 
         const buildColumn = (element) => {
             if (element.name != null && !this.ignoreMetaElement(element)) {
@@ -94,25 +93,14 @@ export class DataGridService {
             }
         };
 
-        configOrder.forEach(configElement => {
-            mdElements.filter(e => e.elementID === configElement)
-                .forEach(e => {
-                    buildColumn(e);
-                    createdMetaElements.push(e);
-                });
-        });
-
-        // remaining elements
-        mdElements.filter(e => createdMetaElements.indexOf(e) === -1)
-            .forEach(buildColumn);
+        mdElements.forEach(buildColumn);
 
         return result;
     }
 
     flattenDataElements(dataElements: DataElements[]) {
         const result = {};
-        const configOrder = this.userConfigService.getElementOrder();
-        const createdDataElements: DataElements[] = [];
+        const configElements = this.userConfigService.getElementOrder();
 
         const buildColumn = (element) => {
             if (!this.ignoreDataElement(element)) {
@@ -123,20 +111,13 @@ export class DataGridService {
             }
         };
 
-        configOrder.forEach(configElement => {
-            const elements = dataElements.filter(e => e.elementID === configElement);
-            if (elements.length > 0) {
-                elements.forEach(e => {
-                    buildColumn(e);
-                    createdDataElements.push(e);
-                });
-            } else if (this.columnConfiguration.allowBlankDataColumns) {
-                buildColumn({ elementID: configElement });
-            }
-        });
+        dataElements.forEach(buildColumn);
 
-        dataElements.filter(e => createdDataElements.indexOf(e) === -1)
-            .forEach(buildColumn);
+        if (this.columnConfiguration.allowBlankDataColumns) {
+            const inDataElements = (configElement) => dataElements.some(dataElem => dataElem.elementID === configElement);
+            configElements.filter(configElem => !inDataElements(configElem))
+                .forEach(e => buildColumn({elementID: e}));
+        }
 
         return result;
     }
@@ -147,6 +128,41 @@ export class DataGridService {
             ...this.flattenMetadataElements(obs.metadataElements),
             ...this.flattenDataElements(obs.dataElements),
         };
+    }
+
+    sortColumns() {
+        const configOrder = this.userConfigService.getElementOrder();
+
+        const identity = this.columnDefs.find(col => col.headerName === 'Identity');
+        const identityChildren = identity.children;
+
+        const inColConfig = (field) => this.columnConfiguration.getIdentityHeaders().children
+            .some(col => col.field === field);
+
+        const pinned = identityChildren.filter(col => inColConfig(col.field));
+
+        const dataCols = [];
+        const identityCols = pinned;
+
+        configOrder.forEach(e => {
+            const inDef = this.columnDefs.filter(col => col.elementID === e);
+            const inIdentityDef = identityChildren.filter(col => col.elementID === e && !pinned.some(pin => pin === col));
+
+            if (inDef.length > 0) {
+                dataCols.push(...inDef);
+            } else if (inIdentityDef.length > 0) {
+                identityCols.push(...inIdentityDef);
+            }
+        });
+
+        const remainingCols = this.columnDefs.filter(col => col.headerName !== 'Identity' && configOrder.indexOf(col.elementID) === -1);
+        const remainingIdentityCols = identityChildren.filter(col => configOrder.indexOf(col.elementID) === -1
+            && pinned.indexOf(col) === -1);
+
+        dataCols.push(...remainingCols);
+        identity.children = identityCols.concat(remainingIdentityCols);
+
+        this.columnDefs = [identity, ...dataCols];
     }
 
     private resetHeader() {
@@ -280,6 +296,7 @@ export class DataGridService {
         'columnGroupShow': 'open',
         'type': 'identity',
         'pinned': this.pinMetaElement(element.elementID),
+        'elementID': element.elementID,
       };
 
       if (this.identityHeader.children === undefined) { this.identityHeader.children = []; }
