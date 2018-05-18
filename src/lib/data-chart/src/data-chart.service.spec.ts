@@ -99,7 +99,7 @@ describe('DataChartService', () => {
         const avgAirChart = charts[1];
         expect(avgAirChart.options.title.text).toBe('mock 1.19.265.2.1.1.0');
         expect(avgAirChart.options.series.length).toBe(2);
-        const wfgStnData = avgAirChart.options.series.find(series => series.name === 'SARTINE ISLAND (AUT)');
+        const wfgStnData = avgAirChart.options.series.find(series => series.name === 'SARTINE ISLAND (AUT) - 1037090');
         const dataPoint = (x, y, qa) => ({x: Date.parse(x), y: y, qa: qa, unit: '°C'});
         expect(wfgStnData).toBeDefined();
         expect(wfgStnData.data).toEqual([

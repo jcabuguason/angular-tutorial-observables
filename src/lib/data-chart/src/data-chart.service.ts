@@ -32,8 +32,8 @@ export class DataChartService {
         return res;
     }
 
-    chartLabel(stnName: string, info: ElementInfo): string {
-        let result = stnName;
+    chartLabel(label: string, info: ElementInfo): string {
+        let result = label;
         if (info.hasOwnProperty('indexValue')) {
             result += (info.indexValue === 0) ? ' (Official)' : ` (Layer ${info.indexValue})`;
         }
@@ -54,6 +54,9 @@ export class DataChartService {
                     text: 'Date'
                 }
             },
+            credits: {
+                enabled: false
+            },
             series: element.series,
             tooltip: {
                 pointFormat:
@@ -73,9 +76,10 @@ export class DataChartService {
     private createElementSeries(elementFields: string[], observations): ElementSeries[] {
         const elemSeries: ElementSeries[] = [];
         for (const obs of observations.filter(obsUtil.latestFromArray).sort(obsUtil.compareObsTimeFromObs)) {
-
-            const stnNameObj = obs.metadataElements.find(elem => elem.name === 'stn_nam');
-            const stnName = (!!stnNameObj) ? stnNameObj.value : null;
+            const getObjValue = (name) => {
+                const obj = obs.metadataElements.find(elem => elem.name === name);
+                return (obj) ? obj.value : null;
+            };
 
             elementFields.map(current => this.decryptField(current)).forEach(field => {
                 const hasLayer = field.hasOwnProperty('indexValue');
@@ -85,8 +89,13 @@ export class DataChartService {
                 if (!!foundElem) {
 
                     const elementChart = this.findElementSeries(elemSeries, field.elementID);
-                    this.findChartSeries(elementChart, this.chartLabel(stnName, field))
-                        .addPoint(obs.obsDateTime, foundElem);
+                    this.findChartSeries(
+                        elementChart,
+                        this.chartLabel(
+                            `${getObjValue('stn_nam')} - ${getObjValue('clim_id')}`,
+                            field
+                        )
+                    ).addPoint(obs.obsDateTime, foundElem);
                 }
             });
         }
