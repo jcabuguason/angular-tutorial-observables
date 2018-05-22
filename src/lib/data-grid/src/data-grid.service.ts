@@ -8,13 +8,20 @@ import { DefaultColumnConfiguration } from './column-configuration/default-colum
 import {
     UserConfigService,
     ElementVisibility,
-    MetaElementVisibility
+    MetaElementVisibility,
 } from 'msc-dms-commons-angular/core/metadata/';
+
+// probably need to fix this import... leaving it like this for now
+import NodeLookups from '../../core/metadata/src/user-config/node.const';
+// import NodeLookups from './node.const';
 
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 
 @Injectable()
 export class DataGridService {
+    readonly elementNodeStartIndex: number = 2;
+    readonly elementNodeDepth: number = 3;
+    readonly headerNodeDepth: number = 6 - this.elementNodeDepth;
 
     public columnsGenerated: string[] = [];
     public rowData: object[] = [];
@@ -25,6 +32,9 @@ export class DataGridService {
 
     private columnConfiguration: ElementColumnConfiguration;
     private identityHeader;
+
+    // set to true/false in pegasus after userConfigService.loadConfig(config)
+    public ignoreUserConfig = false;
 
     constructor(public userConfigService: UserConfigService) {
         this.columnConfiguration = new DefaultColumnConfiguration();
@@ -113,6 +123,7 @@ export class DataGridService {
 
         dataElements.forEach(buildColumn);
 
+        // added at the same time with user config
         if (this.columnConfiguration.allowBlankDataColumns) {
             const inDataElements = (configElement) => dataElements.some(dataElem => dataElem.elementID === configElement);
             configElements.filter(configElem => !inDataElements(configElem))
@@ -165,6 +176,12 @@ export class DataGridService {
         this.columnDefs = [identity, ...dataCols];
     }
 
+    // Formats header name, used without providing user config
+    private formatHeaderName(headerName: string): string {
+        const format = (piece: string) => piece.charAt(0).toUpperCase() + piece.slice(1);
+        return headerName.split('_').map(format).join(' ');
+    }
+
     private resetHeader() {
         this.identityHeader = this.columnConfiguration.getIdentityHeaders();
         this.columnDefs = [];
@@ -193,6 +210,47 @@ export class DataGridService {
 
     }
 
+    // used without providing user config
+    // Gets the specific node headers
+    private getNodeHeader(nodeNumber: number, nodeHeader: string): string {
+        if (nodeNumber === 2) {
+            return NodeLookups.node2[nodeHeader];
+        } else if (nodeNumber === 3) {
+            return NodeLookups.node3[nodeHeader];
+        } else if (nodeNumber === 4) {
+            return NodeLookups.node4[nodeHeader];
+        } else if (nodeNumber === 5) {
+            return NodeLookups.node5[nodeHeader];
+        } else if (nodeNumber === 6) {
+            return NodeLookups.node6[nodeHeader];
+        } else if (nodeNumber === 7) {
+            return NodeLookups.node7[nodeHeader];
+        }
+    }
+
+    // used without providing user config
+    private createSubHeader(headerDepth: number, nodes: string[]) {
+        let headerNode = ' (';
+
+        for (let j = headerDepth; j < (headerDepth + this.headerNodeDepth); j++) {
+            const node = this.getNodeHeader((j + 1), nodes[j]);
+            if (node === undefined) {
+                break;
+            }
+            if (j !== headerDepth) {
+                headerNode += ',';
+            }
+            headerNode += node;
+        }
+        headerNode += ')';
+
+        if (headerNode !== ' ()') {
+            return headerNode;
+        } else {
+            return '';
+        }
+    }
+
     private generateHeaderString(elementID: string, index: number) {
       return this.userConfigService.getFormattedNodeName(elementID, index);
     }
@@ -206,9 +264,17 @@ export class DataGridService {
       const nodes = element.elementID.split('.');
       let currentNodes: any[] = this.columnDefs;
       let workingNode;
-      const nestingDepth = this.userConfigService.getNestingDepth();
+
+      const startIndex = this.ignoreUserConfig
+        ? this.elementNodeStartIndex - 1
+        : 2;
+
+      const nestingDepth = this.ignoreUserConfig
+        ? this.elementNodeStartIndex + this.elementNodeDepth - 1 - 1 // minus 2 because old one was i < nestingDepth
+        : this.userConfigService.getNestingDepth();
+
       // find workingNode to add to
-      for (let i = 2; i <= nestingDepth; i++) {
+      for (let i = startIndex; i <= nestingDepth; i++) {
           const headerName = this.generateHeaderString(elementID, i);
 
           // End processing if no header field is found
@@ -232,7 +298,9 @@ export class DataGridService {
         workingNode.elementID = elementID;
 
         if (!workingNode.children.length) {
-            workingNode.headerName += this.userConfigService.getFormattedSubHeader(elementID);
+            workingNode.headerName += this.ignoreUserConfig
+            ? this.createSubHeader(nestingDepth, nodes)
+            : this.userConfigService.getFormattedSubHeader(elementID);
         }
       }
 
@@ -289,6 +357,7 @@ export class DataGridService {
         return;
       }
 
+      // metadata name using userConfigService may be slightly different than 2.5.6
       const header = {
         'headerName': this.userConfigService.getByElementName(element.elementID),
         'field': headerID,
@@ -306,22 +375,24 @@ export class DataGridService {
     }
 
     private ignoreMetaElement(element: MetadataElements): boolean {
-        return element.elementID != null
+        return element.elementID != null && !this.ignoreUserConfig
             ? this.userConfigService.getMetaElementVisibility(element.elementID) === MetaElementVisibility.NO_LOAD
             : false;
     }
 
     private ignoreDataElement(element: DataElements): boolean {
-        return element.elementID != null
+        return element.elementID != null && !this.ignoreUserConfig
             ? this.userConfigService.getElementVisibility(element.elementID) === ElementVisibility.NO_LOAD
             : false;
     }
 
     private pinMetaElement(elementID: string): boolean {
+        // should return default even if use empty user config (dont need to check ignoreUserConfig)
         return this.userConfigService.getMetaElementVisibility(elementID) === MetaElementVisibility.PINNED;
     }
 
     private hideDataElement(elementID: string): boolean {
+        // should return default even if use empty user config (dont need to check ignoreUserConfig)
         return this.userConfigService.getElementVisibility(elementID) === ElementVisibility.HIDDEN;
     }
 
