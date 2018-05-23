@@ -13,7 +13,7 @@ import {
     Lang,
 } from './user-config.model';
 
-import NodeLookups from './node.const';
+import { NodeLookups } from './node.const';
 import { IncludeExclude } from '../include-exclude/include-exclude.class';
 import { MDInstanceDefinition, MDInstanceElement } from '../model/';
 

@@ -9,16 +9,14 @@ import {
     UserConfigService,
     ElementVisibility,
     MetaElementVisibility,
+    NodeLookups
 } from 'msc-dms-commons-angular/core/metadata/';
-
-// probably need to fix this import... leaving it like this for now
-import NodeLookups from '../../core/metadata/src/user-config/node.const';
-// import NodeLookups from './node.const';
 
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 
 @Injectable()
 export class DataGridService {
+
     readonly elementNodeStartIndex: number = 2;
     readonly elementNodeDepth: number = 3;
     readonly headerNodeDepth: number = 6 - this.elementNodeDepth;
@@ -95,6 +93,7 @@ export class DataGridService {
 
     flattenMetadataElements(mdElements: MetadataElements[]) {
         const result = {};
+        const configElements = this.userConfigService.getElementOrder();
 
         const buildColumn = (element) => {
             if (element.name != null && !this.ignoreMetaElement(element)) {
@@ -103,7 +102,15 @@ export class DataGridService {
             }
         };
 
-        mdElements.forEach(buildColumn);
+        mdElements.filter(e => e != null).forEach(buildColumn);
+
+        // added at the same time with user config
+        if (this.columnConfiguration.allowBlankDataColumns) {
+            const inMdElements = (configElement) => mdElements.some(mdElement => mdElement.elementID === configElement);
+
+            configElements.filter(e => this.isMetadatElement(e) && !inMdElements(e))
+                .forEach(buildColumn);
+        }
 
         return result;
     }
@@ -121,12 +128,13 @@ export class DataGridService {
             }
         };
 
-        dataElements.forEach(buildColumn);
+        dataElements.filter(e => e != null).forEach(buildColumn);
 
         // added at the same time with user config
         if (this.columnConfiguration.allowBlankDataColumns) {
             const inDataElements = (configElement) => dataElements.some(dataElem => dataElem.elementID === configElement);
-            configElements.filter(configElem => !inDataElements(configElem))
+
+            configElements.filter(configElem => !inDataElements(configElem) && !this.isMetadatElement(configElem))
                 .forEach(e => buildColumn({elementID: e}));
         }
 
@@ -176,6 +184,14 @@ export class DataGridService {
         this.columnDefs = [identity, ...dataCols];
     }
 
+    // checks element ID to determine if its a metadata element
+    private isMetadatElement(elementID: string) {
+        const identitifer = Object.keys(NodeLookups.node2)
+            .find(key => NodeLookups.node2[key] === 'identification');
+
+        return elementID.split('.')[1] === identitifer;
+    }
+
     // Formats header name, used without providing user config
     private formatHeaderName(headerName: string): string {
         const format = (piece: string) => piece.charAt(0).toUpperCase() + piece.slice(1);
@@ -190,7 +206,6 @@ export class DataGridService {
 
     // Get the child node, or create it if it doesn't exist
     private getChildNode(currentNodes: any[], headerName: string, nodeNumber: string, elementID: string): object {
-
         for (const currentNode of currentNodes) {
             if (currentNode.nodeNumber === nodeNumber) {
               if (currentNode.elementID === undefined || elementID === currentNode.elementID) {
@@ -207,7 +222,6 @@ export class DataGridService {
         currentNodes.push(newNode);
 
         return newNode;
-
     }
 
     // used without providing user config
@@ -251,8 +265,14 @@ export class DataGridService {
         }
     }
 
-    private generateHeaderString(elementID: string, index: number) {
-      return this.userConfigService.getFormattedNodeName(elementID, index);
+    private generateHeaderString(elementID: string, nodes: string[], index: number) {
+        if (this.ignoreUserConfig) {
+            const firstDraft = this.getNodeHeader((index + 1), nodes[index]);
+            return (firstDraft === undefined)
+                ? firstDraft
+                : this.formatHeaderName(firstDraft);
+        }
+       return this.userConfigService.getFormattedNodeName(elementID, index);
     }
 
     private buildElementColumn(element: DataElements, headerID: string) {
@@ -261,7 +281,7 @@ export class DataGridService {
       }
 
       const elementID = element.elementID;
-      const nodes = element.elementID.split('.');
+      const nodes = elementID.split('.');
       let currentNodes: any[] = this.columnDefs;
       let workingNode;
 
@@ -270,19 +290,20 @@ export class DataGridService {
         : 2;
 
       const nestingDepth = this.ignoreUserConfig
-        ? this.elementNodeStartIndex + this.elementNodeDepth - 1 - 1 // minus 2 because old one was i < nestingDepth
+        ? this.elementNodeStartIndex + this.elementNodeDepth - 2
         : this.userConfigService.getNestingDepth();
 
       // find workingNode to add to
       for (let i = startIndex; i <= nestingDepth; i++) {
-          const headerName = this.generateHeaderString(elementID, i);
+          const headerName = this.generateHeaderString(elementID, nodes, i);
+          const nodeIndex = this.ignoreUserConfig ? i : i - 1;
 
           // End processing if no header field is found
           if (headerName === undefined) {
               break;
           }
 
-          workingNode = this.getChildNode(currentNodes, headerName, nodes[i], elementID);
+          workingNode = this.getChildNode(currentNodes, headerName, nodes[nodeIndex], elementID);
 
           // Build child node array
           if (workingNode.children === undefined) {
@@ -333,7 +354,9 @@ export class DataGridService {
       } else {
         columnToAdd = workingNode;
         // Avoid overwritting layered/official columns
-        if (workingNode.children.length && workingNode.children[0].headerName !== 'Default') {
+        if (workingNode.children.length
+            && workingNode.children[0].headerName !== 'Default'
+            && workingNode.children[0].headerName !== 'Official') {
           columnToAdd = {
             'headerName': 'Default',
             'children': [],

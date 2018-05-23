@@ -1,4 +1,4 @@
-export default class NodeLookups {
+export class NodeLookups {
 
   static node2 = {
     '1': 'air_quality',
