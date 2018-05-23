@@ -8,13 +8,18 @@ import { DefaultColumnConfiguration } from './column-configuration/default-colum
 import {
     UserConfigService,
     ElementVisibility,
-    MetaElementVisibility
+    MetaElementVisibility,
+    NodeLookups
 } from 'msc-dms-commons-angular/core/metadata/';
 
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 
 @Injectable()
 export class DataGridService {
+
+    readonly elementNodeStartIndex: number = 2;
+    readonly elementNodeDepth: number = 3;
+    readonly headerNodeDepth: number = 6 - this.elementNodeDepth;
 
     public columnsGenerated: string[] = [];
     public rowData: object[] = [];
@@ -25,6 +30,9 @@ export class DataGridService {
 
     private columnConfiguration: ElementColumnConfiguration;
     private identityHeader;
+
+    // set to true/false in pegasus after userConfigService.loadConfig(config)
+    public ignoreUserConfig = false;
 
     constructor(public userConfigService: UserConfigService) {
         this.columnConfiguration = new DefaultColumnConfiguration();
@@ -46,6 +54,7 @@ export class DataGridService {
 
     addAllData(obs: object[]) {
         this.rowData.push(...obs.map((data) => this.convertToRowObject(<DMSObs> data)));
+        this.sortColumns();
         this.reloadGrid();
     }
 
@@ -84,8 +93,7 @@ export class DataGridService {
 
     flattenMetadataElements(mdElements: MetadataElements[]) {
         const result = {};
-        const configOrder = this.userConfigService.getElementOrder();
-        const createdMetaElements: MetadataElements[] = [];
+        const configElements = this.userConfigService.getElementOrder();
 
         const buildColumn = (element) => {
             if (element.name != null && !this.ignoreMetaElement(element)) {
@@ -94,25 +102,22 @@ export class DataGridService {
             }
         };
 
-        configOrder.forEach(configElement => {
-            mdElements.filter(e => e.elementID === configElement)
-                .forEach(e => {
-                    buildColumn(e);
-                    createdMetaElements.push(e);
-                });
-        });
+        mdElements.filter(e => e != null).forEach(buildColumn);
 
-        // remaining elements
-        mdElements.filter(e => createdMetaElements.indexOf(e) === -1)
-            .forEach(buildColumn);
+        // added at the same time with user config
+        if (this.columnConfiguration.allowBlankDataColumns) {
+            const inMdElements = (configElement) => mdElements.some(mdElement => mdElement.elementID === configElement);
+
+            configElements.filter(e => this.isMetadatElement(e) && !inMdElements(e))
+                .forEach(buildColumn);
+        }
 
         return result;
     }
 
     flattenDataElements(dataElements: DataElements[]) {
         const result = {};
-        const configOrder = this.userConfigService.getElementOrder();
-        const createdDataElements: DataElements[] = [];
+        const configElements = this.userConfigService.getElementOrder();
 
         const buildColumn = (element) => {
             if (!this.ignoreDataElement(element)) {
@@ -123,20 +128,15 @@ export class DataGridService {
             }
         };
 
-        configOrder.forEach(configElement => {
-            const elements = dataElements.filter(e => e.elementID === configElement);
-            if (elements.length > 0) {
-                elements.forEach(e => {
-                    buildColumn(e);
-                    createdDataElements.push(e);
-                });
-            } else if (this.columnConfiguration.allowBlankDataColumns) {
-                buildColumn({ elementID: configElement });
-            }
-        });
+        dataElements.filter(e => e != null).forEach(buildColumn);
 
-        dataElements.filter(e => createdDataElements.indexOf(e) === -1)
-            .forEach(buildColumn);
+        // added at the same time with user config
+        if (this.columnConfiguration.allowBlankDataColumns) {
+            const inDataElements = (configElement) => dataElements.some(dataElem => dataElem.elementID === configElement);
+
+            configElements.filter(configElem => !inDataElements(configElem) && !this.isMetadatElement(configElem))
+                .forEach(e => buildColumn({elementID: e}));
+        }
 
         return result;
     }
@@ -149,6 +149,55 @@ export class DataGridService {
         };
     }
 
+    sortColumns() {
+        const configOrder = this.userConfigService.getElementOrder();
+
+        const identity = this.columnDefs.find(col => col.headerName === 'Identity');
+        const identityChildren = identity.children;
+
+        const inColConfig = (field) => this.columnConfiguration.getIdentityHeaders().children
+            .some(col => col.field === field);
+
+        const pinned = identityChildren.filter(col => inColConfig(col.field));
+
+        const dataCols = [];
+        const identityCols = pinned;
+
+        configOrder.forEach(e => {
+            const inDef = this.columnDefs.filter(col => col.elementID === e);
+            const inIdentityDef = identityChildren.filter(col => col.elementID === e && !pinned.some(pin => pin === col));
+
+            if (inDef.length > 0) {
+                dataCols.push(...inDef);
+            } else if (inIdentityDef.length > 0) {
+                identityCols.push(...inIdentityDef);
+            }
+        });
+
+        const remainingCols = this.columnDefs.filter(col => col.headerName !== 'Identity' && configOrder.indexOf(col.elementID) === -1);
+        const remainingIdentityCols = identityChildren.filter(col => configOrder.indexOf(col.elementID) === -1
+            && pinned.indexOf(col) === -1);
+
+        dataCols.push(...remainingCols);
+        identity.children = identityCols.concat(remainingIdentityCols);
+
+        this.columnDefs = [identity, ...dataCols];
+    }
+
+    // checks element ID to determine if its a metadata element
+    private isMetadatElement(elementID: string) {
+        const identitifer = Object.keys(NodeLookups.node2)
+            .find(key => NodeLookups.node2[key] === 'identification');
+
+        return elementID.split('.')[1] === identitifer;
+    }
+
+    // Formats header name, used without providing user config
+    private formatHeaderName(headerName: string): string {
+        const format = (piece: string) => piece.charAt(0).toUpperCase() + piece.slice(1);
+        return headerName.split('_').map(format).join(' ');
+    }
+
     private resetHeader() {
         this.identityHeader = this.columnConfiguration.getIdentityHeaders();
         this.columnDefs = [];
@@ -157,7 +206,6 @@ export class DataGridService {
 
     // Get the child node, or create it if it doesn't exist
     private getChildNode(currentNodes: any[], headerName: string, nodeNumber: string, elementID: string): object {
-
         for (const currentNode of currentNodes) {
             if (currentNode.nodeNumber === nodeNumber) {
               if (currentNode.elementID === undefined || elementID === currentNode.elementID) {
@@ -174,11 +222,57 @@ export class DataGridService {
         currentNodes.push(newNode);
 
         return newNode;
-
     }
 
-    private generateHeaderString(elementID: string, index: number) {
-      return this.userConfigService.getFormattedNodeName(elementID, index);
+    // used without providing user config
+    // Gets the specific node headers
+    private getNodeHeader(nodeNumber: number, nodeHeader: string): string {
+        if (nodeNumber === 2) {
+            return NodeLookups.node2[nodeHeader];
+        } else if (nodeNumber === 3) {
+            return NodeLookups.node3[nodeHeader];
+        } else if (nodeNumber === 4) {
+            return NodeLookups.node4[nodeHeader];
+        } else if (nodeNumber === 5) {
+            return NodeLookups.node5[nodeHeader];
+        } else if (nodeNumber === 6) {
+            return NodeLookups.node6[nodeHeader];
+        } else if (nodeNumber === 7) {
+            return NodeLookups.node7[nodeHeader];
+        }
+    }
+
+    // used without providing user config
+    private createSubHeader(headerDepth: number, nodes: string[]) {
+        let headerNode = ' (';
+
+        for (let j = headerDepth; j < (headerDepth + this.headerNodeDepth); j++) {
+            const node = this.getNodeHeader((j + 1), nodes[j]);
+            if (node === undefined) {
+                break;
+            }
+            if (j !== headerDepth) {
+                headerNode += ',';
+            }
+            headerNode += node;
+        }
+        headerNode += ')';
+
+        if (headerNode !== ' ()') {
+            return headerNode;
+        } else {
+            return '';
+        }
+    }
+
+    private generateHeaderString(elementID: string, nodes: string[], index: number) {
+        if (this.ignoreUserConfig) {
+            const firstDraft = this.getNodeHeader((index + 1), nodes[index]);
+            return (firstDraft === undefined)
+                ? firstDraft
+                : this.formatHeaderName(firstDraft);
+        }
+       return this.userConfigService.getFormattedNodeName(elementID, index);
     }
 
     private buildElementColumn(element: DataElements, headerID: string) {
@@ -187,20 +281,29 @@ export class DataGridService {
       }
 
       const elementID = element.elementID;
-      const nodes = element.elementID.split('.');
+      const nodes = elementID.split('.');
       let currentNodes: any[] = this.columnDefs;
       let workingNode;
-      const nestingDepth = this.userConfigService.getNestingDepth();
+
+      const startIndex = this.ignoreUserConfig
+        ? this.elementNodeStartIndex - 1
+        : 2;
+
+      const nestingDepth = this.ignoreUserConfig
+        ? this.elementNodeStartIndex + this.elementNodeDepth - 2
+        : this.userConfigService.getNestingDepth();
+
       // find workingNode to add to
-      for (let i = 2; i <= nestingDepth; i++) {
-          const headerName = this.generateHeaderString(elementID, i);
+      for (let i = startIndex; i <= nestingDepth; i++) {
+          const headerName = this.generateHeaderString(elementID, nodes, i);
+          const nodeIndex = this.ignoreUserConfig ? i : i - 1;
 
           // End processing if no header field is found
           if (headerName === undefined) {
               break;
           }
 
-          workingNode = this.getChildNode(currentNodes, headerName, nodes[i], elementID);
+          workingNode = this.getChildNode(currentNodes, headerName, nodes[nodeIndex], elementID);
 
           // Build child node array
           if (workingNode.children === undefined) {
@@ -216,7 +319,9 @@ export class DataGridService {
         workingNode.elementID = elementID;
 
         if (!workingNode.children.length) {
-            workingNode.headerName += this.userConfigService.getFormattedSubHeader(elementID);
+            workingNode.headerName += this.ignoreUserConfig
+            ? this.createSubHeader(nestingDepth, nodes)
+            : this.userConfigService.getFormattedSubHeader(elementID);
         }
       }
 
@@ -249,7 +354,9 @@ export class DataGridService {
       } else {
         columnToAdd = workingNode;
         // Avoid overwritting layered/official columns
-        if (workingNode.children.length && workingNode.children[0].headerName !== 'Default') {
+        if (workingNode.children.length
+            && workingNode.children[0].headerName !== 'Default'
+            && workingNode.children[0].headerName !== 'Official') {
           columnToAdd = {
             'headerName': 'Default',
             'children': [],
@@ -273,6 +380,7 @@ export class DataGridService {
         return;
       }
 
+      // metadata name using userConfigService may be slightly different than 2.5.6
       const header = {
         'headerName': this.userConfigService.getByElementName(element.elementID),
         'field': headerID,
@@ -280,6 +388,7 @@ export class DataGridService {
         'columnGroupShow': 'open',
         'type': 'identity',
         'pinned': this.pinMetaElement(element.elementID),
+        'elementID': element.elementID,
       };
 
       if (this.identityHeader.children === undefined) { this.identityHeader.children = []; }
@@ -289,22 +398,24 @@ export class DataGridService {
     }
 
     private ignoreMetaElement(element: MetadataElements): boolean {
-        return element.elementID != null
+        return element.elementID != null && !this.ignoreUserConfig
             ? this.userConfigService.getMetaElementVisibility(element.elementID) === MetaElementVisibility.NO_LOAD
             : false;
     }
 
     private ignoreDataElement(element: DataElements): boolean {
-        return element.elementID != null
+        return element.elementID != null && !this.ignoreUserConfig
             ? this.userConfigService.getElementVisibility(element.elementID) === ElementVisibility.NO_LOAD
             : false;
     }
 
     private pinMetaElement(elementID: string): boolean {
+        // should return default even if use empty user config (dont need to check ignoreUserConfig)
         return this.userConfigService.getMetaElementVisibility(elementID) === MetaElementVisibility.PINNED;
     }
 
     private hideDataElement(elementID: string): boolean {
+        // should return default even if use empty user config (dont need to check ignoreUserConfig)
         return this.userConfigService.getElementVisibility(elementID) === ElementVisibility.HIDDEN;
     }
 
