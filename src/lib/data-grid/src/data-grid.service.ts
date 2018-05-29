@@ -398,13 +398,15 @@ export class DataGridService {
     }
 
     private ignoreMetaElement(element: MetadataElements): boolean {
-        return element.elementID != null && !this.ignoreUserConfig
+        if (element.elementID == null) { return true; }
+        return !this.ignoreUserConfig
             ? this.userConfigService.getMetaElementVisibility(element.elementID) === MetaElementVisibility.NO_LOAD
             : false;
     }
 
     private ignoreDataElement(element: DataElements): boolean {
-        return element.elementID != null && !this.ignoreUserConfig
+        if (element.elementID == null) { return true; }
+        return !this.ignoreUserConfig
             ? this.userConfigService.getElementVisibility(element.elementID) === ElementVisibility.NO_LOAD
             : false;
     }
