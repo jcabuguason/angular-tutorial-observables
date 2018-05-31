@@ -5,7 +5,8 @@ export class SearchModel {
     public from?: Date,
     public to?: Date,
     public size?: number,
-    public operator?: string
+    public operator?: string,
+    public sortFields?: string,
   ) { }
 }
 
