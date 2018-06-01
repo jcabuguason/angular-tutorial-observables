@@ -66,7 +66,7 @@ export class SearchService {
     /** Executes parameters for a search request */
     executeSearch(qParams) {
         this.addRequestParams(qParams);
-        this.submitSearch();
+        this.submitSearch(false);
     }
 
     /* Re-directs to url with search parameters */
@@ -302,11 +302,11 @@ export class SearchService {
       return new SearchModel(taxonomies, elements, startDate, endDate, numObs, operator);
     }
 
-    submitSearch() {
+    submitSearch(updateUrlParams: boolean = true) {
         const model = this.getSearchModel();
         // always need taxonomy for ES
         if (model.taxonomy.length > 0 ) {
-            if (this.displayParams.length > 0) {
+            if (this.displayParams.length > 0 && updateUrlParams) {
                 this.updateUrl();
             }
             this.searchRequested.emit(model);
