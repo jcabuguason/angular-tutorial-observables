@@ -13,6 +13,7 @@ import { ObservationsFromStationsParams } from './model/observations-from-statio
 import { UniqueElementsParams } from './model/unique-elements-params.model';
 import { CommonElasticSearchParams } from './model/common-elastic-search-params.model';
 import { ObservationsFromElementsParams } from './model/observations-from-elements-params.model';
+import { URIComponentEncoder } from './uri-component-encoder';
 
 @Injectable()
 export class ElasticSearchService {
@@ -94,7 +95,7 @@ export class ElasticSearchService {
   }
 
   private getCommonParams(parameters: CommonElasticSearchParams): HttpParams {
-    let params = new HttpParams();
+    let params = new HttpParams({encoder: new URIComponentEncoder()});
     if (parameters.type != null) {
       params = params.set('type', parameters.type);
     }

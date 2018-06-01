@@ -161,7 +161,7 @@ describe('ElasticSearchService', () => {
 
       it('should correctly set sortFields', () => {
         service.getBasicObservations('v1.0', 'testNetwork', {sortFields: '+elementID'}).subscribe();
-        httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?sortFields=+elementID`);
+        httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?sortFields=%2BelementID`);
       });
 
       it('should correctly set startIndex', () => {
