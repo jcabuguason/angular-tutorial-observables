@@ -331,6 +331,7 @@ export class DataGridService {
         columnToAdd = {
           'headerName': (element.indexValue ? 'Layer ' + element.indexValue : 'Official'),
           'children': [],
+          'elementID' : elementID,
         };
         if (workingNode.children === undefined) {
           workingNode.children = [];
