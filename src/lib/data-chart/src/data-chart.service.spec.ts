@@ -1,6 +1,5 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 
-import { Observable } from 'rxjs/Observable';
 import { Chart } from 'angular-highcharts';
 
 import { DataChartService } from './data-chart.service';
@@ -16,7 +15,9 @@ describe('DataChartService', () => {
     let service: DataChartService;
     const hits = [
         ...require('./sample-data-1037090.json').hits.hits.map(json => json._source),
-        ...require('./sample-data-1032731.json').hits.hits.map(json => json._source)
+        ...require('./sample-data-1032731.json').hits.hits.map(json => json._source),
+        ...require('./sample-data-1021831.json').hits.hits.map(json => json._source),
+
     ];
     const fieldName = (eID, index = null) => {
         const suffix = (index == null) ? '' : `-L${index}`;
@@ -99,7 +100,7 @@ describe('DataChartService', () => {
         const avgAirChart = charts[1];
         expect(avgAirChart.options.title.text).toBe('mock 1.19.265.2.1.1.0');
         expect(avgAirChart.options.series.length).toBe(2);
-        const wfgStnData = avgAirChart.options.series.find(series => series.name === 'SARTINE ISLAND (AUT) - 1037090');
+        const wfgStnData = avgAirChart.options.series.find(series => series.name === 'SARTINE ISLAND (AUT) - 1037090 - WFG');
         const dataPoint = (x, y, qa) => ({x: Date.parse(x), y: y, qa: qa, unit: '°C'});
         expect(wfgStnData).toBeDefined();
         expect(wfgStnData.data).toEqual([
@@ -108,6 +109,15 @@ describe('DataChartService', () => {
             dataPoint('2018-04-22T02:00:00.000Z', -62.33, '0'),
             dataPoint('2018-04-22T03:00:00.000Z', -57.15, '0'),
         ]);
+    });
+
+    it('should display icao id if station does not have tc id', () => {
+        const chart: Chart = service.chartColumn(
+            [fieldName('1.12.206.0.0.0.0')],
+            hits,
+        )[0];
+        const comoxStn = chart.options.series.find(series => series.name === 'COMOX - 1021831 - CYQQ');
+        expect(comoxStn).toBeDefined();
     });
 
 });
