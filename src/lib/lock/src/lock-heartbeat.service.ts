@@ -117,7 +117,7 @@ export class LockHeartbeatService {
                   const lockName = `${commonLockInfo.user_first_name} ${commonLockInfo.user_last_name}`;
                   const lockTimeout = commonLockInfo.timeout;
 
-                  lockMessage.push(`${lockName} has alrady locked the following resources:`);
+                  lockMessage.push(`${lockName} has already locked the following resources:`);
                   for (const info of lockInfoResponses) {
                     lockMessage.push(`    * ${info.resource_id}`);
                   }
