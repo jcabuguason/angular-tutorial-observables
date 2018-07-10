@@ -76,10 +76,6 @@ export class DataChartService {
     private createElementSeries(elementFields: string[], observations): ElementSeries[] {
         const elemSeries: ElementSeries[] = [];
         for (const obs of observations.filter(obsUtil.latestFromArray).sort(obsUtil.compareObsTimeFromObs)) {
-            const getObjValue = (name) => {
-                const obj = obs.metadataElements.find(elem => elem.name === name);
-                return (obj) ? obj.value : null;
-            };
 
             elementFields.map(current => this.decryptField(current)).forEach(field => {
                 const hasLayer = field.hasOwnProperty('indexValue');
@@ -92,9 +88,8 @@ export class DataChartService {
                     this.findChartSeries(
                         elementChart,
                         this.chartLabel(
-                            `${getObjValue('stn_nam')} - ${getObjValue('clim_id')}`,
-                            field
-                        )
+                            this.createStationLabel(obs.metadataElements),
+                            field)
                     ).addPoint(obs.obsDateTime, foundElem);
                 }
             });
@@ -102,10 +97,24 @@ export class DataChartService {
         return elemSeries;
     }
 
+    private createStationLabel(metadataElements) {
+        const getObjValue = (name) => {
+            const obj = metadataElements.find(elem => elem.name === name);
+            return (obj) ? obj.value : null;
+        };
+        const formatId = (name) => {
+            const id = getObjValue(name);
+            return (id != null) ? ` - ${id}` : '';
+        };
+
+        return `${getObjValue('stn_nam')}`
+            + formatId('clim_id')
+            + (formatId('tc_id') || formatId('icao_stn_id'));
+    }
+
     private findElementSeries = (elementSeries: ElementSeries[], elementID: string): ElementSeries => {
         return this.findSeries(elementSeries, elementID, () => new ElementSeries(elementID));
     }
-
 
     private findChartSeries = (elemSer: ElementSeries, climateID: string): ChartSeries => {
         return this.findSeries(elemSer.series, climateID, () => new ChartSeries(climateID));
@@ -118,6 +127,7 @@ export class DataChartService {
         }
         return series[index];
     }
+
 }
 
 export class Series {
