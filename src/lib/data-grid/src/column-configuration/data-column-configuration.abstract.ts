@@ -115,6 +115,28 @@ export abstract class DataColumnConfiguration {
           gridService.chartColumn(params.column.colDef.field);
         }
       });
+      // get the elementID and only add the submenu if it exists
+      const elementID = params.column.colDef.elementID;
+      if (elementID) {
+        menuItems.push({
+          name: 'Element Info',
+          subMenu : [
+            {
+              name: 'Element ID: ' + elementID,
+              // copy elementID to clipboard
+              action: function() {
+                const textarea = document.createElement('textarea');
+                textarea.setAttribute('type', 'hidden');
+                textarea.textContent = elementID;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+              },
+              icon: '<span class="ag-icon ag-icon-copy"/>',
+            },
+          ]
+        });
+      }
       return menuItems;
     };
   }
