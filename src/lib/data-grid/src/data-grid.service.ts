@@ -9,8 +9,9 @@ import {
     UserConfigService,
     ElementVisibility,
     MetaElementVisibility,
-    NodeLookups
 } from 'msc-dms-commons-angular/core/metadata/';
+
+import { NodeLookups } from 'msc-dms-commons-angular/core/metadata/user-config/node.const';
 
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 
@@ -292,6 +293,7 @@ export class DataGridService {
       const nestingDepth = this.ignoreUserConfig
         ? this.elementNodeStartIndex + this.elementNodeDepth - 2
         : this.userConfigService.getNestingDepth();
+        // : this.userConfigService.getNestingDepth(elementID);
 
       // find workingNode to add to
       for (let i = startIndex; i <= nestingDepth; i++) {
@@ -330,6 +332,7 @@ export class DataGridService {
       if (element.indexValue !== undefined) {
         columnToAdd = {
           'headerName': (element.indexValue ? 'Layer ' + element.indexValue : 'Official'),
+        //   'headerName': (element.indexValue ? this.userConfigService.getElementIndexTitle(elementID) + element.indexValue : 'Official'),
           'children': [],
         };
         if (workingNode.children === undefined) {
@@ -356,9 +359,11 @@ export class DataGridService {
         // Avoid overwritting layered/official columns
         if (workingNode.children.length
             && workingNode.children[0].headerName !== 'Default'
+            // && workingNode.children[0].headerName !== this.userConfigService.getDefaultTag()
             && workingNode.children[0].headerName !== 'Official') {
           columnToAdd = {
             'headerName': 'Default',
+            // 'headerName': this.userConfigService.getDefaultTag(),
             'children': [],
             'elementID': elementID
           };
