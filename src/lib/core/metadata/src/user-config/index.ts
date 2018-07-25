@@ -8,4 +8,5 @@ export {
     SubHeaderConfig,
 } from './user-config.model';
 export { UserConfigService } from './user-config.service';
+export { NodeLookups } from './node.const';
 

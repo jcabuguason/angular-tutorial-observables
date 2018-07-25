@@ -73,6 +73,8 @@ describe('DataGridService', () => {
         service.addRowData(hits[0]);
         expect(service.rowData.length).toBe(1);
         expect(service.columnDefs.length).toBe(37);
+        // console.log('test...');
+        console.log(service.columnDefs);
 
         const row = service.rowData[0];
         expect(row['clim_id']).toBe('1021270');
