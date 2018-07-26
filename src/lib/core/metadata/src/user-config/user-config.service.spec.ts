@@ -1,7 +1,7 @@
 import { UserConfigService } from './user-config.service';
 import { MetadataService } from '../service';
 import { MDInstanceDefinition } from '../model';
-import { Lang, MetaElementVisibility, ElementVisibility } from './user-config.model';
+import { Lang, ElementVisibility } from './user-config.model';
 
 describe('UserConfigService', () => {
 
@@ -27,14 +27,6 @@ describe('UserConfigService', () => {
     describe('Element loading', () => {
         beforeEach(() => {
             service.loadConfig(includeExcludeConfig);
-        });
-
-        it('No load metadata', () => {
-            expect(service.getMetaElementVisibility('1.2.7.0.0.0.0')).toBe(MetaElementVisibility.NO_LOAD);
-        });
-
-        it('Default metadata', () => {
-            expect(service.getMetaElementVisibility('1.2.3.0.0.0.0')).toBe(MetaElementVisibility.DEFAULT);
         });
 
         it('No load element', () => {

@@ -8,7 +8,6 @@ import { DefaultColumnConfiguration } from './column-configuration/default-colum
 import {
     UserConfigService,
     ElementVisibility,
-    MetaElementVisibility,
 } from 'msc-dms-commons-angular/core/metadata/';
 
 import { NodeLookups } from 'msc-dms-commons-angular/core/metadata';
@@ -330,7 +329,9 @@ export class DataGridService {
       let columnToAdd;
       if (element.indexValue !== undefined) {
         columnToAdd = {
-          'headerName': (element.indexValue ? this.userConfigService.getElementIndexTitle(elementID) + element.indexValue : 'Official'),
+          'headerName': (element.indexValue
+            ? (this.userConfigService.getElementIndexTitle(elementID)) + element.indexValue
+            : 'Official'),
           'children': [],
         };
         if (workingNode.children === undefined) {
@@ -388,7 +389,6 @@ export class DataGridService {
         'width': 80,
         'columnGroupShow': 'open',
         'type': 'identity',
-        'pinned': this.pinMetaElement(element.elementID),
         'elementID': element.elementID,
       };
 
@@ -401,7 +401,7 @@ export class DataGridService {
     private ignoreMetaElement(element: MetadataElements): boolean {
         if (element.elementID == null) { return true; }
         return !this.ignoreUserConfig
-            ? this.userConfigService.getMetaElementVisibility(element.elementID) === MetaElementVisibility.NO_LOAD
+            ? this.userConfigService.getElementVisibility(element.elementID) === ElementVisibility.NO_LOAD
             : false;
     }
 
@@ -410,11 +410,6 @@ export class DataGridService {
         return !this.ignoreUserConfig
             ? this.userConfigService.getElementVisibility(element.elementID) === ElementVisibility.NO_LOAD
             : false;
-    }
-
-    private pinMetaElement(elementID: string): boolean {
-        // should return default even if use empty user config (dont need to check ignoreUserConfig)
-        return this.userConfigService.getMetaElementVisibility(elementID) === MetaElementVisibility.PINNED;
     }
 
     private hideDataElement(elementID: string): boolean {

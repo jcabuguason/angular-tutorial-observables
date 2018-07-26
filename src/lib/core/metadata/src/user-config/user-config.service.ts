@@ -5,7 +5,6 @@ import { MetadataService } from '../service';
 import {
     GenericNodeConfig,
     SubHeaderConfig,
-    MetaElementVisibility,
     ElementVisibility,
     Lang,
     UserConfig,
@@ -107,14 +106,6 @@ export class UserConfigService {
         }
 
         return ElementVisibility.DEFAULT;
-    }
-
-    getMetaElementVisibility(elementID: string): MetaElementVisibility {
-        if (!this.userConfig.loadMetaElements.checkIncludeExclude(elementID)) {
-            return MetaElementVisibility.NO_LOAD;
-        }
-
-        return MetaElementVisibility.DEFAULT;
     }
 
     getNestingDepth(elementID: string): number {

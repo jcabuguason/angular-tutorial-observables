@@ -8,13 +8,6 @@ export enum ElementVisibility {
     NO_LOAD
 }
 
-// Enum to dictate how a metadata element should be displayed/pinned
-export enum MetaElementVisibility {
-    DEFAULT,
-    PINNED,
-    NO_LOAD
-}
-
 // Enum to support languages
 export enum Lang {
     ENGLISH = 'en',

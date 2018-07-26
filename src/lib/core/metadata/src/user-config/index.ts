@@ -1,6 +1,5 @@
 export {
     ElementVisibility,
-    MetaElementVisibility,
     Lang,
     NodeIndexMap,
     GenericNodeConfig,
