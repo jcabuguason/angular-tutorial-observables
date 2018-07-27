@@ -88,6 +88,8 @@ export class DataGridService {
             obsDateTime: obs.obsDateTime,
             receivedDateTime: obs.receivedDateTime,
             uri: obs.identity,
+            taxonomy: obs.taxonomy,
+            primaryStationId: obs.identifier,
             station: obsUtil.findMetadataValue(obs, 'stn_nam'),
             revision: obsUtil.findRevision(obs),
         };
@@ -456,7 +458,9 @@ export interface Index {
 }
 
 export interface DMSObs {
-    identity: string;
+    identity: string; // URI
+    identifier: string; // Primary station identifier
+    taxonomy: string;
     obsDateTime: string; // TODO: Switch to moment.js datetime?
     location: Location;
     receivedDateTime: string;
