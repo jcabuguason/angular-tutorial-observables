@@ -35,6 +35,9 @@ describe('DataGridService', () => {
             return '';
         }
         getMetaElementVisibility(elementID) { }
+        getElementIndexTitle(elementID: string): string {
+            return 'Layer';
+        }
         getElementVisibility(elementID) {
             switch (elementID) {
                 case noLoadElement: return ElementVisibility.NO_LOAD;

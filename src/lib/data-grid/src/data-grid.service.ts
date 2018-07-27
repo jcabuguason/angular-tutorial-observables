@@ -10,9 +10,9 @@ import { StationComponent } from './station-info/station-info.component';
 import {
     UserConfigService,
     ElementVisibility,
-    MetaElementVisibility,
-    NodeLookups
 } from 'msc-dms-commons-angular/core/metadata/';
+
+import { NodeLookups } from 'msc-dms-commons-angular/core/metadata';
 
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 
@@ -98,13 +98,15 @@ export class DataGridService {
         const configElements = this.userConfigService.getElementOrder();
 
         const buildColumn = (element) => {
-            if (element.name != null && !this.ignoreMetaElement(element)) {
+            if (element.name != null && !this.ignoreElement(element)) {
                 result[element.name] = element.value;
                 this.buildMetadataColumn(element, element.name);
             }
         };
 
-        mdElements.filter(e => e != null).forEach(buildColumn);
+        mdElements.filter(e => e != null)
+                  .filter(e => e.elementID != null)
+                  .forEach(buildColumn);
 
         // added at the same time with user config
         if (this.columnConfiguration.allowBlankDataColumns) {
@@ -122,7 +124,7 @@ export class DataGridService {
         const configElements = this.userConfigService.getElementOrder();
 
         const buildColumn = (element) => {
-            if (!this.ignoreDataElement(element)) {
+            if (!this.ignoreElement(element)) {
                 const headerID = ColumnConfigurationContainer.findHeaderID(element);
                 this.buildElementColumn(element, headerID);
                 const elementData = this.columnConfiguration.createElementData(element, headerID);
@@ -130,7 +132,9 @@ export class DataGridService {
             }
         };
 
-        dataElements.filter(e => e != null).forEach(buildColumn);
+        dataElements.filter(e => e != null)
+                    .filter(e => e.elementID != null)
+                    .forEach(buildColumn);
 
         // added at the same time with user config
         if (this.columnConfiguration.allowBlankDataColumns) {
@@ -293,7 +297,7 @@ export class DataGridService {
 
       const nestingDepth = this.ignoreUserConfig
         ? this.elementNodeStartIndex + this.elementNodeDepth - 2
-        : this.userConfigService.getNestingDepth();
+        : this.userConfigService.getNestingDepth(elementID);
 
       // find workingNode to add to
       for (let i = startIndex; i <= nestingDepth; i++) {
@@ -331,7 +335,9 @@ export class DataGridService {
       let columnToAdd;
       if (element.indexValue !== undefined) {
         columnToAdd = {
-          'headerName': (element.indexValue ? 'Layer ' + element.indexValue : 'Official'),
+          'headerName': (element.indexValue
+            ? (this.userConfigService.getElementIndexTitle(elementID)) + element.indexValue
+            : 'Official'),
           'children': [],
           'elementID' : elementID,
         };
@@ -358,10 +364,10 @@ export class DataGridService {
         columnToAdd = workingNode;
         // Avoid overwritting layered/official columns
         if (workingNode.children.length
-            && workingNode.children[0].headerName !== 'Default'
+            && workingNode.children[0].headerName !== this.userConfigService.getDefaultTag()
             && workingNode.children[0].headerName !== 'Official') {
           columnToAdd = {
-            'headerName': 'Default',
+            'headerName': this.userConfigService.getDefaultTag(),
             'children': [],
             'elementID': elementID
           };
@@ -390,7 +396,6 @@ export class DataGridService {
         'width': 80,
         'columnGroupShow': 'open',
         'type': 'identity',
-        'pinned': this.pinMetaElement(element.elementID),
         'elementID': element.elementID,
       };
 
@@ -400,23 +405,11 @@ export class DataGridService {
       this.columnsGenerated.push(headerID);
     }
 
-    private ignoreMetaElement(element: MetadataElements): boolean {
-        if (element.elementID == null) { return true; }
-        return !this.ignoreUserConfig
-            ? this.userConfigService.getMetaElementVisibility(element.elementID) === MetaElementVisibility.NO_LOAD
-            : false;
-    }
-
-    private ignoreDataElement(element: DataElements): boolean {
+    private ignoreElement(element: MetadataElements | DataElements): boolean {
         if (element.elementID == null) { return true; }
         return !this.ignoreUserConfig
             ? this.userConfigService.getElementVisibility(element.elementID) === ElementVisibility.NO_LOAD
             : false;
-    }
-
-    private pinMetaElement(elementID: string): boolean {
-        // should return default even if use empty user config (dont need to check ignoreUserConfig)
-        return this.userConfigService.getMetaElementVisibility(elementID) === MetaElementVisibility.PINNED;
     }
 
     private hideDataElement(elementID: string): boolean {

@@ -3,14 +3,11 @@ import { Injectable } from '@angular/core';
 import { MetadataService } from '../service';
 
 import {
-    ElementNodeConfig,
     GenericNodeConfig,
     SubHeaderConfig,
-    ElementSubHeaderConfig,
-    MetaElementVisibility,
     ElementVisibility,
-    ElementNameConfig,
     Lang,
+    UserConfig,
 } from './user-config.model';
 
 import { NodeLookups } from './node.const';
@@ -20,38 +17,7 @@ import { MDInstanceDefinition, MDInstanceElement } from '../model/';
 @Injectable()
 export class UserConfigService {
 
-    // The order of elements in the grid
-    private elementOrder: string[];
-
-    // Include/Exclude util for Loading Metadata Elements
-    private loadMetaElements: IncludeExclude;
-
-    // Include/Exclude util for Pinning Metadata Elements
-    private pinMetaElements: IncludeExclude;
-
-    // Include/Exclude util for Loading Data Elements
-    private loadDataElements: IncludeExclude;
-
-    // Include/Exclude util for Visibility of Data Elements
-    private visibleDataElements: IncludeExclude;
-
-    // Element name configuration
-    private elementNameConfig: ElementNameConfig[];
-
-    // Element node naming configuration
-    private elementNodeConfig: ElementNodeConfig[];
-
-    // Node naming configuration
-    private genericNodeConfig: GenericNodeConfig[];
-
-    // Generic sub header config
-    private genericSubHeaderConfig: SubHeaderConfig;
-
-    // Specific element sub header configs
-    private elementSubHeaderConfigs: ElementSubHeaderConfig[];
-
-    // Nesting depth of grid
-    private nestingDepth;
+    private userConfig: UserConfig;
 
     // The language used in the config
     private lang: Lang = Lang.ENGLISH;
@@ -68,21 +34,7 @@ export class UserConfigService {
     }
 
     defaultHeader() {
-        this.elementOrder = [];
-
-        this.loadMetaElements = new IncludeExclude([], []);
-        this.pinMetaElements = new IncludeExclude([], []);
-        this.loadDataElements = new IncludeExclude([], []);
-        this.visibleDataElements = new IncludeExclude([], []);
-
-        this.elementNameConfig = [];
-        this.elementNodeConfig = [];
-        this.genericNodeConfig = [];
-
-        this.genericSubHeaderConfig = new SubHeaderConfig(true);
-        this.elementSubHeaderConfigs = [];
-
-        this.nestingDepth = 4;
+        this.userConfig = UserConfig.createConfig();
     }
 
     // Sets the language
@@ -130,111 +82,98 @@ export class UserConfigService {
             .filter(elem => elem.group === 'relationship' && elem.name === 'child-configs')
             .forEach(elem => this.loadProfile(elem.value));
 
-        // TODO: Find a cleaner way of handling this
-        for (const element of mdInstance.elements) {
+        UserConfig.updateConfig(this.userConfig, mdInstance);
 
-            // Element ordering
-            if (element.group === 'element-order' && element.name === 'grid-order') {
-                this.elementOrder[Number(element.index) - 1] = element.value;
-            }
-
-            // Configuring Include/Exclude for Metadata
-            if (element.group === 'pin-meta-elements' && element.name === 'include') {
-                this.pinMetaElements.include(element.value);
-            }
-            if (element.group === 'pin-meta-elements' && element.name === 'exclude') {
-                this.pinMetaElements.exclude(element.value);
-            }
-            if (element.group === 'load-meta-elements' && element.name === 'include') {
-                this.loadMetaElements.include(element.value);
-            }
-            if (element.group === 'load-meta-elements' && element.name === 'exclude') {
-                this.loadMetaElements.exclude(element.value);
-            }
-
-            // Configuring Include/Exclude for Data
-            if (element.group === 'visible-elements' && element.name === 'include') {
-                this.visibleDataElements.include(element.value);
-            }
-            if (element.group === 'visible-elements' && element.name === 'exclude') {
-                this.visibleDataElements.exclude(element.value);
-            }
-            if (element.group === 'load-elements' && element.name === 'include') {
-                this.loadDataElements.include(element.value);
-            }
-            if (element.group === 'load-elements' && element.name === 'exclude') {
-                this.loadDataElements.exclude(element.value);
-            }
-
-            // Configuring nesting level
-            if (element.group === 'nesting' && element.name === 'nesting-depth') {
-                this.nestingDepth = Number(element.value);
-            }
-
-            // Configuring sub-headers
-            if (element.group === 'header' && element.name === 'show-sub-header') {
-                this.genericSubHeaderConfig = new SubHeaderConfig(element.value === 'true', element);
-            }
-            if (element.group === 'header' && element.name === 'element-sub-header') {
-                ElementSubHeaderConfig.updateConfig(this.elementSubHeaderConfigs, element);
-            }
-
-            // Configuring renaming
-            if (element.group === 'node-rename' && element.name === 'node-index') {
-                GenericNodeConfig.updateConfig(this.genericNodeConfig, element);
-            }
-            if (element.group === 'element-node-rename' && element.name === 'element-id') {
-                ElementNodeConfig.updateConfig(this.elementNodeConfig, element);
-            }
-            if (element.group === 'element-rename' && element.name === 'element-id') {
-                ElementNameConfig.updateConfig(this.elementNameConfig, element);
-            }
-        }
     }
 
     getElementVisibility(elementID: string): ElementVisibility {
 
-        if (!this.loadDataElements.checkIncludeExclude(elementID)) {
+        if (!this.userConfig.loadDataElements.checkIncludeExclude(elementID)) {
             return ElementVisibility.NO_LOAD;
         }
 
-        if (!this.visibleDataElements.checkIncludeExclude(elementID)) {
+        if (!this.userConfig.visibleDataElements.checkIncludeExclude(elementID)) {
             return ElementVisibility.HIDDEN;
         }
 
-        if (this.elementOrder.length > 0 && this.elementOrder.indexOf(elementID) === -1) {
+        if (this.hasElementOrder() && this.getElementOrder().indexOf(elementID) === -1) {
             return ElementVisibility.HIDDEN;
         }
 
         return ElementVisibility.DEFAULT;
     }
 
-    getMetaElementVisibility(elementID: string): MetaElementVisibility {
-        if (!this.loadMetaElements.checkIncludeExclude(elementID)) {
-            return MetaElementVisibility.NO_LOAD;
-        }
-
-        if (this.pinMetaElements.checkIncludeExclude(elementID)) {
-            return MetaElementVisibility.PINNED;
-        }
-
-        return MetaElementVisibility.DEFAULT;
-    }
-
-    getNestingDepth(): number {
-        return this.nestingDepth;
+    getNestingDepth(elementID: string): number {
+        return this.userConfig.elementConfigs
+                .filter(elemConf => elemConf.elementID === elementID)
+                .map(elemConfig => elemConfig.nestingDepth)
+                .shift()
+            || this.userConfig.nestingDepth;
     }
 
     hasElementOrder(): boolean {
-        return this.elementOrder.length > 0;
+        return this.getElementOrder().length > 0;
     }
 
     getElementOrder(): string[] {
-        return this.elementOrder;
+        const elementOrder: string[] = [];
+
+        this.userConfig.elementConfigs
+                .filter(config => config.order != null)
+                .forEach(config => elementOrder[Number(config.order) - 1 ] = config.elementID);
+
+        return elementOrder;
+    }
+
+    getDefaultTag(): string {
+        return this.userConfig.defaultTag.getName(this.lang);
+    }
+
+    getElementGroup(elementID: string): string[] {
+        return this.userConfig.elementGroups
+            .filter(elemGroup => elemGroup.elementIDs.some(elemID => elemID === elementID))
+            .map(elemGroup => elemGroup.elementIDs)
+            .shift()
+            || [];
+    }
+
+    getElementUnit(elementID: string): string {
+        return this.getSpecificElementUnit(elementID)
+                || this.getGenericElementUnit(elementID)
+                || '';
+    }
+
+    getGenericElementUnit(elementID: string): string {
+        return this.userConfig.elementUnits
+            .filter(config => config.elementRegex.test(elementID))
+            .map(config => config.unit)
+            .shift();
+    }
+
+    getSpecificElementUnit(elementID: string): string {
+        return this.userConfig.elementConfigs
+            .filter(config => config.elementID === elementID)
+            .map(config => config.displayUnit)
+            .shift();
+    }
+
+    getElementIndexTitle(elementID: string): string {
+        return this.userConfig.elementConfigs
+            .filter(config => config.elementID === elementID)
+            .map(config => config.indexTitle)
+            .map(indexTitle => indexTitle.getName(this.lang))
+            .shift();
+    }
+
+    getElementPrecision(elementID: string): number {
+        return this.userConfig.elementConfigs
+            .filter(config => config.elementID === elementID)
+            .map(config => config.precision)
+            .shift();
     }
 
     getFullFormattedHeader(elementID: string) {
-        const main = this.range(2, this.nestingDepth)
+        const main = this.range(2, this.getNestingDepth(elementID))
             .map(nodeIndex => this.getFormattedNodeName(elementID, nodeIndex))
             .filter(nodeName => nodeName !== '')
             .join(' / ');
@@ -262,11 +201,12 @@ export class UserConfigService {
     }
 
     getSubHeaderConfig(elementID: string): SubHeaderConfig {
-        return this.elementSubHeaderConfigs
-                .find((config) => config.elementID === elementID)
-            || this.genericSubHeaderConfig;
+        return this.userConfig.elementConfigs
+                .filter(elemConf => elemConf.elementID === elementID)
+                .map(elemConfig => elemConfig.subHeader)
+                .shift()
+            || this.userConfig.subHeader;
     }
-
 
     getFormattedNodeName(elementID: string, nodeIndex: number): string {
         return this.getNodeName(elementID, nodeIndex)
@@ -288,27 +228,28 @@ export class UserConfigService {
                 || '[UNDEFINED]';
     }
 
-    getByElementName(elementID: string, nodeIndex: number = this.getNestingDepth()): string {
-        return (nodeIndex === this.nestingDepth)
-            ? this.elementNameConfig
+    getByElementName(elementID: string, nodeIndex: number = this.getNestingDepth(elementID)): string {
+        return (nodeIndex === this.getNestingDepth(elementID))
+            ? this.userConfig.elementConfigs
                 .filter(config => config.elementID === elementID)
-                .map(nodeMap => nodeMap.getName(this.lang))
+                .map(config => config.elementName)
+                .map(elementName => elementName.getName(this.lang))
                 .shift()
             : '';
     }
 
     getByElementNode(elementID: string, nodeIndex: number): string {
-        return this.elementNodeConfig
+        return this.userConfig.elementConfigs
             .filter(config => config.elementID === elementID)
-            .map(config => config.nodeMap)
+            .map(config => config.nodeNames)
             .reduce((a, b) => a.concat(b), [])
-            .filter(nodeMap => nodeMap.nodeIndex === nodeIndex)
+            .filter(nodeNames => nodeNames.nodeIndex === nodeIndex)
             .map(nodeMap => nodeMap.getName(this.lang))
             .shift();
     }
 
     getByGenericNode(nodeIndex: number, nodeValue: string): string {
-        return this.genericNodeConfig
+        return this.userConfig.genericNodes
             .filter(config => config.nodeIndex === nodeIndex)
             .map(config => config.nodeMap)
             .reduce((a, b) => a.concat(b), [])

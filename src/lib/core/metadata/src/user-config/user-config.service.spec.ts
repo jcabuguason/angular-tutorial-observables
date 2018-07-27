@@ -1,7 +1,7 @@
 import { UserConfigService } from './user-config.service';
 import { MetadataService } from '../service';
 import { MDInstanceDefinition } from '../model';
-import { Lang, MetaElementVisibility, ElementVisibility } from './user-config.model';
+import { Lang, ElementVisibility } from './user-config.model';
 
 describe('UserConfigService', () => {
 
@@ -29,18 +29,6 @@ describe('UserConfigService', () => {
             service.loadConfig(includeExcludeConfig);
         });
 
-        it('Pinned metadata', () => {
-            expect(service.getMetaElementVisibility('1.2.6.0.0.0.0')).toBe(MetaElementVisibility.PINNED);
-        });
-
-        it('No load metadata', () => {
-            expect(service.getMetaElementVisibility('1.2.7.0.0.0.0')).toBe(MetaElementVisibility.NO_LOAD);
-        });
-
-        it('Default metadata', () => {
-            expect(service.getMetaElementVisibility('1.2.3.0.0.0.0')).toBe(MetaElementVisibility.DEFAULT);
-        });
-
         it('No load element', () => {
             expect(service.getElementVisibility('1.2.8.0.0.0.0')).toBe(ElementVisibility.NO_LOAD);
         });
@@ -56,12 +44,12 @@ describe('UserConfigService', () => {
 
     it('Default nesting level test', () => {
         service.loadConfig(emptyConfig);
-        expect(service.getNestingDepth()).toBe(4);
+        expect(service.getNestingDepth('')).toBe(4);
     });
 
     it('Nesting level test', () => {
         service.loadConfig(nestingConfig);
-        expect(service.getNestingDepth()).toBe(3);
+        expect(service.getNestingDepth('')).toBe(3);
     });
 
     it('Default sub header', () => {
@@ -155,6 +143,58 @@ describe('UserConfigService', () => {
         expect(service.getFullFormattedHeader('1.19.6.0.66.0.0')).toBe('Temperature / Ozone Concentration (-12 h)');
     });
 
+    it('should return a blank unit', () => {
+        service.loadConfig(emptyConfig);
+        expect(service.getElementUnit('1.2.3.4.5.6.7')).toBe('');
+    });
+
+    it('should return a unit from the generic units', () => {
+        service.loadConfig(unitConfig);
+        expect(service.getElementUnit('1.12.207.2.1.1.0')).toBe('K');
+    });
+
+    it('should return a unit from the specific units', () => {
+        service.loadConfig(unitConfig);
+        expect(service.getElementUnit('1.19.6.0.66.0.0')).toBe('m');
+    });
+
+    it('should return a unit from the specific units instead of the generic unit', () => {
+        service.loadConfig(complexUnitConfig);
+        expect(service.getElementUnit('1.12.207.2.1.1.0')).toBe('m');
+    });
+
+    it('should return an element group', () => {
+        service.loadConfig(elementGroupConfig);
+        expect(service.getElementGroup('1.2.3.4.5.6.7')[0]).toBe('1.2.3.4.5.6.7');
+        expect(service.getElementGroup('1.2.3.4.5.6.7')[1]).toBe('1.2.3.4.5.6.75');
+        expect(service.getElementGroup('1.2.3.4.5.6.7')[2]).toBe('1.2.3.4.5.6.70');
+    });
+
+    it('should not return an element group', () => {
+        service.loadConfig(elementGroupConfig);
+        expect(service.getElementGroup('1.2.3.4.5.6.1').length).toBe(0);
+    });
+
+    it('should return a combined element group', () => {
+        service.injectProfiles([elementGroupConfig]);
+        service.loadConfig(parentElementGroupConfig);
+        expect(service.getElementGroup('1.2.3.4.5.6.7')[0]).toBe('1.2.3.4.5.6.7');
+        expect(service.getElementGroup('1.2.3.4.5.6.7')[1]).toBe('1.2.3.4.5.6.75');
+        expect(service.getElementGroup('1.2.3.4.5.6.7')[2]).toBe('1.2.3.4.5.6.70');
+        expect(service.getElementGroup('1.2.3.4.5.6.7')[3]).toBe('1.2.3.4.5.6.8');
+        expect(service.getElementGroup('1.2.3.4.5.6.7')[4]).toBe('1.2.3.4.5.6.9');
+    });
+
+    it('should return a precision', () => {
+        service.loadConfig(precisionConfig);
+        expect(service.getElementPrecision('1.19.265.0.66.0.0')).toBe(1);
+    });
+
+    it('should return an empty string', () => {
+        service.loadConfig(precisionConfig);
+        expect(service.getElementPrecision('1.19.265.0.66.0.1')).toBe(undefined);
+    });
+
     const emptyConfig: MDInstanceDefinition = {
         dataset: 'stub',
         parent: 'stub',
@@ -183,12 +223,24 @@ describe('UserConfigService', () => {
         parent: 'stub',
         identificationElements: [],
         elements: [
-            {group: 'element-order', name: 'grid-order', value: '1.19.265.0.66.0.0', def_id: '', id: '', index: '1', uom: '',
-                language: {english: '', french: ''}, instelements: []},
-            {group: 'element-order', name: 'grid-order', value: '1.19.265.7.65.12.0', def_id: '', id: '', index: '3', uom: '',
-                language: {english: '', french: ''}, instelements: []},
-            {group: 'element-order', name: 'grid-order', value: '1.19.265.8.65.12.0', def_id: '', id: '', index: '2', uom: '',
-                language: {english: '', french: ''}, instelements: []},
+            {group: 'element-display', name: 'element', value: '1.19.265.0.66.0.0', def_id: '', id: '', index: '1', uom: '',
+                language: {english: '', french: ''}, instelements: [
+                {group: 'element-order', name: 'grid-order', value: '1', def_id: '', id: '', index: '1', uom: '',
+                    language: {english: '', french: ''}, instelements: []},
+                ]
+            },
+            {group: 'element-display', name: 'element', value: '1.19.265.7.65.12.0', def_id: '', id: '', index: '1', uom: '',
+                language: {english: '', french: ''}, instelements: [
+                {group: 'element-order', name: 'grid-order', value: '3', def_id: '', id: '', index: '1', uom: '',
+                    language: {english: '', french: ''}, instelements: []},
+                ]
+            },
+            {group: 'element-display', name: 'element', value: '1.19.265.8.65.12.0', def_id: '', id: '', index: '1', uom: '',
+                language: {english: '', french: ''}, instelements: [
+                {group: 'element-order', name: 'grid-order', value: '2', def_id: '', id: '', index: '1', uom: '',
+                    language: {english: '', french: ''}, instelements: []},
+                ]
+            },
         ]
     };
 
@@ -213,7 +265,8 @@ describe('UserConfigService', () => {
                     language: {english: '', french: ''}, instelements: []},
                 {group: 'header', name: 'sub-header-end', value: '7', def_id: '', id: '', index: '', uom: '',
                     language: {english: '', french: ''}, instelements: []},
-                ]},
+                ]
+            },
         ]
     };
 
@@ -230,14 +283,17 @@ describe('UserConfigService', () => {
                     language: {english: '', french: ''}, instelements: []},
                 ]
             },
-            {group: 'header', name: 'element-sub-header', value: '1.19.270.2.1.1.8', def_id: '', id: '', index: '', uom: '',
+            {group: 'element-display', name: 'element', value: '1.19.270.2.1.1.8', def_id: '', id: '', index: '', uom: '',
                 language: {english: '', french: ''}, instelements: [
-                {group: 'header', name: 'sub-header-start', value: '6', def_id: '', id: '', index: '', uom: '',
-                    language: {english: '', french: ''}, instelements: []},
-                {group: 'header', name: 'sub-header-end', value: '7', def_id: '', id: '', index: '', uom: '',
-                    language: {english: '', french: ''}, instelements: []},
-                ]
-            },
+                {group: 'header', name: 'show-sub-header', value: 'true', def_id: '', id: '', index: '', uom: '',
+                    language: {english: '', french: ''}, instelements: [
+                    {group: 'header', name: 'sub-header-start', value: '6', def_id: '', id: '', index: '', uom: '',
+                        language: {english: '', french: ''}, instelements: []},
+                    {group: 'header', name: 'sub-header-end', value: '7', def_id: '', id: '', index: '', uom: '',
+                        language: {english: '', french: ''}, instelements: []},
+                    ]
+                },
+            ]},
         ]
     };
 
@@ -255,17 +311,13 @@ describe('UserConfigService', () => {
                     ]},
                 ]
             },
-            {group: 'element-node-rename', name: 'element-id', value: '1.19.265.8.65.12.0', def_id: '', id: '', index: '', uom: '',
+            {group: 'element-display', name: 'element', value: '1.19.265.8.65.12.0', def_id: '', id: '', index: '', uom: '',
                 language: {english: '', french: ''}, instelements: [
                 {group: 'element-node-rename', name: 'node-index', value: '6', def_id: '', id: '', index: '', uom: '',
                     language: {english: '', french: ''}, instelements: [
                     {group: 'element-node-rename', name: 'node-name', value: 'Max', def_id: '', id: '', index: '', uom: '',
                         language: {english: '', french: ''}, instelements: []},
                     ]},
-                ]
-            },
-            {group: 'element-rename', name: 'element-id', value: '1.19.265.8.65.12.0', def_id: '', id: '', index: '', uom: '',
-                language: {english: '', french: ''}, instelements: [
                 {group: 'element-rename', name: 'node-name', value: 'Max Temp', def_id: '', id: '', index: '', uom: '',
                     language: {english: '', french: ''}, instelements: []},
                 ]
@@ -336,4 +388,98 @@ describe('UserConfigService', () => {
             },
         ]
     };
+
+    const unitConfig: MDInstanceDefinition = {
+        dataset: 'stub',
+        parent: 'stub',
+        identificationElements: [],
+        elements: [
+            {group: 'element-unit', name: 'element', value: '1\.12\.207.*', def_id: '', id: '', index: '', uom: '',
+                language: {english: '', french: ''}, instelements: [
+                {group: 'element-unit', name: 'display-unit', value: 'K', def_id: '', id: '', index: '', uom: '',
+                    language: {english: '', french: ''}, instelements: []},
+                ]
+            },
+            {group: 'element-display', name: 'element', value: '1.19.6.0.66.0.0', def_id: '', id: '', index: '', uom: '',
+                language: {english: '', french: ''}, instelements: [
+                {group: 'element-display', name: 'display-unit', value: 'm', def_id: '', id: '', index: '', uom: '',
+                    language: {english: '', french: ''}, instelements: []},
+                ]
+            },
+        ]
+    };
+    const complexUnitConfig: MDInstanceDefinition = {
+        dataset: 'stub',
+        parent: 'stub',
+        identificationElements: [],
+        elements: [
+            {group: 'element-unit', name: 'element', value: '1\.12\.207.*', def_id: '', id: '', index: '', uom: '',
+                language: {english: '', french: ''}, instelements: [
+                {group: 'element-unit', name: 'display-unit', value: 'K', def_id: '', id: '', index: '', uom: '',
+                    language: {english: '', french: ''}, instelements: []},
+                ]
+            },
+            {group: 'element-display', name: 'element', value: '1.12.207.2.1.1.0', def_id: '', id: '', index: '', uom: '',
+                language: {english: '', french: ''}, instelements: [
+                {group: 'element-display', name: 'display-unit', value: 'm', def_id: '', id: '', index: '', uom: '',
+                    language: {english: '', french: ''}, instelements: []},
+                ]
+            },
+        ]
+    };
+
+    const elementGroupConfig: MDInstanceDefinition = {
+        dataset: 'stub',
+        parent: 'stub',
+        identificationElements: [],
+        elements: [
+            {group: 'id', name: 'profile-name', value: 'child', def_id: '', id: '', index: '1', uom: '',
+                language: {english: '', french: ''}, instelements: []},
+            {group: 'element-groups', name: 'element-group', value: 'wind', def_id: '', id: '', index: '', uom: '',
+                language: {english: '', french: ''}, instelements: [
+                {group: 'element-groups', name: 'element', value: '1.2.3.4.5.6.7', def_id: '', id: '', index: '', uom: '',
+                    language: {english: '', french: ''}, instelements: []},
+                {group: 'element-groups', name: 'element', value: '1.2.3.4.5.6.75', def_id: '', id: '', index: '', uom: '',
+                    language: {english: '', french: ''}, instelements: []},
+                {group: 'element-groups', name: 'element', value: '1.2.3.4.5.6.70', def_id: '', id: '', index: '', uom: '',
+                    language: {english: '', french: ''}, instelements: []},
+                ]
+            },
+        ]
+    };
+
+    const parentElementGroupConfig: MDInstanceDefinition = {
+        dataset: 'stub',
+        parent: 'stub',
+        identificationElements: [],
+        elements: [
+            {group: 'relationship', name: 'child-configs', value: 'child', def_id: '', id: '', index: '1', uom: '',
+                language: {english: '', french: ''}, instelements: []},
+            {group: 'element-groups', name: 'element-group', value: 'wind', def_id: '', id: '', index: '', uom: '',
+                language: {english: '', french: ''}, instelements: [
+                {group: 'element-groups', name: 'element', value: '1.2.3.4.5.6.7', def_id: '', id: '', index: '', uom: '',
+                    language: {english: '', french: ''}, instelements: []},
+                {group: 'element-groups', name: 'element', value: '1.2.3.4.5.6.8', def_id: '', id: '', index: '', uom: '',
+                    language: {english: '', french: ''}, instelements: []},
+                {group: 'element-groups', name: 'element', value: '1.2.3.4.5.6.9', def_id: '', id: '', index: '', uom: '',
+                    language: {english: '', french: ''}, instelements: []},
+                ]
+            },
+        ]
+    };
+
+    const precisionConfig: MDInstanceDefinition = {
+        dataset: 'stub',
+        parent: 'stub',
+        identificationElements: [],
+        elements: [
+            {group: 'element-display', name: 'element', value: '1.19.265.0.66.0.0', def_id: '', id: '', index: '1', uom: '',
+                language: {english: '', french: ''}, instelements: [
+                {group: 'element-display', name: 'precision', value: '1', def_id: '', id: '', index: '1', uom: '',
+                    language: {english: '', french: ''}, instelements: []},
+                ]
+            },
+        ]
+    };
+
 });
