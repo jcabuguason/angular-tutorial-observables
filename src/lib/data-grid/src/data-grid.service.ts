@@ -96,13 +96,15 @@ export class DataGridService {
         const configElements = this.userConfigService.getElementOrder();
 
         const buildColumn = (element) => {
-            if (element.name != null && !this.ignoreMetaElement(element)) {
+            if (element.name != null && !this.ignoreElement(element)) {
                 result[element.name] = element.value;
                 this.buildMetadataColumn(element, element.name);
             }
         };
 
-        mdElements.filter(e => e != null).forEach(buildColumn);
+        mdElements.filter(e => e != null)
+                  .filter(e => e.elementID != null)
+                  .forEach(buildColumn);
 
         // added at the same time with user config
         if (this.columnConfiguration.allowBlankDataColumns) {
@@ -120,7 +122,7 @@ export class DataGridService {
         const configElements = this.userConfigService.getElementOrder();
 
         const buildColumn = (element) => {
-            if (!this.ignoreDataElement(element)) {
+            if (!this.ignoreElement(element)) {
                 const headerID = ColumnConfigurationContainer.findHeaderID(element);
                 this.buildElementColumn(element, headerID);
                 const elementData = this.columnConfiguration.createElementData(element, headerID);
@@ -128,7 +130,9 @@ export class DataGridService {
             }
         };
 
-        dataElements.filter(e => e != null).forEach(buildColumn);
+        dataElements.filter(e => e != null)
+                    .filter(e => e.elementID != null)
+                    .forEach(buildColumn);
 
         // added at the same time with user config
         if (this.columnConfiguration.allowBlankDataColumns) {
@@ -398,14 +402,7 @@ export class DataGridService {
       this.columnsGenerated.push(headerID);
     }
 
-    private ignoreMetaElement(element: MetadataElements): boolean {
-        if (element.elementID == null) { return true; }
-        return !this.ignoreUserConfig
-            ? this.userConfigService.getElementVisibility(element.elementID) === ElementVisibility.NO_LOAD
-            : false;
-    }
-
-    private ignoreDataElement(element: DataElements): boolean {
+    private ignoreElement(element: MetadataElements | DataElements): boolean {
         if (element.elementID == null) { return true; }
         return !this.ignoreUserConfig
             ? this.userConfigService.getElementVisibility(element.elementID) === ElementVisibility.NO_LOAD

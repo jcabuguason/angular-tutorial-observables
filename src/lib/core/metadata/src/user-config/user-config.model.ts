@@ -190,15 +190,6 @@ export class ElementGroup {
     public static updateConfig(configs: ElementGroup[], element: MDInstanceElement): void {
         let currentConfig: ElementGroup;
 
-        // for (const elementGroup of configs) {
-        //     if (elementBelongsToGroup(elementGroup, element)) {
-        //         elementGroup.update(element);
-        //         return;
-        //     }
-        // }
-
-        // configs.push(new ElementGroup(element));
-
         for (const elemGroup of configs) {
             for (const elementID of elemGroup.elementIDs) {
                 for (const instElement of element.instelements) {

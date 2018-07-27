@@ -60,11 +60,6 @@ export class UserConfigService {
         this.loadInstance(mdInstance);
     }
 
-    // Used for debugging
-    logUserConfig() {
-        console.log(this.userConfig);
-    }
-
     private loadProfile(configName: string) {
 
         const matchesConfig = (elem) => (elem.name === 'profile-name' && elem.value === configName);
