@@ -32,6 +32,7 @@ export class DataGridService {
 
     private columnConfiguration: ElementColumnConfiguration;
     private identityHeader;
+    private rawHeader;
 
     // set to true/false in pegasus after userConfigService.loadConfig(config)
     public ignoreUserConfig = false;
@@ -149,11 +150,38 @@ export class DataGridService {
         return result;
     }
 
+    flattenRawMessage(raw: RawMessage) {
+      const result = {};
+      if (this.rawHeader == null) {
+        this.rawHeader = {
+          'headerName': 'Raw',
+          'children': [{
+            'headerName': 'Header',
+            'field': 'raw_header',
+            'width': 220,
+          }]
+        };
+        this.columnDefs.push(this.rawHeader);
+      }
+      if (this.rawHeader.children.length === 1 && !!raw.message) {
+        this.rawHeader.children.push({
+          'headerName': 'Message',
+          'field': 'raw_message',
+          'width': 440,
+          'columnGroupShow': 'open',
+        });
+      }
+
+      Object.keys(raw).forEach(key => result[`raw_${key}`] = raw[key]);
+      return result;
+    }
+
     convertToRowObject(obs: DMSObs) {
         return {
             ...this.flattenObsIdentities(obs),
             ...this.flattenMetadataElements(obs.metadataElements),
             ...this.flattenDataElements(obs.dataElements),
+            ...this.flattenRawMessage(obs.rawMessage),
         };
     }
 
@@ -189,7 +217,7 @@ export class DataGridService {
         dataCols.push(...remainingCols);
         identity.children = identityCols.concat(remainingIdentityCols);
 
-        this.columnDefs = [identity, ...dataCols];
+        this.columnDefs = [identity, ...dataCols, this.rawHeader];
     }
 
     // checks element ID to determine if its a metadata element
@@ -420,9 +448,10 @@ export class DataGridService {
     }
 
     private displayMetadataTable(allData) {
+        const identity = (key) => !(key.startsWith('e_') || key.startsWith('raw_'));
         this.dialog.open(StationComponent, {
             data: {
-                allData: Object.keys(allData).filter(key => !key.startsWith('e_')).map(key => ({
+                allData: Object.keys(allData).filter(key => identity).map(key => ({
                     'key': key,
                     'value': allData[key]
                 }))

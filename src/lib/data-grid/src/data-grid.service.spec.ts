@@ -10,6 +10,7 @@ import { DefaultColumnConfiguration } from './column-configuration/default-colum
 import { VUColumnConfiguration } from './column-configuration/vu-column-configuration.class';
 import { AccordianColumnConfiguration } from './column-configuration/accordian-column-configuration.class';
 import { UserConfigService, ElementVisibility } from 'msc-dms-commons-angular/core/metadata';
+import { MatDialog } from '@angular/material';
 
 describe('DataGridService', () => {
     let service: DataGridService;
@@ -52,7 +53,8 @@ describe('DataGridService', () => {
             providers: [
                 DataGridService,
                 UserConfigService,
-                { provide: UserConfigService, useClass: MockConfigService }
+                { provide: UserConfigService, useClass: MockConfigService },
+                { provide: MatDialog, useValue: { open: () => {} }},
             ],
         });
 
@@ -75,7 +77,15 @@ describe('DataGridService', () => {
 
         service.addRowData(hits[0]);
         expect(service.rowData.length).toBe(1);
-        expect(service.columnDefs.length).toBe(12);
+        expect(service.columnDefs.length).toBe(13);
+        expect(service.columnDefs[service.columnDefs.length - 1]).toEqual({
+          'headerName': 'Raw',
+          'children': [{
+            'headerName': 'Header',
+            'field': 'raw_header',
+            'width': 220,
+          }]
+        });
 
         const row = service.rowData[0];
         expect(row['clim_id']).toBe('1021270');
@@ -84,7 +94,7 @@ describe('DataGridService', () => {
         expect(row['e_7_7_7_7_7_7_7']).toBeUndefined();
 
         expect(service.columnDefs
-            .filter(col => col.headerName !== 'Identity')
+            .filter(col => !(col.headerName === 'Identity' || col.headerName === 'Raw'))
             .map(col => Number(col.nodeNumber))
         ).toEqual([ 11, 19, 12, 5, 20, 17, 23, 6, 24, 13, 2 ]);
     });
@@ -127,7 +137,7 @@ describe('DataGridService', () => {
         expect(getKey(someDisplayCols[0])).toBe('MSNG');
         expect(getKey(someDisplayCols[1])).toBe('100900.0');
         expect(getKey(noLoadElement)).toBeUndefined();
-        expect(service.columnDefs.length).toBe(12);
+        expect(service.columnDefs.length).toBe(13);
     });
 
     it('should hide non-displayed rows if configured', () => {
@@ -139,7 +149,7 @@ describe('DataGridService', () => {
             .find(n => n.elementID === eti).hide;
 
         expect(isHidden('node 1.13.215.0.0.0.0', '1.13.215.0.0.0.0')).toBeTruthy();
-        expect(service.columnDefs.length).toBe(12);
+        expect(service.columnDefs.length).toBe(13);
     });
 
     it('allow blank columns', () => {
@@ -149,7 +159,7 @@ describe('DataGridService', () => {
         const row = service.rowData[0];
         const getKey = (eti: string) => row['e_' + eti.replace(/\./g, '_')];
         expect(getKey(blankElement)).toBeUndefined();
-        expect(service.columnDefs.length).toBe(13);
+        expect(service.columnDefs.length).toBe(14);
     });
 
 });
