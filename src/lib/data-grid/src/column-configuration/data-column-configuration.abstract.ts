@@ -10,7 +10,6 @@ export abstract class DataColumnConfiguration {
   getIdentityHeaders() {
     return {
       'headerName': 'Identity',
-      'suppressToolPanel': true,
       'children': [
         {
           'headerName': 'Station',
@@ -18,6 +17,7 @@ export abstract class DataColumnConfiguration {
           'width': 100,
           'pinned': true,
           'suppressPaste': true,
+          'lockVisible': true,
           'type': 'identity',
         },
         {
@@ -28,6 +28,7 @@ export abstract class DataColumnConfiguration {
           'sort': 'asc',
           'comparator': obsUtil.compareObsTime,
           'cellRenderer': this.renderObsTime,
+          'lockVisible': true,
           'type': 'identity',
         },
         // What about dailies that send back a completed revision?
@@ -38,6 +39,7 @@ export abstract class DataColumnConfiguration {
           'width': 75,
           'sort': 'asc',
           'comparator': obsUtil.compareRevision,
+          'lockVisible': true,
           'type': 'identity',
         },
       ],
