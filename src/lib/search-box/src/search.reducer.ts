@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { SearchModel } from './search.model';
+import { SearchModel } from './model/search.model';
 
 export const BUILD_SEARCH = 'BUILD_SEARCH';
 export const CLEAR_SEARCH = 'CLEAR_SEARCH';

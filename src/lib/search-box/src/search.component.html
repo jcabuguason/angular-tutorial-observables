@@ -1,54 +1,174 @@
-<div class="advancedSearchBox" tabindex="0" (keyup.enter)="searchService.submitSearch(); searchService.removeAllSuggestedChoices()">
+<div class="search-component">
+  <div class="search-container" tabindex="0" (keyup.enter)="searchService.submitSearch()">
 
-    <button id="submitSearchBtn" *ngIf="searchService.searchBtnText" (click)="searchService.submitSearch()">{{searchService.searchBtnText}}</button>
-    
-    <!-- selected search parameter -->
-    <div class="selected-parameters" *ngFor = "let p of searchService.displayParams; index as i">
-        <!-- parameters -->
-        <div class="search-parameter" (click)="searchService.removeAllSuggestedChoices(i)">
-            <div> {{ p.getKey() }}: </div>
-            <div *ngIf="p.getSearchParam().getType() === 'SearchParameter'">
-                <input [(ngModel)]="p.value" #valueInput placeholder={{p.getSearchParam().getPlaceholder()}} class="value-input"
-                (keyup)="searchService.showSuggestedChoices(valueInput.value, i)" 
-                (click)="searchService.showSuggestedChoices(valueInput.value, i)">
-
-                <!-- available choices -->
-                <span *ngIf="p.getDisplayChoices().length" class="pop-up">
-                    <ul *ngFor="let c of p.getDisplayChoices()" >
-                        <li (click)="searchService.addValueToDisplay(c, i)" > {{ c }} </li>
-                    </ul>
-                </span>
-            </div>
-
-            <div *ngIf="p.getSearchParam().getType() === 'SearchDatetime'">
-                <input type="date" value pattern="^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$"
-                [(ngModel)]="p.getSearchParam().date" >
-
-                <input type="number" size="2" min="00" max="23" placeholder="HH"
-                [(ngModel)]="p.getSearchParam().hour" > :
-                <!-- need choices for hours -->
-                <input type="number" size="2" min="00" max="59" placeholder="MM"
-                [(ngModel)]="p.getSearchParam().minute" >
-            </div>
-
-            <div *ngIf="p.getSearchParam().getType() === 'SearchHoursRange'">
-                <input type="number" min="0" max="36"
-                [(ngModel)]="p.getSearchParam().hoursBefore" placeholder="hrs before" class="hrs-input"> /
-                <input type="number" min="0" max="36"
-                [(ngModel)]="p.getSearchParam().hoursAfter" placeholder="hrs after" class="hrs-input">
-            </div>
-
-            <button (click)="searchService.removeDisplay(i)">x</button>
-
-        </div>
+    <div class="bar-buttons">
+      <button *ngIf="searchService.useForm" pButton type="button" class="bar-button" icon="fa fa-bars" (click)="searchService.openForm()"></button>
+      <button pButton type="button" class="bar-button" icon="fa fa-search" (click)="searchService.submitSearch()"></button>
+      <button #expandButton (click)="clickExpandButton(expandOnClick)"
+        pButton type="button" class="bar-button" icon="{{expandButtonIcon}}" *ngIf="showExpandButton"></button>
     </div>
+
+    <div class="parameters-container" #paramsContainer [ngStyle]="{'height': containerHeight}">
+    <!-- search parameters in bar -->
+      <div *ngFor = "let p of searchService.displayParams; index as i" class="selected-parameter">
+
+        <!-- editable search parameters -->
+        <div class="ui-inputgroup" *ngIf="p.getType() === paramType.SEARCH_PARAMETER">
+          <span class="ui-inputgroup-addon">{{p.getDisplayName()}}</span>
+
+          <ng-container *ngIf="p.getType() === paramType.SEARCH_PARAMETER">
+            <ng-container *ngIf="p.getChoices().length === 0; else hasChoices">
+              <!-- no choice, can enter only one value -->
+              <input *ngIf="p.getTimesUsable() === 1"
+                [(ngModel)]="p.selected[0]" type="text" pInputText size="15" placeholder="{{p.getPlaceholder()}}">
+
+              <!-- no choice, can enter multiple values -->
+              <p-chips *ngIf="p.getTimesUsable() > 1"
+                [(ngModel)]="p.selected" [allowDuplicate]="false" [addOnTab]="true" placeholder="{{p.getPlaceholder()}}"
+                [max]="p.getTimesUsable()" [addOnBlur]="true">
+              </p-chips>
+              <button pButton type="button" icon="pi pi-times" class="ui-button-danger"
+                (click)="searchService.removeDisplayParameter(p); checkOverflow()">
+              </button>
+            </ng-container>
+
+            <ng-template #hasChoices>
+              <!-- Need to do these 2 separately, doesn't send back the correct values anymore when using ternary operators in ngIf and ngModel -->
+              <p-autoComplete *ngIf="p.getTimesUsable() === 1"
+                [(ngModel)]="p.selected[0]"
+                [suggestions]="p.filteredSuggestions" (completeMethod)="p.filterSuggestions($event)"
+                [minLength]="1" [dropdown]="true" size="15" [forceSelection]="p.isRestricted()" placeholder="{{p.getPlaceholder()}}"
+                [multiple]="false" appendTo="body">
+                <ng-template let-choices pTemplate="item">
+                  <div>{{choices}}</div>
+                </ng-template>
+              </p-autoComplete>
+
+              <p-autoComplete *ngIf="p.getTimesUsable() > 1"
+                [(ngModel)]="p.selected"
+                [suggestions]="p.filteredSuggestions" (completeMethod)="p.filterSuggestions($event)"
+                [minLength]="1" [dropdown]="true" size="15" [forceSelection]="p.isRestricted()" placeholder="{{p.getPlaceholder()}}"
+                [multiple]="true" appendTo="body">
+                <ng-template let-choices pTemplate="item">
+                  <div>{{choices}}</div>
+                </ng-template>
+              </p-autoComplete>
+
+              <button pButton type="button" icon="pi pi-times" class="ui-button-danger beside-autocomplete"
+                (click)="searchService.removeDisplayParameter(p); checkOverflow()">
+              </button>
+            </ng-template>
+          </ng-container>
+        </div>
+
+        <div class="ui-inputgroup" *ngIf="p.getType() !== paramType.SEARCH_PARAMETER">
+          <span class="ui-inputgroup-addon">{{p.getDisplayName()}}</span>
+
+          <ng-container *ngIf="p.getType() === paramType.SEARCH_HOURS_RANGE">
+            <p-spinner size="7" placeholder="hrs before"
+              [(ngModel)]="p.hoursBefore" [min]="p.minHour" [max]="p.maxHour">
+            </p-spinner>
+            <p-spinner size="7" placeholder="hrs after"
+              [(ngModel)]="p.hoursAfter" [min]="p.minHour" [max]="p.maxHour"
+              [disabled]="searchService.useForm">
+            </p-spinner>
+          </ng-container>
+
+          <ng-container *ngIf="p.getType() === paramType.SEARCH_DATETIME">
+            <p-calendar appendTo="body"
+              [(ngModel)]="p.datetime" [showTime]="true" placeholder="{{p.getPlaceholder()}}"
+              [defaultDate]="defaultDate">
+            </p-calendar>
+          </ng-container>
+
+          <button pButton type="button" icon="pi pi-times" class="ui-button-danger"
+            (click)="searchService.removeDisplayParameter(p); checkOverflow()">
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- suggestions/categories that show up-->
+  <ng-container *ngIf="searchService.addParamsOnBar">
+    <div class="search-parameter-suggestions" *ngFor="let suggestion of searchService.suggestedParams">
+      <button pButton type="button" label="{{suggestion.getDisplayName()}}" class="suggestion-button"
+        (click)="searchService.addSuggestedParameter(suggestion); checkOverflow(); expandParamsContainer()">
+      </button>
+    </div>
+  </ng-container>
 </div>
 
-<!-- suggestions/categories that show up-->
-<div class="search-parameter-suggestions" *ngFor="let suggestion of searchService.suggestedParams">
-    <span class="search-parameter" (click)="searchService.addSuggestedParameter(suggestion)"> {{suggestion.getDisplayName()}}</span>
-</div>
+<!-- Popup Search Form -->
+<p-dialog header="Search" [(visible)]="searchService.displayForm" [modal]="true" [width]="600"
+  class="search-form" onshow="center()" [blockScroll]="true">
 
-<div *ngFor="let m of searchService.message">
-    <span> {{m}} </span>
-</div>
+  <!-- <p-accordion>
+    <p-accordionTab header="Shortcuts" [selected]="true">
+      <div class="shortcut-tab">
+        <div *ngFor = "let s of searchService.shortcutButtons" class="shortcut-button">
+          <button pButton type="button" label="{{s.label}}" (click)="s.command()"></button>
+        </div>
+      </div>
+    </p-accordionTab>
+
+    <p-accordionTab header="Basic Search"> -->
+      <div *ngFor = "let p of searchService.availableParams; index as i" class="selected-parameter" tabindex="0"
+        (keyup.enter)="searchService.submitSearchForm()">
+        <div> {{p.getDisplayName()}} </div>
+
+        <ng-container *ngIf="p.getType() === paramType.SEARCH_PARAMETER">
+          <ng-container *ngIf="p.getChoices().length === 0; else hasChoices">
+            <!-- no choice, one value -->
+            <input *ngIf="p.getTimesUsable() === 1"
+              [(ngModel)]="p.formSelected[0]" type="text" pInputText size="20"
+              placeholder="{{p.getPlaceholder()}}">
+
+            <!-- no choice, multiple value -->
+            <p-chips *ngIf="p.getTimesUsable() > 1"
+              [(ngModel)]="p.formSelected" [allowDuplicate]="false" [max]="p.getTimesUsable()"
+              [addOnTab]="true" [addOnBlur]="true"
+              placeholder="{{p.getPlaceholder()}}"
+              ></p-chips>
+          </ng-container>
+
+          <ng-template #hasChoices>
+            <p-dropdown *ngIf="p.getTimesUsable() === 1" [options]="p.multiSelectChoices"
+              [(ngModel)]="p.formSelected[0]" [filter]="true" appendTo="body">
+            </p-dropdown>
+
+            <p-multiSelect *ngIf="p.getTimesUsable() > 1" [options]="p.multiSelectChoices"
+              [(ngModel)]="p.formSelected" [maxSelectedLabels]="p.multiSelectChoices.length" appendTo="body">
+            </p-multiSelect>
+          </ng-template>
+        </ng-container>
+
+        <ng-container *ngIf="p.getType() === paramType.SEARCH_HOURS_RANGE">
+          <p-spinner size="7" placeholder="hrs before"
+            [(ngModel)]="p.formHoursBefore" [min]="0" [max]="p.maxHour">
+          </p-spinner>
+          <p-spinner size="7" placeholder="hrs after"
+            [(ngModel)]="p.formHoursAfter" [min]="0" [max]="p.maxHour">
+          </p-spinner>
+        </ng-container>
+
+        <ng-container *ngIf="p.getType() === paramType.SEARCH_DATETIME">
+          <p-calendar [(ngModel)]="p.formDatetime" [showTime]="true" [defaultDate]="defaultDate"
+            placeholder="{{p.getPlaceholder()}}" appendTo="body">
+          </p-calendar>
+        </ng-container>
+
+      </div>
+    <!-- </p-accordionTab>
+  </p-accordion> -->
+
+  <p-footer>
+    <button pButton type="button" label="Reset" (click)="searchService.resetForm();" class="ui-button-secondary"></button>
+    <button pButton type="button" label="Submit" (click)="searchService.submitSearchForm()" class="ui-button-secondary"></button>
+  </p-footer>
+
+</p-dialog>
+
+<p-growl *ngIf="!searchService.displayForm" class="error-message" [(value)]="messageService.popupMessage" [sticky]="true"></p-growl>
+

@@ -1,3 +1,25 @@
 {
-  "ngPackage": { }
+  "ngPackage": {
+    "lib": {
+      "externals": {
+        "date-fns": "date-fns",
+        "primeng/accordion": "primeng/accordion",
+        "primeng/autocomplete": "primeng/autocomplete",
+        "primeng/button": "primeng/button",
+        "primeng/calendar": "primeng/calendar",
+        "primeng/chips": "primeng/chips",
+        "primeng/dialog": "primeng/dialog",
+        "primeng/dropdown": "primeng/dropdown",
+        "primeng/growl": "primeng/growl",
+        "primeng/inputtext": "primeng/inputtext",
+        "primeng/menu": "primeng/menu",
+        "primeng/messages": "primeng/messages",
+        "primeng/multiselect": "primeng/multiselect",
+        "primeng/spinner": "primeng/spinner"
+      }
+    }
+  },
+  "peerDependencies": {
+    "primeng": "^6.0.0"
+  }
 }
