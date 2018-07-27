@@ -4,6 +4,8 @@ import { ElementColumnConfiguration } from './column-configuration/element-colum
 import { ColumnConfigurationContainer } from './column-configuration/column-configuration-container.model';
 
 import { DefaultColumnConfiguration } from './column-configuration/default-column-configuration.class';
+import { MatDialog } from '@angular/material/dialog';
+import { StationComponent } from './station-info/station-info.component';
 
 import {
     UserConfigService,
@@ -34,7 +36,7 @@ export class DataGridService {
     // set to true/false in pegasus after userConfigService.loadConfig(config)
     public ignoreUserConfig = false;
 
-    constructor(public userConfigService: UserConfigService) {
+    constructor(public userConfigService: UserConfigService, public dialog: MatDialog) {
         this.columnConfiguration = new DefaultColumnConfiguration();
         this.resetHeader();
     }
@@ -74,7 +76,7 @@ export class DataGridService {
     }
 
     getContextMenuItems() {
-        return this.columnConfiguration.getContextMenuItems();
+        return this.columnConfiguration.getContextMenuItems(this);
     }
 
     getMainMenuItems() {
@@ -422,6 +424,16 @@ export class DataGridService {
         return this.userConfigService.getElementVisibility(elementID) === ElementVisibility.HIDDEN;
     }
 
+    private displayMetadataTable(allData) {
+        this.dialog.open(StationComponent, {
+            data: {
+                allData: Object.keys(allData).filter(key => !key.startsWith('e_')).map(key => ({
+                    'key': key,
+                    'value': allData[key]
+                }))
+            }
+        });
+    }
 }
 
 export interface DMSElementSummary {

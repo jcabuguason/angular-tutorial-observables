@@ -1,6 +1,6 @@
-import { GridStationInfoComponent } from '../grid-station-info/grid-station-info.component';
 import { getTime } from 'date-fns';
 import { DataGridService } from '../data-grid.service';
+import { StationComponent } from '../station-info/station-info.component';
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 
 export abstract class DataColumnConfiguration {
@@ -17,9 +17,6 @@ export abstract class DataColumnConfiguration {
           'field': 'station',
           'width': 100,
           'pinned': true,
-          // Not actually editable, just the name of the Framework for double-clicking a cell for info
-          'editable': true,
-          'cellEditorFramework': GridStationInfoComponent,
           'suppressPaste': true,
           'type': 'identity',
         },
@@ -64,17 +61,21 @@ export abstract class DataColumnConfiguration {
     };
   }
 
-  getContextMenuItems() {
-    return (params) => this.addContextMenuItems(params);
+  getContextMenuItems(gridService: DataGridService) {
+    return (params) => this.addContextMenuItems(params, gridService);
   }
 
-  addContextMenuItems(params): any {
+  addContextMenuItems(params, gridService): any {
     return [
       'copy',
       'copyWithHeaders',
       'separator',
       'toolPanel',
       this.csvExcelExporter(params),
+      {
+        name: 'Station Info',
+        action: () => gridService.displayMetadataTable(params.node.data)
+      },
     ];
   }
 

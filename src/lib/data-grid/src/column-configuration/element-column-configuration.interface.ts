@@ -15,7 +15,7 @@ export interface ElementColumnConfiguration {
 
   getIdentityHeaders();
 
-  getContextMenuItems();
+  getContextMenuItems(gridService: DataGridService);
 
   // TODO: Get rid of gridService here once the chart select UI changes
   getMainMenuItems(gridService: DataGridService);
