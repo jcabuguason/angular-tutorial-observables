@@ -1,13 +1,31 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { Location } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 import { SearchComponent } from './search.component';
 import { SearchService } from './search.service';
 
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser/';
-import { DebugElement } from '@angular/core/src/debug/debug_node';
-import { SEARCH_BOX_CONFIG, SearchParameter } from './public_api';
+import { SEARCH_BOX_CONFIG } from './public_api';
+
+import { AccordionModule } from 'primeng/accordion';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { ButtonModule } from 'primeng/button';
+import { CalendarModule } from 'primeng/calendar';
+import { ChipsModule } from 'primeng/chips';
+import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
+import { GrowlModule } from 'primeng/growl';
+import { InputTextModule } from 'primeng/inputtext';
+import { MenuModule } from 'primeng/menu';
+import { MessagesModule } from 'primeng/messages';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { SpinnerModule } from 'primeng/spinner';
+import { SearchMessageService } from './search-message.service';
+import { SearchURLService } from './search-url.service';
+import { MockUrlService, MockMessageService } from './mock-services';
 
 describe('SearchComponent', () => {
   let searchComponent: SearchComponent;
@@ -17,15 +35,31 @@ describe('SearchComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        FormsModule
+        FormsModule,
+        BrowserAnimationsModule,
+        AccordionModule,
+        AutoCompleteModule,
+        ButtonModule,
+        CalendarModule,
+        ChipsModule,
+        DialogModule,
+        DropdownModule,
+        GrowlModule,
+        InputTextModule,
+        MenuModule,
+        MessagesModule,
+        MultiSelectModule,
+        SpinnerModule,
       ],
       declarations: [
         SearchComponent
       ],
       providers: [
         SearchService,
-        { provide: SEARCH_BOX_CONFIG, useValue: {}},
-        { provide: Location, useValue: { go: () => {}}}
+        { provide: SEARCH_BOX_CONFIG, useValue: {} },
+        { provide: Location, useValue: { go: () => {}} },
+        { provide: SearchMessageService, useClass: MockMessageService },
+        { provide: SearchURLService, useClass: MockUrlService },
       ]
     }).compileComponents()
     .then(() => {
@@ -40,28 +74,18 @@ describe('SearchComponent', () => {
   });
 
   it('pressing enter on search box', () => {
-    const box = fixture.debugElement.query(By.css('.advancedSearchBox'));
-    expect(box).toBeDefined();
+    const box = fixture.debugElement.query(By.css('.search-container'));
+    expect(box.nativeElement).toBeDefined();
 
     spyOn(searchService, 'submitSearch');
-    spyOn(searchService, 'removeAllSuggestedChoices');
     box.nativeElement.dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter'}));
     expect(searchService.submitSearch).toHaveBeenCalled();
-    expect(searchService.removeAllSuggestedChoices).toHaveBeenCalled();
   });
 
-  it('adding suggestions that show up on the bottom', () => {
-    const suggestions = fixture.debugElement.query(By.css('.search-parameter-suggestions'));
-    expect(suggestions).toBeDefined();
-
-    searchService.suggestedParams = [new SearchParameter('name', [], false, false)];
+  it('should check expand button', () => {
+    spyOn(searchComponent, 'checkOverflow');
     fixture.detectChanges();
-
-    const params = fixture.debugElement.query(By.css('.search-parameter-suggestions .search-parameter'));
-    expect(params).toBeDefined();
-
-    spyOn(searchService, 'addSuggestedParameter');
-    params.nativeElement.click();
-    expect(searchService.addSuggestedParameter).toHaveBeenCalled();
+    expect(searchComponent.checkOverflow).toHaveBeenCalled();
   });
+
 });

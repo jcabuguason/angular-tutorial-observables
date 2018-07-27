@@ -1,97 +1,119 @@
-/* These were taken and modified from http://dnauck.github.io/angular-advanced-searchbox/
-https://github.com/dnauck/angular-advanced-searchbox/blob/master/src/angular-advanced-searchbox.css
- */
-.advancedSearchBox {
-  display: block;
+.search-component:hover {
+  z-index: 4;
+}
+
+.search-container {
+  display: flex;
   position: relative;
-  margin: 5px 0 10px 0;
+  margin: 5px 0 3px 0;
   border: 1px solid #ccc;
   border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  min-height: 40px;
-  padding: 0 9px;
+  min-height: 39px;
+  padding: 0 2px;
   background-color: #fff;
-  cursor: text;
   line-height: 38px;
+  z-index: 4;
+}
+.parameters-container {
+  display: inline;
+  overflow: hidden;
 }
 
-.advancedSearchBox.active {
-  border-color: #66afe9;
-}
-
-/* the box */
-.search-parameter {
+.parameters-container .selected-parameter {
   display: inline-block;
-  height: 26px;
-  margin: 0 7px 0 0;
-  background-color: #ececec;
-  border: 1px solid #ccc;
-  padding: 0 5px;
-  border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  line-height: 24px;
-  cursor: default;
-  transition: box-shadow 100ms linear;
+  margin: 0 5px 5px 0;
+  line-height: 19px;
 }
 
-.search-parameter:hover {
-  box-shadow: 0 3px 3px rgba(0,0,0,0.2);
+.bar-buttons {
+  display: flex;
+  max-height: 36px;
 }
-
-.search-parameter div {
-  float: left;
-  margin: 0 2px;
-}
-
-/* makes it inline */
-.search-parameter-suggestions {
-  cursor: auto;
-  display: inline-block;
-}
-
-.selected-parameters {
-  cursor: auto;
-  display: inline-block;
-}
-
-.value-input {
-  /* should be changed to be auto width from length typed */
-  width: 100px;
-}
-
-.pop-up {
-  position: fixed;
-  z-index: 6;
+.bar-button.ui-button {
   background-color: #fff;
-  border: 1px solid #ccc;
-  padding: 0 5px;
-  border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  max-height: 250px; 
-  overflow-y: auto;
-  width: 110px;
+  border-color:  #fff;
+  color: #373a3c;
+  display: inline-block;
+}
+.bar-button.ui-button:hover {
+  background-color: #fff;
+  border-color:  #fff;
+  color: #0099ff;
 }
 
-ul {
+.search-parameter-suggestions {
+  display: inline-block;
+  padding: 2px;
+}
+.search-parameter-suggestions .ui-button {
+  height: 26px;
+  font-size: 15px;
   padding: 0;
-  margin:0;
 }
 
-li {
-  list-style-type: none;
+/* search category name in the bar */
+::ng-deep .ui-inputgroup .ui-inputgroup-addon:first-child  {
+  min-width: auto ;
+}
+/* dropdown button gets covered by delete button without this */
+::ng-deep .ui-autocomplete .ui-autocomplete-dropdown {
+  position: absolute;
+}
+.ui-button.beside-autocomplete {
+  margin: 0 0 0 29px;
 }
 
-li:hover {
-  background-color: #f1f0f0;
+::ng-deep .selected-parameter .ui-autocomplete-multiple-container .ui-autocomplete-input-token input {
+  width: 5em;
 }
 
-.hrs-input {
-  width: 90px;
+::ng-deep .ui-inputtext {
+  min-height: 29px;
+}
+.ui-inputgroup {
+  font-family: "Roboto", "Trebuchet MS", Arial, Helvetica, sans-serif;
+  font-size: 15px;
 }
 
-#submitSearchBtn {
-  height: 28px;
+/* form */
+::ng-deep p-dialog .ui-dialog{
+  overflow: auto;
+  max-height: 100%;
+}
+
+.shortcut-tab {
+  text-align: center;
+}
+
+.shortcut-button {
+  display: inline-block;
+  margin: 0 5px 5px 0;
+}
+
+.search-form .selected-parameter {
+  margin: 5px 5px 0 0;
+}
+.search-form .selected-parameter:focus {
+  outline: none;
+}
+
+::ng-deep .ui-multiselect {
+  min-width: 190px;
+}
+
+/* popup message */
+::ng-deep .ui-growl {
+  position: fixed;
+  top: 55px;
+  left: 15px;
+}
+
+::ng-deep .ui-growl-item {
+  color: #ab1a0f;
+  background-color: #ffcbc8;
+  border-color: #ffcbc8;
+}
+
+.error-message {
+  text-align: left;
 }

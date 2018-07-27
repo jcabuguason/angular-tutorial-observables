@@ -1,4 +1,4 @@
-import { SearchParameter } from './search-parameter';
+import { SearchParameter } from './parameters/search-parameter';
 
 export class SearchTaxonomy {
     private allSearchWords: SearchTaxonomyWord[] = [];
@@ -6,13 +6,11 @@ export class SearchTaxonomy {
      * @param taxonomy The taxonomy (ex: 'dms_data:msc:observation:atmospheric:surface_weather:ca-1.1-ascii')
      * @param allSearchParams All searchable parameters and choices
      * @param searchWords words to associate taxonomy with
-     * @param phases Phases that can be returned from the search (decoded-xml-2.0, decoded_qa-xml-2.0, etc). Default is all.
      */
     constructor(
         private taxonomy: string,
         private allSearchParams: SearchParameter[],
-        private extraSearchWords: string[] = [],
-        private phases: string[] = defaultPhases
+        private extraSearchWords: string[] = []
     ) {
         const taxonomyKeys = this.splitToKeywords(taxonomy);
         this.categorize(allSearchParams, taxonomyKeys);
@@ -83,12 +81,3 @@ export class SearchTaxonomyWord {
   }
 
 }
-
-/** not really used yet */
-const defaultPhases: string[] = [
-    'decoded-xml-2.0',
-    'decoded_qa-xml-2.0',
-    'decoded_qa_full-xml-2.0',
-    'decoded_enhanced-xml-2.0',
-    'decoded_qa_enhanced-xml-2.0'
-];
