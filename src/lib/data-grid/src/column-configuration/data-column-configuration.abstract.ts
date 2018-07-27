@@ -70,7 +70,6 @@ export abstract class DataColumnConfiguration {
       'copy',
       'copyWithHeaders',
       'separator',
-      'toolPanel',
       this.csvExcelExporter(params),
       {
         name: 'Station Info',
@@ -82,7 +81,8 @@ export abstract class DataColumnConfiguration {
   // TODO: Get rid of gridService here once the chart select UI changes
   getMainMenuItems(gridService: DataGridService) {
     return function(params) {
-      const menuItems = params.defaultItems.slice(0);
+      const menuItems = params.defaultItems.slice(0)
+        .filter(item => item !== 'toolPanel');
       menuItems.push(
         'separator',
         {
