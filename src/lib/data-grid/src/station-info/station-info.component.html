@@ -1,0 +1,10 @@
+<div class="title-bar">
+    <span class="title"> Station Info </span>
+</div>
+
+<div class='mat-table'>
+    <div class="mat-row" *ngFor="let model of allData">
+        <div class="mat-cell">{{model.key}}</div>
+        <div class="mat-cell">{{model.value}}</div>
+    </div>
+</div>

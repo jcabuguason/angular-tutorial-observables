@@ -10,4 +10,4 @@ export * from './renderers/qa-renderer.component';
 export * from './renderers/dataflag-renderer.component';
 export * from './renderers/qof-renderer.component';
 export * from './renderers/vof-renderer.component';
-export * from './grid-station-info/grid-station-info.component';
+export * from './station-info/station-info.component';
