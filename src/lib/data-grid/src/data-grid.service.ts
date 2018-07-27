@@ -396,7 +396,7 @@ export class DataGridService {
         'headerName': this.userConfigService.getByElementName(element.elementID),
         'field': headerID,
         'width': 80,
-        'columnGroupShow': 'open',
+        'hide': true,
         'type': 'identity',
         'elementID': element.elementID,
       };
