@@ -366,8 +366,8 @@ export class DataGridService {
       if (element.indexValue !== undefined) {
         columnToAdd = {
           'headerName': (element.indexValue
-            ? (this.userConfigService.getElementIndexTitle(elementID)) + element.indexValue
-            : 'Official'),
+            ? (this.userConfigService.getElementIndexTitle(elementID)) + ' ' + element.indexValue
+            : this.userConfigService.getElementOfficialIndexTitle(elementID)),
           'children': [],
           'elementID' : elementID,
         };

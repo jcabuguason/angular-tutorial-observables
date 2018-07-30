@@ -157,12 +157,24 @@ export class UserConfigService {
             .shift();
     }
 
+    getElementOfficialIndexTitle(elementID: string): string {
+        return this.userConfig.elementConfigs
+            .filter(config => config.elementID === elementID)
+            .map(config => config.officialTitle)
+            .filter(officialTitle => officialTitle !== undefined)
+            .map(officialTitle => officialTitle.getName(this.lang))
+            .shift()
+            || 'Official';
+    }
+
     getElementIndexTitle(elementID: string): string {
         return this.userConfig.elementConfigs
             .filter(config => config.elementID === elementID)
             .map(config => config.indexTitle)
+            .filter(indexTitle => indexTitle !== undefined)
             .map(indexTitle => indexTitle.getName(this.lang))
-            .shift();
+            .shift()
+            || 'Layer';
     }
 
     getElementPrecision(elementID: string): number {

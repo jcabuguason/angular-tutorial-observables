@@ -163,6 +163,26 @@ describe('UserConfigService', () => {
         expect(service.getElementUnit('1.12.207.2.1.1.0')).toBe('m');
     });
 
+    it('should return the default official title', () => {
+        service.loadConfig(emptyConfig);
+        expect(service.getElementOfficialIndexTitle('1.19.6.0.66.0.0')).toBe('Official');
+    });
+
+    it('should return the specific official title', () => {
+        service.loadConfig(layerConfig);
+        expect(service.getElementOfficialIndexTitle('1.12.207.2.1.1.0')).toBe('Proper');
+    });
+
+    it('should return the default layer title', () => {
+        service.loadConfig(emptyConfig);
+        expect(service.getElementIndexTitle('1.19.6.0.66.0.0')).toBe('Layer');
+    });
+
+    it('should return a specific layer title', () => {
+        service.loadConfig(layerConfig);
+        expect(service.getElementIndexTitle('1.12.207.2.1.1.0')).toBe('Cloud Index');
+    });
+
     it('should return an element group', () => {
         service.loadConfig(elementGroupConfig);
         expect(service.getElementGroup('1.2.3.4.5.6.7')[0]).toBe('1.2.3.4.5.6.7');
@@ -389,6 +409,22 @@ describe('UserConfigService', () => {
         ]
     };
 
+    const layerConfig: MDInstanceDefinition = {
+        dataset: 'stub',
+        parent: 'stub',
+        identificationElements: [],
+        elements: [
+            {group: 'element-display', name: 'element', value: '1.12.207.2.1.1.0', def_id: '', id: '', index: '', uom: '',
+                language: {english: '', french: ''}, instelements: [
+                {group: 'element-display', name: 'index-title', value: 'Cloud Index', def_id: '', id: '', index: '', uom: '',
+                    language: {english: '', french: ''}, instelements: []},
+                {group: 'element-display', name: 'official-title', value: 'Proper', def_id: '', id: '', index: '', uom: '',
+                    language: {english: '', french: ''}, instelements: []},
+                ]
+            },
+        ]
+    };
+
     const unitConfig: MDInstanceDefinition = {
         dataset: 'stub',
         parent: 'stub',
@@ -408,6 +444,7 @@ describe('UserConfigService', () => {
             },
         ]
     };
+
     const complexUnitConfig: MDInstanceDefinition = {
         dataset: 'stub',
         parent: 'stub',
