@@ -32,10 +32,10 @@ export function compareObsTimeFromObs(obs1, obs2) {
 }
 
 /** Assumes that alphabetical is okay for non-orig corrections. */
-/** Returns 1 if cor1 has a higer revision than cor2, 0 if same, -1 if cor1 is lower than cor2. */
-export function compareRevision(cor1, cor2): number {
-    const rev1 = cor1.split('_v');
-    const rev2 = cor2.split('_v');
+/** Returns 1 if the first revision has a higer value than then second, 0 if same, -1 otherwise. */
+export function compareRevision(first, second): number {
+    const rev1 = first.split('_v');
+    const rev2 = second.split('_v');
     rev1[1] = (rev1.length === 1) ? 0 : Number(rev1[1]);
     rev2[1] = (rev2.length === 1) ? 0 : Number(rev2[1]);
 
@@ -48,16 +48,16 @@ export function compareRevision(cor1, cor2): number {
 }
 
 /** Same as compareRevision but returns true instead of 1 if cor1 has a higher or same revision as cor2 */
-export function compareRevisionBoolean(cor1, cor2): boolean {
-    return compareRevision(cor1, cor2) >= 0;
+export function compareRevisionBoolean(rev1, rev2): boolean {
+    return compareRevision(rev1, rev2) >= 0;
 }
 
-/** Returns true iff obs1 has a higher revision than obs2 */
+/** Returns true when obs1 has a higher or equal revision to obs2 */
 export function compareRevisionFromObs(obs1, obs2) {
     return compareRevision(
         findRevision(obs1),
         findRevision(obs2)
-    ) > 0;
+    ) >= 0;
 }
 
 /** To be used when array-filtering for the latest revision per date */
