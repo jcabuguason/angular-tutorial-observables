@@ -120,6 +120,7 @@ export class ElementConfig {
     nodeNames: NodeIndexMap[];
     elementName: LanguageLabel;
     displayUnit: string;
+    officialTitle: LanguageLabel;
     indexTitle: LanguageLabel;
     precision: number;
 
@@ -150,6 +151,11 @@ export class ElementConfig {
             // Configuring display unit
             if (element.group === 'element-display' && element.name === 'display-unit') {
                 currentConfig.displayUnit = element.value;
+            }
+
+            // Configuring official index title
+            if (element.group === 'element-display' && element.name === 'official-title') {
+                currentConfig.officialTitle = LanguageLabel.createLanguageLabel(element);
             }
 
             // Configuring index title
