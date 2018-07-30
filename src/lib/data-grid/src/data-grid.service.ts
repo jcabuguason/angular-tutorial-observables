@@ -451,7 +451,7 @@ export class DataGridService {
         const identity = (key) => !(key.startsWith('e_') || key.startsWith('raw_'));
         this.dialog.open(StationComponent, {
             data: {
-                allData: Object.keys(allData).filter(key => identity).map(key => ({
+                allData: Object.keys(allData).filter(identity).map(key => ({
                     'key': key,
                     'value': allData[key]
                 }))
