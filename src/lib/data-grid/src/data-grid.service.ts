@@ -210,7 +210,11 @@ export class DataGridService {
             }
         });
 
-        const remainingCols = this.columnDefs.filter(col => col.headerName !== 'Identity' && configOrder.indexOf(col.elementID) === -1);
+        const remainingDataCol = (col) => col.headerName !== 'Identity'
+            && col.headerName !== 'Raw'
+            && configOrder.indexOf(col.elementID) === -1;
+
+        const remainingCols = this.columnDefs.filter(remainingDataCol);
         const remainingIdentityCols = identityChildren.filter(col => configOrder.indexOf(col.elementID) === -1
             && pinned.indexOf(col) === -1);
 
