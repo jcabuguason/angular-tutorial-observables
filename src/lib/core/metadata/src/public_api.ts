@@ -11,3 +11,5 @@ export * from './model/MetadataInstanceHistory';
 export * from './user-config/user-config.model';
 export * from './user-config/user-config.service';
 export * from './user-config/node.const';
+export * from './unit-code-conversion/unit-code-conversion.service';
+export * from './unit-code-conversion/unit-code-conversion.model';
