@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { FromUnits, UnitConversion, CodeSources, CodeResult } from './unit-code-conversion.model';
 
-const units = require('./units.json');
-const codes = require('./codes.json');
+const units = require('assets/units.json');
+const codes = require('assets/codes.json');
 
 @Injectable()
 export class UnitCodeConversionService {
