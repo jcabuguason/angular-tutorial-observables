@@ -285,6 +285,7 @@ export class DataGridService {
     // used without providing user config
     private createSubHeader(headerDepth: number, nodes: string[]) {
         let headerNode = ' (';
+        headerDepth++;
 
         for (let j = headerDepth; j < (headerDepth + this.headerNodeDepth); j++) {
             const node = this.getNodeHeader((j + 1), nodes[j]);
