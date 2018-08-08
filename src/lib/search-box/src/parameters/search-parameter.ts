@@ -93,7 +93,9 @@ export class SearchParameter {
 
   addSelected(value: string) {
     if (this.canAddSelected(value)) {
-      this.selected.push(value);
+      const fixed = this.choices.find(val => val.toLowerCase() === value.toLowerCase())
+        || value;
+      this.selected.push(fixed);
     }
   }
 
