@@ -23,9 +23,9 @@ describe('SearchService', () => {
   const nameValueObj = (name, value) => ({'name': name, 'value': value});
   const paramValueObj = (param, value) => ({ 'param': param, 'value': value });
 
-  const caIndex = 'dms_data:msc:observation:atmospheric:surface_weather:ca-1.1-ascii';
-  const raIndex = 'dms_data:msc:observation:atmospheric:surface_weather:ra-1.1-ascii';
-  const dndAwosIndex = 'dms_data:dnd:observation:atmospheric:surface_weather:awos-1.0-binary';
+  const caIndex = 'dms_data+msc+observation+atmospheric+surface_weather+ca-1.1-ascii';
+  const raIndex = 'dms_data+msc+observation+atmospheric+surface_weather+ra-1.1-ascii';
+  const dndAwosIndex = 'dms_data+dnd+observation+atmospheric+surface_weather+awos-1.0-binary';
 
   let sParams = {
     organizationParam : null,
