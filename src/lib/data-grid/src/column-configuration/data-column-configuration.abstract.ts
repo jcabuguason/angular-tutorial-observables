@@ -1,48 +1,61 @@
-import { getTime } from 'date-fns';
 import { DataGridService } from '../data-grid.service';
-import { StationComponent } from '../station-info/station-info.component';
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 
 export abstract class DataColumnConfiguration {
 
   public allowBlankDataColumns = false;
 
-  getIdentityHeaders() {
+  getIdentityHeaders(): any {
     return {
       'headerName': 'Identity',
-      'children': [
-        {
-          'headerName': 'Station',
-          'field': 'station',
-          'width': 100,
-          'pinned': true,
-          'suppressPaste': true,
-          'lockVisible': true,
-          'type': 'identity',
-        },
-        {
-          'headerName': 'Instance Date',
-          'field': 'obsDateTime',
-          'width': 220,
-          'pinned': true,
-          'sort': 'asc',
-          'comparator': obsUtil.compareObsTime,
-          'cellRenderer': this.renderObsTime,
-          'lockVisible': true,
-          'type': 'identity',
-        },
-        // What about dailies that send back a completed revision?
-        {
-          'headerName': 'Rev',
-          'field': 'revision',
-          'pinned': true,
-          'width': 75,
-          'sort': 'asc',
-          'comparator': obsUtil.compareRevision,
-          'lockVisible': true,
-          'type': 'identity',
-        },
-      ],
+      'suppressPaste': true,
+      'children': this.buildIdentityChildren()
+    };
+  }
+
+  buildIdentityChildren(): any[] {
+    return [
+      this.buildStationHeader(),
+      this.buildDatetimeHeader(),
+      this.buildRevisionHeader(),
+    ];
+  }
+
+  buildStationHeader(): any {
+    return {
+      'headerName': 'Station',
+      'field': 'station',
+      'width': 100,
+      'pinned': true,
+      'lockVisible': true,
+      'type': 'identity',
+    };
+  }
+
+  buildDatetimeHeader(): any {
+    return {
+      'headerName': 'Instance Date',
+      'field': 'obsDateTime',
+      'width': 220,
+      'pinned': true,
+      'sort': 'asc',
+      'comparator': obsUtil.compareObsTime,
+      'cellRenderer': this.renderObsTime,
+      'lockVisible': true,
+      'type': 'identity',
+    };
+  }
+
+  buildRevisionHeader(): any {
+    return {
+      'headerName': 'Rev',
+      'field': 'revision',
+      'pinned': true,
+      'width': 75,
+      'sort': 'asc',
+      'comparator': obsUtil.compareRevision,
+      'lockVisible': true,
+      'type': 'identity',
     };
   }
 
@@ -148,13 +161,4 @@ export abstract class DataColumnConfiguration {
     return `<a href="/core${params.data.uri}" target="_blank">${params.value}</a>`;
   }
 
-  // TODO: Remove this when call is removed from MIDAS
-  compareObsTime(date1, date2): number {
-    return obsUtil.compareObsTime(date1, date2);
-  }
-
-  // TODO: Remove this when call is removed from MIDAS
-  compareRevision(cor1, cor2): number {
-    return obsUtil.compareRevision(cor1, cor2);
-  }
 }
