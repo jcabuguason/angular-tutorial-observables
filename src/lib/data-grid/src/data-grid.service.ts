@@ -224,6 +224,18 @@ export class DataGridService {
         this.columnDefs = [identity, ...dataCols, this.rawHeader];
     }
 
+    displayMetadataTable(allData) {
+        const identity = (key) => !(key.startsWith('e_') || key.startsWith('raw_'));
+        this.dialog.open(StationComponent, {
+            data: {
+                allData: Object.keys(allData).filter(identity).map(key => ({
+                    'key': key,
+                    'value': allData[key]
+                }))
+            }
+        });
+    }
+
     // checks element ID to determine if its a metadata element
     private isMetadatElement(elementID: string) {
         const identitifer = Object.keys(NodeLookups.node2)
@@ -450,18 +462,6 @@ export class DataGridService {
     private hideDataElement(elementID: string): boolean {
         // should return default even if use empty user config (dont need to check ignoreUserConfig)
         return this.userConfigService.getElementVisibility(elementID) === ElementVisibility.HIDDEN;
-    }
-
-    private displayMetadataTable(allData) {
-        const identity = (key) => !(key.startsWith('e_') || key.startsWith('raw_'));
-        this.dialog.open(StationComponent, {
-            data: {
-                allData: Object.keys(allData).filter(identity).map(key => ({
-                    'key': key,
-                    'value': allData[key]
-                }))
-            }
-        });
     }
 }
 

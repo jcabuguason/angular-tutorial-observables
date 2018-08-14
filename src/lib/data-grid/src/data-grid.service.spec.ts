@@ -11,6 +11,7 @@ import { VUColumnConfiguration } from './column-configuration/vu-column-configur
 import { AccordianColumnConfiguration } from './column-configuration/accordian-column-configuration.class';
 import { UserConfigService, ElementVisibility } from 'msc-dms-commons-angular/core/metadata';
 import { MatDialog } from '@angular/material';
+import { StationComponent } from './station-info/station-info.component';
 
 describe('DataGridService', () => {
     let service: DataGridService;
@@ -162,4 +163,24 @@ describe('DataGridService', () => {
         expect(service.columnDefs.length).toBe(14);
     });
 
+    it('should open filtered station info', () => {
+        const data = {
+            station: 'StationA',
+            msc_id: '1234567',
+            e_1_2_3_4_5_6_7: 'element',
+            raw_header: 'raw header',
+        };
+        const calledWtihData = {
+            data: {
+                allData: [
+                    { key: 'station', value: 'StationA' },
+                    { key: 'msc_id', value: '1234567' }
+                ]
+            }
+        };
+        spyOn(service.dialog, 'open');
+
+        service.displayMetadataTable(data);
+        expect(service.dialog.open).toHaveBeenCalledWith(StationComponent, calledWtihData);
+    });
 });
