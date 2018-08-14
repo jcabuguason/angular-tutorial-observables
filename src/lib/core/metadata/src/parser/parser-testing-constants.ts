@@ -1,4 +1,5 @@
 import { MDDefinition } from '../model/MDDefinition';
+import { MDInstanceElement, MDInstanceDefinition } from '../model';
 
 export const DEFINITION_PARSER_INPUT = {
    '@xmlns': 'http://dms.ec.gc.ca/schema/metadata/1.0',
@@ -312,7 +313,7 @@ export const INSTANCE_DEFINITION_PARSER_INPUT = {
                      '@def_id': '56af20bc1bed3440',
                      '@group': 'account',
                      '@id': 'f2a20a197dd1a4f4',
-                     '@index': 1,
+                     '@index': '1',
                      '@name': 'last_name',
                      '@uom': 'unitless',
                      '@value': 'Test'
@@ -321,7 +322,7 @@ export const INSTANCE_DEFINITION_PARSER_INPUT = {
                      '@def_id': '64dff3a98d585a5d',
                      '@group': 'domain',
                      '@id': '7b1eb450e5ea9d11',
-                     '@index': 1,
+                     '@index': '1',
                      '@name': 'authentication',
                      '@uom': 'unitless',
                      '@value': 'das',
@@ -330,7 +331,7 @@ export const INSTANCE_DEFINITION_PARSER_INPUT = {
                            '@def_id': 'c8154bc1f47699af',
                            '@group': 'domain',
                            '@id': 'c1feff7cb66bb2ac',
-                           '@index': 1,
+                           '@index': '1',
                            '@name': 'domain',
                            '@uom': 'unitless',
                            '@value': 'fd'
@@ -344,14 +345,14 @@ export const INSTANCE_DEFINITION_PARSER_INPUT = {
    }
 };
 
-export const INSTANCE_DEFINITION_PARSER_OUTPUT = {
+export const INSTANCE_DEFINITION_PARSER_OUTPUT: MDInstanceDefinition = {
     dataset: '/msc/mr/system/user/instance-xml-2.0',
     parent: '/metadata/msc/mr/system/user/definition-xml-2.0/1.0',
     elements: [{
         def_id: '56af20bc1bed3440',
         group: 'account',
         id: 'f2a20a197dd1a4f4',
-        index: 1,
+        index: '1',
         language: {english: undefined, french: undefined},
         instelements: [],
         name: 'last_name',
@@ -361,7 +362,7 @@ export const INSTANCE_DEFINITION_PARSER_OUTPUT = {
         def_id: '64dff3a98d585a5d',
         group: 'domain',
         id: '7b1eb450e5ea9d11',
-        index: 1,
+        index: '1',
         name: 'authentication',
         uom: 'unitless',
         value: 'das',
@@ -371,7 +372,7 @@ export const INSTANCE_DEFINITION_PARSER_OUTPUT = {
                 def_id: 'c8154bc1f47699af',
                 group: 'domain',
                 id: 'c1feff7cb66bb2ac',
-                index: 1,
+                index: '1',
                 language: {english: undefined, french: undefined},
                 instelements: [],
                 name: 'domain',
@@ -390,7 +391,7 @@ export const INSTANCE_ELEMENT_PARSER_INPUT = {
     '@def_id': '56af20bc1bed3440',
     '@group': 'account',
     '@id': 'f2a20a197dd1a4f4',
-    '@index': 1,
+    '@index': '1',
     '@name': 'last_name',
     '@uom': 'unitless',
     '@value': 'Test',
@@ -399,7 +400,7 @@ export const INSTANCE_ELEMENT_PARSER_INPUT = {
         '@def_id': 'c8154bc1f47699af',
         '@group': 'domain',
         '@id': 'c1feff7cb66bb2ac',
-        '@index': 1,
+        '@index': '1',
         '@name': 'domain',
         '@uom': 'unitless',
         '@value': 'fd'
@@ -407,11 +408,11 @@ export const INSTANCE_ELEMENT_PARSER_INPUT = {
     ]
 };
 
-export const INSTANCE_ELEMENT_PARSER_OUTPUT = {
+export const INSTANCE_ELEMENT_PARSER_OUTPUT: MDInstanceElement = {
     def_id: '56af20bc1bed3440',
     group: 'account',
     id: 'f2a20a197dd1a4f4',
-    index: 1,
+    index: '1',
     name: 'last_name',
     uom: 'unitless',
     value: 'Test',
@@ -421,7 +422,7 @@ export const INSTANCE_ELEMENT_PARSER_OUTPUT = {
             def_id: 'c8154bc1f47699af',
             group: 'domain',
             id: 'c1feff7cb66bb2ac',
-            index: 1,
+            index: '1',
             name: 'domain',
             uom: 'unitless',
             value: 'fd',
