@@ -86,6 +86,9 @@ export class SearchParameter {
   }
 
   canAddSelected(value: string) {
+    if (this.isEmpty(value)) {
+      return false;
+    }
     return (this.isRestricted() && !this.includesChoice(value))
       ? false
       : !this.alreadySelected(value) && this.selected.length < this.timesUsable;
@@ -116,10 +119,12 @@ export class SearchParameter {
   }
 
   isUnfilledForm(): boolean {
+    this.formSelected = this.filterEmptyValues(this.formSelected);
     return this.formSelected.length === 0;
   }
 
   isUnfilled(): boolean {
+    this.selected = this.filterEmptyValues(this.selected);
     return this.selected.length === 0;
   }
 
@@ -131,6 +136,17 @@ export class SearchParameter {
   applyFormValues() {
     this.selected = this.formSelected;
   }
+
+  removeInvalidValues() {
+    this.selected = this.filterEmptyValues(this.selected);
+    if (this.isRestricted()) {
+      this.selected = this.selected.filter(val => this.includesChoice(val));
+    }
+  }
+
+  isEmpty = (value): boolean => value == null || value === '';
+
+  private filterEmptyValues = (array) => array.filter(val => !this.isEmpty(val));
 
 }
 

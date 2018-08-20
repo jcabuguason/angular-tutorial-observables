@@ -17,6 +17,11 @@ describe('SearchParameter', () => {
     expect(param.canAddSelected('123')).toBeTruthy();
   });
 
+  it('should check for empty values', () => {
+    expect(param.canAddSelected('')).toBeFalsy();
+    expect(paramRestricted.canAddSelected('')).toBeFalsy();
+  });
+
   it('should prevent adding same value again', () => {
     param.addSelected('msc');
     expect(param.canAddSelected('msc')).toBeFalsy();
