@@ -29,7 +29,7 @@ export class SearchHoursRange extends SearchParameter {
 
   // at least 1 field needs to be filled, the other will be set to a default or 0 if undefined/null
   canAddSelected(value) {
-    return (value.hh_before != null || value.hh_after != null);
+    return !this.isEmpty(value.hh_before) || !this.isEmpty(value.hh_after);
   }
 
   addSelected(value) {
@@ -86,10 +86,9 @@ export class SearchHoursRange extends SearchParameter {
   }
 
   private checkUnfilled(checkForm = false): boolean {
-    const isEmpty = (value) => value == null;
     return checkForm
-      ? isEmpty(this.formHoursBefore) && isEmpty(this.formHoursAfter)
-      : isEmpty(this.hoursBefore) && isEmpty(this.hoursAfter);
+      ? this.isEmpty(this.formHoursBefore) && this.isEmpty(this.formHoursAfter)
+      : this.isEmpty(this.hoursBefore) && this.isEmpty(this.hoursAfter);
   }
 
   private fixValue(input: any, min: number, max: number, defaultNum: number = 0): number {

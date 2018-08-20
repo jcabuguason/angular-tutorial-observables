@@ -89,17 +89,18 @@ export class SearchService {
     }
 
     if (values != null) {
-      values.forEach(val => {
-        if (!parameter.canAddSelected(val)) {
-          this.messageService.displayMessage(this.messageService.messageSummaries.cannotAddValue,
-            [parameter.getDisplayName() + ' with value: ' + val]);
-        } else {
-          if (parameter.getName() === ParameterName.SIZE) {
-            val = this.fixNumObs(val).toString();
+      values.filter(val => val != null && val !== '')
+        .forEach(val => {
+          if (!parameter.canAddSelected(val)) {
+            this.messageService.displayMessage(this.messageService.messageSummaries.cannotAddValue,
+              [parameter.getDisplayName() + ' with value: ' + val]);
+          } else {
+            if (parameter.getName() === ParameterName.SIZE) {
+              val = this.fixNumObs(val).toString();
+            }
+            parameter.addSelected(val);
           }
-          parameter.addSelected(val);
-        }
-      });
+        });
     }
   }
 
@@ -136,8 +137,10 @@ export class SearchService {
     this.shortcutSelected = shortcut;
     const model = this.getSearchModel();
 
-    if (updateUrlParams) { this.updateUrl(); }
-    this.searchRequested.emit(model);
+    if (model.taxonomy.length > 0) {
+      if (updateUrlParams) { this.updateUrl(); }
+      this.searchRequested.emit(model);
+    }
     this.displayForm = false;
   }
 
@@ -259,6 +262,7 @@ export class SearchService {
 
   /** Find added parameters but are not filled in */
   private findEmptyDisplayParameters(): SearchParameter[] {
+    this.displayParams.forEach(p => p.removeInvalidValues());
     return this.displayParams.filter(p => p.isUnfilled());
   }
 

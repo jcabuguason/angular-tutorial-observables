@@ -13,6 +13,7 @@ describe('SearchDatetime', () => {
 
     expect(dateParam.canAddSelected(invalidDate)).toBeFalsy();
     expect(dateParam.canAddSelected(null)).toBeFalsy();
+    expect(dateParam.canAddSelected('')).toBeFalsy();
     expect(dateParam.canAddSelected(validDate)).toBeTruthy();
 
     dateParam.addSelected(validDate);
@@ -24,4 +25,9 @@ describe('SearchDatetime', () => {
     dateParam.addSelected(new Date(date));
     expect(dateParam.getDatetimeUrlFormat()).toEqual(date);
   });
+
+  it('should return empty string for formatted datetime', () => {
+    expect(dateParam.getDatetimeUrlFormat()).toEqual('');
+  });
+
 });

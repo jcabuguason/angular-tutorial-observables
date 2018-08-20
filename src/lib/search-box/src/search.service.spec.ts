@@ -122,6 +122,21 @@ describe('SearchService', () => {
     );
   });
 
+  it('should check for empty values', () => {
+    const param1 = sParams.networkParam;
+    const param2 = sParams.stationIdParam;
+    searchService.addSuggestedParameter(param1);
+    searchService.addSuggestedParameter(param2);
+
+    spyOn(messageService, 'displayMessage');
+    searchService.submitSearch();
+
+    expect(messageService.displayMessage).toHaveBeenCalledWith(
+      messageService.messageSummaries.unfilledField,
+      [param1.getDisplayName(), param2.getDisplayName()]
+    );
+  });
+
   it('should check if parameter was already added', () => {
     const param1 = sParams.organizationParam;
 

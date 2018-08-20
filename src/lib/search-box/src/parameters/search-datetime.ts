@@ -48,7 +48,9 @@ export class SearchDatetime extends SearchParameter {
   }
 
   getDatetimeUrlFormat() {
-    return this.formattedDate() + 'T' + this.formattedTime();
+    return !this.isEmpty(this.datetime)
+      ? this.formattedDate() + 'T' + this.formattedTime()
+      : '';
   }
 
   setFullDatetime(date: Date) {

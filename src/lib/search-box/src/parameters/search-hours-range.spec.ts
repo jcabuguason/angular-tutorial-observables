@@ -28,6 +28,12 @@ describe('SearchDatetime', () => {
     expect(hoursParam.hoursAfter).toBeUndefined();
   });
 
+  it('should not add hours if both hh_before and hh_after are empty', () => {
+    hoursParam.addSelected({'hh_before': '', 'hh_after': ''});
+    expect(hoursParam.hoursBefore).toBeUndefined();
+    expect(hoursParam.hoursAfter).toBeUndefined();
+  });
+
   it('should set hour to 0 if field is undefined', () => {
     hoursParam.setHours(3, undefined);
     expect(hoursParam.hoursBefore).toEqual(3);

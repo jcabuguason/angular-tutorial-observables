@@ -37,7 +37,7 @@
               <p-autoComplete *ngIf="p.getTimesUsable() === 1"
                 [(ngModel)]="p.selected[0]"
                 [suggestions]="p.filteredSuggestions" (completeMethod)="p.filterSuggestions($event)"
-                [minLength]="1" [dropdown]="true" size="15" [forceSelection]="p.isRestricted()" placeholder="{{p.getPlaceholder()}}"
+                [minLength]="1" [dropdown]="true" size="15" placeholder="{{p.getPlaceholder()}}"
                 [multiple]="false" appendTo="body">
                 <ng-template let-choices pTemplate="item">
                   <div>{{choices}}</div>
