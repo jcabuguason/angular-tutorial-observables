@@ -186,6 +186,10 @@ export class DataGridService {
     }
 
     sortColumns() {
+        if (!this.rowData.length) {
+            return;
+        }
+
         const configOrder = this.userConfigService.getElementOrder();
 
         const identity = this.columnDefs.find(col => col.headerName === 'Identity');
