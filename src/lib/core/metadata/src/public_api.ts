@@ -8,6 +8,7 @@ export * from './model/MDInstanceDefinition';
 export * from './model/MetadataDefinitionList';
 export * from './model/MetadataDefinitionHistory';
 export * from './model/MetadataInstanceHistory';
+export * from './model/InstanceInfo';
 export * from './user-config/user-config.model';
 export * from './user-config/user-config.service';
 export * from './user-config/node.const';

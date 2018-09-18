@@ -6,3 +6,4 @@ export { MDInstanceDefinition } from './MDInstanceDefinition';
 export { MetadataDefinitionList } from './MetadataDefinitionList';
 export { MetadataDefinitionHistory } from './MetadataDefinitionHistory';
 export { MetadataInstanceHistory } from './MetadataInstanceHistory';
+export { InstanceInfo, InstanceNames } from './InstanceInfo';
