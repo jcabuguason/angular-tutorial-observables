@@ -198,5 +198,9 @@ export const LanguageConstants = {
   'welcome': {
       'en': 'Pegasus is capable of managing metadata instances with the following features:',
       'fr': 'Pegasus est capable de gérer les instances de métadonnées avec les fonctionnalités suivantes:'
+  },
+  'version_not_needed': {
+    'en': 'Optional field, latest value will be used if left empty',
+    'fr': 'Zone optionnelle, la dernière valeur sera utilisée si elle est vide'
   }
 };
