@@ -27,6 +27,7 @@ export class DataGridService {
     public rowData: object[] = [];
     public columnDefs: any[];
     public columnTypes = { 'identity': {} };
+    public defaultColDef = { menuTabs: ['generalMenuTab', 'filterMenuTab'] };
     public reloadRequested = new EventEmitter();
     public chartColumnRequested = new EventEmitter();
 
@@ -107,8 +108,7 @@ export class DataGridService {
             }
         };
 
-        mdElements.filter(e => e != null)
-                  .filter(e => e.elementID != null)
+        mdElements.filter(e => e != null && e.elementID != null)
                   .forEach(buildColumn);
 
         // added at the same time with user config
@@ -396,17 +396,14 @@ export class DataGridService {
           workingNode.children = [];
         }
 
+        // Uses hard-text for Official, I believe fixed in another pending branch
+        // Merge together when possible.
         if (columnToAdd.headerName === 'Official') {
             for (const node of workingNode.children) {
                 node.columnGroupShow = 'open';
             }
-        } else {
-            for (const node of workingNode.children) {
-                if (node.headerName === 'Official') {
-                    columnToAdd.columnGroupShow = 'open';
-                    break;
-                }
-            }
+        } else if (workingNode.children.some(node => node.headerName === 'Official')) {
+          columnToAdd.columnGroupShow = 'open';
         }
 
         workingNode.children.push(columnToAdd);
