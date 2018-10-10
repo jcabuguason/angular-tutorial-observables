@@ -35,7 +35,7 @@ export class SearchTaxonomy {
     }
 
     private splitToKeywords(taxonomy: string): string[] {
-      return taxonomy.split(':').filter(k => k !== '');
+      return taxonomy.split('+').filter(k => k !== '');
     }
 
     private categorize(searchParams: SearchParameter[], words: string[]) {
