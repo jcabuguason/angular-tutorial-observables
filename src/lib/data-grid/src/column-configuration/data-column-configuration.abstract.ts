@@ -67,7 +67,9 @@ export abstract class DataColumnConfiguration {
     return (params) => this.addContextMenuItems(params, gridService);
   }
 
-  addContextMenuItems(params, gridService): any {
+  addContextMenuItems(params, gridService): any[] {
+    if (!params.column) {return [this.csvExcelExporter(params)]; }
+
     return [
       'copy',
       'copyWithHeaders',
