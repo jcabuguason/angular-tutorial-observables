@@ -1,11 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { By } from '@angular/platform-browser/';
-import { StationComponent } from './station-info.component';
+import { StationInfoComponent } from './station-info.component';
 
 describe('ElementDataflagInfoDialogComponent', () => {
-  let component: StationComponent;
-  let fixture: ComponentFixture<StationComponent>;
+  let component: StationInfoComponent;
+  let fixture: ComponentFixture<StationInfoComponent>;
 
   const data = {
     allData: [
@@ -16,13 +16,13 @@ describe('ElementDataflagInfoDialogComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ StationComponent ],
+      declarations: [ StationInfoComponent ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: data},
       ]
     }).compileComponents()
     .then(() => {
-      fixture = TestBed.createComponent(StationComponent);
+      fixture = TestBed.createComponent(StationInfoComponent);
       component = fixture.componentInstance;
     });
   }));

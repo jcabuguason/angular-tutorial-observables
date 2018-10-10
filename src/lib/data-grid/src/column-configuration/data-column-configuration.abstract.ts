@@ -1,4 +1,5 @@
 import { DataGridService } from '../data-grid.service';
+import { StationInfoComponent } from '../station-info/station-info.component';
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 
 export abstract class DataColumnConfiguration {

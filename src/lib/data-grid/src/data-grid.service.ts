@@ -5,7 +5,7 @@ import { ColumnConfigurationContainer } from './column-configuration/column-conf
 
 import { DefaultColumnConfiguration } from './column-configuration/default-column-configuration.class';
 import { MatDialog } from '@angular/material/dialog';
-import { StationComponent } from './station-info/station-info.component';
+import { StationInfoComponent } from './station-info/station-info.component';
 
 import {
     UserConfigService,
@@ -230,7 +230,7 @@ export class DataGridService {
 
     displayMetadataTable(allData) {
         const identity = (key) => !(key.startsWith('e_') || key.startsWith('raw_'));
-        this.dialog.open(StationComponent, {
+        this.dialog.open(StationInfoComponent, {
             data: {
                 allData: Object.keys(allData).filter(identity).map(key => ({
                     'key': key,
