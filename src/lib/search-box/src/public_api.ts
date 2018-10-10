@@ -13,5 +13,4 @@ export * from './parameters/search-datetime';
 export * from './parameters/search-hours-range';
 export * from './parameters/search-parameter';
 
-export * from './search-message.service';
 export * from './search-url.service';

@@ -101,19 +101,12 @@
   min-width: 190px;
 }
 
-/* popup message */
-::ng-deep .ui-growl {
-  position: fixed;
-  top: 55px;
-  left: 15px;
-}
-
-::ng-deep .ui-growl-item {
+:host ::ng-deep .ui-toast-message {
   color: #ab1a0f;
   background-color: #ffcbc8;
   border-color: #ffcbc8;
 }
 
-.error-message {
-  text-align: left;
+:host ::ng-deep .ui-toast-close-icon {
+  color: #ab1a0f;
 }

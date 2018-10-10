@@ -10,16 +10,17 @@
         "primeng/chips": "primeng/chips",
         "primeng/dialog": "primeng/dialog",
         "primeng/dropdown": "primeng/dropdown",
-        "primeng/growl": "primeng/growl",
+        "primeng/toast": "primeng/toast",
         "primeng/inputtext": "primeng/inputtext",
         "primeng/menu": "primeng/menu",
         "primeng/messages": "primeng/messages",
         "primeng/multiselect": "primeng/multiselect",
-        "primeng/spinner": "primeng/spinner"
+        "primeng/spinner": "primeng/spinner",
+        "primeng/components/common/messageservice": "primeng/components/common/messageservice"
       }
     }
   },
   "peerDependencies": {
-    "primeng": "^6.0.0"
+    "primeng": "^6.1.2"
   }
 }

@@ -17,15 +17,15 @@ import { CalendarModule } from 'primeng/calendar';
 import { ChipsModule } from 'primeng/chips';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
-import { GrowlModule } from 'primeng/growl';
+import { ToastModule } from 'primeng/toast';
 import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';
 import { MessagesModule } from 'primeng/messages';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SpinnerModule } from 'primeng/spinner';
-import { SearchMessageService } from './search-message.service';
 import { SearchURLService } from './search-url.service';
 import { MockUrlService, MockMessageService } from './mock-services';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 describe('SearchComponent', () => {
   let searchComponent: SearchComponent;
@@ -44,7 +44,7 @@ describe('SearchComponent', () => {
         ChipsModule,
         DialogModule,
         DropdownModule,
-        GrowlModule,
+        ToastModule,
         InputTextModule,
         MenuModule,
         MessagesModule,
@@ -56,9 +56,9 @@ describe('SearchComponent', () => {
       ],
       providers: [
         SearchService,
+        MessageService,
         { provide: SEARCH_BOX_CONFIG, useValue: {} },
         { provide: Location, useValue: { go: () => {}} },
-        { provide: SearchMessageService, useClass: MockMessageService },
         { provide: SearchURLService, useClass: MockUrlService },
       ]
     }).compileComponents()
