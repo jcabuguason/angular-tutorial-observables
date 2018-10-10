@@ -13,8 +13,8 @@ import { ShortcutModel } from './model/shortcut.model';
 
 import { SEARCH_BOX_CONFIG, SearchBoxConfig } from './search-box.config';
 
-import { SearchMessageService } from './search-message.service';
 import { SearchURLService } from './search-url.service';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 @Injectable()
 export class SearchService {
@@ -44,22 +44,35 @@ export class SearchService {
   shortcutSelected: ShortcutModel;
   shortcutButtons = [];
 
+  popupMessage = [];
+  details;
+
+  messageSummaries = {
+    'missingRequired': 'Missing required search fields:',
+    'unfilledField': 'Fields added but do not have a value or correct format (note: Invalid values could have been automatically removed):',
+  };
+
+
   constructor(
     @Inject(SEARCH_BOX_CONFIG)
     public config: SearchBoxConfig,
     public location: Location,
-    private messageService: SearchMessageService,
+    private messageService: MessageService,
     private urlService: SearchURLService,
   ) {
-      this.taxonomies = this.config.taxonomies;
-      this.availableParams = this.config.searchList;
-      this.suggestedParams = this.availableParams;
+    this.taxonomies = this.config.taxonomies;
+    this.availableParams = this.config.searchList;
+    this.suggestedParams = this.availableParams;
 
-      this.addParamsOnBar = this.config.addParamsOnBar;
-      this.useForm = this.config.useForm;
+    this.addParamsOnBar = this.config.addParamsOnBar;
+    this.useForm = this.config.useForm;
 
-      this.shortcuts = this.config.shortcuts;
-      this.createShortcutButtons();
+    this.shortcuts = this.config.shortcuts;
+    this.createShortcutButtons();
+  }
+
+  clearMessages() {
+    this.popupMessage = [];
   }
 
   /** Executes parameters for a search request */
@@ -91,21 +104,16 @@ export class SearchService {
     if (values != null) {
       values.filter(val => val != null && val !== '')
         .forEach(val => {
-          if (!parameter.canAddSelected(val)) {
-            this.messageService.displayMessage(this.messageService.messageSummaries.cannotAddValue,
-              [parameter.getDisplayName() + ' with value: ' + val]);
-          } else {
-            if (parameter.getName() === ParameterName.SIZE) {
-              val = this.fixNumObs(val).toString();
-            }
-            parameter.addSelected(val);
+          if (parameter.getName() === ParameterName.SIZE) {
+            val = this.fixNumObs(val).toString();
           }
+          parameter.addSelected(val);
         });
     }
   }
 
   /** Add and display parameter (by name) with value if it exists */
-  addParameterByName(name: string, values ?: any[]) {
+  addParameterByName(name: string, values?: any[]) {
     const parameter = this.availableParams.find(p => p.getName() === name);
     if (parameter != null) {
       this.addSuggestedParameter(parameter, values);
@@ -270,16 +278,20 @@ export class SearchService {
   private hasValidParameters(): boolean {
     const empty = this.findEmptyDisplayParameters().map(p => p.getDisplayName());
     const missing = this.findMissingRequiredParameters().map(p => p.getDisplayName());
+
     let valid = true;
 
-    this.messageService.clearMessages();
+    this.messageService.clear();
+    this.popupMessage = [];
 
     if (empty.length > 0) {
-      this.messageService.displayMessage(this.messageService.messageSummaries.unfilledField, empty);
+      this.popupMessage.push(this.messageSummaries.unfilledField);
+      this.messageService.add({ summary: this.messageSummaries['unfilledField'], data: empty, sticky: true });
       valid = false;
     }
     if (missing.length > 0) {
-      this.messageService.displayMessage(this.messageService.messageSummaries.missingRequired, missing);
+      this.popupMessage.push(this.messageSummaries.missingRequired);
+      this.messageService.add({ summary: this.messageSummaries['missingRequired'], data: missing, sticky: true });
       valid = false;
     }
     return valid;
@@ -299,7 +311,7 @@ export class SearchService {
           temp = temp.concat(filtered);
         });
         taxResult = temp;
-    });
+      });
     return taxResult;
   }
 

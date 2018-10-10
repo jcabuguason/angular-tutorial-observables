@@ -2,9 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { Location } from '@angular/common';
 
 import { SearchService } from './search.service';
-import { SearchMessageService } from './search-message.service';
 import { SearchURLService } from './search-url.service';
-import { MockMessageService } from './mock-services';
 
 import { SearchBoxConfig, SEARCH_BOX_CONFIG } from './search-box.config';
 
@@ -14,11 +12,11 @@ import { SearchDatetime } from './parameters/search-datetime';
 import { SearchHoursRange } from './parameters/search-hours-range';
 import { SearchTaxonomy } from './search-taxonomy';
 import { SearchableElement, SearchElement, SearchModel } from './model/search.model';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 describe('SearchService', () => {
   let searchService: SearchService;
   let location: Location;
-  let messageService: SearchMessageService;
 
   const nameValueObj = (name, value) => ({'name': name, 'value': value});
   const paramValueObj = (param, value) => ({ 'param': param, 'value': value });
@@ -93,48 +91,15 @@ describe('SearchService', () => {
     TestBed.configureTestingModule({
       providers: [
         SearchService,
+        MessageService,
         { provide: Location, useValue: { go: () => {}}},
         { provide: SEARCH_BOX_CONFIG, useValue: config },
-        { provide: SearchMessageService, useClass: MockMessageService },
         { provide: SearchURLService, useClass: MockUrlService },
       ],
     });
 
     searchService = TestBed.get(SearchService);
-    messageService = TestBed.get(SearchMessageService);
     location = TestBed.get(Location);
-  });
-
-  it('should add suggested parameter', () => {
-    const param1 = sParams.organizationParam;
-    const param2 = sParams.networkParam;
-    spyOn(messageService, 'displayMessage');
-
-    searchService.addSuggestedParameter(param1);
-    searchService.addSuggestedParameter(param2, ['ca', 'notOnList']);
-
-    expect(searchService.displayParams).toEqual([param1, param2]);
-    expect(param2.getSelected()).toEqual(['ca']);
-
-    expect(messageService.displayMessage).toHaveBeenCalledWith(
-      messageService.messageSummaries.cannotAddValue,
-      [param2.getDisplayName() + ' with value: notOnList']
-    );
-  });
-
-  it('should check for empty values', () => {
-    const param1 = sParams.networkParam;
-    const param2 = sParams.stationIdParam;
-    searchService.addSuggestedParameter(param1);
-    searchService.addSuggestedParameter(param2);
-
-    spyOn(messageService, 'displayMessage');
-    searchService.submitSearch();
-
-    expect(messageService.displayMessage).toHaveBeenCalledWith(
-      messageService.messageSummaries.unfilledField,
-      [param1.getDisplayName(), param2.getDisplayName()]
-    );
   });
 
   it('should check if parameter was already added', () => {

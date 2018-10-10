@@ -80,7 +80,7 @@
     "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
     "ng-packagr": "2.0.0-rc.6",
-    "primeng": "^6.0.0",
+    "primeng": "^6.1.2",
     "primeicons": "^1.0.0-beta.9",
     "protractor": "~5.1.2",
     "rimraf": "^2.6.2",

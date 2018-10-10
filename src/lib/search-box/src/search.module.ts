@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 
 import { SearchComponent } from './search.component';
 import { SearchService } from './search.service';
-import { SearchMessageService } from './search-message.service';
 import { SearchURLService } from './search-url.service';
 
 import { AccordionModule } from 'primeng/accordion';
@@ -14,12 +13,13 @@ import { CalendarModule } from 'primeng/calendar';
 import { ChipsModule } from 'primeng/chips';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
-import { GrowlModule } from 'primeng/growl';
+import { ToastModule } from 'primeng/toast';
 import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';
 import { MessagesModule } from 'primeng/messages';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SpinnerModule } from 'primeng/spinner';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 @NgModule({
   imports: [
@@ -33,7 +33,7 @@ import { SpinnerModule } from 'primeng/spinner';
     ChipsModule,
     DialogModule,
     DropdownModule,
-    GrowlModule,
+    ToastModule,
     InputTextModule,
     MenuModule,
     MessagesModule,
@@ -42,8 +42,8 @@ import { SpinnerModule } from 'primeng/spinner';
   ],
   providers: [
     SearchService,
-    SearchMessageService,
     SearchURLService,
+    MessageService,
   ],
   declarations: [
     SearchComponent
