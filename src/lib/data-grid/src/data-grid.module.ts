@@ -5,7 +5,7 @@ import { QaRendererComponent } from './renderers/qa-renderer.component';
 import { DataFlagRendererComponent } from './renderers/dataflag-renderer.component';
 import { QofRendererComponent } from './renderers/qof-renderer.component';
 import { VofRendererComponent } from './renderers/vof-renderer.component';
-import { StationComponent } from './station-info/station-info.component';
+import { StationInfoComponent } from './station-info/station-info.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material';
 import { MatSortModule } from '@angular/material';
@@ -19,7 +19,7 @@ import { MatSortModule } from '@angular/material';
     DataFlagRendererComponent,
     QofRendererComponent,
     VofRendererComponent,
-    StationComponent,
+    StationInfoComponent,
   ],
   imports: [
     CommonModule,
@@ -34,6 +34,6 @@ import { MatSortModule } from '@angular/material';
     QofRendererComponent,
     VofRendererComponent,
   ],
-  entryComponents: [StationComponent],
+  entryComponents: [StationInfoComponent],
 })
   export class DataGridModule { }

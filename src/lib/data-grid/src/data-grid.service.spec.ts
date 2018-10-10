@@ -11,7 +11,7 @@ import { VUColumnConfiguration } from './column-configuration/vu-column-configur
 import { AccordianColumnConfiguration } from './column-configuration/accordian-column-configuration.class';
 import { UserConfigService, ElementVisibility } from 'msc-dms-commons-angular/core/metadata';
 import { MatDialog } from '@angular/material';
-import { StationComponent } from './station-info/station-info.component';
+import { StationInfoComponent } from './station-info/station-info.component';
 
 describe('DataGridService', () => {
     let service: DataGridService;
@@ -170,7 +170,7 @@ describe('DataGridService', () => {
             e_1_2_3_4_5_6_7: 'element',
             raw_header: 'raw header',
         };
-        const calledWtihData = {
+        const calledWithData = {
             data: {
                 allData: [
                     { key: 'station', value: 'StationA' },
@@ -181,6 +181,6 @@ describe('DataGridService', () => {
         spyOn(service.dialog, 'open');
 
         service.displayMetadataTable(data);
-        expect(service.dialog.open).toHaveBeenCalledWith(StationComponent, calledWtihData);
+        expect(service.dialog.open).toHaveBeenCalledWith(StationInfoComponent, calledWithData);
     });
 });
