@@ -285,7 +285,7 @@ describe('SearchService', () => {
       createElement('12345', 'WMO_ID'),
       createElement('abcd', 'ICAO_ID'),
       createElement('123abcd', 'MSC_ID'),
-      createElement('some other id', 'MSC_ID')
+      createElement('someId', 'MSC_ID')
     ];
     searchService.addSuggestedParameter(sParams.stationIdParam, stations.map(s => s.station));
 
@@ -340,6 +340,25 @@ describe('SearchService', () => {
     expect(sParams.startDateParam.datetime).toEqual(new Date('2018-01-30T05:00'));
     expect(sParams.hoursParam.hoursBefore).toEqual(10);
     expect(sParams.hoursParam.hoursAfter).toEqual(20);
+  });
+
+  it('should handle spaces for station search', () => {
+    const nameId = SearchableElement.STATION_NAME.id;
+    const wmoId = SearchableElement.STATION_TYPE.WMO_ID.id;
+    const createElement = (value, id, adjustedValue) => ({
+      'station': value,
+      'searchElement': new SearchElement(id, 'metadataElements', 'value', adjustedValue)
+    });
+
+    const stationId = createElement(' 123 45 ', wmoId, '12345');
+    const stationName = createElement(' station name ', nameId, 'station name');
+
+    searchService.addSuggestedParameter(sParams.stationIdParam, [stationId.station]);
+    searchService.addSuggestedParameter(sParams.stationNameParam, [stationName.station]);
+
+    expect(searchService.getSearchModel().elements).toEqual(
+      [stationId.searchElement, stationName.searchElement]
+    );
   });
 
 });

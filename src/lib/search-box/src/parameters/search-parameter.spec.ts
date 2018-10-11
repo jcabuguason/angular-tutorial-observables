@@ -22,6 +22,14 @@ describe('SearchParameter', () => {
     expect(paramRestricted.canAddSelected('')).toBeFalsy();
   });
 
+  it('should trim space if it exists before/after value', () => {
+    expect(param.canAddSelected(' ')).toBeFalsy();
+    expect(param.canAddSelected(' msc ')).toBeTruthy();
+
+    expect(param.addSelected(' msc '));
+    expect(param.selected).toEqual(['msc']);
+  });
+
   it('should prevent adding same value again', () => {
     param.addSelected('msc');
     expect(param.canAddSelected('msc')).toBeFalsy();
