@@ -177,15 +177,21 @@ export class SearchService {
           if (adjusted !== station) { p.setSelectedAt(index, adjusted); }
           addToElements(id, adjusted);
         };
+        const updateValue = (value, index, newValue) => {
+          if (newValue !== value) { p.setSelectedAt(index, newValue); }
+        };
 
         switch (p.getName()) {
           case ParameterName.STATION_ID:
-            selected.forEach((value, index) => addStationToElements((value + '').toUpperCase(), index));
+            selected.forEach((value, index) => {
+              const stationID = value.toUpperCase().replace(/\s+/g, '');
+              updateValue(value, index, stationID);
+              addStationToElements(stationID, index);
+            });
             operator = 'AND';
             break;
           case ParameterName.STATION_NAME:
-            selected.forEach((value, index) =>
-              addStationToElements(value, index, SearchableElement.STATION_NAME.id));
+            selected.forEach((value, index) => addStationToElements(value, index, SearchableElement.STATION_NAME.id));
             operator = 'AND';
             break;
           case ParameterName.PROVINCE:
@@ -194,9 +200,8 @@ export class SearchService {
             break;
           case ParameterName.SIZE:
             selected.forEach((s, index) => {
-              const adjustedSize = this.fixNumObs(s);
-              p.setSelectedAt(index, adjustedSize.toString());
-              numObs = Number(adjustedSize);
+              numObs = this.fixNumObs(s);
+              updateValue(s, index, String(numObs));
             });
             break;
           case ParameterName.FROM:

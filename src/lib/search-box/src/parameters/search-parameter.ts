@@ -1,6 +1,6 @@
 export class SearchParameter {
-  selected: any[];
-  formSelected: any[];
+  selected: string[];
+  formSelected: string[];
   filteredSuggestions: string[] = [];
   multiSelectChoices = [];
 
@@ -86,6 +86,7 @@ export class SearchParameter {
   }
 
   canAddSelected(value: string) {
+    value = this.cleanEntries([value]).shift();
     if (this.isEmpty(value)) {
       return false;
     }
@@ -95,6 +96,7 @@ export class SearchParameter {
   }
 
   addSelected(value: string) {
+    value = this.cleanEntries([value]).shift();
     if (this.canAddSelected(value)) {
       const fixed = this.choices.find(val => val.toLowerCase() === value.toLowerCase())
         || value;
@@ -119,12 +121,12 @@ export class SearchParameter {
   }
 
   isUnfilledForm(): boolean {
-    this.formSelected = this.filterEmptyValues(this.formSelected);
+    this.formSelected = this.cleanEntries(this.formSelected);
     return this.formSelected.length === 0;
   }
 
   isUnfilled(): boolean {
-    this.selected = this.filterEmptyValues(this.selected);
+    this.selected = this.cleanEntries(this.selected);
     return this.selected.length === 0;
   }
 
@@ -138,16 +140,23 @@ export class SearchParameter {
   }
 
   removeInvalidValues() {
-    this.selected = this.filterEmptyValues(this.selected);
+    this.selected = this.cleanEntries(this.selected);
+    this.selected = this.removeDuplicates(this.selected);
     if (this.isRestricted()) {
       this.selected = this.selected.filter(val => this.includesChoice(val));
     }
   }
 
-  isEmpty = (value): boolean => value == null || value === '';
+  isEmpty = (value): boolean => value == null || String(value) === '';
 
-  private filterEmptyValues = (array) => array.filter(val => !this.isEmpty(val));
+  cleanEntries = (arr: string[]): string[] => arr
+    .map(entry => entry != null && entry.trim())
+    .filter(trimmed => !!trimmed)
 
+  // some values still gets through from manual user input in the form/bar (ngModel binding)
+  // ex. '12345 ' and '12345   ' are technically unique
+  private removeDuplicates = (arr: string[]): string[] => arr
+    .filter((val, index) => arr.indexOf(val) === index)
 }
 
 export enum ParameterType {
