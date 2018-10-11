@@ -40,7 +40,7 @@
                 [minLength]="1" [dropdown]="true" size="15" placeholder="{{p.getPlaceholder()}}"
                 [multiple]="false" appendTo="body">
                 <ng-template let-choices pTemplate="item">
-                  <div>{{choices}}</div>
+                  <span title="{{p.getChoiceTooltip(choices)}}">{{choices}}</span>
                 </ng-template>
               </p-autoComplete>
 
@@ -49,8 +49,11 @@
                 [suggestions]="p.filteredSuggestions" (completeMethod)="p.filterSuggestions($event)"
                 [minLength]="1" [dropdown]="true" size="15" [forceSelection]="p.isRestricted()" placeholder="{{p.getPlaceholder()}}"
                 [multiple]="true" appendTo="body">
+                <ng-template let-choices pTemplate="selectedItem">
+                  <span title="{{p.getChoiceTooltip(choices)}}" style="margin-right: 2em;">{{choices}}</span>
+                </ng-template>
                 <ng-template let-choices pTemplate="item">
-                  <div>{{choices}}</div>
+                  <span title="{{p.getChoiceTooltip(choices)}}">{{choices}}</span>
                 </ng-template>
               </p-autoComplete>
 
@@ -136,10 +139,16 @@
           <ng-template #hasChoices>
             <p-dropdown *ngIf="p.getTimesUsable() === 1" [options]="p.multiSelectChoices"
               [(ngModel)]="p.formSelected[0]" [filter]="true" appendTo="body">
+              <ng-template let-choices pTemplate="item">
+                <span title="{{p.getChoiceTooltip(choices.value)}}">{{choices.value}}</span>
+              </ng-template>
             </p-dropdown>
 
             <p-multiSelect *ngIf="p.getTimesUsable() > 1" [options]="p.multiSelectChoices"
               [(ngModel)]="p.formSelected" [maxSelectedLabels]="p.multiSelectChoices.length" appendTo="body">
+              <ng-template let-choices pTemplate="item">
+                <span title="{{p.getChoiceTooltip(choices.value)}}">{{choices.value}}</span>
+              </ng-template>
             </p-multiSelect>
           </ng-template>
         </ng-container>

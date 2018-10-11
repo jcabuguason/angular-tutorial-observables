@@ -32,7 +32,7 @@ export class SearchURLService {
           addUrlParam('hh_before', hrs.hoursBefore);
           addUrlParam('hh_after', hrs.hoursAfter);
         } else {
-          p.getSelected().forEach(s => addUrlParam(name, s));
+          p.getSelectedModels().forEach(s => addUrlParam(name, s.uri));
         }
       });
     }
@@ -43,14 +43,22 @@ export class SearchURLService {
   getAllRequestParams(qParams, availableParams: SearchParameter[], shortcuts: ShortcutModel[]) {
     const findParam = (name) => availableParams.find(p => p.getName() === name);
     const paramValueObj = (name, value) => this.paramValueObj(findParam(name), this.toArray(value));
+    const getLabel = (param, values) => values.map(val => {
+        const choice = param.findChoiceByUri(val);
+        return choice ? choice.label : val;
+    });
 
-    return qParams != null ?
+    const requested = qParams != null ?
       Object.keys(qParams)
         .filter(key => qParams[key] != null && !this.isSpecialUrlParam(key, availableParams))
         .map(key => paramValueObj(key, qParams[key]))
         .concat(this.getSpecialRequestParams(qParams, availableParams, shortcuts))
         .filter(obj => obj.param != null && obj.value.length > 0)
       : [];
+
+    requested.forEach(obj => obj.value = getLabel(obj.param, obj.value));
+
+    return requested;
   }
 
   /** Determine if url a param might not match search box field names */

@@ -145,10 +145,10 @@ export class SearchService {
     this.shortcutSelected = shortcut;
     const model = this.getSearchModel();
 
-    if (model.taxonomy.length > 0) {
-      if (updateUrlParams) { this.updateUrl(); }
-      this.searchRequested.emit(model);
+    if (updateUrlParams) {
+      this.updateUrl();
     }
+    this.searchRequested.emit(model);
     this.displayForm = false;
   }
 
@@ -307,12 +307,12 @@ export class SearchService {
     let taxResult: SearchTaxonomy[] = this.taxonomies;
     let temp: SearchTaxonomy[] = [];
 
-    this.displayParams.filter(p => this.isTaxonomyParam(p) && p.getSelected().length)
+    this.displayParams.filter(p => this.isTaxonomyParam(p) && p.getSelectedModels().length)
       .forEach(p => {
         // if searching two values that belong to the same category, it would return the combined result
         temp = [];
-        p.getSelected().forEach(val => {
-          const filtered = taxResult.filter(t => t.includesSearchWord(p.getName(), val));
+        p.getSelectedModels().forEach(val => {
+          const filtered = taxResult.filter(t => t.includesSearchWord(p.getName(), val.label));
           temp = temp.concat(filtered);
         });
         taxResult = temp;

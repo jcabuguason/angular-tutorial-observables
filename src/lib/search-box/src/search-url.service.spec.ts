@@ -5,6 +5,7 @@ import { SearchDatetime } from './parameters/search-datetime';
 import { SearchHoursRange } from './parameters/search-hours-range';
 import { SearchParameter, ParameterName } from './parameters/search-parameter';
 import { ShortcutModel } from './model/shortcut.model';
+import { ChoiceModel } from './model/choice.model';
 
 describe('SearchURLService', () => {
   let urlService: SearchURLService;
@@ -62,6 +63,23 @@ describe('SearchURLService', () => {
     ];
 
     expect(urlService.createUrlParams(displayParams)).toEqual(urlParams);
+  });
+
+  it('create url parameters with specified uri values (may be different than displayed search label)', () => {
+    const networkChoices = [
+      new ChoiceModel('caLabel', 'caUri'),
+      new ChoiceModel('nc awos label')
+    ];
+
+    const newNetworkParam = new SearchParameter('networkWithChoices', networkChoices, false, false);
+    newNetworkParam.selected = ['caLabel', 'nc awos label'];
+
+    const urlParams = [
+      { 'name' : 'networkWithChoices', 'value': networkChoices[0].uri },
+      { 'name' : 'networkWithChoices', 'value': networkChoices[1].label },
+    ];
+
+    expect(urlService.createUrlParams([newNetworkParam])).toEqual(urlParams);
   });
 
   it('create url parameter for shortcut', () => {
