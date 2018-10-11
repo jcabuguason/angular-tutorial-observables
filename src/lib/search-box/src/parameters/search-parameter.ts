@@ -1,7 +1,10 @@
+import { ChoiceModel } from '../model/choice.model';
+
 export class SearchParameter {
-  selected: string[];
-  formSelected: string[];
+  selected: string[] = [];
+  formSelected: string[] = [];
   filteredSuggestions: string[] = [];
+
   multiSelectChoices = [];
 
   private type: ParameterType;
@@ -9,17 +12,17 @@ export class SearchParameter {
 
   constructor(
     private name: string,
-    private choices: string[],
+    private choices: ChoiceModel[],
     private restricted: boolean,
     private required: boolean,
-    private timesUsable: number = 50,
+    private timesUsable: number = 500,
     private placeholder: string = ''
   ) {
       this.displayName = name;
-      this.selected = [];
-      this.formSelected = [];
       this.type = ParameterType.SEARCH_PARAMETER;
-      this.multiSelectChoices = this.choices.map(val => ({ label: val, value: val}));
+      this.multiSelectChoices = this.choices.map(choice => choice.label)
+        .sort()
+        .map(choiceLabel => ({ label: choiceLabel, value: choiceLabel}));
   }
 
   getName(): string {
@@ -34,13 +37,12 @@ export class SearchParameter {
     this.displayName = displayName;
   }
 
-  getChoices(): string[] {
+  getChoices(): ChoiceModel[] {
     return this.choices;
   }
 
   includesChoice(choice): boolean {
-    const found = this.choices.filter(val => val.toLowerCase() === choice.toLowerCase());
-    return found.length > 0;
+    return this.findChoice(this.choices, choice) != null;
   }
 
   isRestricted(): boolean {
@@ -75,8 +77,8 @@ export class SearchParameter {
     return Array.isArray(this.selected) ? this.selected : [this.selected];
   }
 
-  getSelectedAt(index: number): string {
-    return this.selected[index];
+  getSelectedModels() {
+    return this.selected.map(val => this.findChoice(this.choices, val) || new ChoiceModel(val));
   }
 
   setSelectedAt(index: number, value: string) {
@@ -98,9 +100,11 @@ export class SearchParameter {
   addSelected(value: string) {
     value = this.cleanEntries([value]).shift();
     if (this.canAddSelected(value)) {
-      const fixed = this.choices.find(val => val.toLowerCase() === value.toLowerCase())
-        || value;
-      this.selected.push(fixed);
+      const fixed = this.choices.find(val => val.label.toLowerCase() === value.toLowerCase());
+      if (fixed) {
+        value = fixed.label;
+      }
+      this.selected.push(value);
     }
   }
 
@@ -132,7 +136,10 @@ export class SearchParameter {
 
   filterSuggestions(event) {
     const matchSubstring = (choice) => choice.toLowerCase().indexOf(event.query.toLowerCase()) !== -1;
-    this.filteredSuggestions = this.choices.filter(choice => matchSubstring(choice)).sort();
+    this.filteredSuggestions = this.choices
+      .map(choice => choice.label)
+      .filter(label => matchSubstring(label))
+      .sort();
   }
 
   applyFormValues() {
@@ -148,6 +155,39 @@ export class SearchParameter {
   }
 
   isEmpty = (value): boolean => value == null || String(value) === '';
+
+  getChoiceTooltip(value: string) {
+    const choice = this.findChoice(this.choices, value);
+    return choice ? choice.tooltip : '';
+  }
+
+  findChoiceByUri(uri: string) {
+    return this.choices.find(val => val.uri.toLowerCase() === uri.toLowerCase());
+  }
+
+  /** For functions that accept both string value and ChoiceModel */
+  private isChoiceModel(value) {
+    return value != null
+      ? value.hasOwnProperty('label') && value.hasOwnProperty('uri') && value.hasOwnProperty('tooltip')
+      : false;
+  }
+
+  private findChoice(list: any[], value: string | ChoiceModel) {
+    const updatedValue = this.determineChoiceLabel(value).toLowerCase();
+    return list.find(val => {
+      if (this.isChoiceModel(val)) {
+        return val.label.toLowerCase() === updatedValue;
+      } else {
+        return val.toLowerCase() === updatedValue;
+      }
+    });
+  }
+
+  private determineChoiceLabel(value: string | ChoiceModel): string {
+    return this.isChoiceModel(value)
+      ? String(value['label'])
+      : String(value);
+  }
 
   cleanEntries = (arr: string[]): string[] => arr
     .map(entry => entry != null && entry.trim())

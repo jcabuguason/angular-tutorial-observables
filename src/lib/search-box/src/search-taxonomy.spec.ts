@@ -1,10 +1,11 @@
 import { SearchTaxonomy } from './search-taxonomy';
 import { SearchParameter } from './parameters/search-parameter';
+import { ChoiceModel } from './model/choice.model';
 
 describe('SearchTaxonomy', () => {
-  const caTaxonomy = 'dms_data:msc:observation:atmospheric:surface_weather:ca-1.1-ascii';
-  const networkParam = new SearchParameter('network', ['ca', 'nc awos'], false, false);
-  const organizationParam = new SearchParameter('organization', ['msc', 'nav canada'], false, false);
+  const caTaxonomy = 'dms_data+msc+observation+atmospheric+surface_weather+ca-1.1-ascii';
+  const networkParam = new SearchParameter('network', [new ChoiceModel('ca'), new ChoiceModel('nc awos')], false, false);
+  const organizationParam = new SearchParameter('organization', [new ChoiceModel('msc'), new ChoiceModel('nav canada')], false, false);
   // need to specify 'ca' because it only sees 'ca-1.1-ascii' as the keyword
   const extraKeywords = ['ca'];
 

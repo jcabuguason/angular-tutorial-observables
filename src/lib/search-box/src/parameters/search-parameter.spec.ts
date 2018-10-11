@@ -1,10 +1,15 @@
 import { SearchParameter } from './search-parameter';
+import { ChoiceModel } from '../model/choice.model';
 
 describe('SearchParameter', () => {
   let param: SearchParameter;
   let paramRestricted: SearchParameter;
 
-  const choices = ['msc', 'dnd', 'nc'];
+  const choices = [
+    new ChoiceModel('mscLabel', 'mscUri', 'mscTooltip'),
+    new ChoiceModel('dndLabel', 'dndUri'),
+    new ChoiceModel('ncLabel', 'ncUri'),
+  ];
 
   beforeEach(() => {
     param = new SearchParameter('param', choices, false, false);
@@ -12,7 +17,7 @@ describe('SearchParameter', () => {
   });
 
   it('should check if can add value', () => {
-    expect(param.canAddSelected('msc')).toBeTruthy();
+    expect(param.canAddSelected('mscLabel')).toBeTruthy();
     expect(param.canAddSelected('MSC')).toBeTruthy();
     expect(param.canAddSelected('123')).toBeTruthy();
   });
@@ -31,24 +36,24 @@ describe('SearchParameter', () => {
   });
 
   it('should prevent adding same value again', () => {
-    param.addSelected('msc');
-    expect(param.canAddSelected('msc')).toBeFalsy();
+    param.addSelected('mscLabel');
+    expect(param.canAddSelected('mscLabel')).toBeFalsy();
 
-    paramRestricted.addSelected('dnd');
-    expect(paramRestricted.canAddSelected('dnd')).toBeFalsy();
+    paramRestricted.addSelected('dndLabel');
+    expect(paramRestricted.canAddSelected('dndLabel')).toBeFalsy();
   });
 
   it('should check if can add value (limited choice)', () => {
-    expect(paramRestricted.canAddSelected('dnd')).toBeTruthy();
+    expect(paramRestricted.canAddSelected('dndLabel')).toBeTruthy();
     expect(paramRestricted.canAddSelected('123')).toBeFalsy();
   });
 
   it('should return filtered suggestions', () => {
     param.filterSuggestions({'query': 'C'});
-    expect(param.filteredSuggestions).toEqual(['msc', 'nc']);
+    expect(param.filteredSuggestions).toEqual([choices[0].label, choices[2].label]);
 
     param.filterSuggestions({'query': 'msc'});
-    expect(param.filteredSuggestions).toEqual(['msc']);
+    expect(param.filteredSuggestions).toEqual([choices[0].label]);
   });
 
 });

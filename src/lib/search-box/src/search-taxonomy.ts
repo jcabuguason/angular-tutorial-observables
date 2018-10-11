@@ -26,7 +26,7 @@ export class SearchTaxonomy {
     }
 
     includesSearchWord(name: string, value: string): boolean {
-        const s = this.allSearchWords.filter(item => item.getName() === name && item.includesValue(value));
+        const s = this.allSearchWords.filter(item => item.getName().toLowerCase() === name.toLowerCase() && item.includesValue(value));
         return s.length > 0;
     }
 
@@ -42,10 +42,13 @@ export class SearchTaxonomy {
       if (!searchParams) { return; }
 
       words.forEach(word => {
-          const category = searchParams.filter(param => param.getChoices().indexOf(word) > -1 );
+          const category = searchParams.filter(param =>
+            param.getChoices()
+              .map(c => c.label.toLowerCase())
+              .indexOf(word.toLowerCase()) > -1);
 
           category.forEach(cat => {
-              const included = this.allSearchWords.filter(item => item.getName() === cat.getName());
+              const included = this.allSearchWords.filter(item => item.getName().toLowerCase() === cat.getName().toLowerCase());
               if (included.length > 0) {
                   included[0].addValue(word);
               } else {
@@ -77,7 +80,9 @@ export class SearchTaxonomyWord {
     this.values.push(value);
   }
   includesValue(value: string) {
-    return this.values.indexOf(value) > -1;
+    return this.values
+      .map(val => val.toLowerCase())
+      .indexOf(value.toLowerCase()) > -1;
   }
 
 }

@@ -12,6 +12,7 @@ import { SearchDatetime } from './parameters/search-datetime';
 import { SearchHoursRange } from './parameters/search-hours-range';
 import { SearchTaxonomy } from './search-taxonomy';
 import { SearchableElement, SearchElement, SearchModel } from './model/search.model';
+import { ChoiceModel } from './model/choice.model';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 describe('SearchService', () => {
@@ -20,6 +21,7 @@ describe('SearchService', () => {
 
   const nameValueObj = (name, value) => ({'name': name, 'value': value});
   const paramValueObj = (param, value) => ({ 'param': param, 'value': value });
+  const choiceModels = (array) => array.map(val => new ChoiceModel(val));
 
   const caIndex = 'dms_data+msc+observation+atmospheric+surface_weather+ca-1.1-ascii';
   const raIndex = 'dms_data+msc+observation+atmospheric+surface_weather+ra-1.1-ascii';
@@ -56,9 +58,9 @@ describe('SearchService', () => {
   }
 
   beforeEach(() => {
-    const organization: string[] = [ 'msc', 'dnd'].sort();
-    const networks: string[] = ['ca', 'ra', 'dnd awos'].sort();
-    const provinces: string[] = [ 'AB', 'BC', 'MB'];
+    const organization: ChoiceModel[] = choiceModels([ 'msc', 'dnd'].sort());
+    const networks: ChoiceModel[] = choiceModels(['ca', 'ra', 'dnd awos'].sort());
+    const provinces: ChoiceModel[] = choiceModels([ 'AB', 'BC', 'MB']);
     const required = false;
 
     sParams = {
@@ -316,7 +318,7 @@ describe('SearchService', () => {
     );
   });
 
-  it('poupate bar values to form', () => {
+  it('populate bar values to form', () => {
     searchService.config.useForm = true;
     searchService.addSuggestedParameter(sParams.provinceParam, ['BC']);
     searchService.addSuggestedParameter(sParams.startDateParam, ['2018-01-01T00:10']);
