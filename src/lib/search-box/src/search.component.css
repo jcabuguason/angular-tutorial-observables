@@ -110,3 +110,7 @@
 :host ::ng-deep .ui-toast-close-icon {
   color: #ab1a0f;
 }
+
+.reset-button {
+  float: left
+}
