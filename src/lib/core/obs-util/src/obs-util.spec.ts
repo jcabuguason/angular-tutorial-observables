@@ -66,6 +66,10 @@ describe('ObsUtil', () => {
 
         expect(obsUtil.compareRevision('', 'orig')).toBe(-1);
         expect(obsUtil.compareRevision('', 'CCA')).toBe(-1);
+
+        expect(obsUtil.compareRevision(null, 'orig')).toBe(-1);
+        expect(obsUtil.compareRevision(null, null)).toBe(0);
+        expect(obsUtil.compareRevision('orig', null)).toBe(1);
     });
 
     it('should format QA Values', () => {
