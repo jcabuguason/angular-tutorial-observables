@@ -37,6 +37,9 @@ describe('DataGridService', () => {
             return '';
         }
         getMetaElementVisibility(elementID) { }
+        getDescription(elementID: string, nodeIndex: number = 5): string {
+            return '';
+        }
         getElementIndexTitle(elementID: string): string {
             return 'Layer';
         }

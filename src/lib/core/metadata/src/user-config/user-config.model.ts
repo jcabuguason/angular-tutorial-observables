@@ -14,6 +14,7 @@ export enum Lang {
     FRENCH = 'fr'
 }
 
+
 export class UserConfig {
     loadMetaElements: IncludeExclude;
     loadDataElements: IncludeExclude;
@@ -50,61 +51,63 @@ export class UserConfig {
 
         for (const element of definition.elements) {
 
+            const checkElementGroupAndName = (group, name) =>
+                element.group === group && element.name === name;
 
             // Configuring Include/Exclude for Metadata
-            if (element.group === 'load-meta-elements' && element.name === 'include') {
+            if (checkElementGroupAndName('load-meta-elements', 'include')) {
                 config.loadMetaElements.include(element.value);
             }
-            if (element.group === 'load-meta-elements' && element.name === 'exclude') {
+            else if (checkElementGroupAndName('load-meta-elements', 'exclude')) {
                 config.loadMetaElements.exclude(element.value);
             }
 
             // Configuring Include/Exclude for Data
-            if (element.group === 'visible-elements' && element.name === 'include') {
+            else if (checkElementGroupAndName('visible-elements', 'include')) {
                 config.visibleDataElements.include(element.value);
             }
-            if (element.group === 'visible-elements' && element.name === 'exclude') {
+            else if (checkElementGroupAndName('visible-elements', 'exclude')) {
                 config.visibleDataElements.exclude(element.value);
             }
-            if (element.group === 'load-elements' && element.name === 'include') {
+            else if (checkElementGroupAndName('load-elements', 'include')) {
                 config.loadDataElements.include(element.value);
             }
-            if (element.group === 'load-elements' && element.name === 'exclude') {
+            else if (checkElementGroupAndName('load-elements', 'exclude')) {
                 config.loadDataElements.exclude(element.value);
             }
 
             // Configuring nesting level
-            if (element.group === 'nesting' && element.name === 'nesting-depth') {
+            else if (checkElementGroupAndName('nesting', 'nesting-depth')) {
                 config.nestingDepth = Number(element.value);
             }
 
             // Configuring default tag
-            if (element.group === 'default' && element.name === 'default-tag') {
+            else if (checkElementGroupAndName('default', 'default-tag')) {
                 config.defaultTag = LanguageLabel.createLanguageLabel(element);
             }
 
             // Configuring element groups
-            if (element.group === 'element-groups' && element.name === 'element-group') {
+            else if (checkElementGroupAndName('element-groups', 'element-group')) {
                 ElementGroup.updateConfig(config.elementGroups, element);
             }
 
             // Configuring element groups
-            if (element.group === 'element-unit' && element.name === 'element') {
+            else if (checkElementGroupAndName('element-unit', 'element')) {
                 ElementUnit.updateConfig(config.elementUnits, element);
             }
 
             // Configuring sub-headers
-            if (element.group === 'header' && element.name === 'show-sub-header') {
+            else if (checkElementGroupAndName('header', 'show-sub-header')) {
                 config.subHeader = new SubHeaderConfig(element.value === 'true', element);
             }
 
             // Configuring renaming
-            if (element.group === 'node-rename' && element.name === 'node-index') {
+            else if (checkElementGroupAndName('node-rename', 'node-index')) {
                 GenericNodeConfig.updateConfig(config.genericNodes, element);
             }
 
             // Configuring renaming
-            if (element.group === 'element-display' && element.name === 'element') {
+            else if (checkElementGroupAndName('element-display', 'element')) {
                 ElementConfig.updateConfig(config.elementConfigs, element);
             }
         }
@@ -123,6 +126,7 @@ export class ElementConfig {
     officialTitle: LanguageLabel;
     indexTitle: LanguageLabel;
     precision: number;
+    elementDescription: LanguageLabel;
 
     private constructor(elementID: string) {
         this.nodeNames = [];
@@ -138,49 +142,58 @@ export class ElementConfig {
         }
 
         for (const element of configElement.instelements) {
+
+            const checkElementGroupAndName = (group, name) =>
+                element.group === group && element.name === name;
+
             // Configuring element order
-            if (element.group === 'element-order' && element.name === 'grid-order') {
+            if (checkElementGroupAndName('element-order', 'grid-order')) {
                 currentConfig.order = Number(element.value);
             }
 
             // Configuring nesting level
-            if (element.group === 'nesting' && element.name === 'nesting-depth') {
+            else if (checkElementGroupAndName('nesting', 'nesting-depth')) {
                 currentConfig.nestingDepth = Number(element.value);
             }
 
             // Configuring display unit
-            if (element.group === 'element-display' && element.name === 'display-unit') {
+            else if (checkElementGroupAndName('element-display', 'display-unit')) {
                 currentConfig.displayUnit = element.value;
             }
 
             // Configuring official index title
-            if (element.group === 'element-display' && element.name === 'official-title') {
+            else if (checkElementGroupAndName('element-display', 'official-title')) {
                 currentConfig.officialTitle = LanguageLabel.createLanguageLabel(element);
             }
 
             // Configuring index title
-            if (element.group === 'element-display' && element.name === 'index-title') {
+            else if (checkElementGroupAndName('element-display', 'index-title')) {
                 currentConfig.indexTitle = LanguageLabel.createLanguageLabel(element);
             }
 
             // Configuring index title
-            if (element.group === 'element-display' && element.name === 'precision') {
+            else if (checkElementGroupAndName('element-display', 'precision')) {
                 currentConfig.precision = Number(element.value);
             }
 
             // Configuring sub header
-            if (element.group === 'header' && element.name === 'show-sub-header') {
+            else if (checkElementGroupAndName('header', 'show-sub-header')) {
                 currentConfig.subHeader = new SubHeaderConfig(element.value === 'true', element);
             }
 
             // Configuring element name
-            if (element.group === 'element-rename' && element.name === 'node-name') {
+            else if (checkElementGroupAndName('element-rename', 'node-name')) {
                 currentConfig.elementName =  LanguageLabel.createLanguageLabel(element);
             }
 
             // Configuring node names
-            if (element.group === 'element-node-rename' && element.name === 'node-index') {
+            else if (checkElementGroupAndName('element-node-rename', 'node-index')) {
                 NodeIndexMap.updateConfig(currentConfig.nodeNames, element);
+            }
+
+            // Configuring element description
+            else if (checkElementGroupAndName('element-display', 'element-description')) {
+                currentConfig.elementDescription = LanguageLabel.createLanguageLabel(element);
             }
         }
     }
@@ -337,15 +350,14 @@ export class GenericNodeConfig {
 }
 
 // Container to hold node values with their node names
-export class NodeValueMap extends LanguageLabel {
+export class NodeValueMap {
     nodeValue: string;
+    nodeName: LanguageLabel;
+    nodeDescription: LanguageLabel;
 
     constructor(element: MDInstanceElement) {
-        super(element.instelements
-                     .filter(elem => elem.name === 'node-name')
-                     .shift()
-                    );
         this.nodeValue = element.value;
+        this.update(element);
     }
 
     public static updateConfig(configs: NodeValueMap[], element: MDInstanceElement): void {
@@ -354,10 +366,17 @@ export class NodeValueMap extends LanguageLabel {
             .shift();
 
         (!!currentConfig)
-            ? currentConfig.update(element.instelements
-                                    .filter(elem => elem.name === 'node-name')
-                                    .shift())
+            ? currentConfig.update(element)
             : configs.push(new NodeValueMap(element));
+    }
+
+    update(element: MDInstanceElement) {
+        this.nodeName = LanguageLabel.createLanguageLabel(
+            element.instelements
+            .find(elem => elem.name === 'node-name'));
+        this.nodeDescription = LanguageLabel.createLanguageLabel(
+            element.instelements
+            .find(elem => elem.name === 'node-description'));
     }
 }
 
