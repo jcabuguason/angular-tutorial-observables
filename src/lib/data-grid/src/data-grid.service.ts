@@ -272,7 +272,7 @@ export class DataGridService {
 
         const newNode: object = {
           'headerName': headerName,
-          'nodeNumber': nodeNumber
+          'nodeNumber': nodeNumber,
         };
 
         currentNodes.push(newNode);
@@ -333,124 +333,141 @@ export class DataGridService {
     }
 
     private buildElementColumn(element: DataElements, headerID: string) {
-      if (this.columnsGenerated.indexOf(headerID) !== -1) {
-        return;
-      }
+        if (this.columnsGenerated.indexOf(headerID) !== -1) {
+            return;
+        }
 
-      const elementID = element.elementID;
-      const nodes = elementID.split('.');
-      let currentNodes: any[] = this.columnDefs;
-      let workingNode;
+        const elementID = element.elementID;
+        const nodes = elementID.split('.');
+        let currentNodes: any[] = this.columnDefs;
+        let workingNode;
 
-      const startIndex = this.ignoreUserConfig
-        ? this.elementNodeStartIndex - 1
-        : 2;
+        const startIndex = this.ignoreUserConfig
+            ? this.elementNodeStartIndex - 1
+            : 2;
 
-      const nestingDepth = this.ignoreUserConfig
-        ? this.elementNodeStartIndex + this.elementNodeDepth - 2
-        : this.userConfigService.getNestingDepth(elementID);
+        const nestingDepth = this.ignoreUserConfig
+            ? this.elementNodeStartIndex + this.elementNodeDepth - 2
+            : this.userConfigService.getNestingDepth(elementID);
 
       // find workingNode to add to
-      for (let i = startIndex; i <= nestingDepth; i++) {
-          const headerName = this.generateHeaderString(elementID, nodes, i);
-          const nodeIndex = this.ignoreUserConfig ? i : i - 1;
+        for (let i = startIndex; i <= nestingDepth; i++) {
+            const headerName = this.generateHeaderString(elementID, nodes, i);
+            const nodeIndex = this.ignoreUserConfig ? i : i - 1;
 
-          // End processing if no header field is found
-          if (headerName === undefined) {
-              break;
-          }
+            // End processing if no header field is found
+            if (headerName === undefined) {
+                break;
+            }
 
-          workingNode = this.getChildNode(currentNodes, headerName, nodes[nodeIndex], elementID);
+            workingNode = this.getChildNode(currentNodes, headerName, nodes[nodeIndex], elementID);
 
-          // Build child node array
-          if (workingNode.children === undefined) {
-              workingNode.children = [];
-          }
+            if (workingNode.headerTooltip === undefined) {
+                workingNode.headerTooltip = this.userConfigService.getDescription(elementID, i);
+            }
 
-          currentNodes = workingNode.children;
+            // Build child node array
+            if (workingNode.children === undefined) {
+                workingNode.children = [];
+            }
 
-      }
+            currentNodes = workingNode.children;
 
-      if (workingNode.elementID === undefined) {
-
-        workingNode.elementID = elementID;
-
-        if (!workingNode.children.length) {
-            workingNode.headerName += this.ignoreUserConfig
-            ? this.createSubHeader(nestingDepth, nodes)
-            : this.userConfigService.getFormattedSubHeader(elementID);
         }
-      }
+
+        if (workingNode.elementID === undefined) {
+
+            workingNode.elementID = elementID;
+
+            if (!workingNode.children.length) {
+                workingNode.headerName += this.ignoreUserConfig
+                ? this.createSubHeader(nestingDepth, nodes)
+                : this.userConfigService.getFormattedSubHeader(elementID);
+            }
+        }
 
       // Generate layer children if needed
-      let columnToAdd;
-      if (element.indexValue !== undefined) {
-        columnToAdd = {
-          'headerName': (element.indexValue
-            ? (this.userConfigService.getElementIndexTitle(elementID)) + ' ' + element.indexValue
-            : this.userConfigService.getElementOfficialIndexTitle(elementID)),
-          'children': [],
-          'elementID' : elementID,
-        };
-        if (workingNode.children === undefined) {
-          workingNode.children = [];
-        }
+        let columnToAdd;
+        if (element.indexValue !== undefined) {
+            const headerName = (element.indexValue)
+                ? `${this.userConfigService.getElementIndexTitle(elementID)} ${element.indexValue}`
+                : this.userConfigService.getElementOfficialIndexTitle(elementID);
+            const headerTooltip = (this.userConfigService.getDescription(elementID))
+                ? this.userConfigService.getDescription(elementID) + ': ' + headerName
+                : undefined;
 
-        // Uses hard-text for Official, I believe fixed in another pending branch
-        // Merge together when possible.
-        if (columnToAdd.headerName === 'Official') {
-            for (const node of workingNode.children) {
-                node.columnGroupShow = 'open';
+            columnToAdd = {
+                'headerName': headerName,
+                'children': [],
+                'headerTooltip': headerTooltip,
+                'elementID' : elementID,
+            };
+
+            if (workingNode.children === undefined) {
+                workingNode.children = [];
             }
-        } else if (workingNode.children.some(node => node.headerName === 'Official')) {
-          columnToAdd.columnGroupShow = 'open';
+
+            // Uses hard-text for Official, I believe fixed in another pending branch
+            // Merge together when possible.
+            if (columnToAdd.headerName === 'Official') {
+                for (const node of workingNode.children) {
+                    node.columnGroupShow = 'open';
+                }
+            } else if (workingNode.children.some(node => node.headerName === 'Official')) {
+                columnToAdd.columnGroupShow = 'open';
+            }
+
+            workingNode.children.push(columnToAdd);
+
+        } else {
+            columnToAdd = workingNode;
+            // Avoid overwritting layered/official columns
+            if (workingNode.children.length
+                && workingNode.children[0].headerName !== this.userConfigService.getDefaultTag()) {
+
+                const headerName = this.userConfigService.getDefaultTag();
+                const headerTooltip = (this.userConfigService.getDescription(elementID))
+                    ? this.userConfigService.getDescription(elementID)
+                        + ': ' + this.userConfigService.getDefaultTag()
+                    : undefined;
+                columnToAdd = {
+                    'headerName': headerName,
+                    'children': [],
+                    'headerTooltip': headerTooltip,
+                    'elementID': elementID,
+                };
+                workingNode.elementID = undefined;
+                workingNode.children.unshift(columnToAdd);
+            }
         }
 
-        workingNode.children.push(columnToAdd);
-
-      } else {
-        columnToAdd = workingNode;
-        // Avoid overwritting layered/official columns
-        if (workingNode.children.length
-            && workingNode.children[0].headerName !== this.userConfigService.getDefaultTag()
-            && workingNode.children[0].headerName !== 'Official') {
-          columnToAdd = {
-            'headerName': this.userConfigService.getDefaultTag(),
-            'children': [],
-            'elementID': elementID
-          };
-          workingNode.elementID = undefined;
-          workingNode.children.unshift(columnToAdd);
+        if (this.hideDataElement(elementID)) {
+            columnToAdd.hide = true;
         }
-      }
 
-      if (this.hideDataElement(elementID)) {
-          columnToAdd.hide = true;
-      }
-
-      this.columnConfiguration.createElementHeader(columnToAdd, headerID);
-      this.columnsGenerated.push(headerID);
+        this.columnConfiguration.createElementHeader(columnToAdd, headerID);
+        this.columnsGenerated.push(headerID);
     }
 
     private buildMetadataColumn(element, headerID) {
-      if (this.columnsGenerated.indexOf(headerID) !== -1) {
-        return;
-      }
+        if (this.columnsGenerated.indexOf(headerID) !== -1) {
+            return;
+        }
 
       // metadata name using userConfigService may be slightly different than 2.5.6
-      const header = {
-        'headerName': this.userConfigService.getByElementName(element.elementID),
-        'field': headerID,
-        'width': 80,
-        'hide': true,
-        'type': 'identity',
-        'elementID': element.elementID,
-      };
+        const header = {
+            'headerName': this.userConfigService.getByElementName(element.elementID),
+            'field': headerID,
+            'width': 80,
+            'hide': true,
+            'type': 'identity',
+            'elementID': element.elementID,
+        };
 
-      if (this.identityHeader.children === undefined) { this.identityHeader.children = []; }
-      this.identityHeader.children.push(header);
+        if (this.identityHeader.children === undefined) { this.identityHeader.children = []; }
+        this.identityHeader.children.push(header);
 
-      this.columnsGenerated.push(headerID);
+        this.columnsGenerated.push(headerID);
     }
 
     private ignoreElement(element: MetadataElements | DataElements): boolean {

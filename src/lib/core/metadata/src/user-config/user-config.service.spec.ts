@@ -107,7 +107,7 @@ describe('UserConfigService', () => {
 
     it('Undefined element node', () => {
         service.loadConfig(emptyConfig);
-        expect(service.getDefaultNodeName(3, '10000000000')).toBe(undefined);
+        expect(service.getDefaultNodeName(3, '10000000000')).toBeUndefined();
     });
 
     it('English Node Rename', () => {
@@ -205,15 +205,65 @@ describe('UserConfigService', () => {
         expect(service.getElementGroup('1.2.3.4.5.6.7')[4]).toBe('1.2.3.4.5.6.9');
     });
 
+    it('should return undefined instead of a precision', () => {
+        service.loadConfig(precisionConfig);
+        expect(service.getElementPrecision('1.19.265.0.66.0.1')).toBeUndefined();
+    });
+
     it('should return a precision', () => {
         service.loadConfig(precisionConfig);
         expect(service.getElementPrecision('1.19.265.0.66.0.0')).toBe(1);
     });
 
-    it('should return an empty string', () => {
-        service.loadConfig(precisionConfig);
-        expect(service.getElementPrecision('1.19.265.0.66.0.1')).toBe(undefined);
+    it('should return an undefined instead of an element description', () => {
+        service.loadConfig(emptyConfig);
+        expect(service.getElementDescription('1.19.265.0.66.0.1')).toBeUndefined();
     });
+
+    it('should return an element description', () => {
+        service.loadConfig(elementDescriptionConfig);
+        expect(service.getElementDescription('1.12.207.2.1.1.0')).toBe('Cloud Index');
+    });
+
+    it('should return undefined as this is not the correct nesting level', () => {
+        service.loadConfig(elementDescriptionConfig);
+        expect(service.getElementDescription('1.12.207.2.1.1.0', 2)).toBeUndefined();
+    });
+
+    it('should return undefined instead of an node description', () => {
+        service.loadConfig(emptyConfig);
+        expect(service.getNodeDescription('1.2.4.5.6.7.8', 3)).toBeUndefined();
+    });
+
+    it('should return a node description', () => {
+        service.loadConfig(nodeDescriptionConfig);
+        expect(service.getNodeDescription('1.2.4.5.6.7.8', 3)).toBe('Cloud Index');
+    });
+
+    it('should return undefined instead of a node description', () => {
+        service.loadConfig(nodeDescriptionConfig);
+        expect(service.getNodeDescription('1.2.3.5.6.7.8', 3)).toBeUndefined();
+    });
+    it('should return undefined instead of a description', () => {
+        service.loadConfig(emptyConfig);
+        expect(service.getDescription('1.2.3.4.5.6.7', 3)).toBeUndefined();
+    });
+
+    it('should return a description from an element config', () => {
+        service.loadConfig(elementDescriptionConfig);
+        expect(service.getDescription('1.12.207.2.1.1.0', 4)).toBe('Cloud Index');
+    });
+
+    it('should return a description from a node config', () => {
+        service.loadConfig(complexDescriptionConfig);
+        expect(service.getDescription('1.13.207.2.1.1.0', 4)).toBe('Cloud Index');
+    });
+
+    it('should return a description from a complex description config', () => {
+        service.loadConfig(complexDescriptionConfig);
+        expect(service.getDescription('1.12.207.2.1.1.0', 4)).toBe('Sensor Index');
+    });
+
 
     const emptyConfig: MDInstanceDefinition = {
         dataset: 'stub',
@@ -513,6 +563,60 @@ describe('UserConfigService', () => {
             {group: 'element-display', name: 'element', value: '1.19.265.0.66.0.0', def_id: '', id: '', index: '1', uom: '',
                 language: {english: '', french: ''}, instelements: [
                 {group: 'element-display', name: 'precision', value: '1', def_id: '', id: '', index: '1', uom: '',
+                    language: {english: '', french: ''}, instelements: []},
+                ]
+            },
+        ]
+    };
+
+    const elementDescriptionConfig: MDInstanceDefinition = {
+        dataset: 'stub',
+        parent: 'stub',
+        identificationElements: [],
+        elements: [
+            {group: 'element-display', name: 'element', value: '1.12.207.2.1.1.0', def_id: '', id: '', index: '', uom: '',
+                language: {english: '', french: ''}, instelements: [
+                {group: 'element-display', name: 'element-description', value: 'Cloud Index', def_id: '', id: '', index: '', uom: '',
+                    language: {english: '', french: ''}, instelements: []},
+                ]
+            },
+        ]
+    };
+
+    const nodeDescriptionConfig: MDInstanceDefinition = {
+        dataset: 'stub',
+        parent: 'stub',
+        identificationElements: [],
+        elements: [
+            {group: 'node-rename', name: 'node-index', value: '3', def_id: '', id: '', index: '', uom: '',
+                language: {english: '', french: ''}, instelements: [
+                {group: 'node-rename', name: 'node-value', value: '4', def_id: '', id: '', index: '', uom: '',
+                    language: {english: '', french: ''}, instelements: [
+                    {group: 'node-rename', name: 'node-description', value: 'Cloud Index', def_id: '', id: '', index: '', uom: '',
+                        language: {english: '', french: ''}, instelements: []
+                    },
+                ]},
+            ]},
+        ]
+    };
+
+    const complexDescriptionConfig: MDInstanceDefinition = {
+        dataset: 'stub',
+        parent: 'stub',
+        identificationElements: [],
+        elements: [
+            {group: 'node-rename', name: 'node-index', value: '4', def_id: '', id: '', index: '', uom: '',
+                language: {english: '', french: ''}, instelements: [
+                {group: 'node-rename', name: 'node-value', value: '2', def_id: '', id: '', index: '', uom: '',
+                    language: {english: '', french: ''}, instelements: [
+                    {group: 'node-rename', name: 'node-description', value: 'Cloud Index', def_id: '', id: '', index: '', uom: '',
+                        language: {english: '', french: ''}, instelements: []
+                    },
+                ]},
+            ]},
+            {group: 'element-display', name: 'element', value: '1.12.207.2.1.1.0', def_id: '', id: '', index: '', uom: '',
+                language: {english: '', french: ''}, instelements: [
+                {group: 'element-display', name: 'element-description', value: 'Sensor Index', def_id: '', id: '', index: '', uom: '',
                     language: {english: '', french: ''}, instelements: []},
                 ]
             },

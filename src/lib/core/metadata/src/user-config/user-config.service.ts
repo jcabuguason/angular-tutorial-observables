@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { MetadataService } from '../service';
 
 import {
-    GenericNodeConfig,
     SubHeaderConfig,
     ElementVisibility,
     Lang,
@@ -11,7 +10,6 @@ import {
 } from './user-config.model';
 
 import { NodeLookups } from './node.const';
-import { IncludeExclude } from '../include-exclude/include-exclude.class';
 import { MDInstanceDefinition, MDInstanceElement } from '../model/';
 
 @Injectable()
@@ -28,10 +26,13 @@ export class UserConfigService {
     // Function for creating an inclusive array with the specific range
     private range = (start, end) => Array.from({length: (end + 1 - start)}, (v, k) => k + start);
 
+    private nodeValueAt = (elementID, i) => elementID.split('.')[i - 1];
+
     // constructor(private metadataService: MetadataService) {
     constructor() {
         this.defaultHeader();
     }
+
 
     defaultHeader() {
         this.userConfig = UserConfig.createConfig();
@@ -157,6 +158,33 @@ export class UserConfigService {
             .shift();
     }
 
+    getDescription(elementID: string, nodeIndex: number = this.getNestingDepth(elementID)): string {
+        return this.getElementDescription(elementID, nodeIndex)
+            || this.getNodeDescription(elementID, nodeIndex);
+    }
+
+    getElementDescription(elementID: string, nodeIndex: number = this.getNestingDepth(elementID)): string {
+        if (nodeIndex === this.getNestingDepth(elementID)) {
+            return this.userConfig.elementConfigs
+                .filter(config => config.elementID === elementID)
+                .map(config => config.elementDescription)
+                .filter(elemConfig => elemConfig !== undefined)
+                .map(elemConfig => elemConfig.getName(this.lang))
+                .shift();
+        }
+    }
+
+    getNodeDescription(elementID: string, nodeIndex: number): string {
+        return this.userConfig.genericNodes
+            .filter(config => config.nodeIndex === nodeIndex)
+            .map(config => config.nodeMap)
+            .reduce((a, b) => a.concat(b), [])
+            .filter(nodeMap => nodeMap.nodeValue === this.nodeValueAt(elementID, nodeIndex))
+            .map(nodeMap => nodeMap.nodeDescription)
+            .map(nodeDescription => nodeDescription.getName(this.lang))
+            .shift();
+    }
+
     getElementOfficialIndexTitle(elementID: string): string {
         return this.userConfig.elementConfigs
             .filter(config => config.elementID === elementID)
@@ -266,7 +294,8 @@ export class UserConfigService {
             .map(config => config.nodeMap)
             .reduce((a, b) => a.concat(b), [])
             .filter(nodeMap => nodeMap.nodeValue === nodeValue)
-            .map(nodeMap => nodeMap.getName(this.lang))
+            .map(nodeMap => nodeMap.nodeName)
+            .map(nodeName => nodeName.getName(this.lang))
             .shift();
     }
 
