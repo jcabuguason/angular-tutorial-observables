@@ -35,7 +35,9 @@ export class DataChartService {
     chartLabel(label: string, info: ElementInfo): string {
         let result = label;
         if (info.hasOwnProperty('indexValue')) {
-            result += (info.indexValue === 0) ? ' (Official)' : ` (Layer ${info.indexValue})`;
+            result += (info.indexValue === 0)
+              ? ` (${this.configService.getElementOfficialIndexTitle(info.elementID)})`
+              : ` (${this.configService.getDefaultTag()} ${info.indexValue})`;
         }
         return result;
     }

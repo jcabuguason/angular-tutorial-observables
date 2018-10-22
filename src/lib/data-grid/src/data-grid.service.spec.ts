@@ -20,43 +20,30 @@ describe('DataGridService', () => {
     const hiddenElement = '1.13.215.0.0.0.0';
     const blankElement = '1.x.0.0.0.0.0';
 
-    class MockConfigService {
-        getElementOrder() {
-            return [blankElement];
+    class MockConfigService extends UserConfigService {
+      getElementOrder() { return [blankElement]; } // forces a blank column
+      getNestingDepth() { return 3; }
+      getFormattedNodeName(elementID, index) { return `node ${elementID}`; }
+      getFormattedSubHeader(elementID) { return `,sub header ${elementID}`; }
+      getByElementName(element) { return ''; }
+      getElementVisibility(elementID) {
+        switch (elementID) {
+          case noLoadElement: return ElementVisibility.NO_LOAD;
+          case hiddenElement: return ElementVisibility.HIDDEN;
+          default: return ElementVisibility.DEFAULT;
         }
-        getNestingDepth() {
-            return 3;
-        }
-        getFormattedNodeName(elementID, index) {
-            return 'node ' + elementID;
-        }
-        getFormattedSubHeader(elementID) {
-            return ',sub header ' + elementID;
-        }
-        getByElementName(element) {
-            return '';
-        }
-        getMetaElementVisibility(elementID) { }
-        getDescription(elementID: string, nodeIndex: number = 5): string {
-            return '';
-        }
-        getElementIndexTitle(elementID: string): string {
-            return 'Layer';
-        }
-        getElementVisibility(elementID) {
-            switch (elementID) {
-                case noLoadElement: return ElementVisibility.NO_LOAD;
-                case hiddenElement: return ElementVisibility.HIDDEN;
-                default: return ElementVisibility.DEFAULT;
-            }
-        }
+      }
+      getMetaElementVisibility(elementID) { }
+      getDescription(elementID: string, nodeIndex: number): string { return ''; }
+      getElementOfficialIndexTitle(elementID: string) { return 'Official'; }
+      getDefaultTag() { return 'Layer'; }
+
     }
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
                 DataGridService,
-                UserConfigService,
                 { provide: UserConfigService, useClass: MockConfigService },
                 { provide: MatDialog, useValue: { open: () => {} }},
             ],
@@ -148,11 +135,13 @@ describe('DataGridService', () => {
         service.addRowData(hits[0]);
 
         // only for one-layer of children headers
-        const isHidden = (headerName, eti) => service.columnDefs
-            .find(n => n.headerName === headerName).children
+        const isHidden = (eti) => service.columnDefs
+            .find(n => n.headerName === `node ${eti}`).children
             .find(n => n.elementID === eti).hide;
 
-        expect(isHidden('node 1.13.215.0.0.0.0', '1.13.215.0.0.0.0')).toBeTruthy();
+        console.log(service.columnDefs);
+
+        expect(isHidden(hiddenElement)).toBeTruthy();
         expect(service.columnDefs.length).toBe(13);
     });
 

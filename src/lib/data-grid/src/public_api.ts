@@ -11,3 +11,4 @@ export * from './renderers/dataflag-renderer.component';
 export * from './renderers/qof-renderer.component';
 export * from './renderers/vof-renderer.component';
 export * from './station-info/station-info.component';
+export * from './default-grid-configs';

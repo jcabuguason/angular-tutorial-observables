@@ -9,6 +9,8 @@ class MockConfigService {
     getFullFormattedHeader(elementID: string) {
         return 'mock ' + elementID;
     }
+    getElementOfficialIndexTitle = (elementID: string) => 'Official';
+    getDefaultTag = () => 'Layer';
 }
 
 describe('DataChartService', () => {

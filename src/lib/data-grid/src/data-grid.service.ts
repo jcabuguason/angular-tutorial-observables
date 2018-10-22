@@ -6,7 +6,7 @@ import { ColumnConfigurationContainer } from './column-configuration/column-conf
 import { DefaultColumnConfiguration } from './column-configuration/default-column-configuration.class';
 import { MatDialog } from '@angular/material/dialog';
 import { StationInfoComponent } from './station-info/station-info.component';
-
+import { FULL_CONFIG } from './default-grid-configs';
 import {
     UserConfigService,
     ElementVisibility,
@@ -18,10 +18,6 @@ import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 
 @Injectable()
 export class DataGridService {
-
-    readonly elementNodeStartIndex: number = 2;
-    readonly elementNodeDepth: number = 3;
-    readonly headerNodeDepth: number = 6 - this.elementNodeDepth;
 
     public columnsGenerated: string[] = [];
     public rowData: object[] = [];
@@ -35,10 +31,8 @@ export class DataGridService {
     private identityHeader;
     private rawHeader;
 
-    // set to true/false in pegasus after userConfigService.loadConfig(config)
-    public ignoreUserConfig = false;
-
     constructor(public userConfigService: UserConfigService, public dialog: MatDialog) {
+        userConfigService.loadConfig(FULL_CONFIG);
         this.columnConfiguration = new DefaultColumnConfiguration();
         this.resetHeader();
     }
@@ -298,40 +292,6 @@ export class DataGridService {
         }
     }
 
-    // used without providing user config
-    private createSubHeader(headerDepth: number, nodes: string[]) {
-        let headerNode = ' (';
-        headerDepth++;
-
-        for (let j = headerDepth; j < (headerDepth + this.headerNodeDepth); j++) {
-            const node = this.getNodeHeader((j + 1), nodes[j]);
-            if (node === undefined) {
-                break;
-            }
-            if (j !== headerDepth) {
-                headerNode += ',';
-            }
-            headerNode += node;
-        }
-        headerNode += ')';
-
-        if (headerNode !== ' ()') {
-            return headerNode;
-        } else {
-            return '';
-        }
-    }
-
-    private generateHeaderString(elementID: string, nodes: string[], index: number) {
-        if (this.ignoreUserConfig) {
-            const firstDraft = this.getNodeHeader((index + 1), nodes[index]);
-            return (firstDraft === undefined)
-                ? firstDraft
-                : this.formatHeaderName(firstDraft);
-        }
-       return this.userConfigService.getFormattedNodeName(elementID, index);
-    }
-
     private buildElementColumn(element: DataElements, headerID: string) {
         if (this.columnsGenerated.indexOf(headerID) !== -1) {
             return;
@@ -342,25 +302,21 @@ export class DataGridService {
         let currentNodes: any[] = this.columnDefs;
         let workingNode;
 
-        const startIndex = this.ignoreUserConfig
-            ? this.elementNodeStartIndex - 1
-            : 2;
+      const startIndex = 2;
 
-        const nestingDepth = this.ignoreUserConfig
-            ? this.elementNodeStartIndex + this.elementNodeDepth - 2
-            : this.userConfigService.getNestingDepth(elementID);
+      const nestingDepth = this.userConfigService.getNestingDepth(elementID);
+
+      const officialTitle = this.userConfigService.getElementOfficialIndexTitle(elementID);
 
       // find workingNode to add to
-        for (let i = startIndex; i <= nestingDepth; i++) {
-            const headerName = this.generateHeaderString(elementID, nodes, i);
-            const nodeIndex = this.ignoreUserConfig ? i : i - 1;
+      for (let i = startIndex; i <= nestingDepth; i++) {
+          const headerName = this.userConfigService.getFormattedNodeName(elementID, i);
+          const nodeIndex = i - 1;
 
-            // End processing if no header field is found
-            if (headerName === undefined) {
-                break;
-            }
+          // End processing if no header field is found
+          if (!headerName) { break; }
 
-            workingNode = this.getChildNode(currentNodes, headerName, nodes[nodeIndex], elementID);
+          workingNode = this.getChildNode(currentNodes, headerName, nodes[nodeIndex], elementID);
 
             if (workingNode.headerTooltip === undefined) {
                 workingNode.headerTooltip = this.userConfigService.getDescription(elementID, i);
@@ -380,79 +336,74 @@ export class DataGridService {
             workingNode.elementID = elementID;
 
             if (!workingNode.children.length) {
-                workingNode.headerName += this.ignoreUserConfig
-                ? this.createSubHeader(nestingDepth, nodes)
-                : this.userConfigService.getFormattedSubHeader(elementID);
+                workingNode.headerName += this.userConfigService.getFormattedSubHeader(elementID);
             }
         }
 
       // Generate layer children if needed
-        let columnToAdd;
-        if (element.indexValue !== undefined) {
-            const headerName = (element.indexValue)
-                ? `${this.userConfigService.getElementIndexTitle(elementID)} ${element.indexValue}`
-                : this.userConfigService.getElementOfficialIndexTitle(elementID);
-            const headerTooltip = (this.userConfigService.getDescription(elementID))
-                ? this.userConfigService.getDescription(elementID) + ': ' + headerName
-                : undefined;
+      let columnToAdd;
+      if (element.indexValue !== undefined) {
+        const headerName = (element.indexValue)
+          ? `${this.userConfigService.getElementIndexTitle(elementID)} ${element.indexValue}`
+          : officialTitle;
+        const description = this.userConfigService.getDescription(elementID);
+        const headerTooltip = !!description ? `${description}: ${headerName}` : undefined;
+        columnToAdd = {
+          'headerName': headerName,
+          'headerTooltip': headerTooltip,
+          'children': [],
+          'elementID' : elementID,
+        };
+        if (workingNode.children === undefined) {
+          workingNode.children = [];
+        }
 
-            columnToAdd = {
-                'headerName': headerName,
-                'children': [],
-                'headerTooltip': headerTooltip,
-                'elementID' : elementID,
-            };
-
-            if (workingNode.children === undefined) {
-                workingNode.children = [];
-            }
-
-            // Uses hard-text for Official, I believe fixed in another pending branch
-            // Merge together when possible.
-            if (columnToAdd.headerName === 'Official') {
-                for (const node of workingNode.children) {
-                    node.columnGroupShow = 'open';
-                }
-            } else if (workingNode.children.some(node => node.headerName === 'Official')) {
-                columnToAdd.columnGroupShow = 'open';
-            }
-
-            workingNode.children.push(columnToAdd);
-
+        if (columnToAdd.headerName === officialTitle) {
+          for (const node of workingNode.children) {
+              node.columnGroupShow = 'open';
+          }
         } else {
-            columnToAdd = workingNode;
-            // Avoid overwritting layered/official columns
-            if (workingNode.children.length
-                && workingNode.children[0].headerName !== this.userConfigService.getDefaultTag()) {
-
-                const headerName = this.userConfigService.getDefaultTag();
-                const headerTooltip = (this.userConfigService.getDescription(elementID))
-                    ? this.userConfigService.getDescription(elementID)
-                        + ': ' + this.userConfigService.getDefaultTag()
-                    : undefined;
-                columnToAdd = {
-                    'headerName': headerName,
-                    'children': [],
-                    'headerTooltip': headerTooltip,
-                    'elementID': elementID,
-                };
-                workingNode.elementID = undefined;
-                workingNode.children.unshift(columnToAdd);
+            for (const node of workingNode.children) {
+                if (node.headerName === officialTitle) {
+                    columnToAdd.columnGroupShow = 'open';
+                    break;
+                }
             }
         }
 
+        workingNode.children.push(columnToAdd);
+
+      } else {
+        columnToAdd = workingNode;
+        // Avoid overwritting layered/official columns
+        if (workingNode.children.length
+            && workingNode.children[0].headerName !== this.userConfigService.getDefaultTag()
+            && workingNode.children[0].headerName !== officialTitle) {
+          const headerName = this.userConfigService.getDefaultTag();
+          const description = this.userConfigService.getDescription(elementID);
+          const headerTooltip = !description ? `${description}: ${headerName}` : undefined;
+          columnToAdd = {
+            'headerName': headerName,
+            'headerTooltip': headerTooltip,
+            'children': [],
+            'elementID': elementID
+          };
+          workingNode.elementID = undefined;
+          workingNode.children.unshift(columnToAdd);
+        }
+      }
+
+
         if (this.hideDataElement(elementID)) {
-            columnToAdd.hide = true;
+          columnToAdd.hide = true;
         }
 
         this.columnConfiguration.createElementHeader(columnToAdd, headerID);
         this.columnsGenerated.push(headerID);
-    }
+  }
 
     private buildMetadataColumn(element, headerID) {
-        if (this.columnsGenerated.indexOf(headerID) !== -1) {
-            return;
-        }
+      if (this.columnsGenerated.indexOf(headerID) !== -1) { return; }
 
       // metadata name using userConfigService may be slightly different than 2.5.6
         const header = {
@@ -471,14 +422,12 @@ export class DataGridService {
     }
 
     private ignoreElement(element: MetadataElements | DataElements): boolean {
-        if (element.elementID == null) { return true; }
-        return !this.ignoreUserConfig
-            ? this.userConfigService.getElementVisibility(element.elementID) === ElementVisibility.NO_LOAD
-            : false;
+        return element.elementID == null ||
+          this.userConfigService.getElementVisibility(element.elementID) === ElementVisibility.NO_LOAD;
     }
 
     private hideDataElement(elementID: string): boolean {
-        // should return default even if use empty user config (dont need to check ignoreUserConfig)
+        // should return default even if use empty user config
         return this.userConfigService.getElementVisibility(elementID) === ElementVisibility.HIDDEN;
     }
 }
