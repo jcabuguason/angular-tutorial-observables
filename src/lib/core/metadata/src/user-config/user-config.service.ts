@@ -87,6 +87,16 @@ export class UserConfigService {
 
     }
 
+    hasPreferredUnits(): boolean {
+        return !!this.userConfig.elementUnits
+                .map(config => config.unit)
+                .shift()
+            ||
+            !!this.userConfig.elementConfigs
+                .map(config => config.displayUnit)
+                .shift();
+    }
+
     getElementVisibility(elementID: string): ElementVisibility {
 
         if (!this.userConfig.loadDataElements.checkIncludeExclude(elementID)) {
@@ -144,18 +154,17 @@ export class UserConfigService {
                 || '';
     }
 
-    getGenericElementUnit(elementID: string): string {
-        return this.userConfig.elementUnits
-            .filter(config => config.elementRegex.test(elementID))
-            .map(config => config.unit)
-            .shift();
-    }
-
     getSpecificElementUnit(elementID: string): string {
         return this.userConfig.elementConfigs
             .filter(config => config.elementID === elementID)
             .map(config => config.displayUnit)
             .shift();
+    }
+
+    getGenericElementUnit(elementID: string): string {
+        const configElement = this.userConfig.elementUnits
+                                  .find(config => config.elementRegex.test(elementID));
+        if (configElement) { return configElement.unit; }
     }
 
     getDescription(elementID: string, nodeIndex: number = this.getNestingDepth(elementID)): string {

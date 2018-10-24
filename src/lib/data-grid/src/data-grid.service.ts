@@ -12,6 +12,9 @@ import {
     ElementVisibility,
 } from 'msc-dms-commons-angular/core/metadata/';
 
+import { DMSObs, MetadataElements, DataElements, RawMessage, IndexDetails } from 'msc-dms-commons-angular/core/obs-util';
+import { UnitCodeConversionService } from 'msc-dms-commons-angular/core/obs-util';
+
 import { NodeLookups } from 'msc-dms-commons-angular/core/metadata';
 
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
@@ -31,7 +34,9 @@ export class DataGridService {
     private identityHeader;
     private rawHeader;
 
-    constructor(public userConfigService: UserConfigService, public dialog: MatDialog) {
+    constructor(public userConfigService: UserConfigService,
+                public unitService: UnitCodeConversionService,
+                public dialog: MatDialog) {
         userConfigService.loadConfig(FULL_CONFIG);
         this.columnConfiguration = new DefaultColumnConfiguration();
         this.resetHeader();
@@ -54,6 +59,12 @@ export class DataGridService {
         this.rowData.push(...obs.map((data) => this.convertToRowObject(<DMSObs> data)));
         this.sortColumns();
         this.reloadGrid();
+    }
+
+    setData(obs: object[]) {
+        this.rowData = [];
+        this.columnsGenerated = [];
+        this.addAllData(obs);
     }
 
     removeAllData() {
@@ -124,6 +135,7 @@ export class DataGridService {
             if (!this.ignoreElement(element)) {
                 const headerID = ColumnConfigurationContainer.findHeaderID(element);
                 this.buildElementColumn(element, headerID);
+                this.unitService.setPreferredUnits(element);
                 const elementData = this.columnConfiguration.createElementData(element, headerID);
                 Object.keys(elementData).forEach(key => result[key] = elementData[key]);
             }
@@ -131,7 +143,7 @@ export class DataGridService {
 
         dataElements.filter(e => e != null)
                     .filter(e => e.elementID != null)
-                    .forEach(buildColumn);
+                    .forEach(e => buildColumn(e));
 
         // added at the same time with user config
         if (this.columnConfiguration.allowBlankDataColumns) {
@@ -344,7 +356,7 @@ export class DataGridService {
       let columnToAdd;
       if (element.indexValue !== undefined) {
         const headerName = (element.indexValue)
-          ? `${this.userConfigService.getElementIndexTitle(elementID)} ${element.indexValue}`
+          ? `${this.getIndexLabel(element)} ${element.indexValue}`
           : officialTitle;
         const description = this.userConfigService.getDescription(elementID);
         const headerTooltip = !!description ? `${description}: ${headerName}` : undefined;
@@ -402,6 +414,24 @@ export class DataGridService {
         this.columnsGenerated.push(headerID);
   }
 
+    private getIndexLabel(element: DataElements): string {
+        switch (element.index.name) {
+            case 'sensor_index': {
+                return 'Sensor';
+            }
+            case 'cloud_layer_index': {
+                return 'Layer';
+            }
+            case 'observed_weather_index': {
+                return 'Type';
+            }
+            default: {
+                return 'Sensor';
+            }
+        }
+    }
+
+
     private buildMetadataColumn(element, headerID) {
       if (this.columnsGenerated.indexOf(headerID) !== -1) { return; }
 
@@ -430,77 +460,4 @@ export class DataGridService {
         // should return default even if use empty user config
         return this.userConfigService.getElementVisibility(elementID) === ElementVisibility.HIDDEN;
     }
-}
-
-export interface DMSElementSummary {
-    aggregations: Aggregation;
-}
-
-export interface Aggregation {
-    dataElements: ESDataElements;
-}
-
-export interface ESDataElements {
-    index: ElementIndex;
-}
-
-export interface ElementIndex {
-    buckets: Buckets[];
-}
-
-export interface Buckets {
-    key: string;
-    maxIndex: Index;
-    minIndex: Index;
-}
-
-export interface Index {
-    value: number;
-}
-
-export interface DMSObs {
-    identity: string; // URI
-    identifier: string; // Primary station identifier
-    taxonomy: string;
-    obsDateTime: string; // TODO: Switch to moment.js datetime?
-    location: Location;
-    receivedDateTime: string;
-    parentIdentity: string;
-    author: Author;
-    jsonVersion: string;
-    rawMessage: RawMessage;
-    metadataElements: MetadataElements[];
-    dataElements: DataElements[];
-}
-
-export interface Author {
-    build: string;
-    name: string;
-    version: number;
-}
-
-// TODO: This is outdated, will be fixed when we add models to commons?
-export interface DataElements {
-    name: string;
-    value: string;
-    unit: string;
-    elementID: string;
-    overallQASummary: number;
-    indexValue: number;
-}
-
-export interface Location {
-    type: string;
-    coordinates: string;
-}
-
-export interface MetadataElements {
-    name: string;
-    value: string;
-    unit: string;
-    elementID: string;
-}
-export interface RawMessage {
-    header: string;
-    message: string;
 }

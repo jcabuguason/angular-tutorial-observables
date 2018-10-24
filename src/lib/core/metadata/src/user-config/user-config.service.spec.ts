@@ -163,6 +163,21 @@ describe('UserConfigService', () => {
         expect(service.getElementUnit('1.12.207.2.1.1.0')).toBe('m');
     });
 
+    it('should show no preferred units', () => {
+        service.loadConfig(emptyConfig);
+        expect(service.hasPreferredUnits()).toBeFalsy();
+    });
+
+    it('should show preferred units', () => {
+        service.loadConfig(unitConfig);
+        expect(service.hasPreferredUnits()).toBeTruthy();
+    });
+
+    it('should show preferred units from complex config', () => {
+        service.loadConfig(complexUnitConfig);
+        expect(service.hasPreferredUnits()).toBeTruthy();
+    });
+
     it('should return the default official title', () => {
         service.loadConfig(emptyConfig);
         expect(service.getElementOfficialIndexTitle('1.19.6.0.66.0.0')).toBe('Official');
@@ -215,6 +230,11 @@ describe('UserConfigService', () => {
         expect(service.getElementPrecision('1.19.265.0.66.0.0')).toBe(1);
     });
 
+    it('should return an empty string', () => {
+        service.loadConfig(precisionConfig);
+        expect(service.getElementPrecision('1.19.265.0.66.0.1')).toBeUndefined();
+    });
+    
     it('should return an undefined instead of an element description', () => {
         service.loadConfig(emptyConfig);
         expect(service.getElementDescription('1.19.265.0.66.0.1')).toBeUndefined();
@@ -244,6 +264,7 @@ describe('UserConfigService', () => {
         service.loadConfig(nodeDescriptionConfig);
         expect(service.getNodeDescription('1.2.3.5.6.7.8', 3)).toBeUndefined();
     });
+    
     it('should return undefined instead of a description', () => {
         service.loadConfig(emptyConfig);
         expect(service.getDescription('1.2.3.4.5.6.7', 3)).toBeUndefined();

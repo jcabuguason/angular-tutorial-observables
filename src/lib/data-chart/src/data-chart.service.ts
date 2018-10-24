@@ -4,13 +4,15 @@ import { Chart, Highcharts } from 'angular-highcharts';
 
 import { UserConfigService } from 'msc-dms-commons-angular/core/metadata';
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
+import { UnitCodeConversionService } from 'msc-dms-commons-angular/core/obs-util';
 
 @Injectable()
 export class DataChartService {
 
     public wipeCharts = new EventEmitter();
 
-    constructor(private configService: UserConfigService) {}
+    constructor(public configService: UserConfigService,
+                public unitService: UnitCodeConversionService) {}
 
     // Need to use the class structure that is currently in grid-service
     chartColumn(elementFields: string[], observations, extraOptions: Highcharts.Options = {}): Chart[] {
@@ -85,6 +87,8 @@ export class DataChartService {
                     .find(elem => elem.elementID === field.elementID &&
                         (!hasLayer || elem.indexValue === field.indexValue));
                 if (!!foundElem) {
+
+                    this.unitService.setPreferredUnits(foundElem);
 
                     const elementChart = this.findElementSeries(elemSeries, field.elementID);
                     this.findChartSeries(

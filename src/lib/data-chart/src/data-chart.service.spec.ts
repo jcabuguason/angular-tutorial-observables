@@ -4,6 +4,7 @@ import { Chart } from 'angular-highcharts';
 
 import { DataChartService } from './data-chart.service';
 import { UserConfigService } from 'msc-dms-commons-angular/core/metadata';
+import { UnitCodeConversionService, DataElements } from 'msc-dms-commons-angular/core/obs-util';
 
 class MockConfigService {
     getFullFormattedHeader(elementID: string) {
@@ -11,6 +12,12 @@ class MockConfigService {
     }
     getElementOfficialIndexTitle = (elementID: string) => 'Official';
     getDefaultTag = () => 'Layer';
+}
+
+class MockUnitService {
+    setPreferredUnits(element: DataElements, usePreferredUnits: boolean) { }
+
+    usePreferredUnits(): boolean { return false; }
 }
 
 describe('DataChartService', () => {
@@ -30,7 +37,8 @@ describe('DataChartService', () => {
         TestBed.configureTestingModule({
             providers: [
                 DataChartService,
-                { provide: UserConfigService, useClass: MockConfigService }
+                { provide: UserConfigService, useClass: MockConfigService },
+                { provide: UnitCodeConversionService, useClass: MockUnitService}
             ],
         });
 

@@ -25,3 +25,10 @@ export interface UnitConversion {
     multiplier: number;
     offset: number;
 }
+
+export interface ConvertedValues {
+    originalValue: string;
+    originalUnit: string;
+    preferredValue: string;
+    preferredUnit: string;
+}
