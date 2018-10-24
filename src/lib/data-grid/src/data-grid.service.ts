@@ -393,7 +393,7 @@ export class DataGridService {
             && workingNode.children[0].headerName !== officialTitle) {
           const headerName = this.userConfigService.getDefaultTag();
           const description = this.userConfigService.getDescription(elementID);
-          const headerTooltip = !description ? `${description}: ${headerName}` : undefined;
+          const headerTooltip = !!description ? `${description}: ${headerName}` : undefined;
           columnToAdd = {
             'headerName': headerName,
             'headerTooltip': headerTooltip,
