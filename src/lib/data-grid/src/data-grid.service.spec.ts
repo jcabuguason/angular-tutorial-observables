@@ -12,6 +12,13 @@ import { AccordianColumnConfiguration } from './column-configuration/accordian-c
 import { UserConfigService, ElementVisibility } from 'msc-dms-commons-angular/core/metadata';
 import { MatDialog } from '@angular/material';
 import { StationInfoComponent } from './station-info/station-info.component';
+import { UnitCodeConversionService, DataElements } from 'msc-dms-commons-angular/core/obs-util';
+
+class MockUnitService {
+    setPreferredUnits(element: DataElements, usePreferredUnits: boolean) { }
+
+    usePreferredUnits(): boolean { return false; }
+}
 
 describe('DataGridService', () => {
     let service: DataGridService;
@@ -40,12 +47,14 @@ describe('DataGridService', () => {
 
     }
 
+
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
                 DataGridService,
                 { provide: UserConfigService, useClass: MockConfigService },
                 { provide: MatDialog, useValue: { open: () => {} }},
+                { provide: UnitCodeConversionService, useClass: MockUnitService}
             ],
         });
 

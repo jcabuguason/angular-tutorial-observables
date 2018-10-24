@@ -10,9 +10,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material';
 import { MatSortModule } from '@angular/material';
 
-
-
-
 @NgModule({
   declarations: [
     QaRendererComponent,
