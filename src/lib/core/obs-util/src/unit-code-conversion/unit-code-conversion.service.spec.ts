@@ -1,29 +1,79 @@
+import { TestBed, getTestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+
 import { UnitCodeConversionService } from './unit-code-conversion.service';
+import { UNIT_CODE_CONVERSION_CONFIG, UnitCodeConversionConfig } from './unit-code-conversion.config';
+import { DataElements } from '../dms-observation.model';
+import { FromUnits } from './unit-code-conversion.model';
+
+const units = require('assets/units.json');
 
 describe('UnitCodeConversionService', () => {
 
     let service: UnitCodeConversionService;
+    let config: UnitCodeConversionConfig;
+    let unitConversions: FromUnits;
 
     beforeEach(() => {
-        service = new UnitCodeConversionService();
+        config = {
+            endpoint: 'http://www.test.com'
+        };
+
+        unitConversions = units['unitConversionResult'];
+
+        TestBed.configureTestingModule({
+            imports: [ HttpClientTestingModule ],
+            providers: [
+                UnitCodeConversionService,
+                { provide: UNIT_CODE_CONVERSION_CONFIG, useValue: config}
+            ]
+        });
+
+        service = getTestBed().get(UnitCodeConversionService);
     });
 
     it('should return same value due to non-number element value', () => {
-        expect(service.createConversion('1.2.3.4.5.6.7', 'Marlowe', 'm', 'daPa', null).preferredValue).toBe('Marlowe');
+        const element: DataElements = {
+            name: 'temp',
+            elementID: '1.2.3.4.5.6.7',
+            value: 'Marlowe',
+            unit: 'm'
+        };
+        service.convertElement(element, unitConversions, 'm');
+        expect(element.preferredValue).toBe('Marlowe');
     });
 
     it('should return converted value', () => {
-        console.log('test');
-        expect(service.createConversion('1.2.3.4.5.6.7', '42', 'Pa', 'daPa', null).preferredValue).toBe('4.2');
-        console.log('end test');
+        const element: DataElements = {
+            name: 'temp',
+            elementID: '1.2.3.4.5.6.7',
+            value: '42',
+            unit: 'Pa'
+        };
+        service.convertElement(element, unitConversions, 'daPa');
+        expect(element.preferredValue).toBe('4.2');
     });
 
     it('should return same value as no conversion exists', () => {
-        expect(service.createConversion('1.2.3.4.5.6.7', '42', 'm', 'daPa', null).preferredValue).toBe('42');
+        const element: DataElements = {
+            name: 'temp',
+            elementID: '1.2.3.4.5.6.7',
+            value: '42',
+            unit: 'm'
+        };
+        service.convertElement(element, unitConversions, 'daPa');
+        expect(element.preferredValue).toBe('42');
     });
 
     it('should return a rounded value', () => {
-        expect(service.createConversion('1.2.3.4.5.6.7', '42.123', 'm', 'm', 1).preferredValue).toBe('42.1');
+        const element: DataElements = {
+            name: 'temp',
+            elementID: '1.2.3.4.5.6.7',
+            value: '42.123',
+            unit: 'm'
+        };
+        service.convertElement(element, unitConversions, 'm', 1);
+        expect(element.preferredValue).toBe('42.1');
     });
 
     it('should return converted code value', () => {

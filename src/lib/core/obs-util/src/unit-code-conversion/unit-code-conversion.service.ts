@@ -1,21 +1,29 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { FromUnits, UnitConversion, CodeSources, CodeResult, ConvertedValues } from './unit-code-conversion.model';
+import { FromUnits, UnitConversion, CodeSources, CodeResult, UnitConversionResult } from './unit-code-conversion.model';
+import { UNIT_CODE_CONVERSION_CONFIG, UnitCodeConversionConfig } from './unit-code-conversion.config';
 
-import { DataElements } from '../dms-observation.model';
+import { DMSObs, DataElements } from '../dms-observation.model';
 
-const units = require('assets/units.json');
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+
 const codes = require('assets/codes.json');
 
 @Injectable()
 export class UnitCodeConversionService {
 
-    private unitConvs: FromUnits;
+    public unitConvs: Observable<UnitConversionResult>;
     private codeSubs: CodeSources;
     public usePreferredUnits = false;
 
-    constructor() {
-        this.unitConvs = units['unitConversionResult'];
+    constructor(
+        @Inject(UNIT_CODE_CONVERSION_CONFIG)
+        private config: UnitCodeConversionConfig,
+        private http: HttpClient
+    ) {
+        this.unitConvs = this.http.get<any>(`${this.config.endpoint}/units.json`);
         this.codeSubs = codes['codeSubstitutionResult'];
     }
 
@@ -46,11 +54,12 @@ export class UnitCodeConversionService {
             && this.codeSubs[codeSrc].hasOwnProperty(codeTyp);
     }
 
-    createConversion(elementID: string,
-                     elementValue: string,
-                     elementUnit: string,
-                     preferredUnit: string,
-                     elementPrecision: number): ConvertedValues {
+    convertElement(
+        element: DataElements,
+        unitConversions: FromUnits,
+        preferredUnit: string,
+        elementPrecision?: number
+    ) {
 
         const applyPrecision = (value: number, base: number): number =>
             Math.round(value * base) / base;
@@ -58,50 +67,45 @@ export class UnitCodeConversionService {
         const convertUnit = (value: number, conversion: UnitConversion[]): number =>
             (value * conversion['multiplier']) + conversion['offset'];
 
-        const converted: ConvertedValues = {
-            originalValue: elementValue,
-            originalUnit: elementUnit,
-            preferredValue: elementValue,
-            preferredUnit: elementUnit
-        };
+        const validUnitConversion = (fromUnit: string, toUnit: string): boolean =>
+            !!toUnit
+            && unitConversions.hasOwnProperty(fromUnit)
+            && unitConversions[fromUnit].hasOwnProperty(toUnit);
 
-        if ('MSNG' === elementValue) {
+        element.preciseValue = element.value;
+        element.preciseUnit = element.unit;
+        element.preferredValue = element.value;
+        element.preferredUnit = element.unit;
+
+        if ('MSNG' === element.value) {
             if (preferredUnit !== '') {
-                converted.preferredUnit = preferredUnit;
+                element.preferredUnit = preferredUnit;
             }
-            return converted;
+            return;
         }
 
-        const elementNumericValue = Number(elementValue);
+        const elementNumericValue = Number(element.value);
         let preferredNumericValue = elementNumericValue;
 
         if (isNaN(elementNumericValue)) {
-            return converted;
+            return;
         }
 
-        if (this.validUnitConversion(elementUnit, preferredUnit)) {
-            const conversion: UnitConversion[] = this.unitConvs[elementUnit][preferredUnit];
+        if (validUnitConversion(element.unit, preferredUnit)) {
+            const conversion: UnitConversion[] = unitConversions[element.unit][preferredUnit];
 
             preferredNumericValue = convertUnit(elementNumericValue, conversion);
-            converted.preferredUnit = preferredUnit;
-            converted.preferredValue = String(preferredNumericValue);
+            element.preferredUnit = preferredUnit;
+            element.preferredValue = String(preferredNumericValue);
         }
 
         if (elementPrecision != null) {
             const base = 10 ** elementPrecision;
 
-            converted.originalValue = String(applyPrecision(elementNumericValue, base));
-            converted.preferredValue = String(applyPrecision(preferredNumericValue, base));
+            element.preciseValue = String(applyPrecision(elementNumericValue, base));
+            element.preferredValue = String(applyPrecision(preferredNumericValue, base));
         }
 
-        return converted;
-
-    }
-
-    private validUnitConversion(fromUnit: string, toUnit: string): boolean {
-        return !!toUnit
-            && this.unitConvs.hasOwnProperty(fromUnit)
-            && this.unitConvs[fromUnit].hasOwnProperty(toUnit);
     }
 }
 

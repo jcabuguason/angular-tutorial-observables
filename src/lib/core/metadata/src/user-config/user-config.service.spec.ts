@@ -8,7 +8,6 @@ describe('UserConfigService', () => {
     let service: UserConfigService;
 
     beforeEach(() => {
-        // service = new UserConfigService(new MetadataService(null, null));
         service = new UserConfigService();
     });
 
@@ -234,7 +233,7 @@ describe('UserConfigService', () => {
         service.loadConfig(precisionConfig);
         expect(service.getElementPrecision('1.19.265.0.66.0.1')).toBeUndefined();
     });
-    
+
     it('should return an undefined instead of an element description', () => {
         service.loadConfig(emptyConfig);
         expect(service.getElementDescription('1.19.265.0.66.0.1')).toBeUndefined();
@@ -264,7 +263,7 @@ describe('UserConfigService', () => {
         service.loadConfig(nodeDescriptionConfig);
         expect(service.getNodeDescription('1.2.3.5.6.7.8', 3)).toBeUndefined();
     });
-    
+
     it('should return undefined instead of a description', () => {
         service.loadConfig(emptyConfig);
         expect(service.getDescription('1.2.3.4.5.6.7', 3)).toBeUndefined();

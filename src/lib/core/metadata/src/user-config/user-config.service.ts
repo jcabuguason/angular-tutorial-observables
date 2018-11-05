@@ -33,7 +33,6 @@ export class UserConfigService {
         this.defaultHeader();
     }
 
-
     defaultHeader() {
         this.userConfig = UserConfig.createConfig();
     }
