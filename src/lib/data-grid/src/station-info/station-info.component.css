@@ -2,6 +2,7 @@
   display: block;
   overflow: auto;
   max-height: 50vh;
+  font-weight: bolder;
 }
 
 .mat-row,
