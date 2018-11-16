@@ -114,3 +114,14 @@
 .reset-button {
   float: left
 }
+
+ /* needed to fix padding in firefox */
+.ui-button-icon-only {
+  width:2em !important;
+}
+
+ /* needed to make X icon red */
+ .ui-inputgroup .ui-button:last-child {
+  background-color: #d9534f !important;
+  border-color: #d9534f;
+}
