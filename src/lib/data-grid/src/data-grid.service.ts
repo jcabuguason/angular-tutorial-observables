@@ -183,18 +183,6 @@ export class DataGridService {
         };
     }
 
-    displayMetadataTable(allData) {
-      const identity = (key) => !(key.startsWith('e_') || key.startsWith('raw_'));
-      this.dialog.open(StationInfoComponent, {
-        data: {
-          allData: Object.keys(allData).filter(identity).map(key => ({
-            'key': key,
-            'value': allData[key]
-          }))
-        }
-      });
-    }
-
     adjustColumns() {
       if (!this.rowData.length) {
         return;
@@ -255,6 +243,19 @@ export class DataGridService {
         identity.children = identityCols.concat(remainingIdentityCols);
 
         this.columnDefs = [identity, ...dataCols, this.rawHeader];
+    }
+
+    displayMetadataTable(allData) {
+        const identity = (key) => !(key.startsWith('e_') || key.startsWith('raw_'));
+        this.dialog.open(StationInfoComponent, {
+            data: {
+                name: allData.stn_nam,
+                allData: Object.keys(allData).filter(identity).map(key => ({
+                    'key': key,
+                    'value': allData[key]
+                }))
+            }
+        });
     }
 
     // checks element ID to determine if its a metadata element

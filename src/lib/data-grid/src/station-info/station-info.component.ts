@@ -2,6 +2,7 @@ import { Component, Inject} from '@angular/core';
 import { MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 export interface StationInfoInterface {
+  name?: string;
   allData?: {};
 }
 
@@ -11,10 +12,10 @@ export interface StationInfoInterface {
   styleUrls: ['./station-info.component.css']
 })
 export class StationInfoComponent {
-
+  name;
   allData;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: StationInfoInterface,
-  )  { this.allData = data.allData; }
+  )  { this.name = data.name, this.allData = data.allData; }
 }
