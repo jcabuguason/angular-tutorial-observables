@@ -14,7 +14,6 @@ export enum Lang {
     FRENCH = 'fr'
 }
 
-
 export class UserConfig {
     loadMetaElements: IncludeExclude;
     loadDataElements: IncludeExclude;
@@ -26,6 +25,7 @@ export class UserConfig {
     defaultTag: LanguageLabel;
     elementConfigs: ElementConfig[];
     genericNodes: GenericNodeConfig[];
+    qaHideFlags: number[];
 
     private constructor() {
         this.loadMetaElements = new IncludeExclude([], []);
@@ -41,6 +41,7 @@ export class UserConfig {
         this.elementUnits = [];
         this.elementConfigs = [];
         this.genericNodes = [];
+        this.qaHideFlags = [];
     }
 
     public static createConfig(): UserConfig {
@@ -109,6 +110,11 @@ export class UserConfig {
             // Configuring renaming
             else if (checkElementGroupAndName('element-display', 'element')) {
                 ElementConfig.updateConfig(config.elementConfigs, element);
+            }
+
+            // Configuring renaming
+            else if (checkElementGroupAndName('element-display', 'hide-qa-flag')) {
+                config.qaHideFlags.push(Number(element.value));
             }
         }
 

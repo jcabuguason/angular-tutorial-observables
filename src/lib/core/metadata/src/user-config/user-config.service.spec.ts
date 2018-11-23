@@ -8,7 +8,6 @@ describe('UserConfigService', () => {
     let service: UserConfigService;
 
     beforeEach(() => {
-        // service = new UserConfigService(new MetadataService(null, null));
         service = new UserConfigService();
     });
 
@@ -264,7 +263,7 @@ describe('UserConfigService', () => {
         service.loadConfig(nodeDescriptionConfig);
         expect(service.getNodeDescription('1.2.3.5.6.7.8', 3)).toBeUndefined();
     });
-    
+
     it('should return undefined instead of a description', () => {
         service.loadConfig(emptyConfig);
         expect(service.getDescription('1.2.3.4.5.6.7', 3)).toBeUndefined();
@@ -283,6 +282,16 @@ describe('UserConfigService', () => {
     it('should return a description from a complex description config', () => {
         service.loadConfig(complexDescriptionConfig);
         expect(service.getDescription('1.12.207.2.1.1.0', 4)).toBe('Sensor Index');
+    });
+
+    it('should return an empty qa flag toggle list', () => {
+        service.loadConfig(emptyConfig);
+        expect(service.getHideQaFlag().length).toBe(0);
+    });
+
+    it('should return a list of qa flag toggles', () => {
+        service.loadConfig(qaFlagConfig);
+        expect(service.getHideQaFlag().length).toBe(2);
     });
 
 
@@ -641,6 +650,18 @@ describe('UserConfigService', () => {
                     language: {english: '', french: ''}, instelements: []},
                 ]
             },
+        ]
+    };
+
+    const qaFlagConfig: MDInstanceDefinition = {
+        dataset: 'stub',
+        parent: 'stub',
+        identificationElements: [],
+        elements: [
+            {group: 'element-display', name: 'hide-qa-flag', value: '100', def_id: '', id: '', index: '', uom: '',
+                language: {english: '', french: ''}, instelements: []},
+            {group: 'element-display', name: 'hide-qa-flag', value: '10', def_id: '', id: '', index: '', uom: '',
+                language: {english: '', french: ''}, instelements: []},
         ]
     };
 

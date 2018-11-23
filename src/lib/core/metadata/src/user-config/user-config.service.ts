@@ -140,6 +140,10 @@ export class UserConfigService {
         return this.userConfig.defaultTag.getName(this.lang);
     }
 
+    getHideQaFlag(): number[] {
+        return this.userConfig.qaHideFlags;
+    }
+
     getElementGroup(elementID: string): string[] {
         return this.userConfig.elementGroups
             .filter(elemGroup => elemGroup.elementIDs.some(elemID => elemID === elementID))
