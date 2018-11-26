@@ -62,17 +62,20 @@ export class DataGridService {
     }
 
     setData(obs: object[]) {
-        this.rowData = [];
-        this.columnsGenerated = [];
+        this.wipeRecords();
         this.addAllData(obs);
     }
 
     removeAllData() {
+        this.wipeRecords();
+        this.reloadGrid();
+    }
+
+    wipeRecords() {
         this.rowData = [];
         this.columnsGenerated = [];
         this.elementsFound = [];
         this.resetHeader();
-        this.reloadGrid();
     }
 
     reloadGrid() {
