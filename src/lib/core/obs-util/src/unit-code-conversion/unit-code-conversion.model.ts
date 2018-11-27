@@ -13,6 +13,10 @@ export interface CodeResult {
     fr?: string;
 }
 
+export interface UnitConversionResult {
+    unitConversionResult: FromUnits;
+}
+
 export interface FromUnits {
     [fromUnits: string]: ToUnits;
 }

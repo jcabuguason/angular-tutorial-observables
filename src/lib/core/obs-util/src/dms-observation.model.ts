@@ -50,13 +50,13 @@ export interface DataElements {
     value: string;
     unit: string;
     elementID: string;
-    overallQASummary: number;
-    indexValue: number;
-    index: IndexDetails;
-    preciseValue: string;
-    preciseUnit: string;
-    preferredValue: string;
-    preferredUnit: string;
+    overallQASummary?: number;
+    indexValue?: number;
+    index?: IndexDetails;
+    preciseValue?: string;
+    preciseUnit?: string;
+    preferredValue?: string;
+    preferredUnit?: string;
 }
 
 export interface Location {

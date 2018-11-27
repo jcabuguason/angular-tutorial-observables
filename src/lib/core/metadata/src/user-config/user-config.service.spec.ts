@@ -233,7 +233,7 @@ describe('UserConfigService', () => {
         service.loadConfig(precisionConfig);
         expect(service.getElementPrecision('1.19.265.0.66.0.1')).toBeUndefined();
     });
-    
+
     it('should return an undefined instead of an element description', () => {
         service.loadConfig(emptyConfig);
         expect(service.getElementDescription('1.19.265.0.66.0.1')).toBeUndefined();
