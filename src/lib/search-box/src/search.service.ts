@@ -1,6 +1,5 @@
 import { Injectable, Inject, EventEmitter } from '@angular/core';
 import { Location } from '@angular/common';
-
 import { addHours, subHours } from 'date-fns';
 
 import { SearchParameter, ParameterName } from './parameters/search-parameter';
@@ -44,21 +43,14 @@ export class SearchService {
   shortcutSelected: ShortcutModel;
   shortcutButtons = [];
 
-  popupMessage = [];
   details;
-
-  messageSummaries = {
-    'missingRequired': 'Missing required search fields:',
-    'unfilledField': 'Fields added but do not have a value or correct format (note: Invalid values could have been automatically removed):',
-  };
-
 
   constructor(
     @Inject(SEARCH_BOX_CONFIG)
     public config: SearchBoxConfig,
     public location: Location,
     private messageService: MessageService,
-    private urlService: SearchURLService,
+    private urlService: SearchURLService
   ) {
     this.taxonomies = this.config.taxonomies;
     this.availableParams = this.config.searchList;
@@ -69,10 +61,6 @@ export class SearchService {
 
     this.shortcuts = this.config.shortcuts;
     this.createShortcutButtons();
-  }
-
-  clearMessages() {
-    this.popupMessage = [];
   }
 
   /** Executes parameters for a search request */
@@ -286,16 +274,13 @@ export class SearchService {
     let valid = true;
 
     this.messageService.clear();
-    this.popupMessage = [];
 
     if (empty.length > 0) {
-      this.popupMessage.push(this.messageSummaries.unfilledField);
-      this.messageService.add({ summary: this.messageSummaries['unfilledField'], data: empty, sticky: true });
+      this.messageService.add({ summary: 'SEARCH_BAR.UNFILLED_FIELD', data: empty, sticky: true });
       valid = false;
     }
     if (missing.length > 0) {
-      this.popupMessage.push(this.messageSummaries.missingRequired);
-      this.messageService.add({ summary: this.messageSummaries['missingRequired'], data: missing, sticky: true });
+      this.messageService.add({ summary: 'SEARCH_BAR.MISSING_REQUIRED', data: missing, sticky: true });
       valid = false;
     }
     return valid;

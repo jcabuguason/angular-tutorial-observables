@@ -1,5 +1,6 @@
 import { MDInstanceElement, MDInstanceDefinition } from '../model';
 import { IncludeExclude } from '../include-exclude/include-exclude.class';
+import { LanguageService } from 'msc-dms-commons-angular/shared/language';
 
 // Enum to dictate how an element should be displayed/loaded
 export enum ElementVisibility {
@@ -33,8 +34,6 @@ export class UserConfig {
         this.visibleDataElements = new IncludeExclude([], []);
 
         this.subHeader = new SubHeaderConfig(true);
-
-        this.defaultTag = LanguageLabel.createDefaultLanguageLabel('Default');
         this.nestingDepth = 4;
 
         this.elementGroups = [];
@@ -119,6 +118,8 @@ export class UserConfig {
         }
 
     }
+
+    instant(key) { return LanguageService.translator.instant(`GRID.${key}`); }
 }
 
 export class ElementConfig {
@@ -292,15 +293,10 @@ export class LanguageLabel {
         this.frenchLabel = element.language.french ? element.language.french : element.value;
     }
 
-    getName(lang: Lang): string {
-        switch (lang) {
-            case (Lang.ENGLISH) : {
-                return this.englishLabel;
-            }
-            case (Lang.FRENCH) : {
-                return this.frenchLabel;
-            }
-        }
+    getName(): string {
+      return LanguageService.translator.currentLang === 'en'
+        ? this.englishLabel
+        : this.frenchLabel;
     }
 }
 

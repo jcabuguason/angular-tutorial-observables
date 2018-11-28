@@ -37,11 +37,6 @@ export class UserConfigService {
         this.userConfig = UserConfig.createConfig();
     }
 
-    // Sets the language
-    setLanguage(lang: Lang) {
-        this.lang = lang;
-    }
-
     injectProfiles(mdInstances: MDInstanceDefinition[]) {
         this.profiles = mdInstances;
     }
@@ -136,7 +131,9 @@ export class UserConfigService {
     }
 
     getDefaultTag(): string {
-        return this.userConfig.defaultTag.getName(this.lang);
+        return !!this.userConfig.defaultTag
+          ? this.userConfig.defaultTag.getName()
+          : this.userConfig.instant('DEFAULT');
     }
 
     getHideQaFlag(): number[] {
@@ -181,7 +178,7 @@ export class UserConfigService {
                 .filter(config => config.elementID === elementID)
                 .map(config => config.elementDescription)
                 .filter(elemConfig => elemConfig !== undefined)
-                .map(elemConfig => elemConfig.getName(this.lang))
+                .map(elemConfig => elemConfig.getName())
                 .shift();
         }
     }
@@ -193,7 +190,7 @@ export class UserConfigService {
             .reduce((a, b) => a.concat(b), [])
             .filter(nodeMap => nodeMap.nodeValue === this.nodeValueAt(elementID, nodeIndex))
             .map(nodeMap => nodeMap.nodeDescription)
-            .map(nodeDescription => nodeDescription.getName(this.lang))
+            .map(nodeDescription => nodeDescription.getName())
             .shift();
     }
 
@@ -202,9 +199,9 @@ export class UserConfigService {
             .filter(config => config.elementID === elementID)
             .map(config => config.officialTitle)
             .filter(officialTitle => officialTitle !== undefined)
-            .map(officialTitle => officialTitle.getName(this.lang))
+            .map(officialTitle => officialTitle.getName())
             .shift()
-            || 'Official';
+            || this.userConfig.instant('OFFICIAL');
     }
 
     getElementIndexTitle(elementID: string): string {
@@ -212,9 +209,9 @@ export class UserConfigService {
             .filter(config => config.elementID === elementID)
             .map(config => config.indexTitle)
             .filter(indexTitle => indexTitle !== undefined)
-            .map(indexTitle => indexTitle.getName(this.lang))
+            .map(indexTitle => indexTitle.getName())
             .shift()
-            || 'Layer';
+            || this.userConfig.instant('LAYER');
     }
 
     getElementPrecision(elementID: string): number {
@@ -285,7 +282,7 @@ export class UserConfigService {
             ? this.userConfig.elementConfigs
                 .filter(config => config.elementID === elementID)
                 .map(config => config.elementName)
-                .map(elementName => elementName.getName(this.lang))
+                .map(elementName => elementName.getName())
                 .shift()
             : '';
     }
@@ -296,7 +293,7 @@ export class UserConfigService {
             .map(config => config.nodeNames)
             .reduce((a, b) => a.concat(b), [])
             .filter(nodeNames => nodeNames.nodeIndex === nodeIndex)
-            .map(nodeMap => nodeMap.getName(this.lang))
+            .map(nodeMap => nodeMap.getName())
             .shift();
     }
 
@@ -307,7 +304,7 @@ export class UserConfigService {
             .reduce((a, b) => a.concat(b), [])
             .filter(nodeMap => nodeMap.nodeValue === nodeValue)
             .map(nodeMap => nodeMap.nodeName)
-            .map(nodeName => nodeName.getName(this.lang))
+            .map(nodeName => nodeName.getName())
             .shift();
     }
 

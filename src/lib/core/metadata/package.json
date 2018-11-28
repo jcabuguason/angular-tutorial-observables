@@ -1,3 +1,9 @@
 {
-  "ngPackage": { }
+  "ngPackage": {
+    "lib": {
+      "externals": {
+        "msc-dms-commons-angular/shared/language": "msc-dms-commons-angular/shared/language"
+      }
+    }
+  }
 }

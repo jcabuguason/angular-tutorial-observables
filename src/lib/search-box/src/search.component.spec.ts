@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { Location } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-
 import { SearchComponent } from './search.component';
 import { SearchService } from './search.service';
 
@@ -27,6 +26,11 @@ import { SearchURLService } from './search-url.service';
 import { MockUrlService, MockMessageService } from './mock-services';
 import { MessageService } from 'primeng/components/common/messageservice';
 
+import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
+import {CombinedHttpLoader} from 'msc-dms-commons-angular/shared/language';
+import {HttpClient} from '@angular/common/http';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+
 describe('SearchComponent', () => {
   let searchComponent: SearchComponent;
   let fixture: ComponentFixture<SearchComponent>;
@@ -50,11 +54,20 @@ describe('SearchComponent', () => {
         MessagesModule,
         MultiSelectModule,
         SpinnerModule,
+        HttpClientTestingModule,
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useFactory: (httpClient) => new CombinedHttpLoader(httpClient, [{ prefix : '../../../assets/i18n/', suffix: '.json'}]),
+            deps: [HttpClient]
+          }
+        }),
       ],
       declarations: [
         SearchComponent
       ],
       providers: [
+        TranslateService,
         SearchService,
         MessageService,
         { provide: SEARCH_BOX_CONFIG, useValue: {} },

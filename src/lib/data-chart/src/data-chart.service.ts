@@ -5,14 +5,38 @@ import { Chart, Highcharts } from 'angular-highcharts';
 import { UserConfigService } from 'msc-dms-commons-angular/core/metadata';
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 import { UnitCodeConversionService } from 'msc-dms-commons-angular/core/obs-util';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class DataChartService {
 
     public wipeCharts = new EventEmitter();
 
-    constructor(public configService: UserConfigService,
-                public unitService: UnitCodeConversionService) {}
+    constructor(
+      public translate: TranslateService,
+      public configService: UserConfigService,
+      public unitService: UnitCodeConversionService
+    ) {
+      const weekdays = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+      const months =
+        ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+      translate.onLangChange.subscribe(evt => Highcharts.setOptions({
+        lang: {
+          contextButtonTitle: this.instantSingle('CHART_DEFAULTS', 'contextButtonTitle'),
+          printChart: this.instantSingle('CHART_DEFAULTS', 'printChart'),
+          downloadPNG: this.instantSingle('CHART_DEFAULTS', 'downloadPNG'),
+          downloadJPEG: this.instantSingle('CHART_DEFAULTS', 'downloadJPEG'),
+          downloadPDF: this.instantSingle('CHART_DEFAULTS', 'downloadPDF'),
+          downloadSVG: this.instantSingle('CHART_DEFAULTS', 'downloadSVG'),
+          loading: this.instantSingle('CHART_DEFAULTS', 'loading'),
+          resetZoom: this.instantSingle('CHART_DEFAULTS', 'resetZoom'),
+          resetZoomTitle: this.instantSingle('CHART_DEFAULTS', 'resetZoomTitle'),
+          shortMonths: this.instantArray('DATES', months.map(month => `${month}_SHORT`)),
+          months: this.instantArray('DATES', months),
+          weekdays: this.instantArray('DATES', weekdays),
+        }
+      }));
+    }
 
     // Need to use the class structure that is currently in grid-service
     chartColumn(elementFields: string[], observations, extraOptions: Highcharts.Options = {}): Chart[] {
@@ -55,7 +79,12 @@ export class DataChartService {
             xAxis: {
                 type: 'datetime',
                 title: {
-                    text: 'Date'
+                    text: this.instantSingle('CHART', 'DATE')
+                }
+            },
+            yAxis: {
+                title: {
+                    text: this.instantSingle('CHART', 'VALUES')
                 }
             },
             credits: {
@@ -133,6 +162,9 @@ export class DataChartService {
         }
         return series[index];
     }
+
+    private instantSingle = (header, key) => this.translate.instant(`${header}.${key}`);
+    private instantArray = (header, keys) => keys.map(key => this.instantSingle(header, key));
 
 }
 

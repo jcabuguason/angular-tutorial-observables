@@ -1,7 +1,8 @@
 import { UserConfigService } from './user-config.service';
 import { MetadataService } from '../service';
 import { MDInstanceDefinition } from '../model';
-import { Lang, ElementVisibility } from './user-config.model';
+import { Lang, ElementVisibility, LanguageLabel } from './user-config.model';
+import { LanguageService } from 'msc-dms-commons-angular/shared/language';
 
 describe('UserConfigService', () => {
 
@@ -9,6 +10,10 @@ describe('UserConfigService', () => {
 
     beforeEach(() => {
         service = new UserConfigService();
+        LanguageService.translator = <any>{
+          currentLang: 'en',
+          instant: (key) => key,
+        };
     });
 
     it('should set elements in the configured order', () => {
@@ -115,7 +120,7 @@ describe('UserConfigService', () => {
     });
 
     it('French Node Rename', () => {
-        service.setLanguage(Lang.FRENCH);
+        LanguageService.translator.currentLang = 'fr';
         service.loadConfig(langRenameConfig);
         expect(service.getFormattedNodeName('1.19.6.0.66.0.0', 3)).toBe('Fr');
     });
@@ -179,7 +184,7 @@ describe('UserConfigService', () => {
 
     it('should return the default official title', () => {
         service.loadConfig(emptyConfig);
-        expect(service.getElementOfficialIndexTitle('1.19.6.0.66.0.0')).toBe('Official');
+        expect(service.getElementOfficialIndexTitle('1.19.6.0.66.0.0')).toBe('GRID.OFFICIAL');
     });
 
     it('should return the specific official title', () => {
@@ -189,7 +194,7 @@ describe('UserConfigService', () => {
 
     it('should return the default layer title', () => {
         service.loadConfig(emptyConfig);
-        expect(service.getElementIndexTitle('1.19.6.0.66.0.0')).toBe('Layer');
+        expect(service.getElementIndexTitle('1.19.6.0.66.0.0')).toBe('GRID.LAYER');
     });
 
     it('should return a specific layer title', () => {

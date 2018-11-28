@@ -1,6 +1,7 @@
-import {Component, Input} from '@angular/core';
-
-import {ICellRendererAngularComp} from 'ag-grid-angular';
+import { Component, Input } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { ICellRendererAngularComp } from 'ag-grid-angular';
+import { qaTranslationKey } from 'msc-dms-commons-angular/core/obs-util';
 
 @Component({
     selector: 'commons-qa-renderer',
@@ -8,6 +9,7 @@ import {ICellRendererAngularComp} from 'ag-grid-angular';
     styleUrls: ['./qa-renderer.component.scss']
 })
 export class QaRendererComponent implements ICellRendererAngularComp {
+  constructor(public translate: TranslateService) {}
   // Used if the component is called in another template
   @Input() qa: string;
 
@@ -21,4 +23,7 @@ export class QaRendererComponent implements ICellRendererAngularComp {
   refresh(): boolean {
       return false;
   }
+
+  label = (qa: string) => this.translate.instant(qaTranslationKey(qa));
+
 }

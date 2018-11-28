@@ -121,7 +121,19 @@
 }
 
  /* needed to make X icon red */
- .ui-inputgroup .ui-button:last-child {
+.ui-inputgroup .ui-button:last-child {
   background-color: #d9534f !important;
   border-color: #d9534f;
+}
+
+:host ::ng-deep .search-bar.single .ui-dropdown-trigger.ui-state-default.ui-corner-right {
+  background-color: #2399e5;
+  border: 1px solid #2399e5;
+  color: white;
+  width: 29px;
+}
+
+:host ::ng-deep .search-bar.single .ui-dropdown-trigger.ui-state-default.ui-corner-right:hover {
+  background-color: #1f89ce;
+  border: 1px solid #1f89ce;
 }

@@ -6,6 +6,7 @@ export class SearchParameter {
   filteredSuggestions: string[] = [];
 
   multiSelectChoices = [];
+  choicesWithEmpty = [];
 
   private type: ParameterType;
   private displayName: string;
@@ -23,6 +24,10 @@ export class SearchParameter {
       this.multiSelectChoices = this.choices.map(choice => choice.label)
         .sort()
         .map(choiceLabel => ({ label: choiceLabel, value: choiceLabel}));
+      this.choicesWithEmpty = [
+        {label: '-', value: ''},
+        ...this.multiSelectChoices
+      ];
   }
 
   getName(): string {
