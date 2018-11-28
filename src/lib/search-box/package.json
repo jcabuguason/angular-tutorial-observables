@@ -16,11 +16,13 @@
         "primeng/messages": "primeng/messages",
         "primeng/multiselect": "primeng/multiselect",
         "primeng/spinner": "primeng/spinner",
-        "primeng/components/common/messageservice": "primeng/components/common/messageservice"
+        "primeng/components/common/messageservice": "primeng/components/common/messageservice",
+        "@ngx-translate/core": "@ngx-translate/core"
       }
     }
   },
   "peerDependencies": {
-    "primeng": "^6.1.2"
+    "primeng": "^6.1.2",
+    "@ngx-translate/core": "^9.0.0"
   }
 }

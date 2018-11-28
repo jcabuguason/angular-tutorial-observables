@@ -18,6 +18,7 @@ import { UnitCodeConversionService } from 'msc-dms-commons-angular/core/obs-util
 import { NodeLookups } from 'msc-dms-commons-angular/core/metadata';
 
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class DataGridService {
@@ -34,9 +35,12 @@ export class DataGridService {
     private rawHeader;
     private elementsFound: string[] = [];
 
-    constructor(public userConfigService: UserConfigService,
-                public unitService: UnitCodeConversionService,
-                public dialog: MatDialog) {
+    constructor(
+      public translate: TranslateService,
+      public userConfigService: UserConfigService,
+      public unitService: UnitCodeConversionService,
+      public dialog: MatDialog,
+    ) {
         userConfigService.loadConfig(FULL_CONFIG);
         this.columnConfiguration = new DefaultColumnConfiguration();
         this.resetHeader();
@@ -155,9 +159,10 @@ export class DataGridService {
       const result = {};
       if (this.rawHeader == null) {
         this.rawHeader = {
-          'headerName': 'Raw',
+          'headerName': this.translate.instant('GRID.RAW'),
+          'groupId': 'raw',
           'children': [{
-            'headerName': 'Header',
+            'headerName': this.translate.instant('GRID.HEADER'),
             'field': 'raw_header',
             'width': 220,
           }]
@@ -166,7 +171,7 @@ export class DataGridService {
       }
       if (this.rawHeader.children.length === 1 && !!raw.message) {
         this.rawHeader.children.push({
-          'headerName': 'Message',
+          'headerName': this.translate.instant('GRID.MESSAGE'),
           'field': 'raw_message',
           'width': 440,
           'columnGroupShow': 'open',
@@ -209,7 +214,7 @@ export class DataGridService {
     private sortColumns() {
         const configOrder = this.userConfigService.getElementOrder();
 
-        const identity = this.columnDefs.find(col => col.headerName === 'Identity');
+        const identity = this.columnDefs.find(col => col.groupId === 'identity');
         const identityChildren = identity.children;
 
         const inColConfig = (field) => this.columnConfiguration.getIdentityHeaders().children
@@ -234,8 +239,8 @@ export class DataGridService {
             }
         });
 
-        const remainingDataCol = (col) => col.headerName !== 'Identity'
-            && col.headerName !== 'Raw'
+        const remainingDataCol = (col) => col.groupId !== 'identity'
+            && col.groupId !== 'raw'
             && configOrder.indexOf(getID(col)) === -1;
 
         const remainingCols = this.columnDefs.filter(remainingDataCol);
@@ -277,6 +282,7 @@ export class DataGridService {
 
     private resetHeader() {
         this.identityHeader = this.columnConfiguration.getIdentityHeaders();
+        this.rawHeader = null;
         this.columnDefs = [];
         this.columnDefs.push(this.identityHeader);
     }
@@ -421,20 +427,18 @@ export class DataGridService {
     }
 
     private getIndexLabel(element: DataElements): string {
-        switch (element.index.name) {
-            case 'sensor_index': {
-                return 'Sensor';
-            }
-            case 'cloud_layer_index': {
-                return 'Layer';
-            }
-            case 'observed_weather_index': {
-                return 'Type';
-            }
-            default: {
-                return 'Sensor';
-            }
+      let label: string;
+      switch (element.index.name) {
+        case 'sensor_index': /* falls through */
+        case 'cloud_layer_index': /* falls through */
+        case 'observed_weather_index': {
+          label = `${element.index.name.toUpperCase()}_LABEL`; break;
         }
+        default: {
+          label = 'SENSOR_INDEX_LABEL'; break;
+        }
+      }
+      return this.translate.instant(`GRID.${label}`);
     }
 
 

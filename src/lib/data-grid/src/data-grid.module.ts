@@ -9,6 +9,7 @@ import { StationInfoComponent } from './station-info/station-info.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material';
 import { MatSortModule } from '@angular/material';
+import { LanguageModule } from 'msc-dms-commons-angular/shared/language';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { MatSortModule } from '@angular/material';
     MatDialogModule,
     MatTableModule,
     MatDialogModule,
-    MatSortModule
+    MatSortModule,
+    LanguageModule,
   ],
   exports: [
     QaRendererComponent,

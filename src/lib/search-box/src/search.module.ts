@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { LanguageModule } from 'msc-dms-commons-angular/shared/language';
 
 import { SearchComponent } from './search.component';
 import { SearchService } from './search.service';
@@ -25,6 +27,8 @@ import { MessageService } from 'primeng/components/common/messageservice';
   imports: [
     CommonModule,
     FormsModule,
+    HttpClientModule,
+    LanguageModule,
 
     AccordionModule,
     AutoCompleteModule,

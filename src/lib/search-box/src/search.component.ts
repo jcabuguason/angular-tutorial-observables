@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
-
+import { TranslateService } from '@ngx-translate/core';
 import { SearchService } from './search.service';
 import { ParameterType } from './parameters/search-parameter';
 import { MessageService } from 'primeng/components/common/messageservice';
@@ -28,13 +28,13 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   message;
 
   constructor(
+    public translate: TranslateService,
     public searchService: SearchService,
     public messageService: MessageService,
     private changeDectector: ChangeDetectorRef
   ) {
     // this is used to set the time to 00:00 when the calendar/time pops up
     this.defaultDate.setHours(0, 0);
-    this.message = this.searchService.popupMessage;
   }
 
   ngOnInit(): void { }

@@ -83,3 +83,18 @@ export function formatQAValue(qa: number): string {
     return String(qa);
 }
 
+export function qaTranslationKey(qa: number | string): string {
+  switch (Number(qa)) {
+    case -10: { return 'QA.SUPRESSED'; }
+    case -1:  { return 'QA.MISSING'; }
+    case 0:   { return 'QA.ERROR'; }
+    case 10:  { return 'QA.DOUBTFUL'; }
+    case 15:  { return 'QA.SUSPECT'; }
+    case 20:  { return 'QA.INCONSISTENT'; }
+    case 100: { return 'QA.ACCEPTED'; }
+    case 101: { return 'QA.NO_QA_TEST'; }
+    case 110: { return 'QA.NO_OPTIMIZED_RANGE_TEST'; }
+    default:  { return 'N/A'; }
+  }
+}
+

@@ -3,6 +3,6 @@
 <span *ngIf="qa !== 'undefined'"
     [ngClass]="{'badge': qa !== 'N/A'}"
     class="qa{{qa}}"
-    title="Qa Value is {{qa}}">
+    title="{{label(qa)}}">
   {{qa}}
 </span>

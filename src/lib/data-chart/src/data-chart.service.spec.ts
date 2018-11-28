@@ -6,6 +6,11 @@ import { DataChartService } from './data-chart.service';
 import { UserConfigService } from 'msc-dms-commons-angular/core/metadata';
 import { UnitCodeConversionService, DataElements } from 'msc-dms-commons-angular/core/obs-util';
 
+import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
+import {CombinedHttpLoader} from 'msc-dms-commons-angular/shared/language';
+import {HttpClient} from '@angular/common/http';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+
 class MockConfigService {
     getFullFormattedHeader(elementID: string) {
         return 'mock ' + elementID;
@@ -35,8 +40,19 @@ describe('DataChartService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
+            imports: [
+              HttpClientTestingModule,
+              TranslateModule.forRoot({
+                loader: {
+                  provide: TranslateLoader,
+                  useFactory: (httpClient) => new CombinedHttpLoader(httpClient, [{ prefix : '../../../assets/i18n/', suffix: '.json'}]),
+                  deps: [HttpClient]
+                }
+              })
+            ],
             providers: [
                 DataChartService,
+                TranslateService,
                 { provide: UserConfigService, useClass: MockConfigService },
                 { provide: UnitCodeConversionService, useClass: MockUnitService}
             ],

@@ -5,14 +5,16 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "test": "karma start ./karma.conf.js",
-    "build:lib": "npm run build:core && npm run build:commons && npm pack ./dist/lib",
-    "build:core": "ng-packagr -p ./src/lib/core/ng-package.json && npm run link:core ",
+    "build": "npm run cleanup && npm run build:lib && npm run link:i18n && npm pack ./dist/lib",
+    "build:lib": "npm run build:shared && npm run build:core && npm run build:commons",
     "build:commons": "ng-packagr -p ./src/lib/ng-package.json",
-    "link:core": "rimraf ./node_modules/msc-dms-commons-angular && mkdirp ./node_modules/msc-dms-commons-angular/core && ncp ./dist/core ./node_modules/msc-dms-commons-angular/core"
+    "build:core": "ng-packagr -p ./src/lib/core/ng-package.json && ncp ./dist/core ./node_modules/msc-dms-commons-angular/core",
+    "build:shared": "ng-packagr -p ./src/lib/shared/ng-package.json && ncp ./dist/shared ./node_modules/msc-dms-commons-angular/shared",
+    "link:i18n": "mkdirp ./dist/lib/common-i18n && ncp ./src/assets/i18n/ ./dist/lib/common-i18n",
+    "cleanup": "rimraf ./dist && rimraf ./node_modules/msc-dms-commons-angular && mkdirp ./node_modules/msc-dms-commons-angular"
   },
   "private": true,
   "dependencies": {
@@ -28,6 +30,7 @@
     "@angular/platform-browser-dynamic": "^5.0.0",
     "@angular/router": "^5.0.0",
     "@ngrx/store": "^4.1.1",
+    "@ngx-translate/core": "^9.0.0",
     "angular-highcharts": "^5.2.12",
     "axios": "^0.17.0",
     "body-parser": "^1.18.2",
@@ -36,6 +39,7 @@
     "cors": "^2.8.4",
     "d3": "^4.9.1",
     "date-fns": "^1.29.0",
+    "deepmerge": "^2.1.1",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "helmet": "^3.9.0",

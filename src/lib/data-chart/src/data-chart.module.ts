@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { DataChartService } from './data-chart.service';
 import { ChartModule, HIGHCHARTS_MODULES } from 'angular-highcharts';
 import exporting from 'highcharts/modules/exporting.src';
+import { LanguageModule } from 'msc-dms-commons-angular/shared/language';
 
 export function highchartsModules() {
   // apply Highcharts Modules to this array
@@ -14,7 +15,8 @@ export function highchartsModules() {
   ],
   imports: [
     CommonModule,
-    ChartModule
+    ChartModule,
+    LanguageModule
   ],
   providers: [
     { provide: HIGHCHARTS_MODULES, useFactory: highchartsModules }

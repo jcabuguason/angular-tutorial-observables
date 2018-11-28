@@ -8,7 +8,8 @@ export abstract class DataColumnConfiguration {
 
   getIdentityHeaders(): any {
     return {
-      'headerName': 'Identity',
+      'headerValueGetter': (params) => this.instantWrapper('IDENTITY'),
+      'groupId': 'identity',
       'suppressPaste': true,
       'children': this.buildIdentityChildren()
     };
@@ -24,7 +25,7 @@ export abstract class DataColumnConfiguration {
 
   buildStationHeader(): any {
     return {
-      'headerName': 'Station',
+      'headerValueGetter': (params) => this.instantWrapper('STATION'),
       'field': 'station',
       'width': 100,
       'pinned': true,
@@ -35,7 +36,7 @@ export abstract class DataColumnConfiguration {
 
   buildDatetimeHeader(): any {
     return {
-      'headerName': 'Instance Date',
+      'headerValueGetter': (params) => this.instantWrapper('INSTANCE_DATE'),
       'field': 'obsDateTime',
       'width': 220,
       'pinned': true,
@@ -49,7 +50,7 @@ export abstract class DataColumnConfiguration {
 
   buildRevisionHeader(): any {
     return {
-      'headerName': 'Rev',
+      'headerValueGetter': (params) => this.instantWrapper('REV'),
       'field': 'revision',
       'pinned': true,
       'width': 75,
@@ -63,14 +64,14 @@ export abstract class DataColumnConfiguration {
   csvExcelExporter(params) {
     const settings = { columnGroups: true };
     return {
-      name: 'Export',
+      name: this.instantWrapper('EXPORT'),
       subMenu: [
         {
-          name: 'CSV Export',
+          name: this.instantWrapper('CSV_EXPORT'),
           action: () => params.api.exportDataAsCsv(settings)
         },
         {
-          name: 'Excel Export',
+          name: this.instantWrapper('EXCEL_EXPORT'),
           action: () => params.api.exportDataAsExcel(settings)
         }
       ]
@@ -90,7 +91,7 @@ export abstract class DataColumnConfiguration {
       'separator',
       this.csvExcelExporter(params),
       {
-        name: 'Station Info',
+        name: this.instantWrapper('STATION_INFO'),
         action: () => gridService.displayMetadataTable(params.node.data)
       },
     ];
@@ -98,13 +99,14 @@ export abstract class DataColumnConfiguration {
 
   // TODO: Get rid of gridService here once the chart select UI changes
   getMainMenuItems(gridService: DataGridService) {
+    const instWrap = (label) => this.instantWrapper(label);
     return function(params) {
       const menuItems = params.defaultItems.slice(0)
         .filter(item => item !== 'toolPanel');
       menuItems.push(
         'separator',
         {
-          name: 'Column Stats',
+          name: instWrap('COLUMN_STATS'),
           action: function() {
             let sum = 0;
             let total = 0;
@@ -123,13 +125,13 @@ export abstract class DataColumnConfiguration {
               }
             });
             // TODO: Make nicer UI (Material-Angular Snackbar?)
-            alert('Avg: ' + sum / total + '\nMin: ' + min + '\nMax: ' + max);
+            alert(`${instWrap('AVG')}: ${sum / total}\n${instWrap('MIN')}: ${min}\n${instWrap('MAX')}: ${max}`);
           }
         },
       );
       // When dedicated chart-selection UI is added, this will be removed
       menuItems.push({
-        name: 'Chart Element',
+        name: instWrap('CHART_ELEMENT'),
         action: function() {
           gridService.chartColumn(params.column.colDef.field);
         }
@@ -138,10 +140,10 @@ export abstract class DataColumnConfiguration {
       const elementID = params.column.colDef.elementID;
       if (elementID) {
         menuItems.push({
-          name: 'Element Info',
+          name: instWrap('ELEMENT_INFO'),
           subMenu : [
             {
-              name: 'Element ID: ' + elementID,
+              name: `${instWrap('ELEMENT_ID')}: ${elementID}`,
               // copy elementID to clipboard
               action: function() {
                 const textarea = document.createElement('textarea');
@@ -163,5 +165,10 @@ export abstract class DataColumnConfiguration {
   renderObsTime(params) {
     return `<a href="/core${params.data.uri}" target="_blank">${params.value}</a>`;
   }
+
+  // TODO: Find nicer solution, step away from Col-Conf classes?
+  // Needs to be overwritten by `instantWrapper = (key) =>  LanguageService.translator.instant(`GRID.${key}`);` in
+  // app-level Col-Conf class...
+  instantWrapper = (key) => `key`;
 
 }

@@ -4,7 +4,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Local Packaging
 
-- Run `npm run build:lib` to create a library for this component.
+- Run `npm run build` to create the library.
 - This will create a sharable `tgz` file.
 - For local development, this tgz can be installed into other projects with `npm install '<local-path-to-commons>/msc-dms-commons-angular-<version>.tgz'`
 

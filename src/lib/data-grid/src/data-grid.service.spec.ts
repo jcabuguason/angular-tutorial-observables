@@ -14,6 +14,11 @@ import { MatDialog } from '@angular/material';
 import { StationInfoComponent } from './station-info/station-info.component';
 import { UnitCodeConversionService, DataElements } from 'msc-dms-commons-angular/core/obs-util';
 
+import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
+import {CombinedHttpLoader} from 'msc-dms-commons-angular/shared/language';
+import {HttpClient} from '@angular/common/http';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+
 class MockUnitService {
     setPreferredUnits(element: DataElements, usePreferredUnits: boolean) { }
 
@@ -49,9 +54,20 @@ describe('DataGridService', () => {
 
 
     beforeEach(() => {
-        TestBed.configureTestingModule({
+          TestBed.configureTestingModule({
+            imports: [
+              HttpClientTestingModule,
+              TranslateModule.forRoot({
+                loader: {
+                  provide: TranslateLoader,
+                  useFactory: (httpClient) => new CombinedHttpLoader(httpClient, [{ prefix : '../../../assets/i18n/', suffix: '.json'}]),
+                  deps: [HttpClient]
+                }
+              })
+            ],
             providers: [
                 DataGridService,
+                TranslateService,
                 { provide: UserConfigService, useClass: MockConfigService },
                 { provide: MatDialog, useValue: { open: () => {} }},
                 { provide: UnitCodeConversionService, useClass: MockUnitService}
@@ -72,20 +88,14 @@ describe('DataGridService', () => {
     it('should add a single obs', () => {
         expect(service.rowData.length).toBe(0);
         expect(service.columnDefs.length).toBe(1);
-        expect(service.columnDefs[0].children)
-            .toEqual(service.getColumnConfiguration().getIdentityHeaders().children);
+        expect(service.columnDefs[0].groupId).toBe('identity');
+        expect(service.columnDefs[0].children.length)
+          .toBe(service.getColumnConfiguration().getIdentityHeaders().children.length);
 
         service.addRowData(hits[0]);
         expect(service.rowData.length).toBe(1);
         expect(service.columnDefs.length).toBe(13);
-        expect(service.columnDefs[service.columnDefs.length - 1]).toEqual({
-          'headerName': 'Raw',
-          'children': [{
-            'headerName': 'Header',
-            'field': 'raw_header',
-            'width': 220,
-          }]
-        });
+        expect(service.columnDefs[service.columnDefs.length - 1].groupId).toBe('raw');
 
         const row = service.rowData[0];
         expect(row['clim_id']).toBe('1021270');
@@ -94,7 +104,7 @@ describe('DataGridService', () => {
         expect(row['e_7_7_7_7_7_7_7']).toBeUndefined();
 
         expect(service.columnDefs
-            .filter(col => !(col.headerName === 'Identity' || col.headerName === 'Raw'))
+            .filter(col => !(col.groupId === 'identity' || col.groupId === 'raw'))
             .map(col => Number(col.nodeNumber))
         ).toEqual([ 11, 19, 12, 5, 20, 17, 23, 6, 24, 13, 2 ]);
     });
@@ -166,6 +176,7 @@ describe('DataGridService', () => {
 
     it('should open filtered station info', () => {
         const data = {
+            stn_nam: 'Test!',
             station: 'StationA',
             msc_id: '1234567',
             e_1_2_3_4_5_6_7: 'element',
@@ -173,7 +184,9 @@ describe('DataGridService', () => {
         };
         const calledWithData = {
             data: {
+                name: 'Test!',
                 allData: [
+                    { key: 'stn_nam', value: 'Test!' },
                     { key: 'station', value: 'StationA' },
                     { key: 'msc_id', value: '1234567' }
                 ]

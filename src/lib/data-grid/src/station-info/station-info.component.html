@@ -1,5 +1,8 @@
 <div class="title-bar">
-    <span class="title"> Station Info for {{name}} </span>
+    <span class="title"
+      [translate]="'GRID.STATION_INFO_FOR'"
+      [translateParams]="nameParam"
+    ></span>
 </div>
 
 <div class='mat-table'>

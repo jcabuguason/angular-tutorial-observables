@@ -2,14 +2,13 @@
   "ngPackage": {
     "lib": {
       "externals": {
-        "date-fns": "date-fns",
         "@ngx-translate/core": "@ngx-translate/core",
-        "rxjs": "rxjs"
+        "rxjs": "rxjs",
+        "deepmerge": "deepmerge"
       }
     }
   },
   "peerDependencies": {
-    "date-fns": "^1.29.0",
-    "@ngx-translate/core": "^9.0.0"
+    "@ngx-translate/core": "^9.1.1"
   }
 }
