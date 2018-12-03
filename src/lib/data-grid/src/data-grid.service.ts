@@ -369,7 +369,7 @@ export class DataGridService {
 
         workingNode = this.getChildNode(currentNodes, headerName, nodes[nodeIndex], elementID);
 
-        if (!!workingNode.headerTooltip) {
+        if (workingNode.headerTooltip == null) {
           workingNode.headerTooltip = this.userConfigService.getDescription(elementID, i);
         }
 
