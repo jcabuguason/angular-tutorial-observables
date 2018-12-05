@@ -29,6 +29,8 @@ export class DataGridService {
     public defaultColDef = { menuTabs: ['generalMenuTab', 'filterMenuTab'] };
     public reloadRequested = new EventEmitter();
     public chartColumnRequested = new EventEmitter();
+    public chartFormRequested = new EventEmitter();
+    public chartRequested = new EventEmitter();
 
     private columnConfiguration: ElementColumnConfiguration;
     private identityHeader;
@@ -48,6 +50,10 @@ export class DataGridService {
 
     getColumnConfiguration(): ElementColumnConfiguration {
         return this.columnConfiguration;
+    }
+
+    getElementsFound(): string[] {
+        return this.elementsFound;
     }
 
     setColumnConfiguration(columnConfig: ElementColumnConfiguration) {
@@ -90,6 +96,14 @@ export class DataGridService {
         this.chartColumnRequested.emit(param);
     }
 
+    chartObject(param) {
+        this.chartRequested.emit(param);
+
+    }
+    chartFormOnColumn(param) {
+        this.chartFormRequested.emit(param);
+    }
+
     getContextMenuItems() {
         return this.columnConfiguration.getContextMenuItems(this);
     }
@@ -122,7 +136,7 @@ export class DataGridService {
         };
 
         mdElements.filter(e => e != null && e.elementID != null)
-                  .forEach(buildColumn);
+            .forEach(buildColumn);
 
         // added at the same time with user config
         if (this.columnConfiguration.allowBlankDataColumns) {
@@ -178,8 +192,8 @@ export class DataGridService {
         });
       }
 
-      Object.keys(raw).forEach(key => result[`raw_${key}`] = raw[key]);
-      return result;
+        Object.keys(raw).forEach(key => result[`raw_${key}`] = raw[key]);
+        return result;
     }
 
     convertToRowObject(obs: DMSObs) {
@@ -300,8 +314,8 @@ export class DataGridService {
         }
 
         const newNode: object = {
-          'headerName': headerName,
-          'nodeNumber': nodeNumber,
+            'headerName': headerName,
+            'nodeNumber': nodeNumber,
         };
 
         currentNodes.push(newNode);

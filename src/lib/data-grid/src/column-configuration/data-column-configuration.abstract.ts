@@ -129,15 +129,16 @@ export abstract class DataColumnConfiguration {
           }
         },
       );
-      // When dedicated chart-selection UI is added, this will be removed
-      menuItems.push({
-        name: instWrap('CHART_ELEMENT'),
-        action: function() {
-          gridService.chartColumn(params.column.colDef.field);
-        }
-      });
+      const elementID = params.column.colDef.field;
+      if (elementID.startsWith('e')) {
+        menuItems.push({
+          name: instWrap('CHART_ELEMENT'),
+          action: function() {
+            gridService.chartFormOnColumn(params.column.colDef.field);
+          }
+        });
+      }
       // get the elementID and only add the submenu if it exists
-      const elementID = params.column.colDef.elementID;
       if (elementID) {
         menuItems.push({
           name: instWrap('ELEMENT_INFO'),

@@ -4,6 +4,7 @@ import { Chart, Highcharts } from 'angular-highcharts';
 
 import { UserConfigService } from 'msc-dms-commons-angular/core/metadata';
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
+
 import { UnitCodeConversionService } from 'msc-dms-commons-angular/core/obs-util';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -13,68 +14,172 @@ export class DataChartService {
     public wipeCharts = new EventEmitter();
 
     constructor(
-      public translate: TranslateService,
-      public configService: UserConfigService,
-      public unitService: UnitCodeConversionService
+        public translate: TranslateService,
+        public configService: UserConfigService,
+        public unitService: UnitCodeConversionService,
     ) {
-      const weekdays = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
-      const months =
-        ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
-      translate.onLangChange.subscribe(evt => Highcharts.setOptions({
-        lang: {
-          contextButtonTitle: this.instantSingle('CHART_DEFAULTS', 'contextButtonTitle'),
-          printChart: this.instantSingle('CHART_DEFAULTS', 'printChart'),
-          downloadPNG: this.instantSingle('CHART_DEFAULTS', 'downloadPNG'),
-          downloadJPEG: this.instantSingle('CHART_DEFAULTS', 'downloadJPEG'),
-          downloadPDF: this.instantSingle('CHART_DEFAULTS', 'downloadPDF'),
-          downloadSVG: this.instantSingle('CHART_DEFAULTS', 'downloadSVG'),
-          loading: this.instantSingle('CHART_DEFAULTS', 'loading'),
-          resetZoom: this.instantSingle('CHART_DEFAULTS', 'resetZoom'),
-          resetZoomTitle: this.instantSingle('CHART_DEFAULTS', 'resetZoomTitle'),
-          shortMonths: this.instantArray('DATES', months.map(month => `${month}_SHORT`)),
-          months: this.instantArray('DATES', months),
-          weekdays: this.instantArray('DATES', weekdays),
-        }
-      }));
+        const weekdays = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+        const months =
+            ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+        translate.onLangChange.subscribe(evt => Highcharts.setOptions({
+            lang: {
+                contextButtonTitle: this.instantSingle('CHART_DEFAULTS', 'contextButtonTitle'),
+                printChart: this.instantSingle('CHART_DEFAULTS', 'printChart'),
+                downloadPNG: this.instantSingle('CHART_DEFAULTS', 'downloadPNG'),
+                downloadJPEG: this.instantSingle('CHART_DEFAULTS', 'downloadJPEG'),
+                downloadPDF: this.instantSingle('CHART_DEFAULTS', 'downloadPDF'),
+                downloadSVG: this.instantSingle('CHART_DEFAULTS', 'downloadSVG'),
+                loading: this.instantSingle('CHART_DEFAULTS', 'loading'),
+                resetZoom: this.instantSingle('CHART_DEFAULTS', 'resetZoom'),
+                resetZoomTitle: this.instantSingle('CHART_DEFAULTS', 'resetZoomTitle'),
+                shortMonths: this.instantArray('DATES', months.map(month => `${month}_SHORT`)),
+                months: this.instantArray('DATES', months),
+                weekdays: this.instantArray('DATES', weekdays),
+            }
+        }));
     }
 
-    // Need to use the class structure that is currently in grid-service
-    chartColumn(elementFields: string[], observations, extraOptions: Highcharts.Options = {}): Chart[] {
-        const elemSeries: ElementSeries[] = this.createElementSeries(elementFields, observations);
+    chartColumn(chartObj: ChartObject, obs, extraOptions = {}): Chart {
 
-        return elemSeries.map(elem => new Chart(this.elementToChart(elem, extraOptions)));
+        const series = (chartObj.stations.length === 1)
+            ? this.chartMulti(chartObj, obs, extraOptions)
+            : this.chartSingle(chartObj, obs, extraOptions);
+
+        return new Chart(series);
     }
 
-    /**
-     * Element fields are identified as 'e_1_2_3_4_5_6_7' with an optional '-L#' suffix for index layer
-     * This is getting passed in for now since element chart input comes from the grid
-     * For 2.5.8, element chart selection UI will be separate and will require changes to the State,
-     * making this function unneeded.
-    */
-    decryptField(field: string): ElementInfo {
-        const splitField = field.split('-L');
-        const res = <ElementInfo>{ elementID: splitField[0].replace('e_', '').replace(/_/g, '.') };
-        if (splitField.length > 1) { res.indexValue = Number(splitField[1]); }
-        return res;
-    }
-
-    chartLabel(label: string, info: ElementInfo): string {
-        let result = label;
-        if (info.hasOwnProperty('indexValue')) {
-            result += (info.indexValue === 0)
-              ? ` (${this.configService.getElementOfficialIndexTitle(info.elementID)})`
-              : ` (${this.configService.getDefaultTag()} ${info.indexValue})`;
-        }
-        return result;
-    }
-
-    private elementToChart(element: ElementSeries, extraOptions: Highcharts.Options) {
+    private chartSingle(chartObj: ChartObject, obs, extraOptions) {
+        const name = chartObj.elements[0];
         return Object.assign({
             chart: {
-                type: (element.isBar) ? 'column' : 'spline'
+                type: !!(name) ? this.getElementType(name) : '',
+                zoomType: 'xy',
             },
             title: {
-                text: this.configService.getFullFormattedHeader(element.name)
+                text: (!!(name) ? this.configService.getFullFormattedHeader(name) : ''),
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: 'Date'
+                }
+            },
+            yAxis: this.buildYAxes(chartObj, obs),
+            credits: {
+                enabled: false
+            },
+            series: this.createSingleSeries(chartObj, obs),
+        }, extraOptions);
+    }
+
+    private createSingleSeries(chartObj: ChartObject, observations) {
+        const series = [];
+        const yTypes = [];
+        const stations = chartObj.stations;
+        const elements = chartObj.elements;
+
+        for (const station of stations) {
+            const sensor = {};
+            let name;
+
+            for (const obs of observations.filter(obsUtil.latestFromArray)
+                .filter(ob => ob.identifier === station['id']).sort(obsUtil.compareObsTimeFromObs)) {
+                name = this.createStationLabel(obs.metadataElements);
+
+                for (const field of elements) {
+                    const foundElems = obs.dataElements.filter(elem => elem.elementID === field);
+                    this.buildSensor(foundElems, sensor, obs, yTypes);
+                }
+            }
+            this.buildSeries(series, sensor, name, yTypes, this.getElementType(elements[0]));
+        }
+        return series;
+    }
+
+    private buildSeries(series, sensor, name, yTypes, type) {
+        series.push(...Object.keys(sensor)
+            .map((key, index) => ({
+                name: name,
+                showInLegend: (index === 0),
+                data: sensor[key],
+                yAxis: yTypes.indexOf((sensor[key][0].unit)),
+                type: type,
+            })
+            )
+        );
+    }
+
+    private buildSensor(foundElems, sensor, obs, yTypes) {
+        for (const e of foundElems) {
+            if (!!e) {
+                if (yTypes.indexOf(e.unit) === -1) {
+                    yTypes.push(e.unit);
+                }
+                this.unitService.setPreferredUnits(e);
+                const key = e.indexValue;
+                if (!sensor[key]) { sensor[key] = []; }
+                sensor[key].push({
+                    x: Date.parse(obs.obsDateTime),
+                    y: Number(e.value),
+                    // custom fields
+                    unit: e.unit || '',
+                    qa: obsUtil.formatQAValue(e.overallQASummary)
+                });
+            }
+        }
+    }
+
+    private buildYAxes(chartObj: ChartObject, observations) {
+        const elements = chartObj.elements;
+        const stations = chartObj.stations;
+        const names = [];
+        const values = [];
+
+        for (const station of stations) {
+            for (const elem of elements) {
+                for (const obs of observations.filter(ob => ob.identifier === station['id'])) {
+                    const hasUnit = elem.hasOwnProperty('unit');
+                    const foundElem = obs.dataElements
+                        .find(elemt => elemt.elementID === elem && (!hasUnit));
+
+                    if (!!foundElem) {
+                        if (values.indexOf(foundElem.unit) === -1) {
+                            values.push(foundElem.unit);
+                            names.push({ unit: foundElem.unit, name: this.configService.getFormattedNodeName(foundElem.elementID, 2) });
+                        }
+                    }
+                    // TODO: Replace when packaged with ES6
+                    // const names = [...new Set(
+                    //     elements.map(elem => this.configService.getFormattedNodeName(elem, 2))
+                    // )];
+                }
+            }
+        }
+        return names.map((axis, index) => ({
+            title: {
+                gridLineWidth: 0,
+                text: `${axis.name} (${axis.unit})`,
+                style: {
+                    color: 'black',
+                },
+                rotation: 270,
+                labels: {
+                    format: '{value}',
+                }
+            },
+            opposite: !!(index % 2),
+        }));
+    }
+
+    private chartMulti(chartObj: ChartObject, observations, extraOptions) {
+        return Object.assign({
+            chart: {
+                zoomType: 'xy',
+                // create spacing for displaying element labels below the chart
+                marginBottom: 165,
+            },
+            title: {
+                text: chartObj.stations[0]['label'],
             },
             xAxis: {
                 type: 'datetime',
@@ -82,54 +187,48 @@ export class DataChartService {
                     text: this.instantSingle('CHART', 'DATE')
                 }
             },
-            yAxis: {
-                title: {
-                    text: this.instantSingle('CHART', 'VALUES')
-                }
+            yAxis: this.buildYAxes(chartObj, observations),
+            legend: {
+                layout: 'vertical',
+                align: 'left',
+                x: 80,
+                itemMarginTop: 0,
+                verticalAlign: 'bottom',
+                floating: true,
+                backgroundColor: 'rgba(255,255,255,0.25)'
             },
-            credits: {
-                enabled: false
-            },
-            series: element.series,
-            tooltip: {
-                pointFormat:
-                    '<span style="color:{point.color}">\u25CF</span> ' +
-                    '{series.name}: <b>{point.y}</b>, ' +
-                    'QA: <b>{point.qa}</b><br/>',
-                valueSuffix: ' {point.unit}'
-            },
-            exporting: {
-                enabled: true,
-                sourceWidth: 1080,
-                filename: element.name,
-            }
+            series: this.createMultiSeries(chartObj, observations),
         }, extraOptions);
     }
 
-    private createElementSeries(elementFields: string[], observations): ElementSeries[] {
-        const elemSeries: ElementSeries[] = [];
-        for (const obs of observations.filter(obsUtil.latestFromArray).sort(obsUtil.compareObsTimeFromObs)) {
+    createMultiSeries(chartObj: ChartObject, observations) {
+        const series = [];
+        const yTypes = [];
+        const station = chartObj.stations[0];
+        const elements = chartObj.elements;
 
-            elementFields.map(current => this.decryptField(current)).forEach(field => {
-                const hasLayer = field.hasOwnProperty('indexValue');
-                const foundElem = obs.dataElements
-                    .find(elem => elem.elementID === field.elementID &&
-                        (!hasLayer || elem.indexValue === field.indexValue));
-                if (!!foundElem) {
+        for (const element of elements) {
+            const sensor = {};
 
-                    this.unitService.setPreferredUnits(foundElem);
+            for (const obs of observations.sort(obsUtil.compareObsTimeFromObs)
+                .filter(ob => ob.identifier === station['id'])) {
+                const hasLayer = element.hasOwnProperty('indexValue');
+                const foundElems = obs.dataElements.filter(elemt => elemt.elementID === element && (!hasLayer));
+                this.buildSensor(foundElems, sensor, obs, yTypes);
+            }
 
-                    const elementChart = this.findElementSeries(elemSeries, field.elementID);
-                    this.findChartSeries(
-                        elementChart,
-                        this.chartLabel(
-                            this.createStationLabel(obs.metadataElements),
-                            field)
-                    ).addPoint(obs.obsDateTime, foundElem);
-                }
-            });
+            const name = this.configService.getFullFormattedHeader(element);
+            const type = this.getElementType(element);
+            this.buildSeries(series, sensor, name, yTypes, type);
         }
-        return elemSeries;
+        return series;
+    }
+
+    // get the graph type for an element
+    getElementType(elem) {
+        if (elem.split('.')[1] === '11') {
+            return 'column';
+        } else { return 'spline'; }
     }
 
     private createStationLabel(metadataElements) {
@@ -141,57 +240,18 @@ export class DataChartService {
             const id = getObjValue(name);
             return (id != null) ? ` - ${id}` : '';
         };
-
         return `${getObjValue('stn_nam')}`
             + formatId('clim_id')
             + (formatId('tc_id') || formatId('icao_stn_id'));
     }
 
-    private findElementSeries = (elementSeries: ElementSeries[], elementID: string): ElementSeries => {
-        return this.findSeries(elementSeries, elementID, () => new ElementSeries(elementID));
-    }
-
-    private findChartSeries = (elemSer: ElementSeries, climateID: string): ChartSeries => {
-        return this.findSeries(elemSer.series, climateID, () => new ChartSeries(climateID));
-    }
-
-    private findSeries = (series: any[], name: string, buildDefault: () => Series) => {
-        let index = series.findIndex(elem => elem.name === name);
-        if (index < 0) {
-            index = series.push(buildDefault()) - 1;
-        }
-        return series[index];
-    }
-
     private instantSingle = (header, key) => this.translate.instant(`${header}.${key}`);
     private instantArray = (header, keys) => keys.map(key => this.instantSingle(header, key));
-
 }
 
-export class Series {
-    name: string;
-    constructor(name: string) { this.name = name; }
-}
-
-export class ElementSeries extends Series {
-    // Will be removed/changed when new Chart Selection UI is available
-    isBar: boolean = (this.name.split('.')[1] === '11');
-    series: ChartSeries[] = [];
-}
-
-export class ChartSeries extends Series {
-    data: any[] = [];
-
-    addPoint = (date, element) => this.data.push({
-        x: Date.parse(date),
-        y: Number(element.value),
-        // custom fields
-        unit: element.unit || '',
-        qa: obsUtil.formatQAValue(element.overallQASummary)
-    })
-}
-
-export class ElementInfo {
-    elementID: string;
-    indexValue?: number;
+export class ChartObject {
+    constructor(
+        public elements: string[],
+        public stations: string[],
+    ) { }
 }
