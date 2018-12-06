@@ -299,6 +299,20 @@ describe('UserConfigService', () => {
         expect(service.getHideQaFlag().length).toBe(2);
     });
 
+    it('should not have default preferred units by default', () => {
+        service.loadConfig(emptyConfig);
+        expect(service.isLoadPreferredUnits()).toBeFalsy();
+    });
+
+    it('should have default preferred units', () => {
+        service.loadConfig(loadPreferredUnitsConfig);
+        expect(service.isLoadPreferredUnits()).toBeTruthy();
+    });
+
+    it('should not have default preferred units', () => {
+        service.loadConfig(noLoadPreferredUnitsConfig);
+        expect(service.isLoadPreferredUnits()).toBeFalsy();
+    });
 
     const emptyConfig: MDInstanceDefinition = {
         dataset: 'stub',
@@ -670,4 +684,23 @@ describe('UserConfigService', () => {
         ]
     };
 
+    const loadPreferredUnitsConfig: MDInstanceDefinition = {
+        dataset: 'stub',
+        parent: 'stub',
+        identificationElements: [],
+        elements: [
+            {group: 'element-display', name: 'load-preferred-units', value: 'true', def_id: '', id: '', index: '', uom: '',
+                language: {english: '', french: ''}, instelements: []},
+        ]
+    };
+
+    const noLoadPreferredUnitsConfig: MDInstanceDefinition = {
+        dataset: 'stub',
+        parent: 'stub',
+        identificationElements: [],
+        elements: [
+            {group: 'element-display', name: 'load-preferred-units', value: 'false', def_id: '', id: '', index: '', uom: '',
+                language: {english: '', french: ''}, instelements: []},
+        ]
+    };
 });
