@@ -129,27 +129,27 @@ export abstract class DataColumnConfiguration {
           }
         },
       );
-      const elementID = params.column.colDef.field;
-      if (elementID.startsWith('e')) {
+      const element = params.column.colDef;
+      if (!!element && element.field.startsWith('e')) {
         menuItems.push({
           name: instWrap('CHART_ELEMENT'),
           action: function() {
-            gridService.chartFormOnColumn(params.column.colDef.field);
+            gridService.chartFormOnColumn(element.field);
           }
         });
       }
       // get the elementID and only add the submenu if it exists
-      if (elementID) {
+      if (element.elementID) {
         menuItems.push({
           name: instWrap('ELEMENT_INFO'),
           subMenu : [
             {
-              name: `${instWrap('ELEMENT_ID')}: ${elementID}`,
+              name: `${instWrap('ELEMENT_ID')}: ${element.elementID}`,
               // copy elementID to clipboard
               action: function() {
                 const textarea = document.createElement('textarea');
                 textarea.setAttribute('type', 'hidden');
-                textarea.textContent = elementID;
+                textarea.textContent = element.elementID;
                 document.body.appendChild(textarea);
                 textarea.select();
                 document.execCommand('copy');
