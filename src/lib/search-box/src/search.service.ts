@@ -151,8 +151,6 @@ export class SearchService {
       let numObs: number = this.defaultNumObs;
       let operator: string;
 
-      const taxonomies = this.determineTaxonomies().map(val => val.getTaxonomy());
-
       const addToElements = (elementID, value) => elements.push(
         new SearchElement(elementID, 'metadataElements', 'value', value)
       );
@@ -213,7 +211,14 @@ export class SearchService {
         endDate = addHours(date, range.hoursAfter);
       }
 
-      model = new SearchModel(taxonomies, elements, startDate, endDate, numObs, operator);
+      model = new SearchModel(
+        this.determineTaxonomies(),
+        elements,
+        startDate,
+        endDate,
+        numObs,
+        operator
+      );
     }
     return model;
   }
@@ -286,22 +291,32 @@ export class SearchService {
     return valid;
   }
 
-  /** Gets the taxonomies based on words that are associated with it */
-  private determineTaxonomies(): SearchTaxonomy[] {
-    let taxResult: SearchTaxonomy[] = this.taxonomies;
-    let temp: SearchTaxonomy[] = [];
+  private determineTaxonomies() {
+    const taxParameters = this.displayParams.filter(p =>
+      this.isTaxonomyParam(p) && p.getSelectedModels().length
+    );
 
-    this.displayParams.filter(p => this.isTaxonomyParam(p) && p.getSelectedModels().length)
-      .forEach(p => {
-        // if searching two values that belong to the same category, it would return the combined result
-        temp = [];
-        p.getSelectedModels().forEach(val => {
-          const filtered = taxResult.filter(t => t.includesSearchWord(p.getName(), val.label));
-          temp = temp.concat(filtered);
-        });
-        taxResult = temp;
-      });
-    return taxResult;
+    if (!taxParameters.length) { return this.taxonomies.map(current => current.taxonomy); }
+
+    const matchingChoice = (choices, code) => choices.some(choice =>
+      choice.uri.toLowerCase() === code.toLowerCase()
+    );
+
+    const result = [];
+    for (let i = 0; i < taxParameters.length; i++) {
+      const name = taxParameters[i].getName();
+      const choices = taxParameters[i].getSelectedModels();
+      let prop = '';
+      if (name === ParameterName.forTaxonomy.NETWORK) { prop = 'networkCode'; }
+      else if (name === ParameterName.forTaxonomy.ORGANIZATION) { prop = 'organizationCode'; }
+      else { continue; }
+
+      result.push(...this.taxonomies
+        .filter(tax => matchingChoice(choices, tax[prop]))
+        .map(current => current.taxonomy)
+      );
+    }
+    return result;
   }
 
   /** Parameters used to determine taxonomy */

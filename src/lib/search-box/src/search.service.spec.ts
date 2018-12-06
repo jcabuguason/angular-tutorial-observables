@@ -79,9 +79,9 @@ describe('SearchService', () => {
     const config: SearchBoxConfig = {
       searchList: list,
       taxonomies: [
-        new SearchTaxonomy(caIndex, list, ['ca']),
-        new SearchTaxonomy(raIndex, list, ['ra']),
-        new SearchTaxonomy(dndAwosIndex, list, ['dnd awos']),
+        new SearchTaxonomy(caIndex, 'ca', 'msc'),
+        new SearchTaxonomy(raIndex, 'ra', 'msc'),
+        new SearchTaxonomy(dndAwosIndex, 'dnd awos', 'dnd'),
       ],
       addParamsOnBar: true,
       useForm: false,
