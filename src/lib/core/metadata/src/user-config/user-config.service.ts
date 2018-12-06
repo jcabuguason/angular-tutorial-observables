@@ -81,6 +81,10 @@ export class UserConfigService {
 
     }
 
+    isLoadPreferredUnits(): boolean {
+        return this.userConfig.loadPreferredUnits;
+    }
+
     hasPreferredUnits(): boolean {
         return !!this.userConfig.elementUnits
                 .map(config => config.unit)

@@ -27,6 +27,7 @@ export class UserConfig {
     elementConfigs: ElementConfig[];
     genericNodes: GenericNodeConfig[];
     qaHideFlags: number[];
+    loadPreferredUnits: boolean;
 
     private constructor() {
         this.loadMetaElements = new IncludeExclude([], []);
@@ -41,6 +42,7 @@ export class UserConfig {
         this.elementConfigs = [];
         this.genericNodes = [];
         this.qaHideFlags = [];
+        this.loadPreferredUnits = false;
     }
 
     public static createConfig(): UserConfig {
@@ -114,6 +116,11 @@ export class UserConfig {
             // Configuring renaming
             else if (checkElementGroupAndName('element-display', 'hide-qa-flag')) {
                 config.qaHideFlags.push(Number(element.value));
+            }
+
+            // Configuring renaming
+            else if (checkElementGroupAndName('element-display', 'load-preferred-units')) {
+                config.loadPreferredUnits = ('true' === element.value);
             }
         }
 
