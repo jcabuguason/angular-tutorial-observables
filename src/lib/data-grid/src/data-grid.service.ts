@@ -316,6 +316,7 @@ export class DataGridService {
         const newNode: object = {
             'headerName': headerName,
             'nodeNumber': nodeNumber,
+            'comparator': this.comparator,
         };
 
         currentNodes.push(newNode);
@@ -347,7 +348,8 @@ export class DataGridService {
         'headerName': headerName,
         'headerTooltip': !!description ? `${description}: ${headerName}` : undefined,
         'children': [],
-        'elementID': node.elementID
+        'elementID': node.elementID,
+        'comparator': this.comparator,
       };
     }
 
@@ -482,5 +484,41 @@ export class DataGridService {
     private hideDataElement(elementID: string): boolean {
         // should return default even if use empty user config
         return this.userConfigService.getElementVisibility(elementID) === ElementVisibility.HIDDEN;
+    }
+
+    /** Comparator used for sorting data element columns */
+    private comparator(valueA: any, valueB: any) {
+        // Deal with blank and missing values
+        const isBlank = (value: any): boolean => value == null || value === '' || value === '-';
+
+        const compareMissing = (valueAMissing: boolean, valueBMissing: boolean): number => {
+            if (valueAMissing && valueBMissing) {
+                return 0;
+            }
+            if (valueAMissing) {
+                return -1;
+            }
+            if (valueBMissing) {
+                return 1;
+            }
+        }
+
+        let blankResult = compareMissing(isBlank(valueA), isBlank(valueB));
+        if (blankResult != null) {
+            return blankResult;
+        }
+
+        let msngResult = compareMissing(valueA === 'MSNG', valueB === 'MSNG');
+        if (msngResult != null) {
+            return msngResult;
+        }
+
+        // Deal with numbers in string format
+        if (!isNaN(valueA) && !isNaN(valueB)) {
+            valueA = Number(valueA);
+            valueB = Number(valueB);
+        }
+        // Function used in the default sort of ag-grid so no performance change in terms of sorting
+        return valueA > valueB ? 1 : (valueA < valueB ? -1 : 0);
     }
 }
