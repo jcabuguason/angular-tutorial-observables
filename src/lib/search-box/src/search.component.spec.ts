@@ -31,6 +31,9 @@ import {CombinedHttpLoader} from 'msc-dms-commons-angular/shared/language';
 import {HttpClient} from '@angular/common/http';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 
+import { SearchParameter } from './parameters/search-parameter';
+import { ChoiceModel } from './model/choice.model';
+
 describe('SearchComponent', () => {
   let searchComponent: SearchComponent;
   let fixture: ComponentFixture<SearchComponent>;
@@ -99,6 +102,21 @@ describe('SearchComponent', () => {
     spyOn(searchComponent, 'checkOverflow');
     fixture.detectChanges();
     expect(searchComponent.checkOverflow).toHaveBeenCalled();
+  });
+
+  it('should return filtered suggestions', () => {
+    const choices = [
+      new ChoiceModel('mscLabel', 'mscUri', 'mscTooltip'),
+      new ChoiceModel('dndLabel', 'dndUri'),
+      new ChoiceModel('ncLabel', 'ncUri'),
+    ];
+    const param = new SearchParameter('param', choices, false, false);
+
+    fixture.componentInstance.createSuggestions({'query': 'C'}, param);
+    expect(param.filteredSuggestions).toEqual([choices[0].label, choices[2].label]);
+
+    fixture.componentInstance.createSuggestions({'query': 'msc'}, param);
+    expect(param.filteredSuggestions).toEqual([choices[0].label]);
   });
 
 });
