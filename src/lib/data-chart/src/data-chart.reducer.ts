@@ -2,13 +2,13 @@ import { Action } from '@ngrx/store';
 
 export const CHART_CLEAR = 'CHART_CLEAR';
 export const CHART_FORM = 'CHART_FORM';
-
+export const CHART_REMOVE = 'CHART_REMOVE';
 
 
 export class ChartAction implements Action {
   readonly type = CHART_FORM;
 
-  constructor(public payload: ChartModel) { }
+  constructor(public payload: ChartModel[]) { }
 }
 
 export const initialState = [];
@@ -24,13 +24,25 @@ export class ClearChartAction implements Action {
   constructor() { }
 }
 
-export function chartReducer(state = initialState, action: ChartAction | ClearChartAction) {
+export class RemoveChartAction implements Action {
+  readonly type = CHART_REMOVE;
+
+  constructor(public payload) { }
+}
+
+export function chartReducer(state = initialState, action: ChartAction | ClearChartAction | RemoveChartAction) {
   switch (action.type) {
     case CHART_FORM: {
-      return action.payload;
+      return [...state, ...action.payload];
     }
     case CHART_CLEAR: {
       return initialState;
+    }
+    case CHART_REMOVE: {
+      return [
+        ...state.slice(0, action.payload),
+        ...state.slice(action.payload + 1)
+      ];
     }
     default: {
       return state;

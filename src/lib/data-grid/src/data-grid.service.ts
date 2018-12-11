@@ -38,10 +38,10 @@ export class DataGridService {
     private elementsFound: string[] = [];
 
     constructor(
-      public translate: TranslateService,
-      public userConfigService: UserConfigService,
-      public unitService: UnitCodeConversionService,
-      public dialog: MatDialog,
+        public translate: TranslateService,
+        public userConfigService: UserConfigService,
+        public unitService: UnitCodeConversionService,
+        public dialog: MatDialog,
     ) {
         userConfigService.loadConfig(FULL_CONFIG);
         this.columnConfiguration = new DefaultColumnConfiguration();
@@ -62,11 +62,11 @@ export class DataGridService {
     }
 
     addRowData(obs: object) {
-      this.addAllData([obs]);
+        this.addAllData([obs]);
     }
 
     addAllData(obs: object[]) {
-        this.rowData.push(...obs.map((data) => this.convertToRowObject(<DMSObs> data)));
+        this.rowData.push(...obs.map((data) => this.convertToRowObject(<DMSObs>data)));
         this.adjustColumns();
         this.reloadGrid();
     }
@@ -98,8 +98,8 @@ export class DataGridService {
 
     chartObject(param) {
         this.chartRequested.emit(param);
-
     }
+
     chartFormOnColumn(param) {
         this.chartFormRequested.emit(param);
     }
@@ -164,33 +164,33 @@ export class DataGridService {
         };
 
         dataElements.filter(e => e != null && e.elementID != null)
-                    .forEach(buildColumn);
+            .forEach(buildColumn);
 
         return result;
     }
 
     flattenRawMessage(raw: RawMessage) {
-      const result = {};
-      if (this.rawHeader == null) {
-        this.rawHeader = {
-          'headerName': this.translate.instant('GRID.RAW'),
-          'groupId': 'raw',
-          'children': [{
-            'headerName': this.translate.instant('GRID.HEADER'),
-            'field': 'raw_header',
-            'width': 220,
-          }]
-        };
-        this.columnDefs.push(this.rawHeader);
-      }
-      if (this.rawHeader.children.length === 1 && !!raw.message) {
-        this.rawHeader.children.push({
-          'headerName': this.translate.instant('GRID.MESSAGE'),
-          'field': 'raw_message',
-          'width': 440,
-          'columnGroupShow': 'open',
-        });
-      }
+        const result = {};
+        if (this.rawHeader == null) {
+            this.rawHeader = {
+                'headerName': this.translate.instant('GRID.RAW'),
+                'groupId': 'raw',
+                'children': [{
+                    'headerName': this.translate.instant('GRID.HEADER'),
+                    'field': 'raw_header',
+                    'width': 220,
+                }]
+            };
+            this.columnDefs.push(this.rawHeader);
+        }
+        if (this.rawHeader.children.length === 1 && !!raw.message) {
+            this.rawHeader.children.push({
+                'headerName': this.translate.instant('GRID.MESSAGE'),
+                'field': 'raw_message',
+                'width': 440,
+                'columnGroupShow': 'open',
+            });
+        }
 
         Object.keys(raw).forEach(key => result[`raw_${key}`] = raw[key]);
         return result;
@@ -206,22 +206,22 @@ export class DataGridService {
     }
 
     adjustColumns() {
-      if (!this.rowData.length) {
-        return;
-      }
+        if (!this.rowData.length) {
+            return;
+        }
 
-      if (this.columnConfiguration.allowBlankDataColumns) {
-        this.addEmptyDataColumns();
-      }
+        if (this.columnConfiguration.allowBlankDataColumns) {
+            this.addEmptyDataColumns();
+        }
 
-      this.sortColumns();
+        this.sortColumns();
     }
 
     private addEmptyDataColumns() {
-      this.userConfigService.getElementOrder()
-        .filter(id => !this.ignoreElement(id) && this.elementsFound.indexOf(id) === -1)
-        .map(id => ({elementID: id}))
-        .forEach(elem => this.buildElementColumn(elem as DataElements));
+        this.userConfigService.getElementOrder()
+            .filter(id => !this.ignoreElement(id) && this.elementsFound.indexOf(id) === -1)
+            .map(id => ({ elementID: id }))
+            .forEach(elem => this.buildElementColumn(elem as DataElements));
     }
 
     // TODO: This function assumes a flat column config
@@ -305,11 +305,11 @@ export class DataGridService {
     private getChildNode(currentNodes: any[], headerName: string, nodeNumber: string, elementID: string): object {
         for (const currentNode of currentNodes) {
             if (currentNode.nodeNumber === nodeNumber) {
-              // workaround - we need to re-evaluate the elementID checking here:
-              // requires setting the ID to bottom-level columns to undefined if they become parents
-              if (currentNode.elementID === undefined || elementID === currentNode.elementID) {
-                return currentNode;
-              }
+                // workaround - we need to re-evaluate the elementID checking here:
+                // requires setting the ID to bottom-level columns to undefined if they become parents
+                if (currentNode.elementID === undefined || elementID === currentNode.elementID) {
+                    return currentNode;
+                }
             }
         }
 
@@ -354,113 +354,113 @@ export class DataGridService {
     }
 
     private makeDefaultColumn(node) {
-      const columnToAdd = this.columnBoilerplate(node, this.userConfigService.getDefaultTag());
-      node.children.unshift(columnToAdd);
-      // workaround - ensures getChildNode does split early
-      node.elementID = undefined;
-      return columnToAdd;
+        const columnToAdd = this.columnBoilerplate(node, this.userConfigService.getDefaultTag());
+        node.children.unshift(columnToAdd);
+        // workaround - ensures getChildNode does split early
+        node.elementID = undefined;
+        return columnToAdd;
     }
 
     private buildElementColumn(
-      element: DataElements,
-      headerID: string = ColumnConfigurationContainer.findHeaderID(element)
+        element: DataElements,
+        headerID: string = ColumnConfigurationContainer.findHeaderID(element)
     ) {
-      if (this.columnsGenerated.indexOf(headerID) !== -1) { return; }
-      const elementID = element.elementID;
-      const nodes = elementID.split('.');
-      let currentNodes: any[] = this.columnDefs;
-      let workingNode;
+        if (this.columnsGenerated.indexOf(headerID) !== -1) { return; }
+        const elementID = element.elementID;
+        const nodes = elementID.split('.');
+        let currentNodes: any[] = this.columnDefs;
+        let workingNode;
 
-      const startIndex = 2;
-      const nestingDepth = this.userConfigService.getNestingDepth(elementID);
-      const officialTitle = this.userConfigService.getElementOfficialIndexTitle(elementID);
+        const startIndex = 2;
+        const nestingDepth = this.userConfigService.getNestingDepth(elementID);
+        const officialTitle = this.userConfigService.getElementOfficialIndexTitle(elementID);
 
-      // find workingNode to add to
-      for (let i = startIndex; i <= nestingDepth; i++) {
-        const headerName = this.userConfigService.getFormattedNodeName(elementID, i);
-        const nodeIndex = i - 1;
+        // find workingNode to add to
+        for (let i = startIndex; i <= nestingDepth; i++) {
+            const headerName = this.userConfigService.getFormattedNodeName(elementID, i);
+            const nodeIndex = i - 1;
 
-        // End processing if no header field is found
-        if (!headerName) { break; }
+            // End processing if no header field is found
+            if (!headerName) { break; }
 
-        workingNode = this.getChildNode(currentNodes, headerName, nodes[nodeIndex], elementID);
+            workingNode = this.getChildNode(currentNodes, headerName, nodes[nodeIndex], elementID);
 
-        if (workingNode.headerTooltip == null) {
-          workingNode.headerTooltip = this.userConfigService.getDescription(elementID, i);
+            if (workingNode.headerTooltip == null) {
+                workingNode.headerTooltip = this.userConfigService.getDescription(elementID, i);
+            }
+
+            // Build child node array
+            if (workingNode.children === undefined) {
+                workingNode.children = [];
+            }
+
+            // workaround - field signifies a bottom-level column:
+            // this column needs to go from a bottom-level to a default with siblings
+            if (!!workingNode.field) {
+                this.columnConfiguration.createElementHeader(this.makeDefaultColumn(workingNode), workingNode.field);
+                workingNode.field = undefined;
+            }
+            currentNodes = workingNode.children;
         }
 
-        // Build child node array
-        if (workingNode.children === undefined) {
-          workingNode.children = [];
+        if (workingNode.elementID === undefined) {
+            workingNode.elementID = elementID;
+
+            if (!workingNode.children.length) {
+                workingNode.headerName += this.userConfigService.getFormattedSubHeader(elementID);
+            }
         }
 
-        // workaround - field signifies a bottom-level column:
-        // this column needs to go from a bottom-level to a default with siblings
-        if (!!workingNode.field) {
-          this.columnConfiguration.createElementHeader(this.makeDefaultColumn(workingNode), workingNode.field);
-          workingNode.field = undefined;
-        }
-        currentNodes = workingNode.children;
-      }
+        // Generate layer children if needed
+        let columnToAdd;
+        if (element.indexValue !== undefined) {
+            const headerName = (element.indexValue)
+                ? `${this.getIndexLabel(element)} ${element.indexValue}`
+                : officialTitle;
+            columnToAdd = this.columnBoilerplate(workingNode, headerName);
+            if (workingNode.children === undefined) {
+                workingNode.children = [];
+            }
+            if (element.indexValue) {
+                columnToAdd.columnGroupShow = 'open';
+            }
 
-      if (workingNode.elementID === undefined) {
-        workingNode.elementID = elementID;
-
-        if (!workingNode.children.length) {
-          workingNode.headerName += this.userConfigService.getFormattedSubHeader(elementID);
-        }
-      }
-
-      // Generate layer children if needed
-      let columnToAdd;
-      if (element.indexValue !== undefined) {
-        const headerName = (element.indexValue)
-          ? `${this.getIndexLabel(element)} ${element.indexValue}`
-          : officialTitle;
-        columnToAdd = this.columnBoilerplate(workingNode, headerName);
-        if (workingNode.children === undefined) {
-          workingNode.children = [];
-        }
-        if (element.indexValue) {
-          columnToAdd.columnGroupShow = 'open';
+            workingNode.children.push(columnToAdd);
+        } else {
+            columnToAdd = workingNode;
+            // Avoid overwritting layered/official columns
+            if (workingNode.children.length) {
+                columnToAdd = this.makeDefaultColumn(workingNode);
+            }
         }
 
-        workingNode.children.push(columnToAdd);
-      } else {
-        columnToAdd = workingNode;
-        // Avoid overwritting layered/official columns
-        if (workingNode.children.length) {
-          columnToAdd = this.makeDefaultColumn(workingNode);
+        if (this.hideDataElement(elementID)) {
+            columnToAdd.hide = true;
         }
-      }
 
-      if (this.hideDataElement(elementID)) {
-        columnToAdd.hide = true;
-      }
-
-      this.columnConfiguration.createElementHeader(columnToAdd, headerID);
-      this.columnsGenerated.push(headerID);
+        this.columnConfiguration.createElementHeader(columnToAdd, headerID);
+        this.columnsGenerated.push(headerID);
     }
 
     private getIndexLabel(element: DataElements): string {
-      let label: string;
-      switch (element.index.name) {
-        case 'sensor_index': /* falls through */
-        case 'cloud_layer_index': /* falls through */
-        case 'observed_weather_index': {
-          label = `${element.index.name.toUpperCase()}_LABEL`; break;
+        let label: string;
+        switch (element.index.name) {
+            case 'sensor_index': /* falls through */
+            case 'cloud_layer_index': /* falls through */
+            case 'observed_weather_index': {
+                label = `${element.index.name.toUpperCase()}_LABEL`; break;
+            }
+            default: {
+                label = 'SENSOR_INDEX_LABEL'; break;
+            }
         }
-        default: {
-          label = 'SENSOR_INDEX_LABEL'; break;
-        }
-      }
-      return this.translate.instant(`GRID.${label}`);
+        return this.translate.instant(`GRID.${label}`);
     }
 
 
     private buildMetadataColumn(element, headerID) {
-      if (this.columnsGenerated.indexOf(headerID) !== -1) { return; }
-      // metadata name using userConfigService may be slightly different than 2.5.6
+        if (this.columnsGenerated.indexOf(headerID) !== -1) { return; }
+        // metadata name using userConfigService may be slightly different than 2.5.6
         const header = {
             'headerName': this.userConfigService.getByElementName(element.elementID),
             'field': headerID,
@@ -478,7 +478,7 @@ export class DataGridService {
 
     private ignoreElement(elementID: string): boolean {
         return elementID == null ||
-          this.userConfigService.getElementVisibility(elementID) === ElementVisibility.NO_LOAD;
+            this.userConfigService.getElementVisibility(elementID) === ElementVisibility.NO_LOAD;
     }
 
     private hideDataElement(elementID: string): boolean {
