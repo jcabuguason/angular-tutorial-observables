@@ -175,8 +175,7 @@ export class DataChartService {
         return Object.assign({
             chart: {
                 zoomType: 'xy',
-                // create spacing for displaying element labels below the chart
-                marginBottom: 165,
+                marginBottom: 160,
             },
             title: {
                 text: chartObj.stations[0]['label'],
