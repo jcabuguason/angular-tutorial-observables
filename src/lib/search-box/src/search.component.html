@@ -52,7 +52,7 @@
               <p-autoComplete *ngIf="p.getTimesUsable() > 1"
                 [styleClass]="'search-bar multiple'"
                 [(ngModel)]="p.selected"
-                [suggestions]="p.filteredSuggestions" (completeMethod)="p.filterSuggestions($event)"
+                [suggestions]="p.filteredSuggestions" (completeMethod)="createSuggestions($event, p)"
                 [minLength]="1" [dropdown]="true" size="15" [forceSelection]="p.isRestricted()" placeholder="{{p.getPlaceholder()}}"
                 [multiple]="true" appendTo="body">
                 <ng-template let-choices pTemplate="selectedItem">
