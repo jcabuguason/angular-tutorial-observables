@@ -94,6 +94,7 @@
           <button pButton type="button" icon="pi pi-times" class="ui-button-danger"
             (click)="searchService.removeDisplayParameter(p); checkOverflow()">
           </button>
+
         </div>
 
       </div>
@@ -126,9 +127,15 @@
     <p-accordionTab header="Basic Search"> -->
       <div *ngFor = "let p of searchService.availableParams; index as i" class="selected-parameter" tabindex="0"
         (keyup.enter)="searchService.submitSearchForm()">
-        <div> {{p.getDisplayName() | translate}} </div>
+        <div *ngIf="p.getType() !== paramType.SEARCH_QUERY_TYPE"> {{p.getDisplayName() | translate}}
+            <ng-container *ngIf="p.checkbox != null">
+              <!-- for checkbox, use the label property so it's displayed right next to the checkbox -->
+              <p-checkbox [(ngModel)]="p.checkbox.formChecked" binary="true" label="{{p.checkbox.getDisplayName() | translate}}"></p-checkbox>
+            </ng-container>
+        </div>
 
-        <ng-container *ngIf="p.getType() === paramType.SEARCH_PARAMETER">
+        <ng-container *ngIf="p.getType() === paramType.SEARCH_PARAMETER">          
+  
           <ng-container *ngIf="p.getChoices().length === 0; else hasChoices">
             <!-- no choice, one value -->
             <input *ngIf="p.getTimesUsable() === 1"
@@ -189,7 +196,6 @@
             placeholder="{{p.getPlaceholder()}}" appendTo="body">
           </p-calendar>
         </ng-container>
-
       </div>
     <!-- </p-accordionTab>
   </p-accordion> -->

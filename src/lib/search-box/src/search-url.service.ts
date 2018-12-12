@@ -2,6 +2,7 @@ import { SearchParameter, ParameterType } from './parameters/search-parameter';
 import { SearchDatetime } from './parameters/search-datetime';
 import { SearchHoursRange } from './parameters/search-hours-range';
 import { ShortcutModel } from './model/shortcut.model';
+import { SearchQueryType } from './parameters/search-query-type';
 
 export class SearchURLService {
   constructor() {}
@@ -23,16 +24,22 @@ export class SearchURLService {
     } else {
       displayParams.forEach(p => {
         const name = p.getName();
-
-        if (p.getType() === ParameterType.SEARCH_DATETIME) {
-          const date = p as SearchDatetime;
-          addUrlParam(name, date.getDatetimeUrlFormat());
-        } else if (p.getType() === ParameterType.SEARCH_HOURS_RANGE) {
-          const hrs = p as SearchHoursRange;
-          addUrlParam('hh_before', hrs.hoursBefore);
-          addUrlParam('hh_after', hrs.hoursAfter);
-        } else {
-          p.getSelectedModels().forEach(s => addUrlParam(name, s.uri));
+        switch (p.getType()) {
+          case ParameterType.SEARCH_DATETIME:
+            const date = p as SearchDatetime;
+            addUrlParam(name, date.getDatetimeUrlFormat());
+            break;
+          case ParameterType.SEARCH_HOURS_RANGE:
+            const hrs = p as SearchHoursRange;
+            addUrlParam('hh_before', hrs.hoursBefore);
+            addUrlParam('hh_after', hrs.hoursAfter);
+          break;
+          case ParameterType.SEARCH_QUERY_TYPE:
+            const checkbox = p as SearchQueryType;
+            addUrlParam(name, checkbox.uriChecked);
+            break;
+          default:
+            p.getSelectedModels().forEach(s => addUrlParam(name, s.uri));
         }
       });
     }
@@ -73,6 +80,7 @@ export class SearchURLService {
     return [].concat(
       this.getDateRequestParams(qParams, availableParams),
       this.getHourRangeRequestParams(qParams, availableParams),
+      this.getQueryTypeRequestParams(qParams, availableParams),
       this.getShortcutRequestParams(qParams, availableParams, shortcuts)
     );
   }
@@ -118,6 +126,14 @@ export class SearchURLService {
 
     return (hourRange != null && hours != null)
       ? [this.paramValueObj(hourRange, [hours])]
+      : [];
+  }
+
+  getQueryTypeRequestParams(qParams, availableParams: SearchParameter[]) {
+    const checkbox = availableParams.find(p => p.getType() === ParameterType.SEARCH_QUERY_TYPE);
+    const value = this.firstValue(qParams.queryType);
+    return (checkbox != null && value === (checkbox as SearchQueryType).uriChecked)
+      ? [this.paramValueObj(checkbox, [value])]
       : [];
   }
 

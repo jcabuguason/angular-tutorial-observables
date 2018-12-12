@@ -280,7 +280,7 @@ describe('SearchService', () => {
   it('differentiate between station ids', () => {
     const createElement = (value, type) => ({
       'station': value,
-      'searchElement': new SearchElement(SearchableElement.STATION_TYPE[type].id, 'metadataElements', 'value', value.toUpperCase())
+      'searchElement': new SearchElement(SearchableElement.STATION_TYPE[type].id, 'metadataElements', 'value', value)
     });
     const stations = [
       createElement('xyz', 'TC_ID'),

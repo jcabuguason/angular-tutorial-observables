@@ -169,7 +169,7 @@ export class SearchService {
         switch (p.getName()) {
           case ParameterName.STATION_ID:
             selected.forEach((value, index) => {
-              const stationID = value.toUpperCase().replace(/\s+/g, '');
+              const stationID = value.replace(/\s+/g, '');
               updateValue(value, index, stationID);
               addStationToElements(stationID);
             });

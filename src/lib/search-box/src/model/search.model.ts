@@ -7,6 +7,7 @@ export class SearchModel {
     public size?: number,
     public operator?: string,
     public sortFields?: string,
+    public queryType?: string,
   ) { }
 }
 

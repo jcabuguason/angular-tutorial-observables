@@ -8,4 +8,5 @@ export interface CommonElasticSearchParams {
   datetimeType?: ElasticSearchDateTimeType;
   sortFields?: string;
   startIndex?: string;
+  queryType?: string;
 }

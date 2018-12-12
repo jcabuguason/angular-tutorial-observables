@@ -10,6 +10,7 @@ export * from './model/search.model';
 export * from './model/shortcut.model';
 export * from './model/choice.model';
 
+export * from './parameters/search-query-type';
 export * from './parameters/search-datetime';
 export * from './parameters/search-hours-range';
 export * from './parameters/search-parameter';

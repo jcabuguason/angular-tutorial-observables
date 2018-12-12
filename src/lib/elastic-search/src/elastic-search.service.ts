@@ -95,28 +95,19 @@ export class ElasticSearchService {
   }
 
   private getCommonParams(parameters: CommonElasticSearchParams): HttpParams {
-    let params = new HttpParams({encoder: new URIComponentEncoder()});
-    if (parameters.type != null) {
-      params = params.set('type', parameters.type);
-    }
-    if (parameters.size != null) {
-      params = params.set('size', String(parameters.size));
-    }
-    if (parameters.from != null) {
-      params = params.set('from', format(parameters.from, 'YYYYMMDDHHmm'));
-    }
-    if (parameters.to != null) {
-      params = params.set('to', format(parameters.to, 'YYYYMMDDHHmm'));
-    }
-    if (parameters.datetimeType != null) {
-      params = params.set('datetimeType', parameters.datetimeType);
-    }
-    if (parameters.sortFields != null) {
-      params = params.set('sortFields', parameters.sortFields);
-    }
-    if (parameters.startIndex != null) {
-      params = params.set('startIndex', parameters.startIndex);
-    }
-    return params;
+    const params = {};
+    Object.keys(parameters)
+      .filter(key => parameters[key] != null)
+      .forEach(key => {
+        let value = parameters[key];
+        if (key === 'size') {
+          value = String(value);
+        } else if (key === 'from' || key === 'to') {
+          value = format(value, 'YYYYMMDDHHmm');
+        }
+        params[key] = value;
+      });
+
+    return new HttpParams({encoder: new URIComponentEncoder(), fromObject: params});
   }
 }

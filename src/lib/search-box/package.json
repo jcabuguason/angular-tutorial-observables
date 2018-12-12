@@ -7,6 +7,7 @@
         "primeng/autocomplete": "primeng/autocomplete",
         "primeng/button": "primeng/button",
         "primeng/calendar": "primeng/calendar",
+        "primeng/checkbox": "primeng/checkbox",
         "primeng/chips": "primeng/chips",
         "primeng/dialog": "primeng/dialog",
         "primeng/dropdown": "primeng/dropdown",
