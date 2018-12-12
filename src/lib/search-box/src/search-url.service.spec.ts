@@ -6,6 +6,7 @@ import { SearchHoursRange } from './parameters/search-hours-range';
 import { SearchParameter, ParameterName } from './parameters/search-parameter';
 import { ShortcutModel } from './model/shortcut.model';
 import { ChoiceModel } from './model/choice.model';
+import { SearchQueryType } from './parameters/search-query-type';
 
 describe('SearchURLService', () => {
   let urlService: SearchURLService;
@@ -13,8 +14,8 @@ describe('SearchURLService', () => {
   const dateParam = new SearchDatetime(ParameterName.FROM, false);
   const hoursParam = new SearchHoursRange(ParameterName.HOURS_RANGE, false);
   const networkParam = new SearchParameter(ParameterName.forTaxonomy.NETWORK, [], false, false);
-
-  const displayParams = [ dateParam, hoursParam, networkParam ];
+  const queryTypeParam = new SearchQueryType(ParameterName.QUERY_TYPE, 'exact');
+  const displayParams = [ dateParam, hoursParam, networkParam, queryTypeParam ];
 
   const shortcuts = [
     new ShortcutModel('Shortcut1', [{ name: ParameterName.forTaxonomy.NETWORK, values: ['value1'] }]),
@@ -26,13 +27,15 @@ describe('SearchURLService', () => {
     'hh_before': '1',
     'hh_after': '2',
     'network': 'nc awos',
-    'shortcut': 'Shortcut1'
+    'shortcut': 'Shortcut1',
+    'queryType': 'exact',
   };
 
   const dateToSearch = { 'param': dateParam, 'value': [query.from] };
   const hourRangeToSearch = { 'param': hoursParam, 'value': [{ 'hh_before': '1', 'hh_after': '2'}] };
   const networkToSearch = { 'param': networkParam, 'value': [query.network] };
   const shortcutToSearch = { 'param': networkParam, 'value': ['value1'] };
+  const queryTypeToSearch = { 'param': queryTypeParam, 'value': ['exact']};
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -53,6 +56,7 @@ describe('SearchURLService', () => {
     hoursParam.hoursBefore = Number(hoursValue.hh_before);
     hoursParam.hoursAfter = Number(hoursValue.hh_after);
     networkParam.selected = networkValues;
+    queryTypeParam.checked = true;
 
     const urlParams = [
       { 'name': ParameterName.FROM, 'value': dateValue },
@@ -60,6 +64,7 @@ describe('SearchURLService', () => {
       { 'name': 'hh_after',         'value': hoursValue.hh_after },
       { 'name' : ParameterName.forTaxonomy.NETWORK, 'value': networkValues[0] },
       { 'name' : ParameterName.forTaxonomy.NETWORK, 'value': networkValues[1] },
+      { 'name' : ParameterName.QUERY_TYPE, 'value' : 'exact' }
     ];
 
     expect(urlService.createUrlParams(displayParams)).toEqual(urlParams);
@@ -91,6 +96,7 @@ describe('SearchURLService', () => {
     expect(urlService.isSpecialUrlParam(ParameterName.FROM, displayParams)).toBeTruthy();
     expect(urlService.isSpecialUrlParam(ParameterName.HOURS_RANGE, displayParams)).toBeTruthy();
     expect(urlService.isSpecialUrlParam(ParameterName.forTaxonomy.NETWORK, displayParams)).toBeFalsy();
+    expect(urlService.isSpecialUrlParam(ParameterName.QUERY_TYPE, displayParams)).toBeTruthy();
 
     expect(urlService.isSpecialUrlParam('param not in list', displayParams)).toBeTruthy();
   });
@@ -107,8 +113,12 @@ describe('SearchURLService', () => {
     expect(urlService.getHourRangeRequestParams(query, displayParams)).toEqual([hourRangeToSearch]);
   });
 
+  it('get query type parameter', () => {
+    expect(urlService.getQueryTypeRequestParams(query, displayParams)).toEqual([queryTypeToSearch]);
+  });
+
   it('get all parameters', () => {
-    const allExpected = [dateToSearch, hourRangeToSearch, networkToSearch, shortcutToSearch];
+    const allExpected = [dateToSearch, hourRangeToSearch, networkToSearch, shortcutToSearch, queryTypeToSearch];
     const allParams = urlService.getAllRequestParams(query, displayParams, shortcuts);
 
     expect(allParams.length).toEqual(allExpected.length);

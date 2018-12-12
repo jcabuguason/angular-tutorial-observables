@@ -1,4 +1,5 @@
 import { ChoiceModel } from '../model/choice.model';
+import { SearchQueryType } from './search-query-type';
 
 export class SearchParameter {
   selected: string[] = [];
@@ -14,10 +15,11 @@ export class SearchParameter {
   constructor(
     private name: string,
     private choices: ChoiceModel[],
-    private restricted: boolean,
-    private required: boolean,
+    private restricted: boolean = false,
+    private required: boolean = false,
     private timesUsable: number = 500,
-    private placeholder: string = ''
+    private placeholder: string = '',
+    public checkbox: SearchQueryType = null, // place checkbox beside this parameter in the form
   ) {
       this.displayName = name;
       this.type = ParameterType.SEARCH_PARAMETER;
@@ -207,7 +209,8 @@ export class SearchParameter {
 export enum ParameterType {
   SEARCH_PARAMETER,
   SEARCH_DATETIME,
-  SEARCH_HOURS_RANGE
+  SEARCH_HOURS_RANGE,
+  SEARCH_QUERY_TYPE,
 }
 
 export const ParameterName = {
@@ -224,4 +227,5 @@ export const ParameterName = {
   HOURS_RANGE: 'hoursRange',
   FROM: 'from',
   TO: 'to',
+  QUERY_TYPE: 'queryType',
 };

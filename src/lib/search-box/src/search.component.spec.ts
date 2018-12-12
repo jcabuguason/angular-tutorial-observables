@@ -13,6 +13,7 @@ import { AccordionModule } from 'primeng/accordion';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
+import { CheckboxModule } from 'primeng/checkbox';
 import { ChipsModule } from 'primeng/chips';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
@@ -45,6 +46,7 @@ describe('SearchComponent', () => {
         AutoCompleteModule,
         ButtonModule,
         CalendarModule,
+        CheckboxModule,
         ChipsModule,
         DialogModule,
         DropdownModule,
