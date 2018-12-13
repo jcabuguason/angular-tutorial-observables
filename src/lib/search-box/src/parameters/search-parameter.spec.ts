@@ -48,4 +48,12 @@ describe('SearchParameter', () => {
     expect(paramRestricted.canAddSelected('123')).toBeFalsy();
   });
 
+  it('should return filtered suggestions', () => {
+    param.filterSuggestions({'query': 'C'});
+    expect(param.filteredSuggestions).toEqual([choices[0].label, choices[2].label]);
+
+    param.filterSuggestions({'query': 'msc'});
+    expect(param.filteredSuggestions).toEqual([choices[0].label]);
+  });
+
 });

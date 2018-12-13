@@ -141,6 +141,14 @@ export class SearchParameter {
     return this.selected.length === 0;
   }
 
+  filterSuggestions(event) {
+    const matchSubstring = (choice) => choice.toLowerCase().indexOf(event.query.toLowerCase()) !== -1;
+    this.filteredSuggestions = this.choices
+      .map(choice => choice.label)
+      .filter(label => matchSubstring(label))
+      .sort();
+  }
+
   applyFormValues() {
     this.selected = this.formSelected;
   }
