@@ -1,4 +1,4 @@
-import { Injectable, Inject, EventEmitter } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Location } from '@angular/common';
 import { addHours, subHours } from 'date-fns';
 
@@ -14,6 +14,7 @@ import { SEARCH_BOX_CONFIG, SearchBoxConfig } from './search-box.config';
 
 import { SearchURLService } from './search-url.service';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class SearchService {
@@ -28,9 +29,8 @@ export class SearchService {
   formParams: SearchParameter[] = [];
   // suggestions that show up
   suggestedParams: SearchParameter[] = [];
-
-  searchRequested = new EventEmitter();
-
+  // Serves as the announcer of new search requests
+  searchRequested = new Subject<SearchModel>();
   // Maximum number of obs to return for a taxonomy
   maxNumObs = 1500;
   defaultNumObs = 300;
@@ -136,7 +136,7 @@ export class SearchService {
     if (updateUrlParams) {
       this.updateUrl();
     }
-    this.searchRequested.emit(model);
+    this.searchRequested.next(model);
     this.displayForm = false;
   }
 
