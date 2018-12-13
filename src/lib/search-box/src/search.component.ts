@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { SearchService } from './search.service';
-import { ParameterType, SearchParameter } from './parameters/search-parameter';
+import { ParameterType } from './parameters/search-parameter';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
@@ -65,15 +65,6 @@ export class SearchComponent implements OnInit, AfterViewChecked {
       this.expandButtonIcon = this.expandIcon;
       this.expandOnClick = true;
     }
-  }
-
-  // Used for autocomplete w/ i18n
-  createSuggestions(event, parameter: SearchParameter) {
-    const matchSubstring = (choice) => choice.toLowerCase().indexOf(event.query.toLowerCase()) !== -1;
-    parameter.filteredSuggestions = parameter.getChoices()
-      .map(choice => this.translate.instant(choice.label))
-      .filter(label => matchSubstring(label))
-      .sort();
   }
 
 }
