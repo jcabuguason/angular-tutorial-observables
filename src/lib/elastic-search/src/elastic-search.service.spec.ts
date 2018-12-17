@@ -4,7 +4,6 @@ import { HttpClientTestingModule, HttpTestingController} from '@angular/common/h
 import { ElasticSearchService } from './elastic-search.service';
 import { ELASTIC_SEARCH_CONFIG, ElasticSearchConfig } from './elastic-search.config';
 import { ElasticSearchDateTimeType } from './model/elastic-search-date-time-type.model';
-import { ElasticSearchQueryType } from './model/elastic-search-query-type.model';
 
 describe('ElasticSearchService', () => {
   let injector: TestBed;
@@ -171,7 +170,7 @@ describe('ElasticSearchService', () => {
       });
 
       it('should correctly set queryType', () => {
-        service.getBasicObservations('v1.0', 'testNetwork', {queryType: ElasticSearchQueryType.Partial}).subscribe();
+        service.getBasicObservations('v1.0', 'testNetwork', {queryType: 'partial'}).subscribe();
         httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?queryType=partial`);
       });
     });
