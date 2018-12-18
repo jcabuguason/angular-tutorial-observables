@@ -83,7 +83,7 @@ export abstract class DataColumnConfiguration {
   }
 
   addContextMenuItems(params, gridService): any[] {
-    if (!params.column) {return [this.csvExcelExporter(params)]; }
+    if (!params.column) { return [this.csvExcelExporter(params)]; }
 
     return [
       'copy',
@@ -100,14 +100,14 @@ export abstract class DataColumnConfiguration {
   // TODO: Get rid of gridService here once the chart select UI changes
   getMainMenuItems(gridService: DataGridService) {
     const instWrap = (label) => this.instantWrapper(label);
-    return function(params) {
+    return function (params) {
       const menuItems = params.defaultItems.slice(0)
         .filter(item => item !== 'toolPanel');
       menuItems.push(
         'separator',
         {
           name: instWrap('COLUMN_STATS'),
-          action: function() {
+          action: function () {
             let sum = 0;
             let total = 0;
             let min: number;
@@ -133,7 +133,7 @@ export abstract class DataColumnConfiguration {
       if (!!element && element.field.startsWith('e')) {
         menuItems.push({
           name: instWrap('CHART_ELEMENT'),
-          action: function() {
+          action: function () {
             gridService.chartFormOnColumn(element.field);
           }
         });
@@ -142,11 +142,11 @@ export abstract class DataColumnConfiguration {
       if (element.elementID) {
         menuItems.push({
           name: instWrap('ELEMENT_INFO'),
-          subMenu : [
+          subMenu: [
             {
               name: `${instWrap('ELEMENT_ID')}: ${element.elementID}`,
               // copy elementID to clipboard
-              action: function() {
+              action: function () {
                 const textarea = document.createElement('textarea');
                 textarea.setAttribute('type', 'hidden');
                 textarea.textContent = element.elementID;

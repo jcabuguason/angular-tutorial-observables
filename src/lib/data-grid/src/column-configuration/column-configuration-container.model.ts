@@ -19,10 +19,6 @@ export class ColumnConfigurationContainer {
   }
 
   static valueOrDash(data, key: string): string {
-    try {
-      return data[key];
-    } catch (e) {
-      return '-';
-    }
+    return (data && data[key]) ? data[key] : '-';
   }
 }
