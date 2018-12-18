@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { SearchService } from './search.service';
-import { ParameterType } from './parameters/search-parameter';
+import { ParameterType, SearchParameter } from './parameters/search-parameter';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
@@ -52,19 +52,41 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   }
 
   expandParamsContainer() {
-    this.containerHeight = 'auto';
-    this.expandButtonIcon = this.collapseIcon;
-    this.expandOnClick = false;
+    this.containerSettings('auto', this.collapseIcon, false);
   }
 
   clickExpandButton(expandContainer: boolean) {
-    if (expandContainer) {
-      this.expandParamsContainer();
-    } else {
-      this.containerHeight = this.defaultContainerHeight;
-      this.expandButtonIcon = this.expandIcon;
-      this.expandOnClick = true;
-    }
+    (expandContainer)
+      ? this.expandParamsContainer()
+      : this.containerSettings(this.defaultContainerHeight, this.expandIcon, true);
+  }
+
+  containerSettings(height: string, icon: string, click: boolean) {
+    this.containerHeight = height;
+    this.expandButtonIcon = icon;
+    this.expandOnClick = click;
+  }
+
+  // Used for autocomplete w/ i18n
+  // SearchParameter checks the original choice.labels on search submit
+  // keep filteredSuggestions to match original choice.labels (before translation)
+  createSuggestions(event, parameter: SearchParameter) {
+    const matchSubstring = (label: string) => label.toLowerCase().indexOf(event.query.toLowerCase()) !== -1;
+    const sortSuggestions = (a: string, b: string) => a.localeCompare(b);
+
+    parameter.filteredSuggestions = parameter.getChoices()
+      .map(choice => choice.label)
+      .filter(label => matchSubstring(this.translate.instant(label)))
+      .sort((a, b) => sortSuggestions(this.translate.instant(a), this.translate.instant(b)));
+  }
+
+  // Used for multiselect filtering w/ i18n
+  // choice.label can be translated string, only need to keep choice.value to match original (before translation)
+  adjustMultiSelectChoices() {
+    this.searchService.availableParams.forEach(param =>
+      param.multiSelectChoices.forEach(choice =>
+        choice.label = this.translate.instant(choice.value).toLowerCase())
+    );
   }
 
 }
