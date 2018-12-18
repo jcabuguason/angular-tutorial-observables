@@ -61,7 +61,7 @@ export class DataChartService {
             xAxis: {
                 type: 'datetime',
                 title: {
-                    text: 'Date'
+                    text: this.instantSingle('CHART', 'DATE_TIME'),
                 }
             },
             yAxis: this.buildYAxes(chartObj, obs),
@@ -183,7 +183,7 @@ export class DataChartService {
             xAxis: {
                 type: 'datetime',
                 title: {
-                    text: this.instantSingle('CHART', 'DATE')
+                    text: this.instantSingle('CHART', 'DATE_TIME'),
                 }
             },
             yAxis: this.buildYAxes(chartObj, observations),
