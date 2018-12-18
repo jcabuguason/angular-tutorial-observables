@@ -39,7 +39,8 @@
                 [(ngModel)]="p.selected[0]"
                 [options]="p.multiSelectChoices"
                 [autoWidth]="false"
-                filter="true"
+                [resetFilterOnHide]="true"
+                [filter]="true"
                 appendTo="body">
                 <ng-template let-choice pTemplate="item">
                   <span title="{{p.getChoiceTooltip(choice.value) | translate}}">{{choice.value | translate}}</span>
@@ -152,7 +153,7 @@
 
           <ng-template #hasChoices>
             <p-dropdown *ngIf="p.getTimesUsable() === 1" [options]="p.choicesWithEmpty"
-              [(ngModel)]="p.formSelected[0]" [filter]="true" appendTo="body">
+              [(ngModel)]="p.formSelected[0]" [filter]="true" [resetFilterOnHide]="true" appendTo="body">
               <ng-template let-choice pTemplate="selectedItem">
                 <span title="{{p.getChoiceTooltip(choice.value) | translate}}">{{choice.value | translate}}</span>
               </ng-template>
@@ -166,7 +167,7 @@
             </p-dropdown>
 
             <p-multiSelect *ngIf="p.getTimesUsable() > 1" [options]="p.multiSelectChoices"
-              [displaySelectedLabel]="false" [defaultLabel]="''"
+              [displaySelectedLabel]="false" [defaultLabel]="''" [resetFilterOnHide]="true"
               [(ngModel)]="p.formSelected" [maxSelectedLabels]="p.multiSelectChoices.length" appendTo="body">
               <ng-template let-choices pTemplate="selectedItems">
                 <span *ngIf="choices && !choices.length">{{'SEARCH_BAR.SELECT' | translate}}</span>
