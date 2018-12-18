@@ -101,7 +101,7 @@
     "ctrlV": "Ctrl+V"
   },
   "CHART": {
-    "DATE": "Date",
+    "DATE_TIME": "Date and Time (UTC)",
     "VALUES": "Values"
   },
   "CHART_DEFAULTS": {
