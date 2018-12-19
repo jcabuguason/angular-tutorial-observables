@@ -19,7 +19,6 @@ export class SearchParameter {
     private required: boolean = false,
     private timesUsable: number = 500,
     private placeholder: string = '',
-    public checkbox: SearchQueryType = null, // place checkbox beside this parameter in the form
   ) {
       this.displayName = name;
       this.type = ParameterType.SEARCH_PARAMETER;
