@@ -15,7 +15,7 @@ import {
 import { DMSObs, MetadataElements, DataElements, RawMessage, IndexDetails } from 'msc-dms-commons-angular/core/obs-util';
 import { UnitCodeConversionService } from 'msc-dms-commons-angular/core/obs-util';
 
-import { NodeLookups } from 'msc-dms-commons-angular/core/metadata';
+// import { NodeLookups } from 'msc-dms-commons-angular/core/metadata';
 
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 import { TranslateService } from '@ngx-translate/core';
@@ -142,7 +142,7 @@ export class DataGridService {
         if (this.columnConfiguration.allowBlankDataColumns) {
             const inMdElements = (configElement) => mdElements.some(mdElement => mdElement.elementID === configElement);
 
-            configElements.filter(e => this.isMetadatElement(e) && !inMdElements(e))
+            configElements.filter(e => this.isMetadataElement(e) && !inMdElements(e))
                 .forEach(buildColumn);
         }
 
@@ -281,11 +281,15 @@ export class DataGridService {
     }
 
     // checks element ID to determine if its a metadata element
-    private isMetadatElement(elementID: string) {
-        const identitifer = Object.keys(NodeLookups.node2)
-            .find(key => NodeLookups.node2[key] === 'identification');
-
-        return elementID.split('.')[1] === identitifer;
+    // TODO: Old, remove?
+    // private isMetadatElement(elementID: string) {
+    //     const identitifer = Object.keys(NodeLookups.node2)
+    //         .find(key => NodeLookups.node2[key] === 'identification');
+    //     return elementID.split('.')[1] === identitifer;
+    // }
+    private isMetadataElement(elementID: string) {
+      const split = elementID.split('.');
+      return !!split[1] && split[1] === '7';
     }
 
     // Formats header name, used without providing user config
@@ -322,24 +326,6 @@ export class DataGridService {
         currentNodes.push(newNode);
 
         return newNode;
-    }
-
-    // used without providing user config
-    // Gets the specific node headers
-    private getNodeHeader(nodeNumber: number, nodeHeader: string): string {
-        if (nodeNumber === 2) {
-            return NodeLookups.node2[nodeHeader];
-        } else if (nodeNumber === 3) {
-            return NodeLookups.node3[nodeHeader];
-        } else if (nodeNumber === 4) {
-            return NodeLookups.node4[nodeHeader];
-        } else if (nodeNumber === 5) {
-            return NodeLookups.node5[nodeHeader];
-        } else if (nodeNumber === 6) {
-            return NodeLookups.node6[nodeHeader];
-        } else if (nodeNumber === 7) {
-            return NodeLookups.node7[nodeHeader];
-        }
     }
 
     private columnBoilerplate(node, headerName) {

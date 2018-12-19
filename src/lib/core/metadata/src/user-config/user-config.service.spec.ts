@@ -1,19 +1,34 @@
+import { TestBed, getTestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import { UserConfigService } from './user-config.service';
 import { MetadataService } from '../service';
 import { MDInstanceDefinition } from '../model';
 import { Lang, ElementVisibility, LanguageLabel } from './user-config.model';
 import { LanguageService } from 'msc-dms-commons-angular/shared/language';
+import { MR_MAPPING_CONFIG, MRMappingConfig } from './mr-mapping.config';
 
 describe('UserConfigService', () => {
-
+    let injector: TestBed;
     let service: UserConfigService;
+    let config: MRMappingConfig;
 
     beforeEach(() => {
-        service = new UserConfigService();
-        LanguageService.translator = <any>{
-          currentLang: 'en',
-          instant: (key) => key,
-        };
+      config = {
+        endpoint: 'http://www.test.com'
+      };
+      TestBed.configureTestingModule({
+        imports: [ HttpClientTestingModule ],
+        providers: [
+          UserConfigService,
+          { provide: MR_MAPPING_CONFIG, useValue: config}
+        ]
+      });
+      injector = getTestBed();
+      service = injector.get(UserConfigService);
+      LanguageService.translator = <any>{
+        currentLang: 'en',
+        instant: (key) => key,
+      };
     });
 
     it('should set elements in the configured order', () => {
