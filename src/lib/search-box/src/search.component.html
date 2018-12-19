@@ -128,11 +128,15 @@
     <p-accordionTab header="Basic Search"> -->
       <div *ngFor = "let p of searchService.availableParams; index as i" class="selected-parameter" tabindex="0"
         (keyup.enter)="searchService.submitSearchForm()">
-        <div *ngIf="p.getType() !== paramType.SEARCH_QUERY_TYPE"> {{p.getDisplayName() | translate}}
-            <ng-container *ngIf="p.checkbox != null">
-              <!-- for checkbox, use the label property so it's displayed right next to the checkbox -->
-              <p-checkbox [(ngModel)]="p.checkbox.formChecked" binary="true" label="{{p.checkbox.getDisplayName() | translate}}"></p-checkbox>
-            </ng-container>
+
+        <div> 
+          <ng-container *ngIf="p.getType() === paramType.SEARCH_QUERY_TYPE; else notCheckbox">
+            <!-- for checkbox, use the label property so it's displayed right next to the checkbox -->
+            <p-checkbox [(ngModel)]="p.formChecked" binary="true" label="{{p.getDisplayName() | translate}}"></p-checkbox>
+          </ng-container>
+          <ng-template #notCheckbox>
+            {{p.getDisplayName() | translate}} 
+          </ng-template>
         </div>
 
         <ng-container *ngIf="p.getType() === paramType.SEARCH_PARAMETER">          
