@@ -9,7 +9,7 @@ import { DataGridService } from './data-grid.service';
 import { DefaultColumnConfiguration } from './column-configuration/default-column-configuration.class';
 import { VUColumnConfiguration } from './column-configuration/vu-column-configuration.class';
 import { AccordianColumnConfiguration } from './column-configuration/accordian-column-configuration.class';
-import { UserConfigService, ElementVisibility } from 'msc-dms-commons-angular/core/metadata';
+import { UserConfigService, ElementVisibility, MR_MAPPING_CONFIG } from 'msc-dms-commons-angular/core/metadata';
 import { MatDialog } from '@angular/material';
 import { StationInfoComponent } from './station-info/station-info.component';
 import { UnitCodeConversionService, DataElements } from 'msc-dms-commons-angular/core/obs-util';
@@ -69,6 +69,7 @@ describe('DataGridService', () => {
                 DataGridService,
                 TranslateService,
                 { provide: UserConfigService, useClass: MockConfigService },
+                { provide: MR_MAPPING_CONFIG, useValue: {}},
                 { provide: MatDialog, useValue: { open: () => {} }},
                 { provide: UnitCodeConversionService, useClass: MockUnitService}
             ],

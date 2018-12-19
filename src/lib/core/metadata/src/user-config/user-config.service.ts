@@ -1,4 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { MR_MAPPING_CONFIG, MRMappingConfig } from './mr-mapping.config';
+import { Observable } from 'rxjs/Observable';
+import { first, publishLast, refCount, tap, catchError } from 'rxjs/operators';
 
 import { MetadataService } from '../service';
 
@@ -11,11 +15,15 @@ import {
 
 import { NodeLookups } from './node.const';
 import { MDInstanceDefinition, MDInstanceElement } from '../model/';
+import { LanguageService } from 'msc-dms-commons-angular/shared/language';
 
 @Injectable()
 export class UserConfigService {
+    public nodeInfo$: Observable<any>;
 
     private userConfig: UserConfig;
+
+    private nodeInfo;
 
     // The language used in the config
     private lang: Lang = Lang.ENGLISH;
@@ -29,9 +37,22 @@ export class UserConfigService {
     private nodeValueAt = (elementID, i) => elementID.split('.')[i - 1];
 
     // constructor(private metadataService: MetadataService) {
-    constructor() {
-        this.defaultHeader();
-    }
+    constructor(
+      @Inject(MR_MAPPING_CONFIG)
+      private config: MRMappingConfig,
+      private http: HttpClient,
+  ) {
+      this.defaultHeader();
+      // temporary endpoint: http://dw-dev2.cmc.ec.gc.ca:8180/commons_element_taxonomy.json
+      // Call in app before using it here, if needed
+      this.nodeInfo$ = this.http.get<any>(`${this.config.endpoint}/commons_element_taxonomy.json`).pipe(
+        tap((info) => this.nodeInfo = info),
+        first(),
+        publishLast(),
+        refCount(),
+        catchError(e => Observable.throw(e))
+      );
+  }
 
     defaultHeader() {
         this.userConfig = UserConfig.createConfig();
@@ -313,8 +334,13 @@ export class UserConfigService {
     }
 
     getDefaultNodeName(nodeIndex: number, nodeValue: string): string {
-        return (2 <= nodeIndex && nodeIndex <= 7)
-            ? NodeLookups[`node${nodeIndex}`][nodeValue]
-            : '';
+      const capitalize = (lang) => lang.charAt(0).toUpperCase() + lang.slice(1);
+      try {
+        return (!!this.nodeInfo)
+          ? this.nodeInfo[nodeIndex][nodeValue][`displayValue${capitalize(LanguageService.translator.currentLang)}`]
+          : NodeLookups.info[nodeIndex][nodeValue];
+      } catch (e) {
+        return '';
+      }
     }
 }
