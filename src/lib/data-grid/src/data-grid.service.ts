@@ -241,6 +241,7 @@ export class DataGridService {
 
         const dataCols = [];
         const identityCols = pinned;
+        const metaCols = this.columnDefs.filter(col => col.headerClass === 'meta');
 
         configOrder.forEach(e => {
             const inDef = this.columnDefs.filter(col => getID(col) === e);
@@ -255,6 +256,7 @@ export class DataGridService {
 
         const remainingDataCol = (col) => col.groupId !== 'identity'
             && col.groupId !== 'raw'
+            && col.headerClass !== 'meta'
             && configOrder.indexOf(getID(col)) === -1;
 
         const remainingCols = this.columnDefs.filter(remainingDataCol);
@@ -264,32 +266,31 @@ export class DataGridService {
         dataCols.push(...remainingCols);
         identity.children = identityCols.concat(remainingIdentityCols);
 
-        this.columnDefs = [identity, ...dataCols, this.rawHeader];
+        this.columnDefs = [identity, ...metaCols, ...dataCols, this.rawHeader];
     }
 
-    displayMetadataTable(allData) {
-        const identity = (key) => !(key.startsWith('e_') || key.startsWith('raw_'));
-        this.dialog.open(StationInfoComponent, {
-            data: {
-                name: allData.stn_nam,
-                allData: Object.keys(allData).filter(identity).map(key => ({
-                    'key': key,
-                    'value': allData[key]
-                }))
-            }
-        });
+    displayMetadataTable(node) {
+      this.dialog.open(StationInfoComponent, {
+        data: {
+          name: node.stn_nam,
+          allData: this.columnDefs
+          .filter(group => group.groupId === 'identity' || group.headerClass === 'meta')
+          .map(group => group.children)
+          .reduce((acc, val) => acc.concat(val))
+          .filter(child => node[child.field] != null)
+          .map(child => ({
+            key: (!!child.elementID)
+              ? this.userConfigService.getFullDefaultHeader(child.elementID, 3)
+              : child.field,
+            value: node[child.field]
+          }))
+        },
+      });
     }
 
-    // checks element ID to determine if its a metadata element
-    // TODO: Old, remove?
-    // private isMetadatElement(elementID: string) {
-    //     const identitifer = Object.keys(NodeLookups.node2)
-    //         .find(key => NodeLookups.node2[key] === 'identification');
-    //     return elementID.split('.')[1] === identitifer;
-    // }
     private isMetadataElement(elementID: string) {
       const split = elementID.split('.');
-      return !!split[1] && split[1] === '7';
+      return !!split[1] && (split[1] === '7' || split[1] === '8'  || split[1] === '9');
     }
 
     // Formats header name, used without providing user config
@@ -306,7 +307,7 @@ export class DataGridService {
     }
 
     // Get the child node, or create it if it doesn't exist
-    private getChildNode(currentNodes: any[], headerName: string, nodeNumber: string, elementID: string): object {
+    private getChildNode(currentNodes: any[], headerName: string, nodeNumber: string, elementID: string) {
         for (const currentNode of currentNodes) {
             if (currentNode.nodeNumber === nodeNumber) {
                 // workaround - we need to re-evaluate the elementID checking here:
@@ -446,9 +447,14 @@ export class DataGridService {
 
     private buildMetadataColumn(element, headerID) {
         if (this.columnsGenerated.indexOf(headerID) !== -1) { return; }
+
+        const nodes = element.elementID.split('.');
+        const nodeName = (index: number) => this.userConfigService.getFormattedNodeName(element.elementID, index);
+        const parent = this.getChildNode(this.columnDefs, nodeName(2), nodes[1], element.elementID);
+
         // metadata name using userConfigService may be slightly different than 2.5.6
         const header = {
-            'headerName': this.userConfigService.getByElementName(element.elementID),
+            'headerName': nodeName(3),
             'field': headerID,
             'width': 80,
             'hide': true,
@@ -456,8 +462,11 @@ export class DataGridService {
             'elementID': element.elementID,
         };
 
-        if (this.identityHeader.children === undefined) { this.identityHeader.children = []; }
-        this.identityHeader.children.push(header);
+        if (parent.children === undefined) {
+          parent.children = [];
+          parent.headerClass = 'meta';
+        }
+        parent.children.push(header);
 
         this.columnsGenerated.push(headerID);
     }

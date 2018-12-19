@@ -246,6 +246,14 @@ export class UserConfigService {
             .shift();
     }
 
+    getFullDefaultHeader(elementID: string, depth: number = this.getNestingDepth(elementID)): string {
+      const split = elementID.split('.');
+      return this.range(2, depth)
+        .map(nodeIndex => this.getDefaultNodeName(nodeIndex, split[nodeIndex - 1]))
+        .filter(nodeName => nodeName !== '')
+        .join(' / ');
+    }
+
     getFullFormattedHeader(elementID: string) {
         const main = this.range(2, this.getNestingDepth(elementID))
             .map(nodeIndex => this.getFormattedNodeName(elementID, nodeIndex))
@@ -333,9 +341,10 @@ export class UserConfigService {
             .shift();
     }
 
-    getDefaultNodeName(nodeIndex: number, nodeValue: string): string {
+    getDefaultNodeName(nodeIndex: number | string, nodeValue: string): string {
       const capitalize = (lang) => lang.charAt(0).toUpperCase() + lang.slice(1);
       try {
+        nodeIndex = String(nodeIndex);
         return (!!this.nodeInfo)
           ? this.nodeInfo[nodeIndex][nodeValue][`displayValue${capitalize(LanguageService.translator.currentLang)}`]
           : NodeLookups.info[nodeIndex][nodeValue];

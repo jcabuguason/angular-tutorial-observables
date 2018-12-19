@@ -95,7 +95,7 @@ describe('DataGridService', () => {
 
         service.addRowData(hits[0]);
         expect(service.rowData.length).toBe(1);
-        expect(service.columnDefs.length).toBe(13);
+        expect(service.columnDefs.length).toBe(16);
         expect(service.columnDefs[service.columnDefs.length - 1].groupId).toBe('raw');
 
         const row = service.rowData[0];
@@ -105,7 +105,7 @@ describe('DataGridService', () => {
         expect(row['e_7_7_7_7_7_7_7']).toBeUndefined();
 
         expect(service.columnDefs
-            .filter(col => !(col.groupId === 'identity' || col.groupId === 'raw'))
+            .filter(col => !(col.groupId === 'identity' || col.groupId === 'raw' || col.headerClass === 'meta'))
             .map(col => Number(col.nodeNumber))
         ).toEqual([ 11, 19, 12, 5, 20, 17, 23, 6, 24, 13, 2 ]);
     });
@@ -148,7 +148,7 @@ describe('DataGridService', () => {
         expect(getKey(someDisplayCols[0])).toBe('MSNG');
         expect(getKey(someDisplayCols[1])).toBe('100900.0');
         expect(getKey(noLoadElement)).toBeUndefined();
-        expect(service.columnDefs.length).toBe(13);
+        expect(service.columnDefs.length).toBe(16);
     });
 
     it('should hide non-displayed rows if configured', () => {
@@ -159,10 +159,8 @@ describe('DataGridService', () => {
             .find(n => n.headerName === `node ${eti}`).children
             .find(n => n.elementID === eti).hide;
 
-        console.log(service.columnDefs);
-
         expect(isHidden(hiddenElement)).toBeTruthy();
-        expect(service.columnDefs.length).toBe(13);
+        expect(service.columnDefs.length).toBe(16);
     });
 
     it('allow blank columns', () => {
@@ -172,10 +170,37 @@ describe('DataGridService', () => {
         const row = service.rowData[0];
         const getKey = (eti: string) => row['e_' + eti.replace(/\./g, '_')];
         expect(getKey(blankElement)).toBeUndefined();
-        expect(service.columnDefs.length).toBe(14);
+        expect(service.columnDefs.length).toBe(17);
     });
 
     it('should open filtered station info', () => {
+        service.columnDefs = [
+          {
+            groupId: 'identity',
+            children: [
+              { field: 'station', type: 'identity' },
+            ]
+          },
+          {
+            headerClass: 'meta',
+            children: [
+              { field: 'stn_nam', type: 'identity' },
+              { field: 'msc_id', type: 'identity' },
+            ]
+          },
+          {
+            headerName: 'Rain',
+            children: [
+              { field: 'e_1_2_3_4_5_6_7' }
+            ]
+          },
+          {
+            groupId: 'raw',
+            children: [
+              { field: 'raw_header' }
+            ]
+          }
+        ];
         const data = {
             stn_nam: 'Test!',
             station: 'StationA',
@@ -183,12 +208,13 @@ describe('DataGridService', () => {
             e_1_2_3_4_5_6_7: 'element',
             raw_header: 'raw header',
         };
+
         const calledWithData = {
             data: {
                 name: 'Test!',
                 allData: [
-                    { key: 'stn_nam', value: 'Test!' },
                     { key: 'station', value: 'StationA' },
+                    { key: 'stn_nam', value: 'Test!' },
                     { key: 'msc_id', value: '1234567' }
                 ]
             }

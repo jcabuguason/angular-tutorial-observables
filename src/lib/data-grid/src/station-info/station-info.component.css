@@ -12,7 +12,6 @@
   border-bottom-style: solid;
   align-items: center;
   min-height: 25px;
-  max-width: 30vw;
   padding: 0 16px;
   position: sticky;
 }
@@ -22,7 +21,6 @@
   flex: 1;
   overflow: hidden;
   word-wrap: break-word;
-  max-width: 35vw;
 }
 
 .title-bar {
@@ -36,4 +34,8 @@
   position: relative;
   top: 7px;
   margin-left: 23px;
+}
+
+.value {
+  text-align: right;
 }
