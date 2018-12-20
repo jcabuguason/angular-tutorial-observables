@@ -278,7 +278,7 @@ export class UserConfigService {
             ? this.range(headerConfig.subHeaderStart, headerConfig.subHeaderEnd)
                 .map(nodeIndex => this.getNodeName(elementID, nodeIndex))
                 .filter(nodeValue => nodeValue !== '')
-                .join(',')
+                .join(', ')
             : '';
     }
 
@@ -301,13 +301,17 @@ export class UserConfigService {
     getNodeName(elementID: string, nodeIndex: number): string {
         const nodeValue = elementID.split('.')[nodeIndex - 1];
 
-        return (nodeValue === '0')
-            ? ''
-            : this.getByElementName(elementID, nodeIndex)
-                || this.getByElementNode(elementID, nodeIndex)
-                || this.getByGenericNode(nodeIndex, nodeValue)
-                || this.getDefaultNodeName(nodeIndex, nodeValue)
-                || '[UNDEFINED]';
+        if (nodeValue === '0') {
+          return '';
+        } else if (nodeValue === 'M') {
+          return 'N/A';
+        }
+
+        return this.getByElementName(elementID, nodeIndex)
+          || this.getByElementNode(elementID, nodeIndex)
+          || this.getByGenericNode(nodeIndex, nodeValue)
+          || this.getDefaultNodeName(nodeIndex, nodeValue)
+          || '[UNDEFINED]';
     }
 
     getByElementName(elementID: string, nodeIndex: number = this.getNestingDepth(elementID)): string {
@@ -349,7 +353,7 @@ export class UserConfigService {
           ? this.nodeInfo[nodeIndex][nodeValue][`displayValue${capitalize(LanguageService.translator.currentLang)}`]
           : NodeLookups.info[nodeIndex][nodeValue];
       } catch (e) {
-        return '';
+        console.error(`Missing configuration for node value ${nodeValue} at index ${nodeIndex}`);
       }
     }
 }
