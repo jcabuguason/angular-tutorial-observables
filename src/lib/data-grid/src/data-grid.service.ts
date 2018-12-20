@@ -308,15 +308,14 @@ export class DataGridService {
 
     // Get the child node, or create it if it doesn't exist
     private getChildNode(currentNodes: any[], headerName: string, nodeNumber: string, elementID: string) {
-        for (const currentNode of currentNodes) {
-            if (currentNode.nodeNumber === nodeNumber) {
-                // workaround - we need to re-evaluate the elementID checking here:
-                // requires setting the ID to bottom-level columns to undefined if they become parents
-                if (currentNode.elementID === undefined || elementID === currentNode.elementID) {
-                    return currentNode;
-                }
-            }
-        }
+        const possibleMatches = currentNodes.filter(node => node.nodeNumber === nodeNumber);
+
+        // workaround - we need to re-evaluate the elementID checking here:
+        const elementMatch = possibleMatches.find(node => node.elementID === elementID);
+        if (elementMatch != null) { return elementMatch; }
+        // requires setting the ID to bottom-level columns to undefined if they become parents
+        const parentMatch = possibleMatches.find(node => node.elementID == null);
+        if (parentMatch != null) { return parentMatch; }
 
         const newNode: object = {
             'headerName': headerName,
