@@ -77,6 +77,7 @@ export class DataChartService {
         const yTypes = [];
         const stations = chartObj.stations;
         const elements = chartObj.elements;
+        let colorIndex = 0;
 
         for (const station of stations) {
             const sensor = {};
@@ -88,8 +89,9 @@ export class DataChartService {
 
                 for (const field of elements) {
                     const foundElems = obs.dataElements.filter(elem => elem.elementID === field);
-                    this.buildSensor(foundElems, sensor, obs, yTypes);
+                    this.buildSensor(foundElems, sensor, obs, yTypes, colorIndex);
                 }
+                colorIndex++;
             }
             this.buildSeries(series, sensor, name, yTypes, this.getElementType(elements[0]));
         }
@@ -104,12 +106,13 @@ export class DataChartService {
                 data: sensor[key],
                 yAxis: yTypes.indexOf((sensor[key][0].unit)),
                 type: type,
+                color: Highcharts.getOptions().colors[sensor[key]['colorIndex']],
             })
             )
         );
     }
 
-    private buildSensor(foundElems, sensor, obs, yTypes) {
+    private buildSensor(foundElems, sensor, obs, yTypes, colorIndex) {
         for (const e of foundElems) {
             if (!!e) {
                 if (yTypes.indexOf(e.unit) === -1) {
@@ -118,6 +121,7 @@ export class DataChartService {
                 this.unitService.setPreferredUnits(e);
                 const key = e.indexValue;
                 if (!sensor[key]) { sensor[key] = []; }
+                sensor[key]['colorIndex'] = colorIndex;
                 sensor[key].push({
                     x: Date.parse(obs.obsDateTime),
                     y: Number(e.value),
@@ -205,6 +209,7 @@ export class DataChartService {
         const yTypes = [];
         const station = chartObj.stations[0];
         const elements = chartObj.elements;
+        let colorIndex = 0;
 
         for (const element of elements) {
             const sensor = {};
@@ -213,12 +218,13 @@ export class DataChartService {
                 .filter(ob => ob.identifier === station['id'])) {
                 const hasLayer = element.hasOwnProperty('indexValue');
                 const foundElems = obs.dataElements.filter(elemt => elemt.elementID === element && (!hasLayer));
-                this.buildSensor(foundElems, sensor, obs, yTypes);
+                this.buildSensor(foundElems, sensor, obs, yTypes, colorIndex);
             }
 
             const name = this.configService.getFullFormattedHeader(element);
             const type = this.getElementType(element);
             this.buildSeries(series, sensor, name, yTypes, type);
+            colorIndex++;
         }
         return series;
     }
