@@ -15,8 +15,8 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   @ViewChild('paramsContainer') containerElement: ElementRef;
   readonly expandIcon = 'fa fa-caret-down';
   readonly collapseIcon = 'fa fa-caret-up';
-  readonly defaultHeight: number = 39;
-  readonly defaultContainerHeight: string = '39px';
+  readonly defaultHeight: number = 41;
+  readonly defaultContainerHeight: string = '41px';
 
   showExpandButton = true;
   expandButtonIcon = this.expandIcon;
