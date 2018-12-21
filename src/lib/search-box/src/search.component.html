@@ -41,6 +41,7 @@
                 [autoWidth]="false"
                 [resetFilterOnHide]="true"
                 [filter]="true"
+                [autoDisplayFirst]="false"
                 appendTo="body">
                 <ng-template let-choice pTemplate="item">
                   <span title="{{p.getChoiceTooltip(choice.value) | translate}}">{{choice.value | translate}}</span>
@@ -156,7 +157,7 @@
           </ng-container>
 
           <ng-template #hasChoices>
-            <p-dropdown *ngIf="p.getTimesUsable() === 1" [options]="p.choicesWithEmpty"
+            <p-dropdown *ngIf="p.getTimesUsable() === 1" [options]="p.choicesWithEmpty" [autoDisplayFirst]="false"
               [(ngModel)]="p.formSelected[0]" [filter]="true" [resetFilterOnHide]="true" appendTo="body">
               <ng-template let-choice pTemplate="selectedItem">
                 <span title="{{p.getChoiceTooltip(choice.value) | translate}}">{{choice.value | translate}}</span>
