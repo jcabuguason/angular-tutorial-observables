@@ -89,7 +89,7 @@
           <ng-container *ngIf="p.getType() === paramType.SEARCH_DATETIME">
             <p-calendar appendTo="body"
               [(ngModel)]="p.datetime" [showTime]="true" placeholder="{{p.getPlaceholder()}}"
-              [defaultDate]="defaultDate">
+              [defaultDate]="defaultDate" [locale]="calendarLocale">
             </p-calendar>
           </ng-container>
 
@@ -115,7 +115,7 @@
 
 <!-- Popup Search Form -->
 <p-dialog header="{{'SEARCH_BAR.SEARCH' | translate}}" [(visible)]="searchService.displayForm" [modal]="true" [width]="600"
-  class="search-form" (onShow)="adjustMultiSelectChoices()" [blockScroll]="true">
+  class="search-form" [blockScroll]="true">
 
   <!-- <p-accordion>
     <p-accordionTab header="Shortcuts" [selected]="true">
@@ -199,7 +199,7 @@
 
         <ng-container *ngIf="p.getType() === paramType.SEARCH_DATETIME">
           <p-calendar [(ngModel)]="p.formDatetime" [showTime]="true" [defaultDate]="defaultDate"
-            placeholder="{{p.getPlaceholder()}}" appendTo="body">
+            placeholder="{{p.getPlaceholder()}}" appendTo="body" [locale]="calendarLocale">
           </p-calendar>
         </ng-container>
       </div>

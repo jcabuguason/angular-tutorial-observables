@@ -5,7 +5,9 @@
     "SUBMIT": "Submit",
     "MISSING_REQUIRED": "Missing Required Search Fields",
     "UNFILLED_FIELD": "Fields added but do not have a value or correct format (note: Invalid values could have been automatically removed)",
-    "SELECT": "Select"
+    "SELECT": "Select",
+    "CLEAR": "Clear",
+    "TODAY": "Today"
   },
   "GRID": {
     "LAYER": "Layer",
@@ -123,6 +125,13 @@
     "THURSDAY": "Thursday",
     "FRIDAY": "Friday",
     "SATURDAY": "Saturday",
+    "SUNDAY_SHORT": "Sun",
+    "MONDAY_SHORT": "Mon",
+    "TUESDAY_SHORT": "Tue",
+    "WEDNESDAY_SHORT": "Wed",
+    "THURSDAY_SHORT": "Thu",
+    "FRIDAY_SHORT": "Fri",
+    "SATURDAY_SHORT": "Sat",
     "JANUARY": "January",
     "FEBRUARY": "February",
     "MARCH": "March",
