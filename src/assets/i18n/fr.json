@@ -5,7 +5,9 @@
     "SUBMIT": "Soumettre",
     "MISSING_REQUIRED": "Champs de recherche obligatoires manquants",
     "UNFILLED_FIELD": "Champs ajoutés mais n'ont pas de valeur ou un format correct (remarque: des valeurs non valides auraient pu être automatiquement supprimées)",
-    "SELECT": "Sélectionner"
+    "SELECT": "Sélectionner",
+    "CLEAR": "Effacer",
+    "TODAY": "Aujourd'hui"
   },
   "GRID": {
     "LAYER": "Couche",
@@ -123,6 +125,13 @@
     "THURSDAY": "Jeudi",
     "FRIDAY": "Vendredi",
     "SATURDAY": "Samedi",
+    "SUNDAY_SHORT": "Dim",
+    "MONDAY_SHORT": "Lun",
+    "TUESDAY_SHORT": "Mar",
+    "WEDNESDAY_SHORT": "Mer",
+    "THURSDAY_SHORT": "Jeu",
+    "FRIDAY_SHORT": "Ven",
+    "SATURDAY_SHORT": "Sam",
     "JANUARY": "Janvier",
     "FEBRUARY": "Février",
     "MARCH": "Mars",
