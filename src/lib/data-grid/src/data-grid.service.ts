@@ -179,6 +179,7 @@ export class DataGridService {
                     'headerName': this.translate.instant('GRID.HEADER'),
                     'field': 'raw_header',
                     'width': 220,
+                    'valueFormatter': this.removeLineBreaks,
                 }]
             };
             this.columnDefs.push(this.rawHeader);
@@ -189,6 +190,7 @@ export class DataGridService {
                 'field': 'raw_message',
                 'width': 440,
                 'columnGroupShow': 'open',
+                'valueFormatter': this.removeLineBreaks,
             });
         }
 
@@ -514,5 +516,9 @@ export class DataGridService {
         }
         // Function used in the default sort of ag-grid so no performance change in terms of sorting
         return valueA > valueB ? 1 : (valueA < valueB ? -1 : 0);
+    }
+
+    private removeLineBreaks(line) {
+      return line.value.replace(/(\r\n\t|\n|\r\t)/gm, ' ');
     }
 }
