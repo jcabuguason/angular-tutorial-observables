@@ -5,7 +5,7 @@ export const FULL_CONFIG: MDInstanceDefinition = {
   parent: 'stub',
   identificationElements: [],
   elements: [
-    {group: 'id', name: 'profile-name', value: 'Full', def_id: '', id: '', index: '1', uom: '', language: {english: '', french: ''}, instelements: []},
+    {group: 'id', name: 'profile-name', value: 'Full', def_id: '', id: '', index: '1', uom: '', language: {english: 'All Users ', french: 'Tous les utilisateurs'}, instelements: []},
     {group: 'nesting', name: 'nesting-depth', value: '4', def_id: '', id: '', index: '', uom: '', language: {english: '', french: ''}, instelements: []},
     {group: 'header', name: 'show-sub-header', value: 'true', def_id: '', id: '', index: '', uom: '', language: {english: '', french: ''}, instelements: [
       {group: 'header', name: 'sub-header-start', value: '5', def_id: '', id: '', index: '', uom: '', language: {english: '', french: ''}, instelements: []},
