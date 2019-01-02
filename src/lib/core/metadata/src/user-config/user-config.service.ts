@@ -310,6 +310,10 @@ export class UserConfigService {
                 || '[UNDEFINED]';
     }
 
+    getSpecificNodeValue(nodeIndex: number, nodeValue: string): string {
+      return this.getByGenericNode(nodeIndex, nodeValue) || this.getDefaultNodeName(nodeIndex, nodeValue);
+    }
+
     getByElementName(elementID: string, nodeIndex: number = this.getNestingDepth(elementID)): string {
         return (nodeIndex === this.getNestingDepth(elementID))
             ? this.userConfig.elementConfigs
