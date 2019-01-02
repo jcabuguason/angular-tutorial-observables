@@ -260,14 +260,8 @@ export class DataGridService implements OnDestroy {
         const metaCols = this.columnDefs.filter(col => col.headerClass === 'meta');
 
         configOrder.forEach(e => {
-            const inDef = this.columnDefs.filter(col => getID(col) === e);
-            const inIdentityDef = identityChildren.filter(col => col.elementID === e && !pinned.some(pin => pin === col));
-
-            if (inDef.length > 0) {
-                dataCols.push(...inDef);
-            } else if (inIdentityDef.length > 0) {
-                identityCols.push(...inIdentityDef);
-            }
+            const inDef = this.columnDefs.filter(col => getID(col) === e && col.headerClass !== 'meta');
+            dataCols.push(...inDef);
         });
 
         const remainingDataCol = (col) => col.groupId !== 'identity'
@@ -462,14 +456,19 @@ export class DataGridService implements OnDestroy {
 
     private buildMetadataColumn(element, headerID) {
         if (this.columnsGenerated.indexOf(headerID) !== -1) { return; }
-
+        const flatConfig = this.userConfigService.getNestingDepth(element.elementID) === 2;
         const nodes = element.elementID.split('.');
-        const nodeName = (index: number) => this.userConfigService.getFormattedNodeName(element.elementID, index);
-        const parent = this.getChildNode(this.columnDefs, nodeName(2), nodes[1], element.elementID);
+        const parent = this.getChildNode(
+          this.columnDefs,
+          this.userConfigService.getSpecificNodeValue(2, nodes[1]),
+          nodes[1],
+          element.elementID
+        );
 
         // metadata name using userConfigService may be slightly different than 2.5.6
         const header = {
-            'headerName': nodeName(3),
+            'headerName': this.userConfigService.getFormattedNodeName(element.elementID, flatConfig ? 2 : 3),
+            'headerTooltip': this.userConfigService.getDescription(element.elementID),
             'field': headerID,
             'width': 80,
             'hide': true,
