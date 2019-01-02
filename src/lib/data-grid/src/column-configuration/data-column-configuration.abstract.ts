@@ -27,6 +27,7 @@ export abstract class DataColumnConfiguration {
     return {
       'headerValueGetter': (params) => this.instantWrapper('STATION'),
       'field': 'station',
+      'colId': 'station',
       'width': 100,
       'pinned': true,
       'lockVisible': true,
@@ -38,6 +39,7 @@ export abstract class DataColumnConfiguration {
     return {
       'headerValueGetter': (params) => this.instantWrapper('INSTANCE_DATE'),
       'field': 'obsDateTime',
+      'colId': 'obsDateTime',
       'width': 220,
       'pinned': true,
       'sort': 'asc',
@@ -52,6 +54,7 @@ export abstract class DataColumnConfiguration {
     return {
       'headerValueGetter': (params) => this.instantWrapper('REV'),
       'field': 'revision',
+      'colId': 'revision',
       'pinned': true,
       'width': 75,
       'sort': 'asc',

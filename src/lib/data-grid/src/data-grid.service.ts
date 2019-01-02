@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 
 import { ElementColumnConfiguration } from './column-configuration/element-column-configuration.interface';
 import { ColumnConfigurationContainer } from './column-configuration/column-configuration-container.model';
@@ -19,18 +19,20 @@ import { UnitCodeConversionService } from 'msc-dms-commons-angular/core/obs-util
 
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 import { TranslateService } from '@ngx-translate/core';
+import { Subject } from 'rxjs/Subject';
 
 @Injectable()
-export class DataGridService {
+export class DataGridService implements OnDestroy {
     public columnsGenerated: string[] = [];
     public rowData: object[] = [];
     public columnDefs: any[];
     public columnTypes = { 'identity': {} };
     public defaultColDef = { menuTabs: ['generalMenuTab', 'filterMenuTab'] };
-    public reloadRequested = new EventEmitter();
-    public chartColumnRequested = new EventEmitter();
-    public chartFormRequested = new EventEmitter();
-    public chartRequested = new EventEmitter();
+    public reloadRequested = new Subject();
+    public sortRequested = new Subject();
+    public chartColumnRequested = new Subject();
+    public chartFormRequested = new Subject();
+    public chartRequested = new Subject();
 
     private columnConfiguration: ElementColumnConfiguration;
     private identityHeader;
@@ -46,6 +48,14 @@ export class DataGridService {
         userConfigService.loadConfig(FULL_CONFIG);
         this.columnConfiguration = new DefaultColumnConfiguration();
         this.resetHeader();
+    }
+
+    ngOnDestroy() {
+        this.reloadRequested.unsubscribe();
+        this.sortRequested.unsubscribe();
+        this.chartColumnRequested.unsubscribe();
+        this.chartFormRequested.unsubscribe();
+        this.chartRequested.unsubscribe();
     }
 
     getColumnConfiguration(): ElementColumnConfiguration {
@@ -89,19 +99,23 @@ export class DataGridService {
     }
 
     reloadGrid() {
-        this.reloadRequested.emit();
+        this.reloadRequested.next();
     }
 
-    chartColumn(param) {
-        this.chartColumnRequested.emit(param);
+    chartColumn(param: any) {
+        this.chartColumnRequested.next(param);
     }
 
-    chartObject(param) {
-        this.chartRequested.emit(param);
+    chartObject(param: any) {
+        this.chartRequested.next(param);
     }
 
-    chartFormOnColumn(param) {
-        this.chartFormRequested.emit(param);
+    chartFormOnColumn(param: any) {
+        this.chartFormRequested.next(param);
+    }
+
+    requestSortModelChange(param: any) {
+        this.sortRequested.next(param);
     }
 
     getContextMenuItems() {
@@ -495,14 +509,14 @@ export class DataGridService {
             if (valueBMissing) {
                 return 1;
             }
-        }
+        };
 
-        let blankResult = compareMissing(isBlank(valueA), isBlank(valueB));
+        const blankResult = compareMissing(isBlank(valueA), isBlank(valueB));
         if (blankResult != null) {
             return blankResult;
         }
 
-        let msngResult = compareMissing(valueA === 'MSNG', valueB === 'MSNG');
+        const msngResult = compareMissing(valueA === 'MSNG', valueB === 'MSNG');
         if (msngResult != null) {
             return msngResult;
         }
