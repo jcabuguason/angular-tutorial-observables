@@ -532,6 +532,8 @@ export class DataGridService implements OnDestroy {
     }
 
     private removeLineBreaks(line) {
-      return line.value.replace(/(\r\n\t|\n|\r\t)/gm, ' ');
+      if (line.value != null) {
+        return line.value.replace(/(\r\n\t|\n|\r\t)/gm, ' ');
+      }
     }
 }
