@@ -202,7 +202,7 @@ describe('DataGridService', () => {
           }
         ];
         const data = {
-            stn_nam: 'Test!',
+            e_1_7_83_0_0_0_0: 'Test!',
             station: 'StationA',
             msc_id: '1234567',
             e_1_2_3_4_5_6_7: 'element',
@@ -214,7 +214,6 @@ describe('DataGridService', () => {
                 name: 'Test!',
                 allData: [
                     { key: 'station', value: 'StationA' },
-                    { key: 'stn_nam', value: 'Test!' },
                     { key: 'msc_id', value: '1234567' }
                 ]
             }
