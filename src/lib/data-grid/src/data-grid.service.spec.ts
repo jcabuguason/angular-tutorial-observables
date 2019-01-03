@@ -99,8 +99,8 @@ describe('DataGridService', () => {
         expect(service.columnDefs[service.columnDefs.length - 1].groupId).toBe('raw');
 
         const row = service.rowData[0];
-        expect(row['clim_id']).toBe('1021270');
-        expect(row['station']).toBe('Campbell River');
+        expect(row['e_1_7_85_0_0_0_0']).toBe('1021270'); // Climate ID
+        expect(row['e_1_7_83_0_0_0_0']).toBe('Campbell River'); // Station Name
         expect(row['e_1_24_340_0_10_4_6']).toBe('48');
         expect(row['e_7_7_7_7_7_7_7']).toBeUndefined();
 

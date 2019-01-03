@@ -144,8 +144,9 @@ export class DataGridService implements OnDestroy {
 
         const buildColumn = (element) => {
             if (element.name != null && !this.ignoreElement(element.elementID)) {
-                result[element.name] = element.value;
-                this.buildMetadataColumn(element, element.name);
+                const headerID = ColumnConfigurationContainer.findHeaderID(element);
+                result[headerID] = element.value;
+                this.buildMetadataColumn(element, headerID);
             }
         };
 
