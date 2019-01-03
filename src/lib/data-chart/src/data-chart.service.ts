@@ -80,7 +80,6 @@ export class DataChartService {
         const yTypes = [];
         const stations = chartObj.stations;
         const elements = chartObj.elements;
-        let colorIndex = 0;
 
         for (const station of stations) {
             const sensor = {};
@@ -88,13 +87,12 @@ export class DataChartService {
 
             for (const obs of observations.filter(obsUtil.latestFromArray)
                 .filter(ob => ob.identifier === station['id']).sort(obsUtil.compareObsTimeFromObs)) {
-                name = this.createStationLabel(obs.metadataElements);
 
                 for (const field of elements) {
                     const foundElems = obs.dataElements.filter(elem => elem.elementID === field);
-                    this.buildSensor(foundElems, sensor, obs, yTypes, colorIndex);
+                    this.buildSensor(foundElems, sensor, obs, yTypes);
+                    name = this.createStationLabel(obs.metadataElements);
                 }
-                colorIndex++;
             }
             this.buildSeries(series, sensor, name, yTypes, this.getElementType(elements[0]));
         }
@@ -104,19 +102,19 @@ export class DataChartService {
     private buildSeries(series, sensor, name, yTypes, type) {
         series.push(...Object.keys(sensor)
             .map((key, index) => ({
-                name: name,
-                showInLegend: (index === 0),
+                name: `${name} ${sensor[key]['sensorType']}`,
+                showInLegend: true,
                 data: sensor[key],
                 yAxis: yTypes.indexOf((sensor[key][0].unit)),
                 type: type,
-                color: Highcharts.getOptions().colors[sensor[key]['colorIndex']],
             })
             )
         );
     }
 
-    private buildSensor(foundElems, sensor, obs, yTypes, colorIndex) {
+    private buildSensor(foundElems, sensor, obs, yTypes) {
         for (const e of foundElems) {
+            const sensorType = this.getSensorType(e);
             if (!!e) {
                 if (yTypes.indexOf(e.unit) === -1) {
                     yTypes.push(e.unit);
@@ -124,7 +122,7 @@ export class DataChartService {
                 this.unitService.setPreferredUnits(e);
                 const key = e.indexValue;
                 if (!sensor[key]) { sensor[key] = []; }
-                sensor[key]['colorIndex'] = colorIndex;
+                sensor[key]['sensorType'] = sensorType;
                 sensor[key].push({
                     x: Date.parse(obs.obsDateTime),
                     y: Number(e.value),
@@ -182,7 +180,6 @@ export class DataChartService {
         return Object.assign({
             chart: {
                 zoomType: 'xy',
-                marginBottom: 160,
             },
             title: {
                 text: chartObj.stations[0]['label'],
@@ -194,15 +191,6 @@ export class DataChartService {
                 }
             },
             yAxis: this.buildYAxes(chartObj, observations),
-            legend: {
-                layout: 'vertical',
-                align: 'left',
-                x: 80,
-                itemMarginTop: 0,
-                verticalAlign: 'bottom',
-                floating: true,
-                backgroundColor: 'rgba(255,255,255,0.25)'
-            },
             series: this.createMultiSeries(chartObj, observations),
             lang: {
                 noData: this.buildNoDataString(chartObj),
@@ -215,29 +203,37 @@ export class DataChartService {
         const yTypes = [];
         const station = chartObj.stations[0];
         const elements = chartObj.elements;
-        let colorIndex = 0;
 
         for (const element of elements) {
             const sensor = {};
 
             for (const obs of observations.sort(obsUtil.compareObsTimeFromObs)
                 .filter(ob => ob.identifier === station['id'])) {
-                const hasLayer = element.hasOwnProperty('indexValue');
-                const foundElems = obs.dataElements.filter(elemt => elemt.elementID === element && (!hasLayer));
-                this.buildSensor(foundElems, sensor, obs, yTypes, colorIndex);
+                const foundElems = obs.dataElements.filter(elemt => elemt.elementID === element);
+                this.buildSensor(foundElems, sensor, obs, yTypes);
             }
 
             const name = this.configService.getFullFormattedHeader(element);
             const type = this.getElementType(element);
             this.buildSeries(series, sensor, name, yTypes, type);
-            colorIndex++;
         }
         return series;
     }
 
+    getSensorType(e) {
+        if (e.indexValue === 0) {
+            return this.translate.instant('GRID.OFFICIAL');
+        } else if (e.indexValue > 0) {
+            const label = this.translate.instant(`GRID.${e.index.name.toUpperCase()}_LABEL`);
+            return `${label} ${e.indexValue}`;
+        } else { return ''; }
+    }
+
     // get the graph type for an element
     getElementType(elem) {
-        if (elem.split('.')[1] === '11') {
+        if (elem === '1.17.253.0.0.0.0' || elem === '1.17.438.0.0.0.0') {
+            return 'area';
+        } else if (elem.split('.')[1] === '11') {
             return 'column';
         } else { return 'spline'; }
     }
