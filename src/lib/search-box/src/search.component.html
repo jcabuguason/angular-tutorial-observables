@@ -172,15 +172,9 @@
             </p-dropdown>
 
             <p-multiSelect *ngIf="p.getTimesUsable() > 1" [options]="p.multiSelectChoices"
-              [displaySelectedLabel]="false" [defaultLabel]="''" [resetFilterOnHide]="true"
-              [(ngModel)]="p.formSelected" [maxSelectedLabels]="p.multiSelectChoices.length" appendTo="body">
-              <ng-template let-choices pTemplate="selectedItems">
-                <span *ngIf="choices && !choices.length">{{'SEARCH_BAR.SELECT' | translate}}</span>
-                <span *ngFor="let choice of choices; last as isLast" title="{{p.getChoiceTooltip(choice) | translate}}">
-                  {{choice | translate}}
-                  <span *ngIf="!isLast">, </span>
-                </span>
-              </ng-template>
+              [defaultLabel]="multiSelectDefaultLabel" [resetFilterOnHide]="true"
+              [(ngModel)]="p.formSelected" maxSelectedLabels="1" selectedItemsLabel="{0} {{'SEARCH_BAR.SELECTED_ITEMS' | translate}}"
+              appendTo="body">
               <ng-template let-choices pTemplate="item">
                 <span title="{{p.getChoiceTooltip(choices.value) | translate}}">{{choices.value | translate}}</span>
               </ng-template>
