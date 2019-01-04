@@ -27,6 +27,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   defaultDate = new Date();
   calendarLocale;
   message;
+  multiSelectDefaultLabel = '';
 
   private weekdays = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
   private months =
@@ -40,10 +41,12 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   ) {
     // this is used to set the time to 00:00 when the calendar/time pops up
     this.defaultDate.setHours(0, 0);
-    // use calendar labels in current language in case nothing has been emitted by translate.onLangChange before p-calendar gets created
+    // use labels in current language in case nothing has been emitted by translate.onLangChange before they get created
     this.adjustCalendar();
+    this.adjustMultiSelectDefaultLabel();
 
     translate.onLangChange.subscribe(evt => {
+      this.adjustMultiSelectDefaultLabel();
       this.adjustMultiSelectChoices();
       this.adjustCalendar();
     });
@@ -97,7 +100,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   adjustMultiSelectChoices() {
     this.searchService.availableParams.forEach(param =>
       param.multiSelectChoices.forEach(choice =>
-        choice.label = this.translate.instant(choice.value).toLowerCase())
+        choice.label = this.translate.instant(choice.value))
     );
   }
 
@@ -113,6 +116,10 @@ export class SearchComponent implements OnInit, AfterViewChecked {
       today: this.translate.instant('SEARCH_BAR.TODAY'),
       clear:  this.translate.instant('SEARCH_BAR.CLEAR')
     };
+  }
+
+  private adjustMultiSelectDefaultLabel () {
+    this.multiSelectDefaultLabel = this.translate.instant('SEARCH_BAR.SELECT');
   }
 
   private instantArray = (header, keys) => keys.map(key => this.translate.instant(`${header}.${key}`));
