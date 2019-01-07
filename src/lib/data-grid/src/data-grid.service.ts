@@ -12,8 +12,15 @@ import {
     ElementVisibility,
 } from 'msc-dms-commons-angular/core/metadata/';
 
-import { DMSObs, MetadataElements, DataElements, RawMessage, IndexDetails } from 'msc-dms-commons-angular/core/obs-util';
-import { UnitCodeConversionService } from 'msc-dms-commons-angular/core/obs-util';
+import {
+    STN_NAME_FIELD,
+    UnitCodeConversionService,
+    DMSObs,
+    MetadataElements,
+    DataElements,
+    RawMessage,
+    IndexDetails,
+} from 'msc-dms-commons-angular/core/obs-util';
 
 // import { NodeLookups } from 'msc-dms-commons-angular/core/metadata';
 
@@ -283,7 +290,7 @@ export class DataGridService implements OnDestroy {
     displayMetadataTable(node) {
       this.dialog.open(StationInfoComponent, {
         data: {
-          name: node.stn_nam,
+          name: node[STN_NAME_FIELD],
           allData: this.columnDefs
           .filter(group => group.groupId === 'identity' || group.headerClass === 'meta')
           .map(group => group.children)

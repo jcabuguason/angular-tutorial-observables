@@ -1,5 +1,9 @@
 import { compareRevisionBoolean } from './obs-util.class';
 
+export const STN_NAME_FIELD = 'e_1_7_83_0_0_0_0';
+export const MSC_ID_FIELD = 'e_1_7_86_0_0_0_0';
+export const TC_ID_FIELD = 'e_1_7_84_0_0_0_0';
+
 /** Checks if it is the latest obs loaded into the grid */
 export function isLatest(params): boolean {
   const current = params.node.data;
