@@ -281,11 +281,11 @@ export class SearchService {
     this.messageService.clear();
 
     if (empty.length > 0) {
-      this.messageService.add({ summary: 'SEARCH_BAR.UNFILLED_FIELD', data: empty, sticky: true });
+      this.messageService.add({ key: 'search-messages', summary: 'SEARCH_BAR.UNFILLED_FIELD', data: empty, sticky: true });
       valid = false;
     }
     if (missing.length > 0) {
-      this.messageService.add({ summary: 'SEARCH_BAR.MISSING_REQUIRED', data: missing, sticky: true });
+      this.messageService.add({ key: 'search-messages', summary: 'SEARCH_BAR.MISSING_REQUIRED', data: missing, sticky: true });
       valid = false;
     }
     return valid;
