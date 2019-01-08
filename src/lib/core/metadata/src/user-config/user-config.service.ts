@@ -311,7 +311,8 @@ export class UserConfigService {
     }
 
     getSpecificNodeValue(nodeIndex: number, nodeValue: string): string {
-      return this.getByGenericNode(nodeIndex, nodeValue) || this.getDefaultNodeName(nodeIndex, nodeValue);
+      const name = this.getByGenericNode(nodeIndex, nodeValue) || this.getDefaultNodeName(nodeIndex, nodeValue);
+      return (!!name) ? name[0].toUpperCase() + name.slice(1) : '';
     }
 
     getByElementName(elementID: string, nodeIndex: number = this.getNestingDepth(elementID)): string {

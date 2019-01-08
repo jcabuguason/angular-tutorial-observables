@@ -464,7 +464,6 @@ export class DataGridService implements OnDestroy {
 
     private buildMetadataColumn(element, headerID) {
         if (this.columnsGenerated.indexOf(headerID) !== -1) { return; }
-        const flatConfig = this.userConfigService.getNestingDepth(element.elementID) === 2;
         const nodes = element.elementID.split('.');
         const parent = this.getChildNode(
           this.columnDefs,
@@ -472,10 +471,14 @@ export class DataGridService implements OnDestroy {
           nodes[1],
           element.elementID
         );
+        const getHeaderName = () => {
+          const node2 = this.userConfigService.getFormattedNodeName(element.elementID, 2);
+          return parent.headerName === node2 ? this.userConfigService.getFormattedNodeName(element.elementID, 3) : node2;
+        };
 
         // metadata name using userConfigService may be slightly different than 2.5.6
         const header = {
-            'headerName': this.userConfigService.getFormattedNodeName(element.elementID, flatConfig ? 2 : 3),
+            'headerName': getHeaderName(),
             'headerTooltip': this.userConfigService.getDescription(element.elementID),
             'field': headerID,
             'width': 80,
