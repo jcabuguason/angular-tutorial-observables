@@ -43,9 +43,9 @@ export class UserConfigService {
       private http: HttpClient,
   ) {
       this.defaultHeader();
-      // temporary endpoint: http://dw-dev2.cmc.ec.gc.ca:8180/commons_element_taxonomy.json
-      // Call in app before using it here, if needed
-      this.nodeInfo$ = this.http.get<any>(`${this.config.endpoint}/commons_element_taxonomy.json`).pipe(
+
+      const infoUrl = `${this.config.endpoint}/metadata/mapping/v1.0/element_taxonomy/commons_element_identification`;
+      this.nodeInfo$ = this.http.get<any>(infoUrl).pipe(
         tap((info) => this.nodeInfo = info),
         first(),
         publishLast(),
