@@ -73,7 +73,7 @@ describe('UserConfigService', () => {
 
     it('Default sub header', () => {
         service.loadConfig(emptyConfig);
-        expect(service.getSubHeader('1.19.270.2.1.1.7')).toBe('-1 min,1 min,-5 cm');
+        expect(service.getSubHeader('1.19.270.2.1.1.7')).toBe('-1 min, 1 min, -5 cm');
     });
 
     it('No sub header', () => {
@@ -83,12 +83,12 @@ describe('UserConfigService', () => {
 
     it('Global sub header', () => {
         service.loadConfig(subHeaderConfig);
-        expect(service.getSubHeader('1.19.270.2.1.1.7')).toBe('-1 min,1 min');
+        expect(service.getSubHeader('1.19.270.2.1.1.7')).toBe('-1 min, 1 min');
     });
 
     it('Element specific sub header', () => {
         service.loadConfig(subHeaderConfig);
-        expect(service.getSubHeader('1.19.270.2.1.1.8')).toBe('1 min,-10 cm');
+        expect(service.getSubHeader('1.19.270.2.1.1.8')).toBe('1 min, -10 cm');
     });
 
     it('Default Node', () => {
@@ -154,7 +154,7 @@ describe('UserConfigService', () => {
 
     it('should show the entire element name with zero value sub headers', () => {
         service.loadConfig(emptyConfig);
-        expect(service.getFullFormattedHeader('1.12.207.2.1.1.0')).toBe('Pressure / Mean Sea Level Pressure / Average (-1 min,1 min)');
+        expect(service.getFullFormattedHeader('1.12.207.2.1.1.0')).toBe('Pressure / Mean Sea Level Pressure / Average (-1 min, 1 min)');
     });
 
     it('should show the entire element name with zero value headers', () => {
@@ -327,6 +327,27 @@ describe('UserConfigService', () => {
     it('should not have default preferred units', () => {
         service.loadConfig(noLoadPreferredUnitsConfig);
         expect(service.isLoadPreferredUnits()).toBeFalsy();
+    });
+
+    it('should return an empty string when getting a node name for value 0', () => {
+      service.loadConfig(emptyConfig);
+      expect(service.getNodeName('1.2.0.4.5.6.7', 3)).toBe('');
+    });
+
+    it('should return N/A when getting a node with value M', () => {
+      service.loadConfig(emptyConfig);
+      expect(service.getNodeName('1.2.M.4.5.6.7', 3)).toBe('N/A');
+    });
+
+    it('should return a bad string when getting a node name for non-M NaN values', () => {
+      service.loadConfig(emptyConfig);
+      expect(service.getNodeName('1.2.x.4.5.6.7', 3)).toBe('[UNDEFINED]');
+      expect(service.getNodeName('1.2.N.4.5.6.7', 3)).toBe('[UNDEFINED]');
+    });
+
+    it('should return a bad string for a numeric but unavailable node value', () => {
+      service.loadConfig(emptyConfig);
+      expect(service.getNodeName('1.2.999999999.4.5.6.7', 3)).toBe('[UNDEFINED]');
     });
 
     const emptyConfig: MDInstanceDefinition = {
