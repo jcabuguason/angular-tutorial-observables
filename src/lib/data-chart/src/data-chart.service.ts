@@ -69,6 +69,9 @@ export class DataChartService {
                 enabled: false
             },
             series: this.createSingleSeries(chartObj, obs),
+            lang: {
+                noData: this.buildNoDataString(chartObj),
+            },
         }, extraOptions);
     }
 
@@ -201,6 +204,9 @@ export class DataChartService {
                 backgroundColor: 'rgba(255,255,255,0.25)'
             },
             series: this.createMultiSeries(chartObj, observations),
+            lang: {
+                noData: this.buildNoDataString(chartObj),
+            },
         }, extraOptions);
     }
 
@@ -248,6 +254,11 @@ export class DataChartService {
         return `${getObjValue('stn_nam')}`
             + formatId('clim_id')
             + (formatId('tc_id') || formatId('icao_stn_id'));
+    }
+
+    private buildNoDataString(chartObj) {
+        const elems = chartObj.elements.map(elem => `<li>${this.configService.getFullFormattedHeader(elem)}</li>`).join('');
+        return `${this.instantSingle('CHART', 'NO_DATA')}: ${elems}`;
     }
 
     private instantSingle = (header, key) => this.translate.instant(`${header}.${key}`);
