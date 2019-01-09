@@ -105,7 +105,8 @@
   },
   "CHART": {
     "DATE_TIME": "Date et heure (UTC)",
-    "VALUES": "Valeurs"
+    "VALUES": "Valeurs",
+    "NO_DATA": "Aucunes données pour ces éléments"
   },
   "CHART_DEFAULTS": {
     "contextButtonTitle": "Menu graphique",
