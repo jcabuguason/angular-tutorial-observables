@@ -195,6 +195,9 @@ export class DataChartService {
             lang: {
                 noData: this.buildNoDataString(chartObj),
             },
+            credits: {
+                enabled: false,
+            },
         }, extraOptions);
     }
 
