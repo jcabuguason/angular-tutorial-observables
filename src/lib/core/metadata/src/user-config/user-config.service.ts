@@ -117,20 +117,18 @@ export class UserConfigService {
     }
 
     getElementVisibility(elementID: string): ElementVisibility {
-
-        if (!this.userConfig.loadDataElements.checkIncludeExclude(elementID)) {
-            return ElementVisibility.NO_LOAD;
-        }
-
-        if (!this.userConfig.visibleDataElements.checkIncludeExclude(elementID)) {
-            return ElementVisibility.HIDDEN;
-        }
-
-        if (this.hasElementOrder() && this.getElementOrder().indexOf(elementID) === -1) {
-            return ElementVisibility.HIDDEN;
-        }
-
+        if (this.isNoLoad(elementID)) { return ElementVisibility.NO_LOAD; }
+        if (this.isHidden(elementID)) { return ElementVisibility.HIDDEN; }
         return ElementVisibility.DEFAULT;
+    }
+
+    isNoLoad(elementID) {
+        return !this.userConfig.loadDataElements.checkIncludeExclude(elementID);
+    }
+
+    isHidden(elementID) {
+        return (!this.userConfig.visibleDataElements.checkIncludeExclude(elementID)
+            || this.hasElementOrder() && this.getElementOrder().indexOf(elementID) === -1);
     }
 
     getNestingDepth(elementID: string): number {
@@ -360,5 +358,16 @@ export class UserConfigService {
       } catch (e) {
         console.error(`Missing configuration for node value ${nodeValue} at index ${nodeIndex}`);
       }
+    }
+
+    buildFullNodeName(elem) {
+        if (this.isNoLoad(elem)) {
+            return elem.split('.').slice(1)
+            .map((nv, i) => this.getFormattedNodeName(elem, i + 2))
+            .filter(n => n !== '')
+            .join(' / ');
+        } else {
+            return this.getFullFormattedHeader(elem);
+        }
     }
 }
