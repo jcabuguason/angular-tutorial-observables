@@ -358,7 +358,7 @@ export class UserConfigService {
           ? this.nodeInfo[nodeIndex][nodeValue][`displayValue${capitalize(LanguageService.translator.currentLang)}`]
           : NodeLookups.info[nodeIndex][nodeValue];
       } catch (e) {
-        console.error(`Missing configuration for node value ${nodeValue} at index ${nodeIndex}`);
+        console.warn(`Missing configuration for node value ${nodeValue} at index ${nodeIndex}`);
       }
     }
 }
