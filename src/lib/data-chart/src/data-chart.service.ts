@@ -48,6 +48,7 @@ export class DataChartService {
         return new Chart(series);
     }
 
+
     private chartSingle(chartObj: ChartObject, obs, extraOptions) {
         const name = chartObj.elements[0];
         return Object.assign({
@@ -216,7 +217,7 @@ export class DataChartService {
                 this.buildSensor(foundElems, sensor, obs, yTypes);
             }
 
-            const name = this.configService.getFullFormattedHeader(element);
+            const name = this.configService.buildFullNodeName(element);
             const type = this.getElementType(element);
             this.buildSeries(series, sensor, name, yTypes, type);
         }
@@ -256,7 +257,7 @@ export class DataChartService {
     }
 
     private buildNoDataString(chartObj) {
-        const elems = chartObj.elements.map(elem => `<li>${this.configService.getFullFormattedHeader(elem)}</li>`).join('');
+        const elems = chartObj.elements.map(elem => `<li>${this.configService.buildFullNodeName(elem)}</li>`).join('');
         return `${this.instantSingle('CHART', 'NO_DATA')}: ${elems}`;
     }
 
