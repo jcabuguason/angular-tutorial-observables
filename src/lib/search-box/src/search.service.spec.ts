@@ -363,4 +363,23 @@ describe('SearchService', () => {
     );
   });
 
+  it('should return all taxonomies', () => {
+    expect(searchService.getSearchModel().taxonomy).toEqual([caIndex, raIndex, dndAwosIndex]);
+  });
+
+  it('should return taxonomies with matching network', () => {
+    searchService.addSuggestedParameter(sParams.networkParam, ['ca', 'dnd awos']);
+    expect(searchService.getSearchModel().taxonomy).toEqual([caIndex, dndAwosIndex]);
+  });
+
+  it('should return taxonomies with matching organization', () => {
+    searchService.addSuggestedParameter(sParams.organizationParam, ['msc']);
+    expect(searchService.getSearchModel().taxonomy).toEqual([caIndex, raIndex]);
+  });
+
+  it('should return taxonomies with matching network & organization', () => {
+    searchService.addSuggestedParameter(sParams.networkParam, ['ca', 'dnd awos']);
+    searchService.addSuggestedParameter(sParams.organizationParam, ['msc']);
+    expect(searchService.getSearchModel().taxonomy).toEqual([caIndex]);
+  });
 });

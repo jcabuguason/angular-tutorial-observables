@@ -302,21 +302,18 @@ export class SearchService {
       choice.uri.toLowerCase() === code.toLowerCase()
     );
 
-    const result = [];
-    for (let i = 0; i < taxParameters.length; i++) {
-      const name = taxParameters[i].getName();
-      const choices = taxParameters[i].getSelectedModels();
-      let prop = '';
-      if (name === ParameterName.forTaxonomy.NETWORK) { prop = 'networkCode'; }
-      else if (name === ParameterName.forTaxonomy.ORGANIZATION) { prop = 'organizationCode'; }
-      else { continue; }
+    const getAllSelected = (name) => taxParameters
+      .filter(p => p.getName() === ParameterName.forTaxonomy[name])
+      .map(p => p.getSelectedModels())
+      .reduce((allSelected, selected) => allSelected.concat(selected), []);
 
-      result.push(...this.taxonomies
-        .filter(tax => matchingChoice(choices, tax[prop]))
-        .map(current => current.taxonomy)
-      );
-    }
-    return result;
+    const organizations = getAllSelected('ORGANIZATION');
+    const networks = getAllSelected('NETWORK');
+
+    return this.taxonomies
+      .filter(tax => organizations.length === 0 || matchingChoice(organizations, tax['organizationCode']))
+      .filter(tax => networks.length === 0 || matchingChoice(networks, tax['networkCode']))
+      .map(current => current.taxonomy);
   }
 
   /** Parameters used to determine taxonomy */
