@@ -44,7 +44,8 @@ export class UserConfigService {
   ) {
       this.defaultHeader();
 
-      const infoUrl = `${this.config.endpoint}/metadata/mapping/v1.0/element_taxonomy/commons_element_identification`;
+      // const infoUrl = `${this.config.endpoint}/metadata/mapping/v1.0/element_taxonomy/commons_element_identification`;
+      const infoUrl = `${this.config.endpoint}/commons_element_taxonomy.json`;
       this.nodeInfo$ = this.http.get<any>(infoUrl).pipe(
         tap((info) => this.nodeInfo = info),
         first(),
