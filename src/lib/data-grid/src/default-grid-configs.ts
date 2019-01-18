@@ -84,17 +84,5 @@ export const FULL_CONFIG: MDInstanceDefinition = {
       language: { english: '', french: '' },
       instelements: [],
     },
-
-    {
-      group: 'visible-elements',
-      name: 'exclude',
-      value: '^1.(7|8|9)',
-      def_id: '',
-      id: '',
-      index: '',
-      uom: '',
-      language: { english: '', french: '' },
-      instelements: [],
-    },
   ],
 };
