@@ -1,8 +1,11 @@
-import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable, Injector, Inject } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
+import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
+import { MDDefinition } from '../model/MDDefinition';
+import { MDInstanceDefinition } from '../model/MDInstanceDefinition';
 import { OutgoingMetadataInstance } from '../model/OutgoingMetadataInstance';
 import { MDElement } from '../model/MDElement';
 import { MetadataDefinitionList } from '../model/MetadataDefinitionList';

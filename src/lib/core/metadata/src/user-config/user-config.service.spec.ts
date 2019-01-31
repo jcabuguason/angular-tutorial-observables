@@ -1,8 +1,9 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { UserConfigService } from './user-config.service';
+import { MetadataService } from '../service';
 import { MDInstanceDefinition } from '../model';
-import { ElementVisibility } from './user-config.model';
+import { Lang, ElementVisibility, LanguageLabel } from './user-config.model';
 import { LanguageService } from 'msc-dms-commons-angular/shared/language';
 import { MR_MAPPING_CONFIG, MRMappingConfig } from './mr-mapping.config';
 

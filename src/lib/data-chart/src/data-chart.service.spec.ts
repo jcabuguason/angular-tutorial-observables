@@ -1,5 +1,7 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 
+import { Chart } from 'angular-highcharts';
+
 import { DataChartService } from './data-chart.service';
 import { UserConfigService } from 'msc-dms-commons-angular/core/metadata';
 import { UnitCodeConversionService, DataElements } from 'msc-dms-commons-angular/core/obs-util';

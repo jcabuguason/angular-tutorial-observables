@@ -1,10 +1,10 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { FromUnits, UnitConversion, CodeSources, CodeResult, UnitConversionResult } from './unit-code-conversion.model';
 import { UNIT_CODE_CONVERSION_CONFIG, UnitCodeConversionConfig } from './unit-code-conversion.config';
 
-import { DataElements } from '../dms-observation.model';
+import { DMSObs, DataElements } from '../dms-observation.model';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
