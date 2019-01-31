@@ -4,7 +4,6 @@ import { ParseError } from '../error/ParseError';
 
 @Injectable()
 export class MDInstanceElementParser {
-
   static parse(raw): MDInstanceElement {
     const instelements: MDInstanceElement[] = [];
     if (raw['element'] != null) {
@@ -35,9 +34,9 @@ export class MDInstanceElementParser {
       value: raw['@value'],
       language: {
         english: english,
-        french: french
+        french: french,
       },
-      instelements: instelements
+      instelements: instelements,
     };
 
     return instelement;

@@ -5,8 +5,8 @@ import { MatDialogModule } from '@angular/material';
 import { TextDialogComponent } from './text-dialog.component';
 
 @NgModule({
-  imports: [ CommonModule, MatDialogModule ],
-  declarations: [ TextDialogComponent ],
-  exports: [ TextDialogComponent ]
+  imports: [CommonModule, MatDialogModule],
+  declarations: [TextDialogComponent],
+  exports: [TextDialogComponent],
 })
-export class TextDialogModule { }
+export class TextDialogModule {}

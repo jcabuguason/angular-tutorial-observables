@@ -30,9 +30,10 @@ export class LanguageService {
 
   findBrowserLang() {
     const browserLang = this.translate.getBrowserLang();
-    if (browserLang === 'fr') { this.isEnglish = false; }
+    if (browserLang === 'fr') {
+      this.isEnglish = false;
+    }
 
     return this.langCode();
   }
-
 }

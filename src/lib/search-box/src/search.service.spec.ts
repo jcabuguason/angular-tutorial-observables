@@ -19,24 +19,24 @@ describe('SearchService', () => {
   let searchService: SearchService;
   let location: Location;
 
-  const nameValueObj = (name, value) => ({'name': name, 'value': value});
-  const paramValueObj = (param, value) => ({ 'param': param, 'value': value });
-  const choiceModels = (array) => array.map(val => new ChoiceModel(val));
+  const nameValueObj = (name, value) => ({ name: name, value: value });
+  const paramValueObj = (param, value) => ({ param: param, value: value });
+  const choiceModels = array => array.map(val => new ChoiceModel(val));
 
   const caIndex = 'dms_data+msc+observation+atmospheric+surface_weather+ca-1.1-ascii';
   const raIndex = 'dms_data+msc+observation+atmospheric+surface_weather+ra-1.1-ascii';
   const dndAwosIndex = 'dms_data+dnd+observation+atmospheric+surface_weather+awos-1.0-binary';
 
   let sParams = {
-    organizationParam : null,
-    networkParam : null,
-    stationIdParam : null,
-    stationNameParam : null,
-    startDateParam : null,
-    endDateParam : null,
-    hoursParam : null,
-    provinceParam : null,
-    sizeParam : null
+    organizationParam: null,
+    networkParam: null,
+    stationIdParam: null,
+    stationNameParam: null,
+    startDateParam: null,
+    endDateParam: null,
+    hoursParam: null,
+    provinceParam: null,
+    sizeParam: null,
   };
 
   class MockUrlService {
@@ -45,9 +45,7 @@ describe('SearchService', () => {
       if (shortcut != null) {
         all.push(nameValueObj('shortcut', ['shortcutLabel']));
       } else {
-        params.forEach(p => all.push(
-          ...p.selected.map(() => nameValueObj('paramName', ['param Values']))
-        ));
+        params.forEach(p => all.push(...p.selected.map(() => nameValueObj('paramName', ['param Values']))));
       }
       return all;
     }
@@ -58,21 +56,21 @@ describe('SearchService', () => {
   }
 
   beforeEach(() => {
-    const organization: ChoiceModel[] = choiceModels([ 'msc', 'dnd'].sort());
+    const organization: ChoiceModel[] = choiceModels(['msc', 'dnd'].sort());
     const networks: ChoiceModel[] = choiceModels(['ca', 'ra', 'dnd awos'].sort());
-    const provinces: ChoiceModel[] = choiceModels([ 'AB', 'BC', 'MB']);
+    const provinces: ChoiceModel[] = choiceModels(['AB', 'BC', 'MB']);
     const required = false;
 
     sParams = {
-      organizationParam : new SearchParameter(ParameterName.forTaxonomy.ORGANIZATION, organization, true, required),
-      networkParam : new SearchParameter(ParameterName.forTaxonomy.NETWORK, networks, true, false),
-      stationIdParam : new SearchParameter(ParameterName.STATION_ID, [], false, required),
-      stationNameParam : new SearchParameter(ParameterName.STATION_NAME, [], false, required),
-      startDateParam : new SearchDatetime(ParameterName.FROM, required),
-      endDateParam : new SearchDatetime(ParameterName.TO, required),
-      hoursParam : new SearchHoursRange(ParameterName.HOURS_RANGE, required),
-      provinceParam : new SearchParameter(ParameterName.PROVINCE, provinces, true, required),
-      sizeParam : new SearchParameter(ParameterName.SIZE, [], false, required, 1),
+      organizationParam: new SearchParameter(ParameterName.forTaxonomy.ORGANIZATION, organization, true, required),
+      networkParam: new SearchParameter(ParameterName.forTaxonomy.NETWORK, networks, true, false),
+      stationIdParam: new SearchParameter(ParameterName.STATION_ID, [], false, required),
+      stationNameParam: new SearchParameter(ParameterName.STATION_NAME, [], false, required),
+      startDateParam: new SearchDatetime(ParameterName.FROM, required),
+      endDateParam: new SearchDatetime(ParameterName.TO, required),
+      hoursParam: new SearchHoursRange(ParameterName.HOURS_RANGE, required),
+      provinceParam: new SearchParameter(ParameterName.PROVINCE, provinces, true, required),
+      sizeParam: new SearchParameter(ParameterName.SIZE, [], false, required, 1),
     };
 
     const list = Object.keys(sParams).map(key => sParams[key]);
@@ -85,16 +83,14 @@ describe('SearchService', () => {
       ],
       addParamsOnBar: true,
       useForm: false,
-      shortcuts: [
-        new ShortcutModel('Shortcut1', [{ 'name': ParameterName.forTaxonomy.NETWORK, 'values': ['ca', 'ra'] }])
-      ]
+      shortcuts: [new ShortcutModel('Shortcut1', [{ name: ParameterName.forTaxonomy.NETWORK, values: ['ca', 'ra'] }])],
     };
 
     TestBed.configureTestingModule({
       providers: [
         SearchService,
         MessageService,
-        { provide: Location, useValue: { go: () => {}}},
+        { provide: Location, useValue: { go: () => {} } },
         { provide: SEARCH_BOX_CONFIG, useValue: config },
         { provide: SearchURLService, useClass: MockUrlService },
       ],
@@ -119,12 +115,12 @@ describe('SearchService', () => {
     expect(searchService.displayParams).toEqual([sParams.startDateParam]);
   });
 
-  it ('should remove parameters', () => {
+  it('should remove parameters', () => {
     const param1 = sParams.startDateParam;
     const param2 = sParams.endDateParam;
     const remove = sParams.stationNameParam;
 
-    searchService.displayParams = [ param1, remove, param2 ];
+    searchService.displayParams = [param1, remove, param2];
     searchService.removeDisplayParameter(remove);
     expect(searchService.displayParams).toEqual([param1, param2]);
 
@@ -157,7 +153,7 @@ describe('SearchService', () => {
 
   it('should add date and hours range with values', () => {
     const dateValue = '2018-01-31T00:00';
-    const hoursValue = { 'hh_before': 1, 'hh_after': 2};
+    const hoursValue = { hh_before: 1, hh_after: 2 };
 
     searchService.addSuggestedParameter(sParams.startDateParam, [dateValue]);
     searchService.addSuggestedParameter(sParams.hoursParam, [hoursValue]);
@@ -169,7 +165,7 @@ describe('SearchService', () => {
   });
 
   it('should limit range and size on add', () => {
-    const hoursValue = { 'hh_before': '-100', 'hh_after': '100'};
+    const hoursValue = { hh_before: '-100', hh_after: '100' };
     searchService.addSuggestedParameter(sParams.hoursParam, [hoursValue]);
     expect(sParams.hoursParam.hoursBefore).toEqual(sParams.hoursParam.minHour);
     expect(sParams.hoursParam.hoursAfter).toEqual(sParams.hoursParam.maxHour);
@@ -196,7 +192,7 @@ describe('SearchService', () => {
 
   it('should adjust datetime in model if given hours range', () => {
     searchService.addSuggestedParameter(sParams.startDateParam, ['2018-01-03T12:00']);
-    searchService.addSuggestedParameter(sParams.hoursParam, [{ 'hh_before': '12', 'hh_after': '36'}]);
+    searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: '12', hh_after: '36' }]);
 
     const model = searchService.getSearchModel();
     expect(model.from).toEqual(new Date('2018-01-03T00:00'));
@@ -232,10 +228,10 @@ describe('SearchService', () => {
     // should be formatted differently, but for testing purposes urlService will return this back
     const params = [
       paramValueObj(sParams.startDateParam, ['2018-01-31T00:00']),
-      paramValueObj(sParams.hoursParam, [{'hh_before': '12', 'hh_after': '21'}]),
+      paramValueObj(sParams.hoursParam, [{ hh_before: '12', hh_after: '21' }]),
       paramValueObj(sParams.networkParam, ['dnd awos']),
       paramValueObj(sParams.stationIdParam, ['123', 'abc']),
-      paramValueObj(sParams.sizeParam, ['100'])
+      paramValueObj(sParams.sizeParam, ['100']),
     ];
     spyOn(location, 'go');
     spyOn(searchService, 'submitSearch');
@@ -248,7 +244,7 @@ describe('SearchService', () => {
       sParams.hoursParam,
       sParams.networkParam,
       sParams.stationIdParam,
-      sParams.sizeParam
+      sParams.sizeParam,
     ]);
     expect(sParams.startDateParam.datetime).toEqual(new Date('2018-01-31T00:00'));
     expect(sParams.hoursParam.hoursBefore).toEqual(12);
@@ -266,12 +262,15 @@ describe('SearchService', () => {
     searchService.addSuggestedParameter(sParams.provinceParam, ['AB']);
 
     const expectedModel = new SearchModel(
-      [ caIndex, dndAwosIndex ],
+      [caIndex, dndAwosIndex],
       [
         new SearchElement(SearchableElement.STATION_NAME.id, 'metadataElements', 'value', 'station name'),
-        new SearchElement(SearchableElement.PROVINCE.id, 'metadataElements', 'value', 'AB')
+        new SearchElement(SearchableElement.PROVINCE.id, 'metadataElements', 'value', 'AB'),
       ],
-      new Date('2018-01-01T00:00'), new Date('2018-02-01T00:00'), 300, 'AND'
+      new Date('2018-01-01T00:00'),
+      new Date('2018-02-01T00:00'),
+      300,
+      'AND'
     );
 
     expect(searchService.getSearchModel()).toEqual(expectedModel);
@@ -279,15 +278,15 @@ describe('SearchService', () => {
 
   it('differentiate between station ids', () => {
     const createElement = (value, type) => ({
-      'station': value,
-      'searchElement': new SearchElement(SearchableElement.STATION_TYPE[type].id, 'metadataElements', 'value', value)
+      station: value,
+      searchElement: new SearchElement(SearchableElement.STATION_TYPE[type].id, 'metadataElements', 'value', value),
     });
     const stations = [
       createElement('xyz', 'TC_ID'),
       createElement('12345', 'WMO_ID'),
       createElement('abcd', 'ICAO_ID'),
       createElement('123abcd', 'MSC_ID'),
-      createElement('someId', 'MSC_ID')
+      createElement('someId', 'MSC_ID'),
     ];
     searchService.addSuggestedParameter(sParams.stationIdParam, stations.map(s => s.station));
 
@@ -298,8 +297,8 @@ describe('SearchService', () => {
     const mscId = SearchableElement.STATION_TYPE.MSC_ID.id;
     const nameId = SearchableElement.STATION_NAME.id;
     const createElement = (value, id, adjustedValue) => ({
-      'station': value,
-      'searchElement': new SearchElement(id, 'metadataElements', 'value', adjustedValue)
+      station: value,
+      searchElement: new SearchElement(id, 'metadataElements', 'value', adjustedValue),
     });
 
     const stations = [
@@ -313,8 +312,7 @@ describe('SearchService', () => {
     searchService.addSuggestedParameter(sParams.stationNameParam, [stationName.station]);
 
     expect(searchService.getSearchModel().elements).toEqual(
-      stations.map(s => s.searchElement)
-        .concat(stationName.searchElement)
+      stations.map(s => s.searchElement).concat(stationName.searchElement)
     );
   });
 
@@ -322,7 +320,7 @@ describe('SearchService', () => {
     searchService.config.useForm = true;
     searchService.addSuggestedParameter(sParams.provinceParam, ['BC']);
     searchService.addSuggestedParameter(sParams.startDateParam, ['2018-01-01T00:10']);
-    searchService.addSuggestedParameter(sParams.hoursParam, [{'hh_before': 1, 'hh_after': 2}]);
+    searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: 1, hh_after: 2 }]);
     searchService.openForm();
 
     expect(sParams.provinceParam.formSelected).toEqual(['BC']);
@@ -348,8 +346,8 @@ describe('SearchService', () => {
     const nameId = SearchableElement.STATION_NAME.id;
     const wmoId = SearchableElement.STATION_TYPE.WMO_ID.id;
     const createElement = (value, id, adjustedValue) => ({
-      'station': value,
-      'searchElement': new SearchElement(id, 'metadataElements', 'value', adjustedValue)
+      station: value,
+      searchElement: new SearchElement(id, 'metadataElements', 'value', adjustedValue),
     });
 
     const stationId = createElement(' 123 45 ', wmoId, '12345');
@@ -358,9 +356,7 @@ describe('SearchService', () => {
     searchService.addSuggestedParameter(sParams.stationIdParam, [stationId.station]);
     searchService.addSuggestedParameter(sParams.stationNameParam, [stationName.station]);
 
-    expect(searchService.getSearchModel().elements).toEqual(
-      [stationId.searchElement, stationName.searchElement]
-    );
+    expect(searchService.getSearchModel().elements).toEqual([stationId.searchElement, stationName.searchElement]);
   });
 
   it('should return all taxonomies', () => {

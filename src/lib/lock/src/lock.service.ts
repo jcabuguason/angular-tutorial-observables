@@ -17,21 +17,25 @@ export class LockService {
     @Inject(LOCK_CONFIG)
     private config: LockConfig,
     private http: HttpClient
-  ) { }
+  ) {}
 
   acquireLock(body: AcquireLockRequest): Observable<AcquireLockResponse> {
-    return this.http
-      .post<AcquireLockResponse>(`${this.config.endpoint}?url=/lock/acquire_lock`, body, {withCredentials: true});
+    return this.http.post<AcquireLockResponse>(`${this.config.endpoint}?url=/lock/acquire_lock`, body, {
+      withCredentials: true,
+    });
   }
 
   releaseLock(body: ReleaseLockRequest): Observable<ReleaseLockResponse> {
-    return this.http
-      .post<ReleaseLockResponse>(`${this.config.endpoint}?url=/lock/release_lock`, body, {withCredentials: true});
+    return this.http.post<ReleaseLockResponse>(`${this.config.endpoint}?url=/lock/release_lock`, body, {
+      withCredentials: true,
+    });
   }
 
   lockInfo(params: LockInfoParams): Observable<LockInfoResponse> {
     const httpParams = JSON.parse(JSON.stringify(params));
-    return this.http
-      .get<LockInfoResponse>(`${this.config.endpoint}?url=/lock/lock_info`, {params: httpParams, withCredentials: true});
+    return this.http.get<LockInfoResponse>(`${this.config.endpoint}?url=/lock/lock_info`, {
+      params: httpParams,
+      withCredentials: true,
+    });
   }
 }

@@ -1,10 +1,10 @@
 export {
-    ElementVisibility,
-    Lang,
-    NodeIndexMap,
-    GenericNodeConfig,
-    NodeValueMap,
-    SubHeaderConfig,
+  ElementVisibility,
+  Lang,
+  NodeIndexMap,
+  GenericNodeConfig,
+  NodeValueMap,
+  SubHeaderConfig,
 } from './user-config.model';
 export { UserConfigService } from './user-config.service';
 export { NodeLookups } from './node.const';

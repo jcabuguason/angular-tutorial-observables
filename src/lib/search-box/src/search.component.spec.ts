@@ -27,10 +27,10 @@ import { SearchURLService } from './search-url.service';
 import { MockUrlService, MockMessageService } from './mock-services';
 import { MessageService } from 'primeng/components/common/messageservice';
 
-import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
-import {CombinedHttpLoader} from 'msc-dms-commons-angular/shared/language';
-import {HttpClient} from '@angular/common/http';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { CombinedHttpLoader } from 'msc-dms-commons-angular/shared/language';
+import { HttpClient } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('SearchComponent', () => {
   let searchComponent: SearchComponent;
@@ -60,28 +60,28 @@ describe('SearchComponent', () => {
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (httpClient) => new CombinedHttpLoader(httpClient, [{ prefix : '../../../assets/i18n/', suffix: '.json'}]),
-            deps: [HttpClient]
-          }
+            useFactory: httpClient =>
+              new CombinedHttpLoader(httpClient, [{ prefix: '../../../assets/i18n/', suffix: '.json' }]),
+            deps: [HttpClient],
+          },
         }),
       ],
-      declarations: [
-        SearchComponent
-      ],
+      declarations: [SearchComponent],
       providers: [
         TranslateService,
         SearchService,
         MessageService,
         { provide: SEARCH_BOX_CONFIG, useValue: {} },
-        { provide: Location, useValue: { go: () => {}} },
+        { provide: Location, useValue: { go: () => {} } },
         { provide: SearchURLService, useClass: MockUrlService },
-      ]
-    }).compileComponents()
-    .then(() => {
-      fixture = TestBed.createComponent(SearchComponent);
-      searchComponent = fixture.componentInstance;
-      searchService = fixture.debugElement.injector.get(SearchService);
-    });
+      ],
+    })
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(SearchComponent);
+        searchComponent = fixture.componentInstance;
+        searchService = fixture.debugElement.injector.get(SearchService);
+      });
   }));
 
   it('should create', () => {
@@ -93,7 +93,7 @@ describe('SearchComponent', () => {
     expect(box.nativeElement).toBeDefined();
 
     spyOn(searchService, 'submitSearch');
-    box.nativeElement.dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter'}));
+    box.nativeElement.dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter' }));
     expect(searchService.submitSearch).toHaveBeenCalled();
   });
 
@@ -102,5 +102,4 @@ describe('SearchComponent', () => {
     fixture.detectChanges();
     expect(searchComponent.checkOverflow).toHaveBeenCalled();
   });
-
 });

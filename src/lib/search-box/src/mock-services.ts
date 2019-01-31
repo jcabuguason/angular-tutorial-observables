@@ -1,8 +1,8 @@
 export class MockMessageService {
   messageSummaries = {
-    'missingRequired': '',
-    'unfilledField': '',
-    'cannotAddValue': ''
+    missingRequired: '',
+    unfilledField: '',
+    cannotAddValue: '',
   };
   displayMessage(messageSummary, values) {}
   clearMessages() {}

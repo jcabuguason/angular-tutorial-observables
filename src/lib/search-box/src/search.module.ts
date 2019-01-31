@@ -46,16 +46,8 @@ import { MessageService } from 'primeng/components/common/messageservice';
     MultiSelectModule,
     SpinnerModule,
   ],
-  providers: [
-    SearchService,
-    SearchURLService,
-    MessageService,
-  ],
-  declarations: [
-    SearchComponent
-  ],
-  exports: [
-    SearchComponent
-  ]
+  providers: [SearchService, SearchURLService, MessageService],
+  declarations: [SearchComponent],
+  exports: [SearchComponent],
 })
-export class SearchModule { }
+export class SearchModule {}

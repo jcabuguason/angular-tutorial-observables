@@ -1,40 +1,75 @@
 <div class="search-component">
   <div class="search-container" tabindex="0" (keyup.enter)="searchService.submitSearch()">
-
     <div class="bar-buttons">
-      <button *ngIf="searchService.useForm" pButton type="button" class="bar-button" icon="fa fa-bars" (click)="searchService.openForm()"></button>
-      <button pButton type="button" class="bar-button" icon="fa fa-search" (click)="searchService.submitSearch()"></button>
-      <button #expandButton (click)="clickExpandButton(expandOnClick)"
-        pButton type="button" class="bar-button" icon="{{expandButtonIcon}}" *ngIf="showExpandButton"></button>
+      <button
+        *ngIf="searchService.useForm"
+        pButton
+        type="button"
+        class="bar-button"
+        icon="fa fa-bars"
+        (click)="searchService.openForm()"
+      ></button>
+      <button
+        pButton
+        type="button"
+        class="bar-button"
+        icon="fa fa-search"
+        (click)="searchService.submitSearch()"
+      ></button>
+      <button
+        #expandButton
+        (click)="clickExpandButton(expandOnClick)"
+        pButton
+        type="button"
+        class="bar-button"
+        icon="{{ expandButtonIcon }}"
+        *ngIf="showExpandButton"
+      ></button>
     </div>
 
-    <div class="parameters-container" #paramsContainer [ngStyle]="{'height': containerHeight}">
-    <!-- search parameters in bar -->
-      <div *ngFor = "let p of searchService.displayParams; index as i" class="selected-parameter">
-
+    <div class="parameters-container" #paramsContainer [ngStyle]="{ height: containerHeight }">
+      <!-- search parameters in bar -->
+      <div *ngFor="let p of searchService.displayParams; index as i" class="selected-parameter">
         <!-- editable search parameters -->
         <div class="ui-inputgroup" *ngIf="p.getType() === paramType.SEARCH_PARAMETER">
-          <span class="ui-inputgroup-addon">{{p.getDisplayName() | translate}}</span>
+          <span class="ui-inputgroup-addon">{{ p.getDisplayName() | translate }}</span>
 
           <ng-container *ngIf="p.getType() === paramType.SEARCH_PARAMETER">
             <ng-container *ngIf="p.getChoices().length === 0; else hasChoices">
               <!-- no choice, can enter only one value -->
-              <input *ngIf="p.getTimesUsable() === 1"
-                [(ngModel)]="p.selected[0]" type="text" pInputText size="15" placeholder="{{p.getPlaceholder()}}">
+              <input
+                *ngIf="p.getTimesUsable() === 1"
+                [(ngModel)]="p.selected[0]"
+                type="text"
+                pInputText
+                size="15"
+                placeholder="{{ p.getPlaceholder() }}"
+              />
 
               <!-- no choice, can enter multiple values -->
-              <p-chips *ngIf="p.getTimesUsable() > 1"
-                [(ngModel)]="p.selected" [allowDuplicate]="false" [addOnTab]="true" placeholder="{{p.getPlaceholder()}}"
-                [max]="p.getTimesUsable()" [addOnBlur]="true">
+              <p-chips
+                *ngIf="p.getTimesUsable() > 1"
+                [(ngModel)]="p.selected"
+                [allowDuplicate]="false"
+                [addOnTab]="true"
+                placeholder="{{ p.getPlaceholder() }}"
+                [max]="p.getTimesUsable()"
+                [addOnBlur]="true"
+              >
               </p-chips>
-              <button pButton type="button" icon="pi pi-times" class="ui-button-danger"
-                (click)="searchService.removeDisplayParameter(p); checkOverflow()">
-              </button>
+              <button
+                pButton
+                type="button"
+                icon="pi pi-times"
+                class="ui-button-danger"
+                (click)="searchService.removeDisplayParameter(p); checkOverflow()"
+              ></button>
             </ng-container>
 
             <ng-template #hasChoices>
               <!-- Need to do these 2 separately, doesn't send back the correct values anymore when using ternary operators in ngIf and ngModel -->
-              <p-dropdown *ngIf="p.getTimesUsable() === 1"
+              <p-dropdown
+                *ngIf="p.getTimesUsable() === 1"
                 [styleClass]="'search-bar single'"
                 [(ngModel)]="p.selected[0]"
                 [options]="p.multiSelectChoices"
@@ -42,63 +77,95 @@
                 [resetFilterOnHide]="true"
                 [filter]="true"
                 [autoDisplayFirst]="false"
-                appendTo="body">
+                appendTo="body"
+              >
                 <ng-template let-choice pTemplate="item">
-                  <span title="{{p.getChoiceTooltip(choice.value) | translate}}">{{choice.value | translate}}</span>
+                  <span title="{{ p.getChoiceTooltip(choice.value) | translate }}">{{ choice.value | translate }}</span>
                 </ng-template>
                 <ng-template let-choice pTemplate="selectedItem">
-                  <span title="{{p.getChoiceTooltip(choice.value) | translate}}">{{choice.value | translate}}</span>
+                  <span title="{{ p.getChoiceTooltip(choice.value) | translate }}">{{ choice.value | translate }}</span>
                 </ng-template>
               </p-dropdown>
 
-              <p-autoComplete *ngIf="p.getTimesUsable() > 1"
+              <p-autoComplete
+                *ngIf="p.getTimesUsable() > 1"
                 [styleClass]="'search-bar multiple'"
                 [(ngModel)]="p.selected"
-                [suggestions]="p.filteredSuggestions" (completeMethod)="createSuggestions($event, p)"
-                [minLength]="1" [dropdown]="true" size="15" [forceSelection]="p.isRestricted()" placeholder="{{p.getPlaceholder()}}"
-                [multiple]="true" appendTo="body">
+                [suggestions]="p.filteredSuggestions"
+                (completeMethod)="createSuggestions($event, p)"
+                [minLength]="1"
+                [dropdown]="true"
+                size="15"
+                [forceSelection]="p.isRestricted()"
+                placeholder="{{ p.getPlaceholder() }}"
+                [multiple]="true"
+                appendTo="body"
+              >
                 <ng-template let-choices pTemplate="selectedItem">
-                  <span title="{{p.getChoiceTooltip(choices) | translate}}" style="margin-right: 2em;">{{choices | translate}}</span>
+                  <span title="{{ p.getChoiceTooltip(choices) | translate }}" style="margin-right: 2em;">{{
+                    choices | translate
+                  }}</span>
                 </ng-template>
                 <ng-template let-choices pTemplate="item">
-                  <span title="{{p.getChoiceTooltip(choices) | translate}}">{{choices | translate}}</span>
+                  <span title="{{ p.getChoiceTooltip(choices) | translate }}">{{ choices | translate }}</span>
                 </ng-template>
               </p-autoComplete>
 
-              <button pButton type="button" icon="pi pi-times" class="ui-button-danger beside-autocomplete"
+              <button
+                pButton
+                type="button"
+                icon="pi pi-times"
+                class="ui-button-danger beside-autocomplete"
                 [class.beside-autocomplete]="p.getTimesUsable() > 1"
-                (click)="searchService.removeDisplayParameter(p); checkOverflow()">
-              </button>
+                (click)="searchService.removeDisplayParameter(p); checkOverflow()"
+              ></button>
             </ng-template>
           </ng-container>
         </div>
 
         <div class="ui-inputgroup" *ngIf="p.getType() !== paramType.SEARCH_PARAMETER">
-          <span class="ui-inputgroup-addon">{{p.getDisplayName() | translate}}</span>
+          <span class="ui-inputgroup-addon">{{ p.getDisplayName() | translate }}</span>
 
           <ng-container *ngIf="p.getType() === paramType.SEARCH_HOURS_RANGE">
-            <p-spinner size="7" placeholder="hrs before"
-              [(ngModel)]="p.hoursBefore" [min]="p.minHour" [max]="p.maxHour">
+            <p-spinner
+              size="7"
+              placeholder="hrs before"
+              [(ngModel)]="p.hoursBefore"
+              [min]="p.minHour"
+              [max]="p.maxHour"
+            >
             </p-spinner>
-            <p-spinner size="7" placeholder="hrs after"
-              [(ngModel)]="p.hoursAfter" [min]="p.minHour" [max]="p.maxHour"
-              [disabled]="searchService.useForm">
+            <p-spinner
+              size="7"
+              placeholder="hrs after"
+              [(ngModel)]="p.hoursAfter"
+              [min]="p.minHour"
+              [max]="p.maxHour"
+              [disabled]="searchService.useForm"
+            >
             </p-spinner>
           </ng-container>
 
           <ng-container *ngIf="p.getType() === paramType.SEARCH_DATETIME">
-            <p-calendar appendTo="body"
-              [(ngModel)]="p.datetime" [showTime]="true" placeholder="{{p.getPlaceholder()}}"
-              [defaultDate]="defaultDate" [locale]="calendarLocale">
+            <p-calendar
+              appendTo="body"
+              [(ngModel)]="p.datetime"
+              [showTime]="true"
+              placeholder="{{ p.getPlaceholder() }}"
+              [defaultDate]="defaultDate"
+              [locale]="calendarLocale"
+            >
             </p-calendar>
           </ng-container>
 
-          <button pButton type="button" icon="pi pi-times" class="ui-button-danger"
-            (click)="searchService.removeDisplayParameter(p); checkOverflow()">
-          </button>
-
+          <button
+            pButton
+            type="button"
+            icon="pi pi-times"
+            class="ui-button-danger"
+            (click)="searchService.removeDisplayParameter(p); checkOverflow()"
+          ></button>
         </div>
-
       </div>
     </div>
   </div>
@@ -106,17 +173,26 @@
   <!-- suggestions/categories that show up-->
   <ng-container *ngIf="searchService.addParamsOnBar">
     <div class="search-parameter-suggestions" *ngFor="let suggestion of searchService.suggestedParams">
-      <button pButton type="button" label="{{suggestion.getDisplayName() | translate}}" class="suggestion-button"
-        (click)="searchService.addSuggestedParameter(suggestion); checkOverflow(); expandParamsContainer()">
-      </button>
+      <button
+        pButton
+        type="button"
+        label="{{ suggestion.getDisplayName() | translate }}"
+        class="suggestion-button"
+        (click)="searchService.addSuggestedParameter(suggestion); checkOverflow(); expandParamsContainer()"
+      ></button>
     </div>
   </ng-container>
 </div>
 
 <!-- Popup Search Form -->
-<p-dialog header="{{'SEARCH_BAR.SEARCH' | translate}}" [(visible)]="searchService.displayForm" [modal]="true" [width]="600"
-  class="search-form" [blockScroll]="true">
-
+<p-dialog
+  header="{{ 'SEARCH_BAR.SEARCH' | translate }}"
+  [(visible)]="searchService.displayForm"
+  [modal]="true"
+  [width]="600"
+  class="search-form"
+  [blockScroll]="true"
+>
   <!-- <p-accordion>
     <p-accordionTab header="Shortcuts" [selected]="true">
       <div class="shortcut-tab">
@@ -127,96 +203,130 @@
     </p-accordionTab>
 
     <p-accordionTab header="Basic Search"> -->
-      <div *ngFor = "let p of searchService.availableParams; index as i" class="selected-parameter" tabindex="0"
-        (keyup.enter)="searchService.submitSearchForm()">
+  <div
+    *ngFor="let p of searchService.availableParams; index as i"
+    class="selected-parameter"
+    tabindex="0"
+    (keyup.enter)="searchService.submitSearchForm()"
+  >
+    <div>
+      <ng-container *ngIf="p.getType() === paramType.SEARCH_QUERY_TYPE; else notCheckbox">
+        <!-- for checkbox, use the label property so it's displayed right next to the checkbox -->
+        <p-checkbox [(ngModel)]="p.formChecked" binary="true" label="{{ p.getDisplayName() | translate }}"></p-checkbox>
+      </ng-container>
+      <ng-template #notCheckbox> {{ p.getDisplayName() | translate }} </ng-template>
+    </div>
 
-        <div> 
-          <ng-container *ngIf="p.getType() === paramType.SEARCH_QUERY_TYPE; else notCheckbox">
-            <!-- for checkbox, use the label property so it's displayed right next to the checkbox -->
-            <p-checkbox [(ngModel)]="p.formChecked" binary="true" label="{{p.getDisplayName() | translate}}"></p-checkbox>
-          </ng-container>
-          <ng-template #notCheckbox>
-            {{p.getDisplayName() | translate}} 
+    <ng-container *ngIf="p.getType() === paramType.SEARCH_PARAMETER">
+      <ng-container *ngIf="p.getChoices().length === 0; else hasChoices">
+        <!-- no choice, one value -->
+        <input
+          *ngIf="p.getTimesUsable() === 1"
+          [(ngModel)]="p.formSelected[0]"
+          type="text"
+          pInputText
+          size="20"
+          placeholder="{{ p.getPlaceholder() }}"
+        />
+
+        <!-- no choice, multiple value -->
+        <p-chips
+          *ngIf="p.getTimesUsable() > 1"
+          [(ngModel)]="p.formSelected"
+          [allowDuplicate]="false"
+          [max]="p.getTimesUsable()"
+          [addOnTab]="true"
+          [addOnBlur]="true"
+          placeholder="{{ p.getPlaceholder() }}"
+        ></p-chips>
+      </ng-container>
+
+      <ng-template #hasChoices>
+        <p-dropdown
+          *ngIf="p.getTimesUsable() === 1"
+          [options]="p.choicesWithEmpty"
+          [autoDisplayFirst]="false"
+          [(ngModel)]="p.formSelected[0]"
+          [filter]="true"
+          [resetFilterOnHide]="true"
+          appendTo="body"
+        >
+          <ng-template let-choice pTemplate="selectedItem">
+            <span title="{{ p.getChoiceTooltip(choice.value) | translate }}">{{ choice.value | translate }}</span>
           </ng-template>
-        </div>
-
-        <ng-container *ngIf="p.getType() === paramType.SEARCH_PARAMETER">          
-  
-          <ng-container *ngIf="p.getChoices().length === 0; else hasChoices">
-            <!-- no choice, one value -->
-            <input *ngIf="p.getTimesUsable() === 1"
-              [(ngModel)]="p.formSelected[0]" type="text" pInputText size="20"
-              placeholder="{{p.getPlaceholder()}}">
-
-            <!-- no choice, multiple value -->
-            <p-chips *ngIf="p.getTimesUsable() > 1"
-              [(ngModel)]="p.formSelected" [allowDuplicate]="false" [max]="p.getTimesUsable()"
-              [addOnTab]="true" [addOnBlur]="true"
-              placeholder="{{p.getPlaceholder()}}"
-              ></p-chips>
-          </ng-container>
-
-          <ng-template #hasChoices>
-            <p-dropdown *ngIf="p.getTimesUsable() === 1" [options]="p.choicesWithEmpty" [autoDisplayFirst]="false"
-              [(ngModel)]="p.formSelected[0]" [filter]="true" [resetFilterOnHide]="true" appendTo="body">
-              <ng-template let-choice pTemplate="selectedItem">
-                <span title="{{p.getChoiceTooltip(choice.value) | translate}}">{{choice.value | translate}}</span>
-              </ng-template>
-              <ng-template let-choice pTemplate="item">
-                <span *ngIf="!!choice.value; else emptyValue"
-                  title="{{p.getChoiceTooltip(choice.value) | translate}}">
-                    {{choice.value | translate}}
-                </span>
-                <ng-template #emptyValue>-</ng-template>
-              </ng-template>
-            </p-dropdown>
-
-            <p-multiSelect *ngIf="p.getTimesUsable() > 1" [options]="p.multiSelectChoices"
-              [defaultLabel]="multiSelectDefaultLabel" [resetFilterOnHide]="true"
-              [(ngModel)]="p.formSelected" maxSelectedLabels="1" selectedItemsLabel="{0} {{'SEARCH_BAR.SELECTED_ITEMS' | translate}}"
-              appendTo="body">
-              <ng-template let-choices pTemplate="item">
-                <span title="{{p.getChoiceTooltip(choices.value) | translate}}">{{choices.value | translate}}</span>
-              </ng-template>
-            </p-multiSelect>
+          <ng-template let-choice pTemplate="item">
+            <span *ngIf="!!choice.value; else emptyValue" title="{{ p.getChoiceTooltip(choice.value) | translate }}">
+              {{ choice.value | translate }}
+            </span>
+            <ng-template #emptyValue>-</ng-template>
           </ng-template>
-        </ng-container>
+        </p-dropdown>
 
-        <ng-container *ngIf="p.getType() === paramType.SEARCH_HOURS_RANGE">
-          <p-spinner size="7" placeholder="hrs before"
-            [(ngModel)]="p.formHoursBefore" [min]="0" [max]="p.maxHour">
-          </p-spinner>
-          <p-spinner size="7" placeholder="hrs after"
-            [(ngModel)]="p.formHoursAfter" [min]="0" [max]="p.maxHour">
-          </p-spinner>
-        </ng-container>
+        <p-multiSelect
+          *ngIf="p.getTimesUsable() > 1"
+          [options]="p.multiSelectChoices"
+          [defaultLabel]="multiSelectDefaultLabel"
+          [resetFilterOnHide]="true"
+          [(ngModel)]="p.formSelected"
+          maxSelectedLabels="1"
+          selectedItemsLabel="{0} {{ 'SEARCH_BAR.SELECTED_ITEMS' | translate }}"
+          appendTo="body"
+        >
+          <ng-template let-choices pTemplate="item">
+            <span title="{{ p.getChoiceTooltip(choices.value) | translate }}">{{ choices.value | translate }}</span>
+          </ng-template>
+        </p-multiSelect>
+      </ng-template>
+    </ng-container>
 
-        <ng-container *ngIf="p.getType() === paramType.SEARCH_DATETIME">
-          <p-calendar [(ngModel)]="p.formDatetime" [showTime]="true" [defaultDate]="defaultDate"
-            placeholder="{{p.getPlaceholder()}}" appendTo="body" [locale]="calendarLocale">
-          </p-calendar>
-        </ng-container>
-      </div>
-    <!-- </p-accordionTab>
+    <ng-container *ngIf="p.getType() === paramType.SEARCH_HOURS_RANGE">
+      <p-spinner size="7" placeholder="hrs before" [(ngModel)]="p.formHoursBefore" [min]="0" [max]="p.maxHour">
+      </p-spinner>
+      <p-spinner size="7" placeholder="hrs after" [(ngModel)]="p.formHoursAfter" [min]="0" [max]="p.maxHour">
+      </p-spinner>
+    </ng-container>
+
+    <ng-container *ngIf="p.getType() === paramType.SEARCH_DATETIME">
+      <p-calendar
+        [(ngModel)]="p.formDatetime"
+        [showTime]="true"
+        [defaultDate]="defaultDate"
+        placeholder="{{ p.getPlaceholder() }}"
+        appendTo="body"
+        [locale]="calendarLocale"
+      >
+      </p-calendar>
+    </ng-container>
+  </div>
+  <!-- </p-accordionTab>
   </p-accordion> -->
 
   <p-footer>
-    <button pButton type="button" label="{{ 'SEARCH_BAR.RESET' | translate }}" (click)="searchService.resetForm()" class="ui-button-secondary reset-button"></button>
-    <button pButton type="button" label="{{ 'SEARCH_BAR.SUBMIT' | translate }}" (click)="searchService.submitSearchForm()" class="submit-button"></button>
+    <button
+      pButton
+      type="button"
+      label="{{ 'SEARCH_BAR.RESET' | translate }}"
+      (click)="searchService.resetForm()"
+      class="ui-button-secondary reset-button"
+    ></button>
+    <button
+      pButton
+      type="button"
+      label="{{ 'SEARCH_BAR.SUBMIT' | translate }}"
+      (click)="searchService.submitSearchForm()"
+      class="submit-button"
+    ></button>
   </p-footer>
-
 </p-dialog>
 
 <p-toast key="search-messages" position="center">
   <ng-template let-message pTemplate="message">
-      <div>
-          <i class="pi pi-exclamation-triangle" style="font-size: 3em"></i>
-          <p>{{ message.summary | translate }}</p>
-          <ul>
-              <li *ngFor="let field of message.data">
-                {{ field | translate }}
-              </li>
-          </ul>
-      </div>
+    <div>
+      <i class="pi pi-exclamation-triangle" style="font-size: 3em"></i>
+      <p>{{ message.summary | translate }}</p>
+      <ul>
+        <li *ngFor="let field of message.data">{{ field | translate }}</li>
+      </ul>
+    </div>
   </ng-template>
 </p-toast>

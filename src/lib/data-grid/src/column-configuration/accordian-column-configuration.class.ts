@@ -5,18 +5,18 @@ export class AccordianColumnConfiguration extends DataColumnConfiguration implem
   createElementHeader(workingNode: any, columnID: string) {
     workingNode.children.push(
       {
-        'headerName': 'Value',
-        'field': columnID + '_v',
+        headerName: 'Value',
+        field: columnID + '_v',
       },
       {
-        'headerName': 'Unit',
-        'field': columnID + '_u',
-        'columnGroupShow': 'open',
+        headerName: 'Unit',
+        field: columnID + '_u',
+        columnGroupShow: 'open',
       },
       {
-        'headerName': 'QA Summary',
-        'field': columnID + '_qa',
-        'columnGroupShow': 'open',
+        headerName: 'QA Summary',
+        field: columnID + '_qa',
+        columnGroupShow: 'open',
       }
     );
   }
@@ -28,5 +28,4 @@ export class AccordianColumnConfiguration extends DataColumnConfiguration implem
       [columnID + '_qa']: element.overallQASummary,
     };
   }
-
 }

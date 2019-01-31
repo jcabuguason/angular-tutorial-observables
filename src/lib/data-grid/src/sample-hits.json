@@ -1,1 +1,1640 @@
-[{"_index":"dms_data_idx:nav_canada:observation:atmospheric:surface_weather:awos-2.1-binary_2018.02","_type":"dms","_id":"nav_canada:observation:atmospheric:surface_weather:awos-2.1-binary:decoded_qa_enhanced-xml-2.0:201803050100:1021270:cybl:orig:data_60:level_1","_score":15.009586,"_source":{"identifier":"1021270","obsDateTime":"2018-03-05T01:00:00Z","author":{"build":"build.113","name":"MSC-DMS-Merger-Observation","version":"2.3"},"metadataElements":[{"elementID":"1.7.392.0.0.0.0","unit":"unitless","name":"MSNG","value":"/data/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/job-xml-2.0/201803050100/cybl/orig/data_60","group":"identification"},{"elementID":"1.7.82.0.0.0.0","unit":"unitless","name":"wmo_synop_id","value":"MSNG","group":"identification"},{"elementID":"1.7.83.0.0.0.0","unit":"unitless","name":"stn_nam","value":"Campbell River","group":"identification"},{"elementID":"1.7.104.0.0.0.0","unit":"code","codeSrc":"wmo_bufr","codeType":"002001","valueNum":0,"name":"stn_typ_generic","value":"0","group":"identification"},{"elementID":"1.7.427.0.0.0.0","unit":"code","codeSrc":"local_bufr","codeType":"002196","valueNum":10,"name":"stn_typ","value":"10","group":"identification"},{"elementID":"1.7.78.0.0.0.0","unit":"datetime","name":"date_tm","value":"2018-03-05T01:00:00Z","group":"identification"},{"elementID":"1.7.97.0.0.0.0","unit":"°","valueNum":49.95204,"name":"lat","value":"49.95204","group":"identification"},{"elementID":"1.7.98.0.0.0.0","unit":"°","valueNum":-125.27305,"name":"long","value":"-125.27305","group":"identification"},{"elementID":"1.7.87.0.0.0.0","unit":"m","valueNum":108.8,"name":"stn_elev","value":"108.8","group":"identification"},{"elementID":"1.8.147.0.0.0.0","unit":"m","valueNum":111.2,"name":"baro_elev","value":"111.2","group":"instrumentation"},{"elementID":"1.7.102.0.0.0.0","unit":"unitless","name":"icao_stn_id","value":"CYBL","group":"identification"},{"elementID":"1.7.426.0.0.0.0","unit":"code","codeSrc":"wmo_bufr","codeType":"008079","valueNum":0,"name":"rpt_typ","value":"0","group":"identification"},{"elementID":"1.8.137.0.0.0.0","unit":"unitless","name":"main_prsnt_wx_dtctn_sys","value":"MSNG","group":"instrumentation"},{"elementID":"1.8.138.0.0.0.0","unit":"unitless","name":"suppl_prsnt_wx_dtctn_sys","value":"MSNG","group":"instrumentation"},{"elementID":"1.8.139.0.0.0.0","unit":"unitless","name":"vis_msrmnt_sys","value":"MSNG","group":"instrumentation"},{"elementID":"1.8.140.0.0.0.0","unit":"unitless","name":"cld_dtctn_sys","value":"MSNG","group":"instrumentation"},{"elementID":"1.8.141.0.0.0.0","unit":"unitless","name":"ltng_dtctn_snsr_typ","value":"MSNG","group":"instrumentation"},{"elementID":"1.8.142.0.0.0.0","unit":"unitless","name":"sky_condn_algo_typ","value":"MSNG","group":"instrumentation"},{"elementID":"1.8.143.0.0.0.0","unit":"unitless","name":"pcpn_phenom_dtctn_cap","value":"MSNG","group":"instrumentation"},{"elementID":"1.8.144.0.0.0.0","unit":"unitless","name":"othr_wx_phenom_dtctn_cap","value":"MSNG","group":"instrumentation"},{"elementID":"1.8.145.0.0.0.0","unit":"unitless","name":"obscn_dtctn_cap","value":"MSNG","group":"instrumentation"},{"elementID":"1.8.146.0.0.0.0","unit":"unitless","name":"ltng_strk_discrmn_cap","value":"MSNG","group":"instrumentation"},{"elementID":"1.9.154.0.0.0.0","unit":"code","codeSrc":"wmo_bufr","codeType":"002175","valueNum":1,"name":"pcpn_msrmnt_mtd","value":"1","group":"methods"},{"elementID":"1.7.85.0.0.0.0","unit":"unitless","valueNum":1021270,"name":"clim_id","value":"1021270","group":"identification"},{"elementID":"1.7.86.0.0.0.0","unit":"unitless","valueNum":1021270,"name":"msc_id","value":"1021270","group":"identification"},{"elementID":"1.7.81.0.0.0.0","unit":"unitless","name":"data_pvdr","value":"NAV CANADA","group":"identification"},{"elementID":"1.7.103.0.0.0.0","unit":"unitless","name":"data_attrib_not","value":"Observational data provided by NAV CANADA. All rights reserved.","group":"identification"},{"elementID":"1.7.117.0.0.0.0","unit":"unitless","name":"prov","value":"BC","group":"identification"},{"elementID":"1.7.105.0.0.0.0","unit":"unitless","name":"cor","value":"orig","group":"identification"},{"elementID":"1.7.408.0.0.0.0","unit":"unitless","valueNum":0,"name":"ver","value":"0","group":"identification"},{"unit":"unitless","value":"/metadata/msc/qa_package/ncawos2.1/meta_product-xml-1.0/station/cybl/03010000","group":"identification"},{"unit":"unitless","value":"decoded_enhanced-xml-2.0","group":"identification"},{"unit":"unitless","value":"decoded_qa_full-xml-2.0","group":"identification"},{"unit":"unitless","value":"/data/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/decoded_qa-xml-2.0/201803050100/1021270/cybl/orig/data_60/level_1","group":"identification"},{"unit":"unitless","value":"/data/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/decoded-xml-2.0/201803050100/1021270/cybl/orig/data_60","group":"identification"}],"taxonomy":"/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/decoded_qa_enhanced-xml-2.0","primaryID":"1021270","rawMessage":{"header":"ISAB65 CYBL 050100"},"receivedDateTime":"2018-03-05T01:03:00Z","identity":"/data/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/decoded_qa_enhanced-xml-2.0/201803050100/1021270/cybl/orig/data_60/level_1","jsonVersion":1,"location":{"coordinates":[-125.27305,49.95204,108.8],"type":"point"},"dataElements":[{"elementID":"1.11.171.1.65.12.0","unit":"mm","name":"pcpn_amt_pst6hrs","supplementaryInfo":[{"dataFlag":"4"}],"value":"MSNG","group":"precipitation"},{"elementID":"1.11.171.1.62.9.0","unit":"mm","name":"pcpn_amt_pst3hrs","supplementaryInfo":[{"dataFlag":"4"}],"value":"MSNG","group":"precipitation"},{"elementID":"1.11.171.1.67.14.0","unit":"mm","name":"pcpn_amt_pst24hrs","supplementaryInfo":[{"dataFlag":"4"}],"value":"MSNG","group":"precipitation"},{"elementID":"1.12.210.0.0.0.0","unit":"hPa","valueNum":6.43,"name":"vpr_pres","supplementaryInfo":[{"dataFlag":"1"}],"value":"6.43","group":"pressure"},{"elementID":"1.19.271.0.0.0.0","unit":"°C","valueNum":3.235156,"name":"wetblb_temp","supplementaryInfo":[{"dataFlag":"1"}],"value":"3.235156","group":"temperature"},{"elementID":"1.12.206.0.0.0.0","unit":"Pa","valueNum":100930,"name":"stn_pres","elementIndex":"1","overallQASummary":100,"value":"100930.0","group":"pressure"},{"elementID":"1.12.207.0.0.0.0","unit":"Pa","valueNum":102280,"name":"mslp","elementIndex":"2","overallQASummary":100,"value":"102280.0","group":"pressure"},{"elementID":"1.12.208.3.62.9.0","unit":"Pa","valueNum":100,"name":"pres_tend_amt_pst3hrs","elementIndex":"3","overallQASummary":100,"value":"100.0","group":"pressure"},{"elementID":"1.12.209.10.62.9.0","unit":"code","codeSrc":"wmo_bufr","codeType":"010063","name":"pres_tend_char_pst3hrs","elementIndex":"4","overallQASummary":-1,"value":"MSNG","group":"pressure"},{"elementID":"1.12.212.0.0.0.0","unit":"Pa","valueNum":100900,"name":"baro_read","elementIndex":"5","overallQASummary":100,"value":"100900.0","group":"pressure"},{"elementID":"1.12.213.0.0.0.0","unit":"Pa","valueNum":102240,"name":"altmetr_setng","elementIndex":"6","overallQASummary":100,"value":"102240.0","group":"pressure"},{"elementID":"1.12.214.0.0.0.0","unit":"code","codeSrc":"local_bufr","codeType":"010211","valueNum":0,"name":"rpd_pres_chg","elementIndex":"7","overallQASummary":100,"value":"0","group":"pressure"},{"elementID":"1.12.211.0.0.0.0","unit":"ft","valueNum":-1000,"name":"dnsty_altd","elementIndex":"8","overallQASummary":100,"value":"-1000","group":"pressure"},{"elementID":"1.19.265.0.0.0.0","unit":"K","valueNum":278.35,"name":"air_temp","elementIndex":"9","overallQASummary":100,"value":"278.35","group":"temperature"},{"elementID":"1.19.267.0.0.0.0","unit":"K","valueNum":273.85,"name":"dwpt_temp","elementIndex":"10","overallQASummary":100,"value":"273.85","group":"temperature"},{"elementID":"1.5.66.0.0.0.0","unit":"%","valueNum":73,"name":"rel_hum","elementIndex":"11","overallQASummary":100,"value":"73","group":"humidity"},{"elementID":"1.19.265.7.60.7.0","unit":"K","valueNum":278.95,"name":"max_air_temp_pst1hr","elementIndex":"12","overallQASummary":100,"value":"278.95","group":"temperature"},{"elementID":"1.19.265.8.60.7.0","unit":"K","valueNum":278.35,"name":"min_air_temp_pst1hr","elementIndex":"13","overallQASummary":100,"value":"278.35","group":"temperature"},{"elementID":"1.19.265.7.65.12.0","unit":"K","valueNum":279.35,"name":"max_air_temp_pst6hrs","elementIndex":"14","overallQASummary":100,"value":"279.35","group":"temperature"},{"elementID":"1.19.265.8.65.12.0","unit":"K","valueNum":277.15,"name":"min_air_temp_pst6hrs","elementIndex":"15","overallQASummary":100,"value":"277.15","group":"temperature"},{"elementID":"1.19.265.7.67.14.0","unit":"K","valueNum":279.35,"name":"max_air_temp_pst24hrs","elementIndex":"16","overallQASummary":100,"value":"279.35","group":"temperature"},{"elementID":"1.19.265.8.67.14.0","unit":"K","valueNum":272.15,"name":"min_air_temp_pst24hrs","elementIndex":"17","overallQASummary":100,"value":"272.15","group":"temperature"},{"elementID":"1.19.265.0.66.0.0","unit":"K","valueNum":274.45,"name":"air_temp_12hrs_ago","elementIndex":"18","overallQASummary":100,"value":"274.45","group":"temperature"},{"elementID":"1.20.287.2.10.4.0","unit":"m","name":"avg_vis_pst10mts","elementIndex":"19","overallQASummary":-10,"value":"MSNG","group":"visibility"},{"elementID":"1.20.287.7.10.4.0","unit":"m","name":"max_vis_pst10mts","elementIndex":"20","overallQASummary":-10,"value":"MSNG","group":"visibility"},{"elementID":"1.20.287.8.10.4.0","unit":"m","name":"min_vis_pst10mts","elementIndex":"21","overallQASummary":-10,"value":"MSNG","group":"visibility"},{"elementID":"1.17.252.0.0.0.0","unit":"m","name":"vert_vis","elementIndex":"22","overallQASummary":-10,"value":"MSNG","group":"sky_condition"},{"elementID":"1.23.304.0.0.0.0","unit":"code","codeSrc":"wmo_bufr","codeType":"020003","valueNum":100,"name":"prsnt_wx","index":{"name":"observed_weather_index","value":1},"elementIndex":"23","overallQASummary":-10,"value":"100","indexValue":1,"group":"weather"},{"elementID":"1.11.176.0.10.4.0","unit":"unitless","name":"pcpn_typ_pst10mts","elementIndex":"24","overallQASummary":-10,"value":"MSNG","group":"precipitation"},{"elementID":"1.11.179.0.10.4.0","unit":"code","codeSrc":"wmo_bufr","codeType":"020022","name":"pcpn_char_pst10mts","elementIndex":"25","overallQASummary":-10,"value":"MSNG","group":"precipitation"},{"elementID":"1.11.180.0.10.4.0","unit":"min","name":"pcpn_dur_pst10mts","elementIndex":"26","overallQASummary":-10,"value":"MSNG","group":"precipitation"},{"elementID":"1.23.302.0.10.4.0","unit":"unitless","name":"othr_phenom_pst10mts","elementIndex":"27","overallQASummary":100,"value":"MSNG","group":"weather"},{"elementID":"1.23.305.0.10.4.0","unit":"code","codeSrc":"wmo_bufr","codeType":"020024","name":"phenom_intnsty_pst10mts","elementIndex":"28","overallQASummary":-10,"value":"MSNG","group":"weather"},{"elementID":"1.23.306.0.10.4.0","unit":"unitless","name":"obscn_pst10mts","elementIndex":"29","overallQASummary":-10,"value":"MSNG","group":"weather"},{"elementID":"1.23.307.0.10.4.0","unit":"code","codeSrc":"wmo_bufr","codeType":"020026","name":"obscn_char_pst10mts","elementIndex":"30","overallQASummary":-10,"value":"MSNG","group":"weather"},{"elementID":"1.6.72.0.0.0.0","unit":"code","codeSrc":"local_bufr","codeType":"020252","name":"sfc_icng","elementIndex":"31","overallQASummary":-10,"value":"MSNG","group":"ice"},{"elementID":"1.23.303.0.0.0.0","unit":"unitless","name":"sig_locl_phenom","elementIndex":"32","overallQASummary":-10,"value":"MSNG","group":"weather"},{"elementID":"1.24.320.12.2.2.6","unit":"°","valueNum":74,"name":"avg_wnd_dir_10m_pst2mts","elementIndex":"33","overallQASummary":100,"value":"74","group":"wind"},{"elementID":"1.24.314.2.2.2.6","unit":"m/s","valueNum":1.3,"name":"avg_wnd_spd_10m_pst2mts","elementIndex":"34","overallQASummary":100,"value":"1.3","group":"wind"},{"elementID":"1.24.320.12.10.4.6","unit":"°","valueNum":95,"name":"avg_wnd_dir_10m_pst10mts","elementIndex":"35","overallQASummary":100,"value":"95","group":"wind"},{"elementID":"1.24.314.2.10.4.6","unit":"m/s","valueNum":1.4,"name":"avg_wnd_spd_10m_pst10mts","elementIndex":"36","overallQASummary":100,"value":"1.4","group":"wind"},{"elementID":"1.24.340.0.10.4.6","unit":"°","valueNum":48,"name":"var_wnd_dir_lwr_bnd_10m_pst10mts","elementIndex":"37","overallQASummary":100,"value":"48","group":"wind"},{"elementID":"1.24.339.0.10.4.6","unit":"°","valueNum":134,"name":"var_wnd_dir_upr_bnd_10m_pst10mts","elementIndex":"38","overallQASummary":100,"value":"134","group":"wind"},{"elementID":"1.24.338.0.10.4.6","unit":"code","codeSrc":"local_bufr","codeType":"011222","valueNum":2,"name":"var_wnd_state_10m_pst10mts","elementIndex":"39","overallQASummary":100,"value":"2","group":"wind"},{"elementID":"1.24.326.7.10.4.6","unit":"m/s","name":"max_wnd_gst_spd_10m_pst10mts","elementIndex":"40","overallQASummary":-1,"value":"MSNG","group":"wind"},{"elementID":"1.24.323.0.60.7.6","unit":"°","valueNum":69,"name":"wnd_dir_10m_pst1hr_max_spd","elementIndex":"41","overallQASummary":100,"value":"69","group":"wind"},{"elementID":"1.24.314.7.60.7.6","unit":"m/s","valueNum":1.7,"name":"max_wnd_spd_10m_pst1hr","elementIndex":"42","overallQASummary":100,"value":"1.7","group":"wind"},{"elementID":"1.11.171.1.60.7.0","unit":"mm","name":"pcpn_amt_pst1hr","elementIndex":"43","overallQASummary":-10,"value":"MSNG","group":"precipitation"},{"elementID":"1.11.171.1.62.9.0","unit":"mm","name":"pcpn_amt_pst3hrs","elementIndex":"44","overallQASummary":-10,"value":"MSNG","group":"precipitation"},{"elementID":"1.11.171.1.65.12.0","unit":"mm","name":"pcpn_amt_pst6hrs","elementIndex":"45","overallQASummary":-10,"value":"MSNG","group":"precipitation"},{"elementID":"1.11.171.1.67.14.0","unit":"mm","name":"pcpn_amt_pst24hrs","elementIndex":"46","overallQASummary":-10,"value":"MSNG","group":"precipitation"},{"elementID":"1.13.215.0.0.0.0","unit":"unitless","name":"hrdwr_qlty_flg","elementIndex":"47","value":"0000111111001100001111110000000","group":"quality"},{"elementID":"1.13.216.0.0.0.0","unit":"unitless","name":"wx_elemt_wrng_flg","elementIndex":"48","value":"0000000000000000000000000000000","group":"quality"},{"elementID":"1.13.217.0.0.0.0","unit":"unitless","name":"wx_elemt_err_flg","elementIndex":"49","value":"0000000000000000000000000000000","group":"quality"},{"elementID":"1.2.19.0.0.0.0","unit":"code","codeSrc":"wmo_bufr","codeType":"033006","valueNum":3,"name":"stn_int_msrmnt_stat","elementIndex":"50","value":"3","group":"diagnostics"}],"parentIdentity":"/data/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/decoded-xml-2.0/201803050100/1021270/cybl/orig/data_60"}},{"_index":"dms_data_idx:nav_canada:observation:atmospheric:surface_weather:awos-2.1-binary_2018.02","_type":"dms","_id":"nav_canada:observation:atmospheric:surface_weather:awos-2.1-binary:decoded_qa_enhanced-xml-2.0:201803050200:1021270:cybl:orig:data_60:level_1","_score":15.009586,"_source":{"identifier":"1021270","obsDateTime":"2018-03-05T02:00:00Z","author":{"build":"build.113","name":"MSC-DMS-Merger-Observation","version":"2.3"},"metadataElements":[{"elementID":"1.7.392.0.0.0.0","unit":"unitless","name":"MSNG","value":"/data/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/job-xml-2.0/201803050200/cybl/orig/data_60","group":"identification"},{"elementID":"1.7.82.0.0.0.0","unit":"unitless","name":"wmo_synop_id","value":"MSNG","group":"identification"},{"elementID":"1.7.83.0.0.0.0","unit":"unitless","name":"stn_nam","value":"Campbell River","group":"identification"},{"elementID":"1.7.104.0.0.0.0","unit":"code","codeSrc":"wmo_bufr","codeType":"002001","valueNum":0,"name":"stn_typ_generic","value":"0","group":"identification"},{"elementID":"1.7.427.0.0.0.0","unit":"code","codeSrc":"local_bufr","codeType":"002196","valueNum":10,"name":"stn_typ","value":"10","group":"identification"},{"elementID":"1.7.78.0.0.0.0","unit":"datetime","name":"date_tm","value":"2018-03-05T02:00:00Z","group":"identification"},{"elementID":"1.7.97.0.0.0.0","unit":"°","valueNum":49.95204,"name":"lat","value":"49.95204","group":"identification"},{"elementID":"1.7.98.0.0.0.0","unit":"°","valueNum":-125.27305,"name":"long","value":"-125.27305","group":"identification"},{"elementID":"1.7.87.0.0.0.0","unit":"m","valueNum":108.8,"name":"stn_elev","value":"108.8","group":"identification"},{"elementID":"1.8.147.0.0.0.0","unit":"m","valueNum":111.2,"name":"baro_elev","value":"111.2","group":"instrumentation"},{"elementID":"1.7.102.0.0.0.0","unit":"unitless","name":"icao_stn_id","value":"CYBL","group":"identification"},{"elementID":"1.7.426.0.0.0.0","unit":"code","codeSrc":"wmo_bufr","codeType":"008079","valueNum":0,"name":"rpt_typ","value":"0","group":"identification"},{"elementID":"1.8.137.0.0.0.0","unit":"unitless","name":"main_prsnt_wx_dtctn_sys","value":"MSNG","group":"instrumentation"},{"elementID":"1.8.138.0.0.0.0","unit":"unitless","name":"suppl_prsnt_wx_dtctn_sys","value":"MSNG","group":"instrumentation"},{"elementID":"1.8.139.0.0.0.0","unit":"unitless","name":"vis_msrmnt_sys","value":"MSNG","group":"instrumentation"},{"elementID":"1.8.140.0.0.0.0","unit":"unitless","name":"cld_dtctn_sys","value":"MSNG","group":"instrumentation"},{"elementID":"1.8.141.0.0.0.0","unit":"unitless","name":"ltng_dtctn_snsr_typ","value":"MSNG","group":"instrumentation"},{"elementID":"1.8.142.0.0.0.0","unit":"unitless","name":"sky_condn_algo_typ","value":"MSNG","group":"instrumentation"},{"elementID":"1.8.143.0.0.0.0","unit":"unitless","name":"pcpn_phenom_dtctn_cap","value":"MSNG","group":"instrumentation"},{"elementID":"1.8.144.0.0.0.0","unit":"unitless","name":"othr_wx_phenom_dtctn_cap","value":"MSNG","group":"instrumentation"},{"elementID":"1.8.145.0.0.0.0","unit":"unitless","name":"obscn_dtctn_cap","value":"MSNG","group":"instrumentation"},{"elementID":"1.8.146.0.0.0.0","unit":"unitless","name":"ltng_strk_discrmn_cap","value":"MSNG","group":"instrumentation"},{"elementID":"1.9.154.0.0.0.0","unit":"code","codeSrc":"wmo_bufr","codeType":"002175","valueNum":1,"name":"pcpn_msrmnt_mtd","value":"1","group":"methods"},{"elementID":"1.7.85.0.0.0.0","unit":"unitless","valueNum":1021270,"name":"clim_id","value":"1021270","group":"identification"},{"elementID":"1.7.86.0.0.0.0","unit":"unitless","valueNum":1021270,"name":"msc_id","value":"1021270","group":"identification"},{"elementID":"1.7.81.0.0.0.0","unit":"unitless","name":"data_pvdr","value":"NAV CANADA","group":"identification"},{"elementID":"1.7.103.0.0.0.0","unit":"unitless","name":"data_attrib_not","value":"Observational data provided by NAV CANADA. All rights reserved.","group":"identification"},{"elementID":"1.7.117.0.0.0.0","unit":"unitless","name":"prov","value":"BC","group":"identification"},{"elementID":"1.7.105.0.0.0.0","unit":"unitless","name":"cor","value":"orig","group":"identification"},{"elementID":"1.7.408.0.0.0.0","unit":"unitless","valueNum":0,"name":"ver","value":"0","group":"identification"},{"unit":"unitless","value":"/metadata/msc/qa_package/ncawos2.1/meta_product-xml-1.0/station/cybl/03010000","group":"identification"},{"unit":"unitless","value":"decoded_enhanced-xml-2.0","group":"identification"},{"unit":"unitless","value":"decoded_qa_full-xml-2.0","group":"identification"},{"unit":"unitless","value":"/data/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/decoded_qa-xml-2.0/201803050200/1021270/cybl/orig/data_60/level_1","group":"identification"},{"unit":"unitless","value":"/data/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/decoded-xml-2.0/201803050200/1021270/cybl/orig/data_60","group":"identification"}],"taxonomy":"/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/decoded_qa_enhanced-xml-2.0","primaryID":"1021270","rawMessage":{"header":"ISAB65 CYBL 050200"},"receivedDateTime":"2018-03-05T02:03:00Z","identity":"/data/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/decoded_qa_enhanced-xml-2.0/201803050200/1021270/cybl/orig/data_60/level_1","jsonVersion":1,"location":{"coordinates":[-125.27305,49.95204,108.8],"type":"point"},"dataElements":[{"elementID":"1.11.171.1.62.9.0","unit":"mm","name":"pcpn_amt_pst3hrs","supplementaryInfo":[{"dataFlag":"4"}],"value":"MSNG","group":"precipitation"},{"elementID":"1.11.171.1.65.12.0","unit":"mm","name":"pcpn_amt_pst6hrs","supplementaryInfo":[{"dataFlag":"4"}],"value":"MSNG","group":"precipitation"},{"elementID":"1.11.171.1.67.14.0","unit":"mm","name":"pcpn_amt_pst24hrs","supplementaryInfo":[{"dataFlag":"4"}],"value":"MSNG","group":"precipitation"},{"elementID":"1.12.210.0.0.0.0","unit":"hPa","valueNum":6.52,"name":"vpr_pres","supplementaryInfo":[{"dataFlag":"1"}],"value":"6.52","group":"pressure"},{"elementID":"1.19.271.0.0.0.0","unit":"°C","valueNum":2.488281,"name":"wetblb_temp","supplementaryInfo":[{"dataFlag":"1"}],"value":"2.488281","group":"temperature"},{"elementID":"1.12.206.0.0.0.0","unit":"Pa","valueNum":100960,"name":"stn_pres","elementIndex":"1","overallQASummary":100,"value":"100960.0","group":"pressure"},{"elementID":"1.12.207.0.0.0.0","unit":"Pa","valueNum":102310,"name":"mslp","elementIndex":"2","overallQASummary":100,"value":"102310.0","group":"pressure"},{"elementID":"1.12.208.3.62.9.0","unit":"Pa","valueNum":90,"name":"pres_tend_amt_pst3hrs","elementIndex":"3","overallQASummary":100,"value":"90.0","group":"pressure"},{"elementID":"1.12.209.10.62.9.0","unit":"code","codeSrc":"wmo_bufr","codeType":"010063","name":"pres_tend_char_pst3hrs","elementIndex":"4","overallQASummary":-1,"value":"MSNG","group":"pressure"},{"elementID":"1.12.212.0.0.0.0","unit":"Pa","valueNum":100930,"name":"baro_read","elementIndex":"5","overallQASummary":100,"value":"100930.0","group":"pressure"},{"elementID":"1.12.213.0.0.0.0","unit":"Pa","valueNum":102270,"name":"altmetr_setng","elementIndex":"6","overallQASummary":100,"value":"102270.0","group":"pressure"},{"elementID":"1.12.214.0.0.0.0","unit":"code","codeSrc":"local_bufr","codeType":"010211","valueNum":0,"name":"rpd_pres_chg","elementIndex":"7","overallQASummary":100,"value":"0","group":"pressure"},{"elementID":"1.12.211.0.0.0.0","unit":"ft","valueNum":-1200,"name":"dnsty_altd","elementIndex":"8","overallQASummary":100,"value":"-1200","group":"pressure"},{"elementID":"1.19.265.0.0.0.0","unit":"K","valueNum":276.85,"name":"air_temp","elementIndex":"9","overallQASummary":100,"value":"276.85","group":"temperature"},{"elementID":"1.19.267.0.0.0.0","unit":"K","valueNum":274.05,"name":"dwpt_temp","elementIndex":"10","overallQASummary":100,"value":"274.05","group":"temperature"},{"elementID":"1.5.66.0.0.0.0","unit":"%","valueNum":82,"name":"rel_hum","elementIndex":"11","overallQASummary":100,"value":"82","group":"humidity"},{"elementID":"1.19.265.7.60.7.0","unit":"K","valueNum":278.35,"name":"max_air_temp_pst1hr","elementIndex":"12","overallQASummary":100,"value":"278.35","group":"temperature"},{"elementID":"1.19.265.8.60.7.0","unit":"K","valueNum":276.85,"name":"min_air_temp_pst1hr","elementIndex":"13","overallQASummary":100,"value":"276.85","group":"temperature"},{"elementID":"1.19.265.7.65.12.0","unit":"K","valueNum":279.35,"name":"max_air_temp_pst6hrs","elementIndex":"14","overallQASummary":100,"value":"279.35","group":"temperature"},{"elementID":"1.19.265.8.65.12.0","unit":"K","valueNum":276.85,"name":"min_air_temp_pst6hrs","elementIndex":"15","overallQASummary":100,"value":"276.85","group":"temperature"},{"elementID":"1.19.265.7.67.14.0","unit":"K","valueNum":279.35,"name":"max_air_temp_pst24hrs","elementIndex":"16","overallQASummary":100,"value":"279.35","group":"temperature"},{"elementID":"1.19.265.8.67.14.0","unit":"K","valueNum":272.15,"name":"min_air_temp_pst24hrs","elementIndex":"17","overallQASummary":100,"value":"272.15","group":"temperature"},{"elementID":"1.19.265.0.66.0.0","unit":"K","valueNum":273.45,"name":"air_temp_12hrs_ago","elementIndex":"18","overallQASummary":100,"value":"273.45","group":"temperature"},{"elementID":"1.20.287.2.10.4.0","unit":"m","name":"avg_vis_pst10mts","elementIndex":"19","overallQASummary":-10,"value":"MSNG","group":"visibility"},{"elementID":"1.20.287.7.10.4.0","unit":"m","name":"max_vis_pst10mts","elementIndex":"20","overallQASummary":-10,"value":"MSNG","group":"visibility"},{"elementID":"1.20.287.8.10.4.0","unit":"m","name":"min_vis_pst10mts","elementIndex":"21","overallQASummary":-10,"value":"MSNG","group":"visibility"},{"elementID":"1.17.252.0.0.0.0","unit":"m","name":"vert_vis","elementIndex":"22","overallQASummary":-10,"value":"MSNG","group":"sky_condition"},{"elementID":"1.23.304.0.0.0.0","unit":"code","codeSrc":"wmo_bufr","codeType":"020003","valueNum":100,"name":"prsnt_wx","index":{"name":"observed_weather_index","value":1},"elementIndex":"23","overallQASummary":-10,"value":"100","indexValue":1,"group":"weather"},{"elementID":"1.11.176.0.10.4.0","unit":"unitless","name":"pcpn_typ_pst10mts","elementIndex":"24","overallQASummary":-10,"value":"MSNG","group":"precipitation"},{"elementID":"1.11.179.0.10.4.0","unit":"code","codeSrc":"wmo_bufr","codeType":"020022","name":"pcpn_char_pst10mts","elementIndex":"25","overallQASummary":-10,"value":"MSNG","group":"precipitation"},{"elementID":"1.11.180.0.10.4.0","unit":"min","name":"pcpn_dur_pst10mts","elementIndex":"26","overallQASummary":-10,"value":"MSNG","group":"precipitation"},{"elementID":"1.23.302.0.10.4.0","unit":"unitless","name":"othr_phenom_pst10mts","elementIndex":"27","overallQASummary":100,"value":"MSNG","group":"weather"},{"elementID":"1.23.305.0.10.4.0","unit":"code","codeSrc":"wmo_bufr","codeType":"020024","name":"phenom_intnsty_pst10mts","elementIndex":"28","overallQASummary":-10,"value":"MSNG","group":"weather"},{"elementID":"1.23.306.0.10.4.0","unit":"unitless","name":"obscn_pst10mts","elementIndex":"29","overallQASummary":-10,"value":"MSNG","group":"weather"},{"elementID":"1.23.307.0.10.4.0","unit":"code","codeSrc":"wmo_bufr","codeType":"020026","name":"obscn_char_pst10mts","elementIndex":"30","overallQASummary":-10,"value":"MSNG","group":"weather"},{"elementID":"1.6.72.0.0.0.0","unit":"code","codeSrc":"local_bufr","codeType":"020252","name":"sfc_icng","elementIndex":"31","overallQASummary":-10,"value":"MSNG","group":"ice"},{"elementID":"1.23.303.0.0.0.0","unit":"unitless","name":"sig_locl_phenom","elementIndex":"32","overallQASummary":-10,"value":"MSNG","group":"weather"},{"elementID":"1.24.320.12.2.2.6","unit":"°","valueNum":123,"name":"avg_wnd_dir_10m_pst2mts","elementIndex":"33","overallQASummary":100,"value":"123","group":"wind"},{"elementID":"1.24.314.2.2.2.6","unit":"m/s","valueNum":0.4,"name":"avg_wnd_spd_10m_pst2mts","elementIndex":"34","overallQASummary":100,"value":"0.4","group":"wind"},{"elementID":"1.24.320.12.10.4.6","unit":"°","valueNum":108,"name":"avg_wnd_dir_10m_pst10mts","elementIndex":"35","overallQASummary":100,"value":"108","group":"wind"},{"elementID":"1.24.314.2.10.4.6","unit":"m/s","valueNum":0.6,"name":"avg_wnd_spd_10m_pst10mts","elementIndex":"36","overallQASummary":100,"value":"0.6","group":"wind"},{"elementID":"1.24.340.0.10.4.6","unit":"°","name":"var_wnd_dir_lwr_bnd_10m_pst10mts","elementIndex":"37","overallQASummary":-1,"value":"MSNG","group":"wind"},{"elementID":"1.24.339.0.10.4.6","unit":"°","name":"var_wnd_dir_upr_bnd_10m_pst10mts","elementIndex":"38","overallQASummary":-1,"value":"MSNG","group":"wind"},{"elementID":"1.24.338.0.10.4.6","unit":"code","codeSrc":"local_bufr","codeType":"011222","valueNum":0,"name":"var_wnd_state_10m_pst10mts","elementIndex":"39","overallQASummary":100,"value":"0","group":"wind"},{"elementID":"1.24.326.7.10.4.6","unit":"m/s","name":"max_wnd_gst_spd_10m_pst10mts","elementIndex":"40","overallQASummary":-1,"value":"MSNG","group":"wind"},{"elementID":"1.24.323.0.60.7.6","unit":"°","valueNum":107,"name":"wnd_dir_10m_pst1hr_max_spd","elementIndex":"41","overallQASummary":100,"value":"107","group":"wind"},{"elementID":"1.24.314.7.60.7.6","unit":"m/s","valueNum":0.7,"name":"max_wnd_spd_10m_pst1hr","elementIndex":"42","overallQASummary":100,"value":"0.7","group":"wind"},{"elementID":"1.11.171.1.60.7.0","unit":"mm","name":"pcpn_amt_pst1hr","elementIndex":"43","overallQASummary":-10,"value":"MSNG","group":"precipitation"},{"elementID":"1.11.171.1.62.9.0","unit":"mm","name":"pcpn_amt_pst3hrs","elementIndex":"44","overallQASummary":-10,"value":"MSNG","group":"precipitation"},{"elementID":"1.11.171.1.65.12.0","unit":"mm","name":"pcpn_amt_pst6hrs","elementIndex":"45","overallQASummary":-10,"value":"MSNG","group":"precipitation"},{"elementID":"1.11.171.1.67.14.0","unit":"mm","name":"pcpn_amt_pst24hrs","elementIndex":"46","overallQASummary":-10,"value":"MSNG","group":"precipitation"},{"elementID":"1.13.215.0.0.0.0","unit":"unitless","name":"hrdwr_qlty_flg","elementIndex":"47","value":"0000111111001100001111110000000","group":"quality"},{"elementID":"1.13.216.0.0.0.0","unit":"unitless","name":"wx_elemt_wrng_flg","elementIndex":"48","value":"0000000000000000000000000000000","group":"quality"},{"elementID":"1.13.217.0.0.0.0","unit":"unitless","name":"wx_elemt_err_flg","elementIndex":"49","value":"0000000000000000000000000000000","group":"quality"},{"elementID":"1.2.19.0.0.0.0","unit":"code","codeSrc":"wmo_bufr","codeType":"033006","valueNum":3,"name":"stn_int_msrmnt_stat","elementIndex":"50","value":"3","group":"diagnostics"}],"parentIdentity":"/data/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/decoded-xml-2.0/201803050200/1021270/cybl/orig/data_60"}}]
+[
+  {
+    "_index": "dms_data_idx:nav_canada:observation:atmospheric:surface_weather:awos-2.1-binary_2018.02",
+    "_type": "dms",
+    "_id": "nav_canada:observation:atmospheric:surface_weather:awos-2.1-binary:decoded_qa_enhanced-xml-2.0:201803050100:1021270:cybl:orig:data_60:level_1",
+    "_score": 15.009586,
+    "_source": {
+      "identifier": "1021270",
+      "obsDateTime": "2018-03-05T01:00:00Z",
+      "author": {
+        "build": "build.113",
+        "name": "MSC-DMS-Merger-Observation",
+        "version": "2.3"
+      },
+      "metadataElements": [
+        {
+          "elementID": "1.7.392.0.0.0.0",
+          "unit": "unitless",
+          "name": "MSNG",
+          "value": "/data/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/job-xml-2.0/201803050100/cybl/orig/data_60",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.82.0.0.0.0",
+          "unit": "unitless",
+          "name": "wmo_synop_id",
+          "value": "MSNG",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.83.0.0.0.0",
+          "unit": "unitless",
+          "name": "stn_nam",
+          "value": "Campbell River",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.104.0.0.0.0",
+          "unit": "code",
+          "codeSrc": "wmo_bufr",
+          "codeType": "002001",
+          "valueNum": 0,
+          "name": "stn_typ_generic",
+          "value": "0",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.427.0.0.0.0",
+          "unit": "code",
+          "codeSrc": "local_bufr",
+          "codeType": "002196",
+          "valueNum": 10,
+          "name": "stn_typ",
+          "value": "10",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.78.0.0.0.0",
+          "unit": "datetime",
+          "name": "date_tm",
+          "value": "2018-03-05T01:00:00Z",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.97.0.0.0.0",
+          "unit": "°",
+          "valueNum": 49.95204,
+          "name": "lat",
+          "value": "49.95204",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.98.0.0.0.0",
+          "unit": "°",
+          "valueNum": -125.27305,
+          "name": "long",
+          "value": "-125.27305",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.87.0.0.0.0",
+          "unit": "m",
+          "valueNum": 108.8,
+          "name": "stn_elev",
+          "value": "108.8",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.8.147.0.0.0.0",
+          "unit": "m",
+          "valueNum": 111.2,
+          "name": "baro_elev",
+          "value": "111.2",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.7.102.0.0.0.0",
+          "unit": "unitless",
+          "name": "icao_stn_id",
+          "value": "CYBL",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.426.0.0.0.0",
+          "unit": "code",
+          "codeSrc": "wmo_bufr",
+          "codeType": "008079",
+          "valueNum": 0,
+          "name": "rpt_typ",
+          "value": "0",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.8.137.0.0.0.0",
+          "unit": "unitless",
+          "name": "main_prsnt_wx_dtctn_sys",
+          "value": "MSNG",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.8.138.0.0.0.0",
+          "unit": "unitless",
+          "name": "suppl_prsnt_wx_dtctn_sys",
+          "value": "MSNG",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.8.139.0.0.0.0",
+          "unit": "unitless",
+          "name": "vis_msrmnt_sys",
+          "value": "MSNG",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.8.140.0.0.0.0",
+          "unit": "unitless",
+          "name": "cld_dtctn_sys",
+          "value": "MSNG",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.8.141.0.0.0.0",
+          "unit": "unitless",
+          "name": "ltng_dtctn_snsr_typ",
+          "value": "MSNG",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.8.142.0.0.0.0",
+          "unit": "unitless",
+          "name": "sky_condn_algo_typ",
+          "value": "MSNG",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.8.143.0.0.0.0",
+          "unit": "unitless",
+          "name": "pcpn_phenom_dtctn_cap",
+          "value": "MSNG",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.8.144.0.0.0.0",
+          "unit": "unitless",
+          "name": "othr_wx_phenom_dtctn_cap",
+          "value": "MSNG",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.8.145.0.0.0.0",
+          "unit": "unitless",
+          "name": "obscn_dtctn_cap",
+          "value": "MSNG",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.8.146.0.0.0.0",
+          "unit": "unitless",
+          "name": "ltng_strk_discrmn_cap",
+          "value": "MSNG",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.9.154.0.0.0.0",
+          "unit": "code",
+          "codeSrc": "wmo_bufr",
+          "codeType": "002175",
+          "valueNum": 1,
+          "name": "pcpn_msrmnt_mtd",
+          "value": "1",
+          "group": "methods"
+        },
+        {
+          "elementID": "1.7.85.0.0.0.0",
+          "unit": "unitless",
+          "valueNum": 1021270,
+          "name": "clim_id",
+          "value": "1021270",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.86.0.0.0.0",
+          "unit": "unitless",
+          "valueNum": 1021270,
+          "name": "msc_id",
+          "value": "1021270",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.81.0.0.0.0",
+          "unit": "unitless",
+          "name": "data_pvdr",
+          "value": "NAV CANADA",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.103.0.0.0.0",
+          "unit": "unitless",
+          "name": "data_attrib_not",
+          "value": "Observational data provided by NAV CANADA. All rights reserved.",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.117.0.0.0.0",
+          "unit": "unitless",
+          "name": "prov",
+          "value": "BC",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.105.0.0.0.0",
+          "unit": "unitless",
+          "name": "cor",
+          "value": "orig",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.408.0.0.0.0",
+          "unit": "unitless",
+          "valueNum": 0,
+          "name": "ver",
+          "value": "0",
+          "group": "identification"
+        },
+        {
+          "unit": "unitless",
+          "value": "/metadata/msc/qa_package/ncawos2.1/meta_product-xml-1.0/station/cybl/03010000",
+          "group": "identification"
+        },
+        {
+          "unit": "unitless",
+          "value": "decoded_enhanced-xml-2.0",
+          "group": "identification"
+        },
+        {
+          "unit": "unitless",
+          "value": "decoded_qa_full-xml-2.0",
+          "group": "identification"
+        },
+        {
+          "unit": "unitless",
+          "value": "/data/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/decoded_qa-xml-2.0/201803050100/1021270/cybl/orig/data_60/level_1",
+          "group": "identification"
+        },
+        {
+          "unit": "unitless",
+          "value": "/data/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/decoded-xml-2.0/201803050100/1021270/cybl/orig/data_60",
+          "group": "identification"
+        }
+      ],
+      "taxonomy": "/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/decoded_qa_enhanced-xml-2.0",
+      "primaryID": "1021270",
+      "rawMessage": { "header": "ISAB65 CYBL 050100" },
+      "receivedDateTime": "2018-03-05T01:03:00Z",
+      "identity": "/data/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/decoded_qa_enhanced-xml-2.0/201803050100/1021270/cybl/orig/data_60/level_1",
+      "jsonVersion": 1,
+      "location": {
+        "coordinates": [-125.27305, 49.95204, 108.8],
+        "type": "point"
+      },
+      "dataElements": [
+        {
+          "elementID": "1.11.171.1.65.12.0",
+          "unit": "mm",
+          "name": "pcpn_amt_pst6hrs",
+          "supplementaryInfo": [{ "dataFlag": "4" }],
+          "value": "MSNG",
+          "group": "precipitation"
+        },
+        {
+          "elementID": "1.11.171.1.62.9.0",
+          "unit": "mm",
+          "name": "pcpn_amt_pst3hrs",
+          "supplementaryInfo": [{ "dataFlag": "4" }],
+          "value": "MSNG",
+          "group": "precipitation"
+        },
+        {
+          "elementID": "1.11.171.1.67.14.0",
+          "unit": "mm",
+          "name": "pcpn_amt_pst24hrs",
+          "supplementaryInfo": [{ "dataFlag": "4" }],
+          "value": "MSNG",
+          "group": "precipitation"
+        },
+        {
+          "elementID": "1.12.210.0.0.0.0",
+          "unit": "hPa",
+          "valueNum": 6.43,
+          "name": "vpr_pres",
+          "supplementaryInfo": [{ "dataFlag": "1" }],
+          "value": "6.43",
+          "group": "pressure"
+        },
+        {
+          "elementID": "1.19.271.0.0.0.0",
+          "unit": "°C",
+          "valueNum": 3.235156,
+          "name": "wetblb_temp",
+          "supplementaryInfo": [{ "dataFlag": "1" }],
+          "value": "3.235156",
+          "group": "temperature"
+        },
+        {
+          "elementID": "1.12.206.0.0.0.0",
+          "unit": "Pa",
+          "valueNum": 100930,
+          "name": "stn_pres",
+          "elementIndex": "1",
+          "overallQASummary": 100,
+          "value": "100930.0",
+          "group": "pressure"
+        },
+        {
+          "elementID": "1.12.207.0.0.0.0",
+          "unit": "Pa",
+          "valueNum": 102280,
+          "name": "mslp",
+          "elementIndex": "2",
+          "overallQASummary": 100,
+          "value": "102280.0",
+          "group": "pressure"
+        },
+        {
+          "elementID": "1.12.208.3.62.9.0",
+          "unit": "Pa",
+          "valueNum": 100,
+          "name": "pres_tend_amt_pst3hrs",
+          "elementIndex": "3",
+          "overallQASummary": 100,
+          "value": "100.0",
+          "group": "pressure"
+        },
+        {
+          "elementID": "1.12.209.10.62.9.0",
+          "unit": "code",
+          "codeSrc": "wmo_bufr",
+          "codeType": "010063",
+          "name": "pres_tend_char_pst3hrs",
+          "elementIndex": "4",
+          "overallQASummary": -1,
+          "value": "MSNG",
+          "group": "pressure"
+        },
+        {
+          "elementID": "1.12.212.0.0.0.0",
+          "unit": "Pa",
+          "valueNum": 100900,
+          "name": "baro_read",
+          "elementIndex": "5",
+          "overallQASummary": 100,
+          "value": "100900.0",
+          "group": "pressure"
+        },
+        {
+          "elementID": "1.12.213.0.0.0.0",
+          "unit": "Pa",
+          "valueNum": 102240,
+          "name": "altmetr_setng",
+          "elementIndex": "6",
+          "overallQASummary": 100,
+          "value": "102240.0",
+          "group": "pressure"
+        },
+        {
+          "elementID": "1.12.214.0.0.0.0",
+          "unit": "code",
+          "codeSrc": "local_bufr",
+          "codeType": "010211",
+          "valueNum": 0,
+          "name": "rpd_pres_chg",
+          "elementIndex": "7",
+          "overallQASummary": 100,
+          "value": "0",
+          "group": "pressure"
+        },
+        {
+          "elementID": "1.12.211.0.0.0.0",
+          "unit": "ft",
+          "valueNum": -1000,
+          "name": "dnsty_altd",
+          "elementIndex": "8",
+          "overallQASummary": 100,
+          "value": "-1000",
+          "group": "pressure"
+        },
+        {
+          "elementID": "1.19.265.0.0.0.0",
+          "unit": "K",
+          "valueNum": 278.35,
+          "name": "air_temp",
+          "elementIndex": "9",
+          "overallQASummary": 100,
+          "value": "278.35",
+          "group": "temperature"
+        },
+        {
+          "elementID": "1.19.267.0.0.0.0",
+          "unit": "K",
+          "valueNum": 273.85,
+          "name": "dwpt_temp",
+          "elementIndex": "10",
+          "overallQASummary": 100,
+          "value": "273.85",
+          "group": "temperature"
+        },
+        {
+          "elementID": "1.5.66.0.0.0.0",
+          "unit": "%",
+          "valueNum": 73,
+          "name": "rel_hum",
+          "elementIndex": "11",
+          "overallQASummary": 100,
+          "value": "73",
+          "group": "humidity"
+        },
+        {
+          "elementID": "1.19.265.7.60.7.0",
+          "unit": "K",
+          "valueNum": 278.95,
+          "name": "max_air_temp_pst1hr",
+          "elementIndex": "12",
+          "overallQASummary": 100,
+          "value": "278.95",
+          "group": "temperature"
+        },
+        {
+          "elementID": "1.19.265.8.60.7.0",
+          "unit": "K",
+          "valueNum": 278.35,
+          "name": "min_air_temp_pst1hr",
+          "elementIndex": "13",
+          "overallQASummary": 100,
+          "value": "278.35",
+          "group": "temperature"
+        },
+        {
+          "elementID": "1.19.265.7.65.12.0",
+          "unit": "K",
+          "valueNum": 279.35,
+          "name": "max_air_temp_pst6hrs",
+          "elementIndex": "14",
+          "overallQASummary": 100,
+          "value": "279.35",
+          "group": "temperature"
+        },
+        {
+          "elementID": "1.19.265.8.65.12.0",
+          "unit": "K",
+          "valueNum": 277.15,
+          "name": "min_air_temp_pst6hrs",
+          "elementIndex": "15",
+          "overallQASummary": 100,
+          "value": "277.15",
+          "group": "temperature"
+        },
+        {
+          "elementID": "1.19.265.7.67.14.0",
+          "unit": "K",
+          "valueNum": 279.35,
+          "name": "max_air_temp_pst24hrs",
+          "elementIndex": "16",
+          "overallQASummary": 100,
+          "value": "279.35",
+          "group": "temperature"
+        },
+        {
+          "elementID": "1.19.265.8.67.14.0",
+          "unit": "K",
+          "valueNum": 272.15,
+          "name": "min_air_temp_pst24hrs",
+          "elementIndex": "17",
+          "overallQASummary": 100,
+          "value": "272.15",
+          "group": "temperature"
+        },
+        {
+          "elementID": "1.19.265.0.66.0.0",
+          "unit": "K",
+          "valueNum": 274.45,
+          "name": "air_temp_12hrs_ago",
+          "elementIndex": "18",
+          "overallQASummary": 100,
+          "value": "274.45",
+          "group": "temperature"
+        },
+        {
+          "elementID": "1.20.287.2.10.4.0",
+          "unit": "m",
+          "name": "avg_vis_pst10mts",
+          "elementIndex": "19",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "visibility"
+        },
+        {
+          "elementID": "1.20.287.7.10.4.0",
+          "unit": "m",
+          "name": "max_vis_pst10mts",
+          "elementIndex": "20",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "visibility"
+        },
+        {
+          "elementID": "1.20.287.8.10.4.0",
+          "unit": "m",
+          "name": "min_vis_pst10mts",
+          "elementIndex": "21",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "visibility"
+        },
+        {
+          "elementID": "1.17.252.0.0.0.0",
+          "unit": "m",
+          "name": "vert_vis",
+          "elementIndex": "22",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "sky_condition"
+        },
+        {
+          "elementID": "1.23.304.0.0.0.0",
+          "unit": "code",
+          "codeSrc": "wmo_bufr",
+          "codeType": "020003",
+          "valueNum": 100,
+          "name": "prsnt_wx",
+          "index": { "name": "observed_weather_index", "value": 1 },
+          "elementIndex": "23",
+          "overallQASummary": -10,
+          "value": "100",
+          "indexValue": 1,
+          "group": "weather"
+        },
+        {
+          "elementID": "1.11.176.0.10.4.0",
+          "unit": "unitless",
+          "name": "pcpn_typ_pst10mts",
+          "elementIndex": "24",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "precipitation"
+        },
+        {
+          "elementID": "1.11.179.0.10.4.0",
+          "unit": "code",
+          "codeSrc": "wmo_bufr",
+          "codeType": "020022",
+          "name": "pcpn_char_pst10mts",
+          "elementIndex": "25",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "precipitation"
+        },
+        {
+          "elementID": "1.11.180.0.10.4.0",
+          "unit": "min",
+          "name": "pcpn_dur_pst10mts",
+          "elementIndex": "26",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "precipitation"
+        },
+        {
+          "elementID": "1.23.302.0.10.4.0",
+          "unit": "unitless",
+          "name": "othr_phenom_pst10mts",
+          "elementIndex": "27",
+          "overallQASummary": 100,
+          "value": "MSNG",
+          "group": "weather"
+        },
+        {
+          "elementID": "1.23.305.0.10.4.0",
+          "unit": "code",
+          "codeSrc": "wmo_bufr",
+          "codeType": "020024",
+          "name": "phenom_intnsty_pst10mts",
+          "elementIndex": "28",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "weather"
+        },
+        {
+          "elementID": "1.23.306.0.10.4.0",
+          "unit": "unitless",
+          "name": "obscn_pst10mts",
+          "elementIndex": "29",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "weather"
+        },
+        {
+          "elementID": "1.23.307.0.10.4.0",
+          "unit": "code",
+          "codeSrc": "wmo_bufr",
+          "codeType": "020026",
+          "name": "obscn_char_pst10mts",
+          "elementIndex": "30",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "weather"
+        },
+        {
+          "elementID": "1.6.72.0.0.0.0",
+          "unit": "code",
+          "codeSrc": "local_bufr",
+          "codeType": "020252",
+          "name": "sfc_icng",
+          "elementIndex": "31",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "ice"
+        },
+        {
+          "elementID": "1.23.303.0.0.0.0",
+          "unit": "unitless",
+          "name": "sig_locl_phenom",
+          "elementIndex": "32",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "weather"
+        },
+        {
+          "elementID": "1.24.320.12.2.2.6",
+          "unit": "°",
+          "valueNum": 74,
+          "name": "avg_wnd_dir_10m_pst2mts",
+          "elementIndex": "33",
+          "overallQASummary": 100,
+          "value": "74",
+          "group": "wind"
+        },
+        {
+          "elementID": "1.24.314.2.2.2.6",
+          "unit": "m/s",
+          "valueNum": 1.3,
+          "name": "avg_wnd_spd_10m_pst2mts",
+          "elementIndex": "34",
+          "overallQASummary": 100,
+          "value": "1.3",
+          "group": "wind"
+        },
+        {
+          "elementID": "1.24.320.12.10.4.6",
+          "unit": "°",
+          "valueNum": 95,
+          "name": "avg_wnd_dir_10m_pst10mts",
+          "elementIndex": "35",
+          "overallQASummary": 100,
+          "value": "95",
+          "group": "wind"
+        },
+        {
+          "elementID": "1.24.314.2.10.4.6",
+          "unit": "m/s",
+          "valueNum": 1.4,
+          "name": "avg_wnd_spd_10m_pst10mts",
+          "elementIndex": "36",
+          "overallQASummary": 100,
+          "value": "1.4",
+          "group": "wind"
+        },
+        {
+          "elementID": "1.24.340.0.10.4.6",
+          "unit": "°",
+          "valueNum": 48,
+          "name": "var_wnd_dir_lwr_bnd_10m_pst10mts",
+          "elementIndex": "37",
+          "overallQASummary": 100,
+          "value": "48",
+          "group": "wind"
+        },
+        {
+          "elementID": "1.24.339.0.10.4.6",
+          "unit": "°",
+          "valueNum": 134,
+          "name": "var_wnd_dir_upr_bnd_10m_pst10mts",
+          "elementIndex": "38",
+          "overallQASummary": 100,
+          "value": "134",
+          "group": "wind"
+        },
+        {
+          "elementID": "1.24.338.0.10.4.6",
+          "unit": "code",
+          "codeSrc": "local_bufr",
+          "codeType": "011222",
+          "valueNum": 2,
+          "name": "var_wnd_state_10m_pst10mts",
+          "elementIndex": "39",
+          "overallQASummary": 100,
+          "value": "2",
+          "group": "wind"
+        },
+        {
+          "elementID": "1.24.326.7.10.4.6",
+          "unit": "m/s",
+          "name": "max_wnd_gst_spd_10m_pst10mts",
+          "elementIndex": "40",
+          "overallQASummary": -1,
+          "value": "MSNG",
+          "group": "wind"
+        },
+        {
+          "elementID": "1.24.323.0.60.7.6",
+          "unit": "°",
+          "valueNum": 69,
+          "name": "wnd_dir_10m_pst1hr_max_spd",
+          "elementIndex": "41",
+          "overallQASummary": 100,
+          "value": "69",
+          "group": "wind"
+        },
+        {
+          "elementID": "1.24.314.7.60.7.6",
+          "unit": "m/s",
+          "valueNum": 1.7,
+          "name": "max_wnd_spd_10m_pst1hr",
+          "elementIndex": "42",
+          "overallQASummary": 100,
+          "value": "1.7",
+          "group": "wind"
+        },
+        {
+          "elementID": "1.11.171.1.60.7.0",
+          "unit": "mm",
+          "name": "pcpn_amt_pst1hr",
+          "elementIndex": "43",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "precipitation"
+        },
+        {
+          "elementID": "1.11.171.1.62.9.0",
+          "unit": "mm",
+          "name": "pcpn_amt_pst3hrs",
+          "elementIndex": "44",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "precipitation"
+        },
+        {
+          "elementID": "1.11.171.1.65.12.0",
+          "unit": "mm",
+          "name": "pcpn_amt_pst6hrs",
+          "elementIndex": "45",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "precipitation"
+        },
+        {
+          "elementID": "1.11.171.1.67.14.0",
+          "unit": "mm",
+          "name": "pcpn_amt_pst24hrs",
+          "elementIndex": "46",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "precipitation"
+        },
+        {
+          "elementID": "1.13.215.0.0.0.0",
+          "unit": "unitless",
+          "name": "hrdwr_qlty_flg",
+          "elementIndex": "47",
+          "value": "0000111111001100001111110000000",
+          "group": "quality"
+        },
+        {
+          "elementID": "1.13.216.0.0.0.0",
+          "unit": "unitless",
+          "name": "wx_elemt_wrng_flg",
+          "elementIndex": "48",
+          "value": "0000000000000000000000000000000",
+          "group": "quality"
+        },
+        {
+          "elementID": "1.13.217.0.0.0.0",
+          "unit": "unitless",
+          "name": "wx_elemt_err_flg",
+          "elementIndex": "49",
+          "value": "0000000000000000000000000000000",
+          "group": "quality"
+        },
+        {
+          "elementID": "1.2.19.0.0.0.0",
+          "unit": "code",
+          "codeSrc": "wmo_bufr",
+          "codeType": "033006",
+          "valueNum": 3,
+          "name": "stn_int_msrmnt_stat",
+          "elementIndex": "50",
+          "value": "3",
+          "group": "diagnostics"
+        }
+      ],
+      "parentIdentity": "/data/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/decoded-xml-2.0/201803050100/1021270/cybl/orig/data_60"
+    }
+  },
+  {
+    "_index": "dms_data_idx:nav_canada:observation:atmospheric:surface_weather:awos-2.1-binary_2018.02",
+    "_type": "dms",
+    "_id": "nav_canada:observation:atmospheric:surface_weather:awos-2.1-binary:decoded_qa_enhanced-xml-2.0:201803050200:1021270:cybl:orig:data_60:level_1",
+    "_score": 15.009586,
+    "_source": {
+      "identifier": "1021270",
+      "obsDateTime": "2018-03-05T02:00:00Z",
+      "author": {
+        "build": "build.113",
+        "name": "MSC-DMS-Merger-Observation",
+        "version": "2.3"
+      },
+      "metadataElements": [
+        {
+          "elementID": "1.7.392.0.0.0.0",
+          "unit": "unitless",
+          "name": "MSNG",
+          "value": "/data/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/job-xml-2.0/201803050200/cybl/orig/data_60",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.82.0.0.0.0",
+          "unit": "unitless",
+          "name": "wmo_synop_id",
+          "value": "MSNG",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.83.0.0.0.0",
+          "unit": "unitless",
+          "name": "stn_nam",
+          "value": "Campbell River",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.104.0.0.0.0",
+          "unit": "code",
+          "codeSrc": "wmo_bufr",
+          "codeType": "002001",
+          "valueNum": 0,
+          "name": "stn_typ_generic",
+          "value": "0",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.427.0.0.0.0",
+          "unit": "code",
+          "codeSrc": "local_bufr",
+          "codeType": "002196",
+          "valueNum": 10,
+          "name": "stn_typ",
+          "value": "10",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.78.0.0.0.0",
+          "unit": "datetime",
+          "name": "date_tm",
+          "value": "2018-03-05T02:00:00Z",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.97.0.0.0.0",
+          "unit": "°",
+          "valueNum": 49.95204,
+          "name": "lat",
+          "value": "49.95204",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.98.0.0.0.0",
+          "unit": "°",
+          "valueNum": -125.27305,
+          "name": "long",
+          "value": "-125.27305",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.87.0.0.0.0",
+          "unit": "m",
+          "valueNum": 108.8,
+          "name": "stn_elev",
+          "value": "108.8",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.8.147.0.0.0.0",
+          "unit": "m",
+          "valueNum": 111.2,
+          "name": "baro_elev",
+          "value": "111.2",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.7.102.0.0.0.0",
+          "unit": "unitless",
+          "name": "icao_stn_id",
+          "value": "CYBL",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.426.0.0.0.0",
+          "unit": "code",
+          "codeSrc": "wmo_bufr",
+          "codeType": "008079",
+          "valueNum": 0,
+          "name": "rpt_typ",
+          "value": "0",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.8.137.0.0.0.0",
+          "unit": "unitless",
+          "name": "main_prsnt_wx_dtctn_sys",
+          "value": "MSNG",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.8.138.0.0.0.0",
+          "unit": "unitless",
+          "name": "suppl_prsnt_wx_dtctn_sys",
+          "value": "MSNG",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.8.139.0.0.0.0",
+          "unit": "unitless",
+          "name": "vis_msrmnt_sys",
+          "value": "MSNG",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.8.140.0.0.0.0",
+          "unit": "unitless",
+          "name": "cld_dtctn_sys",
+          "value": "MSNG",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.8.141.0.0.0.0",
+          "unit": "unitless",
+          "name": "ltng_dtctn_snsr_typ",
+          "value": "MSNG",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.8.142.0.0.0.0",
+          "unit": "unitless",
+          "name": "sky_condn_algo_typ",
+          "value": "MSNG",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.8.143.0.0.0.0",
+          "unit": "unitless",
+          "name": "pcpn_phenom_dtctn_cap",
+          "value": "MSNG",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.8.144.0.0.0.0",
+          "unit": "unitless",
+          "name": "othr_wx_phenom_dtctn_cap",
+          "value": "MSNG",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.8.145.0.0.0.0",
+          "unit": "unitless",
+          "name": "obscn_dtctn_cap",
+          "value": "MSNG",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.8.146.0.0.0.0",
+          "unit": "unitless",
+          "name": "ltng_strk_discrmn_cap",
+          "value": "MSNG",
+          "group": "instrumentation"
+        },
+        {
+          "elementID": "1.9.154.0.0.0.0",
+          "unit": "code",
+          "codeSrc": "wmo_bufr",
+          "codeType": "002175",
+          "valueNum": 1,
+          "name": "pcpn_msrmnt_mtd",
+          "value": "1",
+          "group": "methods"
+        },
+        {
+          "elementID": "1.7.85.0.0.0.0",
+          "unit": "unitless",
+          "valueNum": 1021270,
+          "name": "clim_id",
+          "value": "1021270",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.86.0.0.0.0",
+          "unit": "unitless",
+          "valueNum": 1021270,
+          "name": "msc_id",
+          "value": "1021270",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.81.0.0.0.0",
+          "unit": "unitless",
+          "name": "data_pvdr",
+          "value": "NAV CANADA",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.103.0.0.0.0",
+          "unit": "unitless",
+          "name": "data_attrib_not",
+          "value": "Observational data provided by NAV CANADA. All rights reserved.",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.117.0.0.0.0",
+          "unit": "unitless",
+          "name": "prov",
+          "value": "BC",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.105.0.0.0.0",
+          "unit": "unitless",
+          "name": "cor",
+          "value": "orig",
+          "group": "identification"
+        },
+        {
+          "elementID": "1.7.408.0.0.0.0",
+          "unit": "unitless",
+          "valueNum": 0,
+          "name": "ver",
+          "value": "0",
+          "group": "identification"
+        },
+        {
+          "unit": "unitless",
+          "value": "/metadata/msc/qa_package/ncawos2.1/meta_product-xml-1.0/station/cybl/03010000",
+          "group": "identification"
+        },
+        {
+          "unit": "unitless",
+          "value": "decoded_enhanced-xml-2.0",
+          "group": "identification"
+        },
+        {
+          "unit": "unitless",
+          "value": "decoded_qa_full-xml-2.0",
+          "group": "identification"
+        },
+        {
+          "unit": "unitless",
+          "value": "/data/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/decoded_qa-xml-2.0/201803050200/1021270/cybl/orig/data_60/level_1",
+          "group": "identification"
+        },
+        {
+          "unit": "unitless",
+          "value": "/data/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/decoded-xml-2.0/201803050200/1021270/cybl/orig/data_60",
+          "group": "identification"
+        }
+      ],
+      "taxonomy": "/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/decoded_qa_enhanced-xml-2.0",
+      "primaryID": "1021270",
+      "rawMessage": { "header": "ISAB65 CYBL 050200" },
+      "receivedDateTime": "2018-03-05T02:03:00Z",
+      "identity": "/data/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/decoded_qa_enhanced-xml-2.0/201803050200/1021270/cybl/orig/data_60/level_1",
+      "jsonVersion": 1,
+      "location": {
+        "coordinates": [-125.27305, 49.95204, 108.8],
+        "type": "point"
+      },
+      "dataElements": [
+        {
+          "elementID": "1.11.171.1.62.9.0",
+          "unit": "mm",
+          "name": "pcpn_amt_pst3hrs",
+          "supplementaryInfo": [{ "dataFlag": "4" }],
+          "value": "MSNG",
+          "group": "precipitation"
+        },
+        {
+          "elementID": "1.11.171.1.65.12.0",
+          "unit": "mm",
+          "name": "pcpn_amt_pst6hrs",
+          "supplementaryInfo": [{ "dataFlag": "4" }],
+          "value": "MSNG",
+          "group": "precipitation"
+        },
+        {
+          "elementID": "1.11.171.1.67.14.0",
+          "unit": "mm",
+          "name": "pcpn_amt_pst24hrs",
+          "supplementaryInfo": [{ "dataFlag": "4" }],
+          "value": "MSNG",
+          "group": "precipitation"
+        },
+        {
+          "elementID": "1.12.210.0.0.0.0",
+          "unit": "hPa",
+          "valueNum": 6.52,
+          "name": "vpr_pres",
+          "supplementaryInfo": [{ "dataFlag": "1" }],
+          "value": "6.52",
+          "group": "pressure"
+        },
+        {
+          "elementID": "1.19.271.0.0.0.0",
+          "unit": "°C",
+          "valueNum": 2.488281,
+          "name": "wetblb_temp",
+          "supplementaryInfo": [{ "dataFlag": "1" }],
+          "value": "2.488281",
+          "group": "temperature"
+        },
+        {
+          "elementID": "1.12.206.0.0.0.0",
+          "unit": "Pa",
+          "valueNum": 100960,
+          "name": "stn_pres",
+          "elementIndex": "1",
+          "overallQASummary": 100,
+          "value": "100960.0",
+          "group": "pressure"
+        },
+        {
+          "elementID": "1.12.207.0.0.0.0",
+          "unit": "Pa",
+          "valueNum": 102310,
+          "name": "mslp",
+          "elementIndex": "2",
+          "overallQASummary": 100,
+          "value": "102310.0",
+          "group": "pressure"
+        },
+        {
+          "elementID": "1.12.208.3.62.9.0",
+          "unit": "Pa",
+          "valueNum": 90,
+          "name": "pres_tend_amt_pst3hrs",
+          "elementIndex": "3",
+          "overallQASummary": 100,
+          "value": "90.0",
+          "group": "pressure"
+        },
+        {
+          "elementID": "1.12.209.10.62.9.0",
+          "unit": "code",
+          "codeSrc": "wmo_bufr",
+          "codeType": "010063",
+          "name": "pres_tend_char_pst3hrs",
+          "elementIndex": "4",
+          "overallQASummary": -1,
+          "value": "MSNG",
+          "group": "pressure"
+        },
+        {
+          "elementID": "1.12.212.0.0.0.0",
+          "unit": "Pa",
+          "valueNum": 100930,
+          "name": "baro_read",
+          "elementIndex": "5",
+          "overallQASummary": 100,
+          "value": "100930.0",
+          "group": "pressure"
+        },
+        {
+          "elementID": "1.12.213.0.0.0.0",
+          "unit": "Pa",
+          "valueNum": 102270,
+          "name": "altmetr_setng",
+          "elementIndex": "6",
+          "overallQASummary": 100,
+          "value": "102270.0",
+          "group": "pressure"
+        },
+        {
+          "elementID": "1.12.214.0.0.0.0",
+          "unit": "code",
+          "codeSrc": "local_bufr",
+          "codeType": "010211",
+          "valueNum": 0,
+          "name": "rpd_pres_chg",
+          "elementIndex": "7",
+          "overallQASummary": 100,
+          "value": "0",
+          "group": "pressure"
+        },
+        {
+          "elementID": "1.12.211.0.0.0.0",
+          "unit": "ft",
+          "valueNum": -1200,
+          "name": "dnsty_altd",
+          "elementIndex": "8",
+          "overallQASummary": 100,
+          "value": "-1200",
+          "group": "pressure"
+        },
+        {
+          "elementID": "1.19.265.0.0.0.0",
+          "unit": "K",
+          "valueNum": 276.85,
+          "name": "air_temp",
+          "elementIndex": "9",
+          "overallQASummary": 100,
+          "value": "276.85",
+          "group": "temperature"
+        },
+        {
+          "elementID": "1.19.267.0.0.0.0",
+          "unit": "K",
+          "valueNum": 274.05,
+          "name": "dwpt_temp",
+          "elementIndex": "10",
+          "overallQASummary": 100,
+          "value": "274.05",
+          "group": "temperature"
+        },
+        {
+          "elementID": "1.5.66.0.0.0.0",
+          "unit": "%",
+          "valueNum": 82,
+          "name": "rel_hum",
+          "elementIndex": "11",
+          "overallQASummary": 100,
+          "value": "82",
+          "group": "humidity"
+        },
+        {
+          "elementID": "1.19.265.7.60.7.0",
+          "unit": "K",
+          "valueNum": 278.35,
+          "name": "max_air_temp_pst1hr",
+          "elementIndex": "12",
+          "overallQASummary": 100,
+          "value": "278.35",
+          "group": "temperature"
+        },
+        {
+          "elementID": "1.19.265.8.60.7.0",
+          "unit": "K",
+          "valueNum": 276.85,
+          "name": "min_air_temp_pst1hr",
+          "elementIndex": "13",
+          "overallQASummary": 100,
+          "value": "276.85",
+          "group": "temperature"
+        },
+        {
+          "elementID": "1.19.265.7.65.12.0",
+          "unit": "K",
+          "valueNum": 279.35,
+          "name": "max_air_temp_pst6hrs",
+          "elementIndex": "14",
+          "overallQASummary": 100,
+          "value": "279.35",
+          "group": "temperature"
+        },
+        {
+          "elementID": "1.19.265.8.65.12.0",
+          "unit": "K",
+          "valueNum": 276.85,
+          "name": "min_air_temp_pst6hrs",
+          "elementIndex": "15",
+          "overallQASummary": 100,
+          "value": "276.85",
+          "group": "temperature"
+        },
+        {
+          "elementID": "1.19.265.7.67.14.0",
+          "unit": "K",
+          "valueNum": 279.35,
+          "name": "max_air_temp_pst24hrs",
+          "elementIndex": "16",
+          "overallQASummary": 100,
+          "value": "279.35",
+          "group": "temperature"
+        },
+        {
+          "elementID": "1.19.265.8.67.14.0",
+          "unit": "K",
+          "valueNum": 272.15,
+          "name": "min_air_temp_pst24hrs",
+          "elementIndex": "17",
+          "overallQASummary": 100,
+          "value": "272.15",
+          "group": "temperature"
+        },
+        {
+          "elementID": "1.19.265.0.66.0.0",
+          "unit": "K",
+          "valueNum": 273.45,
+          "name": "air_temp_12hrs_ago",
+          "elementIndex": "18",
+          "overallQASummary": 100,
+          "value": "273.45",
+          "group": "temperature"
+        },
+        {
+          "elementID": "1.20.287.2.10.4.0",
+          "unit": "m",
+          "name": "avg_vis_pst10mts",
+          "elementIndex": "19",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "visibility"
+        },
+        {
+          "elementID": "1.20.287.7.10.4.0",
+          "unit": "m",
+          "name": "max_vis_pst10mts",
+          "elementIndex": "20",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "visibility"
+        },
+        {
+          "elementID": "1.20.287.8.10.4.0",
+          "unit": "m",
+          "name": "min_vis_pst10mts",
+          "elementIndex": "21",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "visibility"
+        },
+        {
+          "elementID": "1.17.252.0.0.0.0",
+          "unit": "m",
+          "name": "vert_vis",
+          "elementIndex": "22",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "sky_condition"
+        },
+        {
+          "elementID": "1.23.304.0.0.0.0",
+          "unit": "code",
+          "codeSrc": "wmo_bufr",
+          "codeType": "020003",
+          "valueNum": 100,
+          "name": "prsnt_wx",
+          "index": { "name": "observed_weather_index", "value": 1 },
+          "elementIndex": "23",
+          "overallQASummary": -10,
+          "value": "100",
+          "indexValue": 1,
+          "group": "weather"
+        },
+        {
+          "elementID": "1.11.176.0.10.4.0",
+          "unit": "unitless",
+          "name": "pcpn_typ_pst10mts",
+          "elementIndex": "24",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "precipitation"
+        },
+        {
+          "elementID": "1.11.179.0.10.4.0",
+          "unit": "code",
+          "codeSrc": "wmo_bufr",
+          "codeType": "020022",
+          "name": "pcpn_char_pst10mts",
+          "elementIndex": "25",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "precipitation"
+        },
+        {
+          "elementID": "1.11.180.0.10.4.0",
+          "unit": "min",
+          "name": "pcpn_dur_pst10mts",
+          "elementIndex": "26",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "precipitation"
+        },
+        {
+          "elementID": "1.23.302.0.10.4.0",
+          "unit": "unitless",
+          "name": "othr_phenom_pst10mts",
+          "elementIndex": "27",
+          "overallQASummary": 100,
+          "value": "MSNG",
+          "group": "weather"
+        },
+        {
+          "elementID": "1.23.305.0.10.4.0",
+          "unit": "code",
+          "codeSrc": "wmo_bufr",
+          "codeType": "020024",
+          "name": "phenom_intnsty_pst10mts",
+          "elementIndex": "28",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "weather"
+        },
+        {
+          "elementID": "1.23.306.0.10.4.0",
+          "unit": "unitless",
+          "name": "obscn_pst10mts",
+          "elementIndex": "29",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "weather"
+        },
+        {
+          "elementID": "1.23.307.0.10.4.0",
+          "unit": "code",
+          "codeSrc": "wmo_bufr",
+          "codeType": "020026",
+          "name": "obscn_char_pst10mts",
+          "elementIndex": "30",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "weather"
+        },
+        {
+          "elementID": "1.6.72.0.0.0.0",
+          "unit": "code",
+          "codeSrc": "local_bufr",
+          "codeType": "020252",
+          "name": "sfc_icng",
+          "elementIndex": "31",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "ice"
+        },
+        {
+          "elementID": "1.23.303.0.0.0.0",
+          "unit": "unitless",
+          "name": "sig_locl_phenom",
+          "elementIndex": "32",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "weather"
+        },
+        {
+          "elementID": "1.24.320.12.2.2.6",
+          "unit": "°",
+          "valueNum": 123,
+          "name": "avg_wnd_dir_10m_pst2mts",
+          "elementIndex": "33",
+          "overallQASummary": 100,
+          "value": "123",
+          "group": "wind"
+        },
+        {
+          "elementID": "1.24.314.2.2.2.6",
+          "unit": "m/s",
+          "valueNum": 0.4,
+          "name": "avg_wnd_spd_10m_pst2mts",
+          "elementIndex": "34",
+          "overallQASummary": 100,
+          "value": "0.4",
+          "group": "wind"
+        },
+        {
+          "elementID": "1.24.320.12.10.4.6",
+          "unit": "°",
+          "valueNum": 108,
+          "name": "avg_wnd_dir_10m_pst10mts",
+          "elementIndex": "35",
+          "overallQASummary": 100,
+          "value": "108",
+          "group": "wind"
+        },
+        {
+          "elementID": "1.24.314.2.10.4.6",
+          "unit": "m/s",
+          "valueNum": 0.6,
+          "name": "avg_wnd_spd_10m_pst10mts",
+          "elementIndex": "36",
+          "overallQASummary": 100,
+          "value": "0.6",
+          "group": "wind"
+        },
+        {
+          "elementID": "1.24.340.0.10.4.6",
+          "unit": "°",
+          "name": "var_wnd_dir_lwr_bnd_10m_pst10mts",
+          "elementIndex": "37",
+          "overallQASummary": -1,
+          "value": "MSNG",
+          "group": "wind"
+        },
+        {
+          "elementID": "1.24.339.0.10.4.6",
+          "unit": "°",
+          "name": "var_wnd_dir_upr_bnd_10m_pst10mts",
+          "elementIndex": "38",
+          "overallQASummary": -1,
+          "value": "MSNG",
+          "group": "wind"
+        },
+        {
+          "elementID": "1.24.338.0.10.4.6",
+          "unit": "code",
+          "codeSrc": "local_bufr",
+          "codeType": "011222",
+          "valueNum": 0,
+          "name": "var_wnd_state_10m_pst10mts",
+          "elementIndex": "39",
+          "overallQASummary": 100,
+          "value": "0",
+          "group": "wind"
+        },
+        {
+          "elementID": "1.24.326.7.10.4.6",
+          "unit": "m/s",
+          "name": "max_wnd_gst_spd_10m_pst10mts",
+          "elementIndex": "40",
+          "overallQASummary": -1,
+          "value": "MSNG",
+          "group": "wind"
+        },
+        {
+          "elementID": "1.24.323.0.60.7.6",
+          "unit": "°",
+          "valueNum": 107,
+          "name": "wnd_dir_10m_pst1hr_max_spd",
+          "elementIndex": "41",
+          "overallQASummary": 100,
+          "value": "107",
+          "group": "wind"
+        },
+        {
+          "elementID": "1.24.314.7.60.7.6",
+          "unit": "m/s",
+          "valueNum": 0.7,
+          "name": "max_wnd_spd_10m_pst1hr",
+          "elementIndex": "42",
+          "overallQASummary": 100,
+          "value": "0.7",
+          "group": "wind"
+        },
+        {
+          "elementID": "1.11.171.1.60.7.0",
+          "unit": "mm",
+          "name": "pcpn_amt_pst1hr",
+          "elementIndex": "43",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "precipitation"
+        },
+        {
+          "elementID": "1.11.171.1.62.9.0",
+          "unit": "mm",
+          "name": "pcpn_amt_pst3hrs",
+          "elementIndex": "44",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "precipitation"
+        },
+        {
+          "elementID": "1.11.171.1.65.12.0",
+          "unit": "mm",
+          "name": "pcpn_amt_pst6hrs",
+          "elementIndex": "45",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "precipitation"
+        },
+        {
+          "elementID": "1.11.171.1.67.14.0",
+          "unit": "mm",
+          "name": "pcpn_amt_pst24hrs",
+          "elementIndex": "46",
+          "overallQASummary": -10,
+          "value": "MSNG",
+          "group": "precipitation"
+        },
+        {
+          "elementID": "1.13.215.0.0.0.0",
+          "unit": "unitless",
+          "name": "hrdwr_qlty_flg",
+          "elementIndex": "47",
+          "value": "0000111111001100001111110000000",
+          "group": "quality"
+        },
+        {
+          "elementID": "1.13.216.0.0.0.0",
+          "unit": "unitless",
+          "name": "wx_elemt_wrng_flg",
+          "elementIndex": "48",
+          "value": "0000000000000000000000000000000",
+          "group": "quality"
+        },
+        {
+          "elementID": "1.13.217.0.0.0.0",
+          "unit": "unitless",
+          "name": "wx_elemt_err_flg",
+          "elementIndex": "49",
+          "value": "0000000000000000000000000000000",
+          "group": "quality"
+        },
+        {
+          "elementID": "1.2.19.0.0.0.0",
+          "unit": "code",
+          "codeSrc": "wmo_bufr",
+          "codeType": "033006",
+          "valueNum": 3,
+          "name": "stn_int_msrmnt_stat",
+          "elementIndex": "50",
+          "value": "3",
+          "group": "diagnostics"
+        }
+      ],
+      "parentIdentity": "/data/nav_canada/observation/atmospheric/surface_weather/awos-2.1-binary/decoded-xml-2.0/201803050200/1021270/cybl/orig/data_60"
+    }
+  }
+]

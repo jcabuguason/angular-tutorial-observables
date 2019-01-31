@@ -9,8 +9,8 @@ export interface TextDialogData {
 @Component({
   selector: 'commons-text-dialog',
   templateUrl: 'text-dialog.component.html',
-  styleUrls: [ 'text-dialog.component.css' ]
+  styleUrls: ['text-dialog.component.css'],
 })
 export class TextDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: TextDialogData) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: TextDialogData) {}
 }

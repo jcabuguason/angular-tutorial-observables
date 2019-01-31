@@ -29,5 +29,4 @@ describe('SearchDatetime', () => {
   it('should return empty string for formatted datetime', () => {
     expect(dateParam.getDatetimeUrlFormat()).toEqual('');
   });
-
 });

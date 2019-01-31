@@ -1,38 +1,38 @@
 export interface CodeSources {
-    [codeSource: string]: CodeTypes;
+  [codeSource: string]: CodeTypes;
 }
 
 export interface CodeTypes {
-    [codeType: string]: CodeResult[];
+  [codeType: string]: CodeResult[];
 }
 
 export interface CodeResult {
-    codeValue: string;
-    textValue: string;
-    en?: string;
-    fr?: string;
+  codeValue: string;
+  textValue: string;
+  en?: string;
+  fr?: string;
 }
 
 export interface UnitConversionResult {
-    unitConversionResult: FromUnits;
+  unitConversionResult: FromUnits;
 }
 
 export interface FromUnits {
-    [fromUnits: string]: ToUnits;
+  [fromUnits: string]: ToUnits;
 }
 
 export interface ToUnits {
-    [toUnits: string]: UnitConversion[];
+  [toUnits: string]: UnitConversion[];
 }
 
 export interface UnitConversion {
-    multiplier: number;
-    offset: number;
+  multiplier: number;
+  offset: number;
 }
 
 export interface ConvertedValues {
-    originalValue: string;
-    originalUnit: string;
-    preferredValue: string;
-    preferredUnit: string;
+  originalValue: string;
+  originalUnit: string;
+  preferredValue: string;
+  preferredUnit: string;
 }

@@ -4,9 +4,9 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { qaTranslationKey } from 'msc-dms-commons-angular/core/obs-util';
 
 @Component({
-    selector: 'commons-qa-renderer',
-    templateUrl: './qa-renderer.component.html',
-    styleUrls: ['./qa-renderer.component.scss']
+  selector: 'commons-qa-renderer',
+  templateUrl: './qa-renderer.component.html',
+  styleUrls: ['./qa-renderer.component.scss'],
 })
 export class QaRendererComponent implements ICellRendererAngularComp {
   constructor(public translate: TranslateService) {}
@@ -21,9 +21,8 @@ export class QaRendererComponent implements ICellRendererAngularComp {
   }
 
   refresh(): boolean {
-      return false;
+    return false;
   }
 
   label = (qa: string) => this.translate.instant(qaTranslationKey(qa));
-
 }

@@ -1,7 +1,5 @@
 export default class CAData {
-
-
-      /*
+  /*
   static testHeader = {
     "aggregations":{
       "dataElements":{
@@ -158,106 +156,460 @@ export default class CAData {
       "key":"1.4.56.0.0.0.0","doc_count":18,"maxIndex":{ "value":null},"minIndex":{ "value":null}}]}}}}
       */
   static testHeader = {
-    "aggregations":{
-      "dataElements":{
-      "doc_count":1849878,
-      "index":{
-      "doc_count_error_upper_bound":0,
-      "sum_other_doc_count":0,
-      "buckets":[{
-      "key":"1.19.265.2.1.1.0","doc_count":45993,"maxIndex":{ "value":3.0},"minIndex":{ "value":0.0}},{
-      "key":"1.19.265.7.60.7.0","doc_count":45527,"maxIndex":{ "value":3.0},"minIndex":{ "value":0.0}},{
-      "key":"1.19.265.8.60.7.0","doc_count":45527,"maxIndex":{ "value":3.0},"minIndex":{ "value":0.0}},{
-      "key":"1.19.265.2.60.7.0","doc_count":45299,"maxIndex":{ "value":3.0},"minIndex":{ "value":0.0}}]}}}}
-
-
-      static testObs1 = {
-        "identifier":"5022759","obsDateTime":"2017-11-23T17:00:00.000Z","receivedDateTime":"2017-11-23T23:46:00.000Z","identity":"/data/msc/observation/atmospheric/surface_weather/ca-1.1-ascii/decoded_qa_enhanced-xml-2.0/201711231700/5022759/wsu/11/orig/data_60/level_1","author":{
-        "build":"build.103","name":"MSC-DMS-Merger-Observation","version":"2.3"},"metadataElements":[{
-        "elementID":"1.7.392.0.0.0.0","unit":"unitless","name":"MSNG","value":"/data/msc/observation/atmospheric/surface_weather/ca-1.1-ascii/job-xml-2.0/201711231700/5022759/orig/data_60","group":"identification"},{
-        "elementID":"1.7.78.0.0.0.0","unit":"datetime","name":"date_tm","value":"2017-11-23T17:00:00.000Z","group":"identification"},{
-        "elementID":"1.7.79.0.0.0.0","unit":"unitless","valueNum":11,"name":"snsr_tbl_nbr","value":"11","group":"identification"},{
-        "elementID":"1.7.80.0.0.0.0","unit":"unitless","valueNum":1449,"name":"stn_id","value":"1449","group":"identification"},{
-        "elementID":"1.7.73.0.0.0.0","unit":"unitless","valueNum":4398,"name":"logr_prg_sig","value":"4398","group":"identification"},{
-        "elementID":"1.7.92.0.0.0.0","unit":"min","valueNum":60,"name":"MSNG","value":"60","group":"identification"},{
-        "elementID":"1.7.83.0.0.0.0","unit":"unitless","name":"stn_nam","value":"SPRAGUE","group":"identification"},{
-        "elementID":"1.7.84.0.0.0.0","unit":"unitless","name":"tc_id","value":"WSU","group":"identification"},{
-        "elementID":"1.7.82.0.0.0.0","unit":"unitless","valueNum":71449,"name":"wmo_synop_id","value":"71449","group":"identification"},{
-        "elementID":"1.7.87.0.0.0.0","unit":"m","valueNum":328.8,"name":"stn_elev","value":"328.8","group":"identification"},{
-        "elementID":"1.7.96.0.0.0.0","unit":"m","valueNum":328.88776,"name":"geoptl_stn_hgt","value":"328.88776","group":"identification"},{
-        "elementID":"1.7.x.0.0.0.0","unit":"hPa","valueNum":0,"name":"MSNG","value":"0.0","group":"identification"},{
-        "elementID":"1.7.105.0.0.0.0","unit":"unitless","name":"cor","value":"orig","group":"identification"},{
-        "elementID":"1.7.408.0.0.0.0","unit":"unitless","valueNum":0,"name":"ver","value":"0","group":"identification"},{
-        "elementID":"1.7.81.0.0.0.0","unit":"unitless","name":"data_pvdr","value":"MSC","group":"identification"},{
-        "elementID":"1.7.86.0.0.0.0","unit":"unitless","valueNum":5022759,"name":"msc_id","value":"5022759","group":"identification"},{
-        "elementID":"1.7.85.0.0.0.0","unit":"unitless","valueNum":5022759,"name":"clim_id","value":"5022759","group":"identification"},{
-        "elementID":"1.7.117.0.0.0.0","unit":"unitless","name":"prov","value":"MB","group":"identification"},{
-        "elementID":"1.7.97.0.0.0.0","unit":"Â°","valueNum":49.016667,"name":"lat","value":"49.016667","group":"identification"},{
-        "elementID":"1.7.98.0.0.0.0","unit":"Â°","valueNum":-95.6,"name":"long","value":"-95.6","group":"identification"},{
-        "elementID":"1.7.x.0.0.0.0","unit":"unitless","name":"MSNG","value":"N","group":"identification"},{
-        "elementID":"1.7.89.0.0.0.0","unit":"unitless","name":"hly_prdct_flg","value":"Y","group":"identification"},{
-        "elementID":"1.7.90.0.0.0.0","unit":"unitless","name":"sm_prdct_flg","value":"Y","group":"identification"},{
-        "elementID":"1.7.94.0.0.0.0","unit":"unitless","name":"cs_prdct_flg","value":"N","group":"identification"},{
-        "elementID":"1.7.95.0.0.0.0","unit":"unitless","name":"sx_prdct_flg","value":"N","group":"identification"},{
-        "elementID":"1.7.x.0.0.0.0","unit":"unitless","name":"MSNG","value":"MSNG","group":"identification"},{
-        "elementID":"1.7.91.0.0.0.0","unit":"code","codeSrc":"std_code_src","codeType":"content_indicator","name":"MSNG","value":"data","group":"identification"},{
-        "elementID":"1.7.393.0.0.0.0","unit":"unitless","valueNum":-0.002576,"name":"plat_coeff_a","value":"-0.002576","group":"identification"},{
-        "elementID":"1.7.394.0.0.0.0","unit":"unitless","valueNum":-0.454112,"name":"plat_coeff_b","value":"-0.454112","group":"identification"},{
-        "elementID":"1.7.395.0.0.0.0","unit":"unitless","valueNum":1.019344,"name":"plat_coeff_c","value":"1.019344","group":"identification"},{
-        "elementID":"1.7.93.0.0.0.0","unit":"unitless","name":"MSNG","value":"/metadata/msc/qa_package/surface_ca1.1/meta_product-xml-1.0/station/5022759/11010000","group":"identification"},{
-        "unit":"unitless","value":"decoded_enhanced-xml-2.0","group":"identification"},{
-        "unit":"unitless","value":"decoded_qa_full-xml-2.0","group":"identification"},{
-        "unit":"unitless","value":"/data/msc/observation/atmospheric/surface_weather/ca-1.1-ascii/decoded_qa-xml-2.0/201711231700/5022759/wsu/11/orig/data_60/level_1","group":"identification"},{
-        "unit":"unitless","value":"/data/msc/observation/atmospheric/surface_weather/ca-1.1-ascii/decoded-xml-2.0/201711231700/5022759/wsu/11/orig/data_60","group":"identification"}],"jsonVersion":1,"location":{
-        "coordinates":[-95.6,49.016667,328.8],"type":"point"},"taxonomy":"/msc/observation/atmospheric/surface_weather/ca-1.1-ascii/decoded_qa_enhanced-xml-2.0",
-        "dataElements":[
-        {
-          "elementID": "1.19.265.7.60.7.0",
-          "unit":"Â°C",
-          "dataType":"official",
-          "valueNum":-5.337,
-          "name":"max_air_temp_pst1hr",
-          "elementIndex":"9",
-          "overallQASummary":100,
-          "value":"-5.337",
-          "indexValue":0,
-          "group":"temperature"
+    aggregations: {
+      dataElements: {
+        doc_count: 1849878,
+        index: {
+          doc_count_error_upper_bound: 0,
+          sum_other_doc_count: 0,
+          buckets: [
+            {
+              key: '1.19.265.2.1.1.0',
+              doc_count: 45993,
+              maxIndex: { value: 3.0 },
+              minIndex: { value: 0.0 },
+            },
+            {
+              key: '1.19.265.7.60.7.0',
+              doc_count: 45527,
+              maxIndex: { value: 3.0 },
+              minIndex: { value: 0.0 },
+            },
+            {
+              key: '1.19.265.8.60.7.0',
+              doc_count: 45527,
+              maxIndex: { value: 3.0 },
+              minIndex: { value: 0.0 },
+            },
+            {
+              key: '1.19.265.2.60.7.0',
+              doc_count: 45299,
+              maxIndex: { value: 3.0 },
+              minIndex: { value: 0.0 },
+            },
+          ],
         },
-        {
-          "elementID":"1.19.265.7.60.7.0",
-          "unit":"Â°C",
-          "valueNum":-5.337,
-          "name":"max_air_temp_pst1hr",
-          "index":{
-            "name":"sensor_index",
-            "value":1
-          },
-          "elementIndex":"9.1",
-          "value":"-5.337",
-          "indexValue":1,
-          "group":"temperature"
-        },
-        {
-          "elementID":"1.19.265.7.60.7.0",
-          "unit":"Â°C",
-          "name":"max_air_temp_pst1hr",
-          "index":{
-            "name":"sensor_index",
-            "value":2
-          },"elementIndex":"9.2",
-          "value":"MSNG",
-          "indexValue":2,
-          "group":"temperature"
-        },
-        { "elementID":"1.19.265.7.60.7.0","unit":"Â°C","name":"max_air_temp_pst1hr","index":{ "name":"sensor_index","value":3},"elementIndex":"9.3","value":"MSNG","indexValue":3,"group":"temperature"},
-        { "elementID":"1.19.265.8.60.7.0","unit":"Â°C","dataType":"official","valueNum":-6.816,"name":"min_air_temp_pst1hr","elementIndex":"10","overallQASummary":100,"value":"-6.816","indexValue":0,"group":"temperature"},
-        { "elementID":"1.19.265.8.60.7.0","unit":"Â°C","valueNum":-6.816,"name":"min_air_temp_pst1hr","index":{ "name":"sensor_index","value":1},"elementIndex":"10.1","value":"-6.816","indexValue":1,"group":"temperature"},
-        { "elementID":"1.19.265.8.60.7.0","unit":"Â°C","name":"min_air_temp_pst1hr","index":{ "name":"sensor_index","value":2},"elementIndex":"10.2","value":"MSNG","indexValue":2,"group":"temperature"},
-        { "elementID":"1.19.265.8.60.7.0","unit":"Â°C","name":"min_air_temp_pst1hr","index":{ "name":"sensor_index","value":3},"elementIndex":"10.3","value":"MSNG","indexValue":3,"group":"temperature"},
-        { "elementID":"1.5.66.7.60.7.0","unit":"%","valueNum":95.3,"name":"max_rel_hum_pst1hr","elementIndex":"11","overallQASummary":100,"value":"95.3","group":"humidity"},
-        { "elementID":"1.5.66.8.60.7.0","unit":"%","valueNum":92.6,"name":"min_rel_hum_pst1hr","elementIndex":"12","overallQASummary":100,"value":"92.6","group":"humidity"},{
-        "elementID":"1.11.169.1.60.7.0","unit":"mm","valueNum":0,"name":"rnfl_amt_pst1hr","elementIndex":"13","overallQASummary":100,"value":"0","group":"precipitation"},{
-        "elementID":"1.24.323.0.10.4.6","unit":"Â°","valueNum":173.7,"name":"wnd_dir_10m_pst10mts_max_spd","elementIndex":"56","overallQASummary":100,"value":"173.7","group":"wind"}],"rawMessage":{
-        "header":"CACN45 CWAO 231700","message":"WSU 11,2017,327,1700,1449,8.06,100,12.77,12.67,-5.426,92.6,-6.016,-5.337,95.3,-6.816,92.6,1.345,182.1,1.169,181.8,12.67,1.45,191.7,3.077,1648,208.5,2.45,173.7,1.804,175.7,1.126,175.9,169.9,-13.31,472.4,472.4,472.4,472.4,0,0.63,0,0.85,0,1.202,0,1.224,0,472.3,472.2,472.2,472.2,5.178,5.188,5.222,5.238,0,6998,6998,6998,6998,6998,6998,6998,6998,6998,471,472.2,471,472.2,471,472.2,471,472.2,470.9,472.1,470.9,472.2,470.9,472.2,470.9,472.2,4.18,8.37,4.19,8.37,4.214,8.37,4.241,8.4,0,0,0,0,0,4398"},"parentIdentity":"/data/msc/observation/atmospheric/surface_weather/ca-1.1-ascii/decoded-xml-2.0/201711231700/5022759/wsu/11/orig/data_60"}
+      },
+    },
+  };
 
+  static testObs1 = {
+    identifier: '5022759',
+    obsDateTime: '2017-11-23T17:00:00.000Z',
+    receivedDateTime: '2017-11-23T23:46:00.000Z',
+    identity:
+      '/data/msc/observation/atmospheric/surface_weather/ca-1.1-ascii/decoded_qa_enhanced-xml-2.0/201711231700/5022759/wsu/11/orig/data_60/level_1',
+    author: {
+      build: 'build.103',
+      name: 'MSC-DMS-Merger-Observation',
+      version: '2.3',
+    },
+    metadataElements: [
+      {
+        elementID: '1.7.392.0.0.0.0',
+        unit: 'unitless',
+        name: 'MSNG',
+        value:
+          '/data/msc/observation/atmospheric/surface_weather/ca-1.1-ascii/job-xml-2.0/201711231700/5022759/orig/data_60',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.78.0.0.0.0',
+        unit: 'datetime',
+        name: 'date_tm',
+        value: '2017-11-23T17:00:00.000Z',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.79.0.0.0.0',
+        unit: 'unitless',
+        valueNum: 11,
+        name: 'snsr_tbl_nbr',
+        value: '11',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.80.0.0.0.0',
+        unit: 'unitless',
+        valueNum: 1449,
+        name: 'stn_id',
+        value: '1449',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.73.0.0.0.0',
+        unit: 'unitless',
+        valueNum: 4398,
+        name: 'logr_prg_sig',
+        value: '4398',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.92.0.0.0.0',
+        unit: 'min',
+        valueNum: 60,
+        name: 'MSNG',
+        value: '60',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.83.0.0.0.0',
+        unit: 'unitless',
+        name: 'stn_nam',
+        value: 'SPRAGUE',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.84.0.0.0.0',
+        unit: 'unitless',
+        name: 'tc_id',
+        value: 'WSU',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.82.0.0.0.0',
+        unit: 'unitless',
+        valueNum: 71449,
+        name: 'wmo_synop_id',
+        value: '71449',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.87.0.0.0.0',
+        unit: 'm',
+        valueNum: 328.8,
+        name: 'stn_elev',
+        value: '328.8',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.96.0.0.0.0',
+        unit: 'm',
+        valueNum: 328.88776,
+        name: 'geoptl_stn_hgt',
+        value: '328.88776',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.x.0.0.0.0',
+        unit: 'hPa',
+        valueNum: 0,
+        name: 'MSNG',
+        value: '0.0',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.105.0.0.0.0',
+        unit: 'unitless',
+        name: 'cor',
+        value: 'orig',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.408.0.0.0.0',
+        unit: 'unitless',
+        valueNum: 0,
+        name: 'ver',
+        value: '0',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.81.0.0.0.0',
+        unit: 'unitless',
+        name: 'data_pvdr',
+        value: 'MSC',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.86.0.0.0.0',
+        unit: 'unitless',
+        valueNum: 5022759,
+        name: 'msc_id',
+        value: '5022759',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.85.0.0.0.0',
+        unit: 'unitless',
+        valueNum: 5022759,
+        name: 'clim_id',
+        value: '5022759',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.117.0.0.0.0',
+        unit: 'unitless',
+        name: 'prov',
+        value: 'MB',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.97.0.0.0.0',
+        unit: 'Â°',
+        valueNum: 49.016667,
+        name: 'lat',
+        value: '49.016667',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.98.0.0.0.0',
+        unit: 'Â°',
+        valueNum: -95.6,
+        name: 'long',
+        value: '-95.6',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.x.0.0.0.0',
+        unit: 'unitless',
+        name: 'MSNG',
+        value: 'N',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.89.0.0.0.0',
+        unit: 'unitless',
+        name: 'hly_prdct_flg',
+        value: 'Y',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.90.0.0.0.0',
+        unit: 'unitless',
+        name: 'sm_prdct_flg',
+        value: 'Y',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.94.0.0.0.0',
+        unit: 'unitless',
+        name: 'cs_prdct_flg',
+        value: 'N',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.95.0.0.0.0',
+        unit: 'unitless',
+        name: 'sx_prdct_flg',
+        value: 'N',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.x.0.0.0.0',
+        unit: 'unitless',
+        name: 'MSNG',
+        value: 'MSNG',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.91.0.0.0.0',
+        unit: 'code',
+        codeSrc: 'std_code_src',
+        codeType: 'content_indicator',
+        name: 'MSNG',
+        value: 'data',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.393.0.0.0.0',
+        unit: 'unitless',
+        valueNum: -0.002576,
+        name: 'plat_coeff_a',
+        value: '-0.002576',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.394.0.0.0.0',
+        unit: 'unitless',
+        valueNum: -0.454112,
+        name: 'plat_coeff_b',
+        value: '-0.454112',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.395.0.0.0.0',
+        unit: 'unitless',
+        valueNum: 1.019344,
+        name: 'plat_coeff_c',
+        value: '1.019344',
+        group: 'identification',
+      },
+      {
+        elementID: '1.7.93.0.0.0.0',
+        unit: 'unitless',
+        name: 'MSNG',
+        value: '/metadata/msc/qa_package/surface_ca1.1/meta_product-xml-1.0/station/5022759/11010000',
+        group: 'identification',
+      },
+      {
+        unit: 'unitless',
+        value: 'decoded_enhanced-xml-2.0',
+        group: 'identification',
+      },
+      {
+        unit: 'unitless',
+        value: 'decoded_qa_full-xml-2.0',
+        group: 'identification',
+      },
+      {
+        unit: 'unitless',
+        value:
+          '/data/msc/observation/atmospheric/surface_weather/ca-1.1-ascii/decoded_qa-xml-2.0/201711231700/5022759/wsu/11/orig/data_60/level_1',
+        group: 'identification',
+      },
+      {
+        unit: 'unitless',
+        value:
+          '/data/msc/observation/atmospheric/surface_weather/ca-1.1-ascii/decoded-xml-2.0/201711231700/5022759/wsu/11/orig/data_60',
+        group: 'identification',
+      },
+    ],
+    jsonVersion: 1,
+    location: {
+      coordinates: [-95.6, 49.016667, 328.8],
+      type: 'point',
+    },
+    taxonomy: '/msc/observation/atmospheric/surface_weather/ca-1.1-ascii/decoded_qa_enhanced-xml-2.0',
+    dataElements: [
+      {
+        elementID: '1.19.265.7.60.7.0',
+        unit: 'Â°C',
+        dataType: 'official',
+        valueNum: -5.337,
+        name: 'max_air_temp_pst1hr',
+        elementIndex: '9',
+        overallQASummary: 100,
+        value: '-5.337',
+        indexValue: 0,
+        group: 'temperature',
+      },
+      {
+        elementID: '1.19.265.7.60.7.0',
+        unit: 'Â°C',
+        valueNum: -5.337,
+        name: 'max_air_temp_pst1hr',
+        index: {
+          name: 'sensor_index',
+          value: 1,
+        },
+        elementIndex: '9.1',
+        value: '-5.337',
+        indexValue: 1,
+        group: 'temperature',
+      },
+      {
+        elementID: '1.19.265.7.60.7.0',
+        unit: 'Â°C',
+        name: 'max_air_temp_pst1hr',
+        index: {
+          name: 'sensor_index',
+          value: 2,
+        },
+        elementIndex: '9.2',
+        value: 'MSNG',
+        indexValue: 2,
+        group: 'temperature',
+      },
+      {
+        elementID: '1.19.265.7.60.7.0',
+        unit: 'Â°C',
+        name: 'max_air_temp_pst1hr',
+        index: { name: 'sensor_index', value: 3 },
+        elementIndex: '9.3',
+        value: 'MSNG',
+        indexValue: 3,
+        group: 'temperature',
+      },
+      {
+        elementID: '1.19.265.8.60.7.0',
+        unit: 'Â°C',
+        dataType: 'official',
+        valueNum: -6.816,
+        name: 'min_air_temp_pst1hr',
+        elementIndex: '10',
+        overallQASummary: 100,
+        value: '-6.816',
+        indexValue: 0,
+        group: 'temperature',
+      },
+      {
+        elementID: '1.19.265.8.60.7.0',
+        unit: 'Â°C',
+        valueNum: -6.816,
+        name: 'min_air_temp_pst1hr',
+        index: { name: 'sensor_index', value: 1 },
+        elementIndex: '10.1',
+        value: '-6.816',
+        indexValue: 1,
+        group: 'temperature',
+      },
+      {
+        elementID: '1.19.265.8.60.7.0',
+        unit: 'Â°C',
+        name: 'min_air_temp_pst1hr',
+        index: { name: 'sensor_index', value: 2 },
+        elementIndex: '10.2',
+        value: 'MSNG',
+        indexValue: 2,
+        group: 'temperature',
+      },
+      {
+        elementID: '1.19.265.8.60.7.0',
+        unit: 'Â°C',
+        name: 'min_air_temp_pst1hr',
+        index: { name: 'sensor_index', value: 3 },
+        elementIndex: '10.3',
+        value: 'MSNG',
+        indexValue: 3,
+        group: 'temperature',
+      },
+      {
+        elementID: '1.5.66.7.60.7.0',
+        unit: '%',
+        valueNum: 95.3,
+        name: 'max_rel_hum_pst1hr',
+        elementIndex: '11',
+        overallQASummary: 100,
+        value: '95.3',
+        group: 'humidity',
+      },
+      {
+        elementID: '1.5.66.8.60.7.0',
+        unit: '%',
+        valueNum: 92.6,
+        name: 'min_rel_hum_pst1hr',
+        elementIndex: '12',
+        overallQASummary: 100,
+        value: '92.6',
+        group: 'humidity',
+      },
+      {
+        elementID: '1.11.169.1.60.7.0',
+        unit: 'mm',
+        valueNum: 0,
+        name: 'rnfl_amt_pst1hr',
+        elementIndex: '13',
+        overallQASummary: 100,
+        value: '0',
+        group: 'precipitation',
+      },
+      {
+        elementID: '1.24.323.0.10.4.6',
+        unit: 'Â°',
+        valueNum: 173.7,
+        name: 'wnd_dir_10m_pst10mts_max_spd',
+        elementIndex: '56',
+        overallQASummary: 100,
+        value: '173.7',
+        group: 'wind',
+      },
+    ],
+    rawMessage: {
+      header: 'CACN45 CWAO 231700',
+      message:
+        'WSU 11,2017,327,1700,1449,8.06,100,12.77,12.67,-5.426,92.6,-6.016,-5.337,95.3,-6.816,92.6,1.345,182.1,1.169,181.8,12.67,1.45,191.7,3.077,1648,208.5,2.45,173.7,1.804,175.7,1.126,175.9,169.9,-13.31,472.4,472.4,472.4,472.4,0,0.63,0,0.85,0,1.202,0,1.224,0,472.3,472.2,472.2,472.2,5.178,5.188,5.222,5.238,0,6998,6998,6998,6998,6998,6998,6998,6998,6998,471,472.2,471,472.2,471,472.2,471,472.2,470.9,472.1,470.9,472.2,470.9,472.2,470.9,472.2,4.18,8.37,4.19,8.37,4.214,8.37,4.241,8.4,0,0,0,0,0,4398',
+    },
+    parentIdentity:
+      '/data/msc/observation/atmospheric/surface_weather/ca-1.1-ascii/decoded-xml-2.0/201711231700/5022759/wsu/11/orig/data_60',
+  };
 }

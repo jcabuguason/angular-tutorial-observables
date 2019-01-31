@@ -7,32 +7,25 @@ import { MDEnum } from '../model/MDEnum';
 
 @Injectable()
 export class MDElementParser {
-
   static parse(raw): MDElement {
-
     try {
       const description = [].concat(raw['description']);
-      const descriptionJSON = description
-        .filter(obj => obj != null)
-        .find(obj => obj['@name'] === 'description');
+      const descriptionJSON = description.filter(obj => obj != null).find(obj => obj['@name'] === 'description');
 
-      const displayNameJSON = description
-        .filter(obj => obj != null)
-        .find(obj => obj['@name'] === 'display-name');
+      const displayNameJSON = description.filter(obj => obj != null).find(obj => obj['@name'] === 'display-name');
 
       let enums: MDEnum[] = [];
       if (raw.enum !== undefined) {
-        enums = [].concat(raw['enum'])
-          .map(e => {
-            const enumLang = [].concat(e['language']).filter((lang) => lang != null);
-            const enumEnglish = enumLang.find((lang) => lang['@name'] === 'en');
-            const enumFrench = enumLang.find((lang) => lang['@name'] === 'fr');
-            return {
-              value: e['@value'],
-              english: enumEnglish == null ? null : enumEnglish['@value'],
-              french: enumFrench == null ? null : enumFrench['@value']
-            };
-          });
+        enums = [].concat(raw['enum']).map(e => {
+          const enumLang = [].concat(e['language']).filter(lang => lang != null);
+          const enumEnglish = enumLang.find(lang => lang['@name'] === 'en');
+          const enumFrench = enumLang.find(lang => lang['@name'] === 'fr');
+          return {
+            value: e['@value'],
+            english: enumEnglish == null ? null : enumEnglish['@value'],
+            french: enumFrench == null ? null : enumFrench['@value'],
+          };
+        });
       }
 
       const elements: MDElement[] = [];
@@ -65,9 +58,9 @@ export class MDElementParser {
         enums: enums,
         elements: elements,
         requiredLanguages: {
-            english: english,
-            french: french
-        }
+          english: english,
+          french: french,
+        },
       };
 
       return element;

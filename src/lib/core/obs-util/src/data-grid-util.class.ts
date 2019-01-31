@@ -16,11 +16,8 @@ export function isLatest(params): boolean {
   const all = Object.keys(allNodes).map(node => allNodes[node].data);
 
   const compareNode = (node, property) => node[property] === current[property];
-  const sameObs = (node) => compareNode(node, 'obsDateTime')
-    && compareNode(node, 'primaryStationId')
-    && compareNode(node, 'taxonomy');
+  const sameObs = node =>
+    compareNode(node, 'obsDateTime') && compareNode(node, 'primaryStationId') && compareNode(node, 'taxonomy');
 
-  return all.filter(sameObs)
-    .every(node => compareRevisionBoolean(current.revision, node.revision));
+  return all.filter(sameObs).every(node => compareRevisionBoolean(current.revision, node.revision));
 }
-

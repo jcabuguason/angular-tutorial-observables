@@ -8,9 +8,9 @@ export class SearchURLService {
   constructor() {}
 
   /** used to create URL */
-  nameValueObj = (name, value) => ({'name': name, 'value': value});
+  nameValueObj = (name, value) => ({ name: name, value: value });
   /** used to read from URL and populate search bar */
-  paramValueObj = (param, value) => ({ 'param': param, 'value': value });
+  paramValueObj = (param, value) => ({ param: param, value: value });
 
   /** This is for adding to the URL parameters.
    *  Returns the search parameters so it can be used in the url
@@ -33,7 +33,7 @@ export class SearchURLService {
             const hrs = p as SearchHoursRange;
             addUrlParam('hh_before', hrs.hoursBefore);
             addUrlParam('hh_after', hrs.hoursAfter);
-          break;
+            break;
           case ParameterType.SEARCH_QUERY_TYPE:
             const checkbox = p as SearchQueryType;
             addUrlParam(name, checkbox.uriChecked);
@@ -48,31 +48,31 @@ export class SearchURLService {
 
   /** Reads the URL parameters and returns a list of the corresponding SearchParameter with its values */
   getAllRequestParams(qParams, availableParams: SearchParameter[], shortcuts: ShortcutModel[]) {
-    const findParam = (name) => availableParams.find(p => p.getName() === name);
+    const findParam = name => availableParams.find(p => p.getName() === name);
     const paramValueObj = (name, value) => this.paramValueObj(findParam(name), this.toArray(value));
-    const getLabel = (param, values) => values.map(val => {
+    const getLabel = (param, values) =>
+      values.map(val => {
         const choice = param.findChoiceByUri(val);
         return choice ? choice.label : val;
-    });
+      });
 
-    const requested = qParams != null ?
-      Object.keys(qParams)
-        .filter(key => qParams[key] != null && !this.isSpecialUrlParam(key, availableParams))
-        .map(key => paramValueObj(key, qParams[key]))
-        .concat(this.getSpecialRequestParams(qParams, availableParams, shortcuts))
-        .filter(obj => obj.param != null && obj.value.length > 0)
-      : [];
+    const requested =
+      qParams != null
+        ? Object.keys(qParams)
+            .filter(key => qParams[key] != null && !this.isSpecialUrlParam(key, availableParams))
+            .map(key => paramValueObj(key, qParams[key]))
+            .concat(this.getSpecialRequestParams(qParams, availableParams, shortcuts))
+            .filter(obj => obj.param != null && obj.value.length > 0)
+        : [];
 
-    requested.forEach(obj => obj.value = getLabel(obj.param, obj.value));
+    requested.forEach(obj => (obj.value = getLabel(obj.param, obj.value)));
 
     return requested;
   }
 
   /** Determine if url a param might not match search box field names */
   isSpecialUrlParam(name: string, availableParams: SearchParameter[]) {
-    return !availableParams
-      .filter(p => p.getType() === ParameterType.SEARCH_PARAMETER)
-      .some(p => p.getName() === name);
+    return !availableParams.filter(p => p.getType() === ParameterType.SEARCH_PARAMETER).some(p => p.getName() === name);
   }
 
   /** Parameters that don't match search box field names or uses a special format (date, hour range, shortcuts) */
@@ -86,16 +86,15 @@ export class SearchURLService {
   }
 
   getShortcutRequestParams(qParams, availableParams: SearchParameter[], shortcuts: ShortcutModel[]) {
-    const findParam = (name) => availableParams.find(p => p.getName() === name);
-    const paramValueObj = (param) => this.paramValueObj(findParam(param.name), param.values);
+    const findParam = name => availableParams.find(p => p.getName() === name);
+    const paramValueObj = param => this.paramValueObj(findParam(param.name), param.values);
 
     const flatten = (a, b) => a.concat(b);
     return [].concat(
-      ...this.toArray(qParams.shortcut).map(label => shortcuts
-        .filter(s => s.label.toLowerCase() === label.toLowerCase())
-        .map(s => s.addParameters.map(paramValueObj)
-          .reduce(flatten)
-        )
+      ...this.toArray(qParams.shortcut).map(label =>
+        shortcuts
+          .filter(s => s.label.toLowerCase() === label.toLowerCase())
+          .map(s => s.addParameters.map(paramValueObj).reduce(flatten))
       )
     );
   }
@@ -107,7 +106,7 @@ export class SearchURLService {
 
     return [
       this.paramValueObj(datetimes.find(p => p.getName() === 'from'), [fromDate]),
-      this.paramValueObj(datetimes.find(p => p.getName() === 'to'), [toDate])
+      this.paramValueObj(datetimes.find(p => p.getName() === 'to'), [toDate]),
     ].filter(obj => obj.param != null && obj.value[0] != null);
   }
 
@@ -119,31 +118,27 @@ export class SearchURLService {
 
     if (before != null || after != null) {
       hours = {
-        'hh_before': this.firstValue(before),
-        'hh_after': this.firstValue(after)
+        hh_before: this.firstValue(before),
+        hh_after: this.firstValue(after),
       };
     }
 
-    return (hourRange != null && hours != null)
-      ? [this.paramValueObj(hourRange, [hours])]
-      : [];
+    return hourRange != null && hours != null ? [this.paramValueObj(hourRange, [hours])] : [];
   }
 
   getQueryTypeRequestParams(qParams, availableParams: SearchParameter[]) {
     const checkbox = availableParams.find(p => p.getType() === ParameterType.SEARCH_QUERY_TYPE);
     const value = this.firstValue(qParams.queryType);
-    return (checkbox != null && value === (checkbox as SearchQueryType).uriChecked)
+    return checkbox != null && value === (checkbox as SearchQueryType).uriChecked
       ? [this.paramValueObj(checkbox, [value])]
       : [];
   }
 
   private toArray(value) {
-    return Array.isArray(value) ? value : [value]
-      .filter(val => val != null);
+    return Array.isArray(value) ? value : [value].filter(val => val != null);
   }
 
   private firstValue(value) {
     return this.toArray(value)[0];
   }
-
 }

@@ -2,18 +2,19 @@ import { ElementColumnConfiguration } from './element-column-configuration.inter
 import { DataColumnConfiguration } from './data-column-configuration.abstract';
 
 export class VUColumnConfiguration extends DataColumnConfiguration implements ElementColumnConfiguration {
-
   createElementHeader(workingNode: any, elementTaxonomy: string) {
-    workingNode.children.push(...[
-      {
-        'headerName': 'Value',
-        'field': elementTaxonomy + '_v',
-      },
-      {
-        'headerName': 'Unit',
-        'field': elementTaxonomy + '_u',
-      },
-    ]);
+    workingNode.children.push(
+      ...[
+        {
+          headerName: 'Value',
+          field: elementTaxonomy + '_v',
+        },
+        {
+          headerName: 'Unit',
+          field: elementTaxonomy + '_u',
+        },
+      ]
+    );
   }
 
   createElementData(element, columnID: string) {
@@ -22,5 +23,4 @@ export class VUColumnConfiguration extends DataColumnConfiguration implements El
       [columnID + '_u']: element.unit,
     };
   }
-
 }

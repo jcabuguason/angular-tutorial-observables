@@ -3,11 +3,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from './language.service';
 
 @NgModule({
-  exports: [
-    TranslateModule
-  ],
-  providers: [
-    LanguageService,
-  ]
+  exports: [TranslateModule],
+  providers: [LanguageService],
 })
-export class LanguageModule { }
+export class LanguageModule {}

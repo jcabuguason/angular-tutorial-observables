@@ -8,9 +8,7 @@ import { ParseError } from '../error/ParseError';
 
 @Injectable()
 export class MDInstanceDefinitionParser {
-
   static parse(raw): MDInstanceDefinition {
-
     let ieJSON;
     let eJSON;
     let datasetJSON;
@@ -45,7 +43,7 @@ export class MDInstanceDefinitionParser {
       dataset: datasetJSON,
       parent: parentJSON,
       identificationElements: identificationElements,
-      elements: instelements
+      elements: instelements,
     };
 
     return definition;

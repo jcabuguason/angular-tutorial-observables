@@ -5,7 +5,7 @@ export interface ElementColumnConfiguration {
   allowBlankDataColumns;
 
   // Optional function for changing header menu items
-  getMenuItems?: (params: any)  => any;
+  getMenuItems?: (params: any) => any;
 
   // Sets up the nested headers needed for this element
   createElementHeader(workingNode: any, columnID: string);

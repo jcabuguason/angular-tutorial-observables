@@ -28,12 +28,11 @@ describe('LockHeartbeatService', () => {
   }
 
   beforeEach(() => {
-
     const config: LockConfig = {
       endpoint: 'http://www.test.com',
       coreTTL: 5,
       applicationTTL: 60,
-      warning: 5
+      warning: 5,
     };
 
     lockServiceStub = {
@@ -41,11 +40,11 @@ describe('LockHeartbeatService', () => {
         locked_resources: ['1'],
         timeout: '',
         type: '',
-        user: 'dsa'
+        user: 'dsa',
       }),
       releaseLock: Observable.of({
         unlocked_resources: ['1'],
-        failed_unlocks: []
+        failed_unlocks: [],
       }),
       lockInfo: Observable.of({
         resource_id: 'string',
@@ -53,26 +52,22 @@ describe('LockHeartbeatService', () => {
         user: 'string',
         user_first_name: 'string',
         user_last_name: 'string',
-        timeout: 'string'
-      })
+        timeout: 'string',
+      }),
     };
 
     TestBed.configureTestingModule({
-      imports: [
-        MatDialogModule,
-        TextDialogModule,
-        NoopAnimationsModule
-      ],
+      imports: [MatDialogModule, TextDialogModule, NoopAnimationsModule],
       providers: [
         MatDialog,
         LockHeartbeatService,
-        {provide: LockService, useValue: lockServiceStub},
-        {provide: LOCK_CONFIG, useValue: config}
+        { provide: LockService, useValue: lockServiceStub },
+        { provide: LOCK_CONFIG, useValue: config },
       ],
     }).overrideModule(BrowserDynamicTestingModule, {
       set: {
-        entryComponents: [ TextDialogComponent ]
-      }
+        entryComponents: [TextDialogComponent],
+      },
     });
 
     service = getTestBed().get(LockHeartbeatService);
@@ -159,7 +154,7 @@ describe('LockHeartbeatService', () => {
     expect(results.unsuccessful).toBe(0);
     expect(results.unauthorized).toBe(0);
 
-    acquireLock.and.returnValue(Observable.throw(new HttpErrorResponse({status: 423})));
+    acquireLock.and.returnValue(Observable.throw(new HttpErrorResponse({ status: 423 })));
 
     tick(30);
     expect(lockService.acquireLock).toHaveBeenCalledTimes(8);
@@ -182,7 +177,7 @@ describe('LockHeartbeatService', () => {
     expect(results.unsuccessful).toBe(0);
     expect(results.unauthorized).toBe(0);
 
-    acquireLock.and.returnValue(Observable.throw(new HttpErrorResponse({status: 401})));
+    acquireLock.and.returnValue(Observable.throw(new HttpErrorResponse({ status: 401 })));
 
     tick(30);
     expect(lockService.acquireLock).toHaveBeenCalledTimes(8);

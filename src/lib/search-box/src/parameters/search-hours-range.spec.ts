@@ -17,7 +17,7 @@ describe('SearchDatetime', () => {
   });
 
   it('should add specified hours', () => {
-    hoursParam.addSelected({'hh_before': 1, 'hh_after': 2});
+    hoursParam.addSelected({ hh_before: 1, hh_after: 2 });
     expect(hoursParam.hoursBefore).toEqual(1);
     expect(hoursParam.hoursAfter).toEqual(2);
   });
@@ -29,7 +29,7 @@ describe('SearchDatetime', () => {
   });
 
   it('should not add hours if both hh_before and hh_after are empty', () => {
-    hoursParam.addSelected({'hh_before': '', 'hh_after': ''});
+    hoursParam.addSelected({ hh_before: '', hh_after: '' });
     expect(hoursParam.hoursBefore).toBeUndefined();
     expect(hoursParam.hoursAfter).toBeUndefined();
   });
@@ -61,7 +61,7 @@ describe('SearchDatetime', () => {
   });
 
   it('should limit hours', () => {
-    hoursParam.addSelected({'hh_before': -100, 'hh_after': 100});
+    hoursParam.addSelected({ hh_before: -100, hh_after: 100 });
     expect(hoursParam.hoursBefore).toEqual(hoursParam.minHour);
     expect(hoursParam.hoursAfter).toEqual(hoursParam.maxHour);
   });

@@ -3,7 +3,8 @@ import { INSTANCE_DEFINITION_PARSER_INPUT, INSTANCE_DEFINITION_PARSER_OUTPUT } f
 
 describe('MDInstanceDefinitionParser', () => {
   it('should return the correct value', () => {
-    expect(MDInstanceDefinitionParser.parse(INSTANCE_DEFINITION_PARSER_INPUT)).toEqual(INSTANCE_DEFINITION_PARSER_OUTPUT);
+    expect(MDInstanceDefinitionParser.parse(INSTANCE_DEFINITION_PARSER_INPUT)).toEqual(
+      INSTANCE_DEFINITION_PARSER_OUTPUT
+    );
   });
-
 });

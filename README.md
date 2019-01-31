@@ -19,10 +19,9 @@ When developing a module that uses a shared module, there will be errors when im
 
 ## Jenkins Builds
 
-Jenkins will automatically package Commons into a `tgz` file and publish it to the Nexus repo. 
+Jenkins will automatically package Commons into a `tgz` file and publish it to the Nexus repo.
 
 Installing commons through npm in another project will pull the `tgz` that was built by Jenkins.
-
 
 ---
 

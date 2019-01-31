@@ -5,18 +5,18 @@ export const UPDATE_PREFERRED_UNITS = 'UPDATE_PREFERRED_UNITS';
 export const initialState = false;
 
 export class UpdatePreferredUnitsAction implements Action {
-    readonly type = UPDATE_PREFERRED_UNITS;
+  readonly type = UPDATE_PREFERRED_UNITS;
 
-    constructor(public payload: boolean) {}
+  constructor(public payload: boolean) {}
 }
 
 export function preferredUnitsReducer(state = initialState, action: UpdatePreferredUnitsAction) {
-    switch (action.type) {
-        case UPDATE_PREFERRED_UNITS: {
-            return action.payload;
-        }
-        default: {
-            return state;
-        }
+  switch (action.type) {
+    case UPDATE_PREFERRED_UNITS: {
+      return action.payload;
     }
+    default: {
+      return state;
+    }
+  }
 }

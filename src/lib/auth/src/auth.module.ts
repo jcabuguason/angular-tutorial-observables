@@ -7,14 +7,7 @@ import { StoreModule } from '@ngrx/store';
 import { authReducer } from './auth.reducer';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    HttpClientModule,
-    StoreModule.forFeature('auth', { auth: authReducer }),
-  ],
-  providers: [
-    AuthService,
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-  ]
+  imports: [CommonModule, HttpClientModule, StoreModule.forFeature('auth', { auth: authReducer })],
+  providers: [AuthService, { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
 })
-export class AuthModule { }
+export class AuthModule {}

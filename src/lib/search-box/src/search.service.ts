@@ -18,7 +18,6 @@ import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class SearchService {
-
   // all taxonomies
   taxonomies: SearchTaxonomy[] = [];
   // available search parameters to choose from
@@ -76,7 +75,8 @@ export class SearchService {
       this.location.go('/');
     } else {
       const urlParams = new URLSearchParams();
-      this.urlService.createUrlParams(this.displayParams, this.shortcutSelected)
+      this.urlService
+        .createUrlParams(this.displayParams, this.shortcutSelected)
         .forEach(p => urlParams.append(p.name, p.value));
       this.location.go('/?' + urlParams.toString().replace(/\+/gi, ' '));
     }
@@ -90,7 +90,8 @@ export class SearchService {
     }
 
     if (values != null) {
-      values.filter(val => val != null && val !== '')
+      values
+        .filter(val => val != null && val !== '')
         .forEach(val => {
           if (parameter.getName() === ParameterName.SIZE) {
             val = this.fixNumObs(val).toString();
@@ -151,9 +152,8 @@ export class SearchService {
       let numObs: number = this.defaultNumObs;
       let operator: string;
 
-      const addToElements = (elementID, value) => elements.push(
-        new SearchElement(elementID, 'metadataElements', 'value', value)
-      );
+      const addToElements = (elementID, value) =>
+        elements.push(new SearchElement(elementID, 'metadataElements', 'value', value));
 
       this.displayParams.forEach(p => {
         const selected = p.getSelected();
@@ -163,7 +163,9 @@ export class SearchService {
           addToElements(id, adjusted);
         };
         const updateValue = (value, index, newValue) => {
-          if (newValue !== value) { p.setSelectedAt(index, newValue); }
+          if (newValue !== value) {
+            p.setSelectedAt(index, newValue);
+          }
         };
 
         switch (p.getName()) {
@@ -211,21 +213,13 @@ export class SearchService {
         endDate = addHours(date, range.hoursAfter);
       }
 
-      model = new SearchModel(
-        this.determineTaxonomies(),
-        elements,
-        startDate,
-        endDate,
-        numObs,
-        operator
-      );
+      model = new SearchModel(this.determineTaxonomies(), elements, startDate, endDate, numObs, operator);
     }
     return model;
   }
 
   findMissingRequiredParameters(): SearchParameter[] {
-    return this.availableParams.filter(p => p.isRequired())
-      .filter(p => this.displayParams.indexOf(p) === -1);
+    return this.availableParams.filter(p => p.isRequired()).filter(p => this.displayParams.indexOf(p) === -1);
   }
 
   openForm() {
@@ -254,8 +248,7 @@ export class SearchService {
     const stationType = SearchableElement.STATION_TYPE;
     const defaultID = stationType.MSC_ID.id;
 
-    const result = Object.keys(stationType)
-      .find(key => stationID.match(stationType[key].regex) != null);
+    const result = Object.keys(stationType).find(key => stationID.match(stationType[key].regex) != null);
 
     return result != null ? stationType[result].id : defaultID;
   }
@@ -281,31 +274,40 @@ export class SearchService {
     this.messageService.clear();
 
     if (empty.length > 0) {
-      this.messageService.add({ key: 'search-messages', summary: 'SEARCH_BAR.UNFILLED_FIELD', data: empty, sticky: true });
+      this.messageService.add({
+        key: 'search-messages',
+        summary: 'SEARCH_BAR.UNFILLED_FIELD',
+        data: empty,
+        sticky: true,
+      });
       valid = false;
     }
     if (missing.length > 0) {
-      this.messageService.add({ key: 'search-messages', summary: 'SEARCH_BAR.MISSING_REQUIRED', data: missing, sticky: true });
+      this.messageService.add({
+        key: 'search-messages',
+        summary: 'SEARCH_BAR.MISSING_REQUIRED',
+        data: missing,
+        sticky: true,
+      });
       valid = false;
     }
     return valid;
   }
 
   private determineTaxonomies() {
-    const taxParameters = this.displayParams.filter(p =>
-      this.isTaxonomyParam(p) && p.getSelectedModels().length
-    );
+    const taxParameters = this.displayParams.filter(p => this.isTaxonomyParam(p) && p.getSelectedModels().length);
 
-    if (!taxParameters.length) { return this.taxonomies.map(current => current.taxonomy); }
+    if (!taxParameters.length) {
+      return this.taxonomies.map(current => current.taxonomy);
+    }
 
-    const matchingChoice = (choices, code) => choices.some(choice =>
-      choice.uri.toLowerCase() === code.toLowerCase()
-    );
+    const matchingChoice = (choices, code) => choices.some(choice => choice.uri.toLowerCase() === code.toLowerCase());
 
-    const getAllSelected = (name) => taxParameters
-      .filter(p => p.getName() === ParameterName.forTaxonomy[name])
-      .map(p => p.getSelectedModels())
-      .reduce((allSelected, selected) => allSelected.concat(selected), []);
+    const getAllSelected = name =>
+      taxParameters
+        .filter(p => p.getName() === ParameterName.forTaxonomy[name])
+        .map(p => p.getSelectedModels())
+        .reduce((allSelected, selected) => allSelected.concat(selected), []);
 
     const organizations = getAllSelected('ORGANIZATION');
     const networks = getAllSelected('NETWORK');
@@ -318,13 +320,13 @@ export class SearchService {
 
   /** Parameters used to determine taxonomy */
   private isTaxonomyParam(param: SearchParameter): boolean {
-    return Object.keys(ParameterName.forTaxonomy)
-      .some(name => ParameterName.forTaxonomy[name] === param.getName());
+    return Object.keys(ParameterName.forTaxonomy).some(name => ParameterName.forTaxonomy[name] === param.getName());
   }
 
   /** Populate search box with information from specific URL parameters */
   private addRequestParams(qParams) {
-    this.urlService.getAllRequestParams(qParams, this.availableParams, this.shortcuts)
+    this.urlService
+      .getAllRequestParams(qParams, this.availableParams, this.shortcuts)
       .forEach(obj => this.addSuggestedParameter(obj.param, obj.value));
   }
 
@@ -347,15 +349,14 @@ export class SearchService {
   private createShortcutButtons() {
     if (this.shortcuts != null) {
       const createButton = (shortcut: ShortcutModel) => ({
-        'label': shortcut.label,
-        'command': () => {
+        label: shortcut.label,
+        command: () => {
           this.removeAllDisplayParameters();
           shortcut.addParameters.forEach(p => this.addParameterByName(p.name, p.values));
           this.submitSearch(true, shortcut);
-        }
+        },
       });
       this.shortcutButtons = this.shortcuts.map(createButton);
     }
   }
-
 }
