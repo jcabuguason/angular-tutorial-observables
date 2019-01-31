@@ -15,33 +15,34 @@ describe('SearchURLService', () => {
   const hoursParam = new SearchHoursRange(ParameterName.HOURS_RANGE, false);
   const networkParam = new SearchParameter(ParameterName.forTaxonomy.NETWORK, [], false, false);
   const queryTypeParam = new SearchQueryType(ParameterName.QUERY_TYPE, 'exact');
-  const displayParams = [ dateParam, hoursParam, networkParam, queryTypeParam ];
+  const displayParams = [dateParam, hoursParam, networkParam, queryTypeParam];
 
   const shortcuts = [
     new ShortcutModel('Shortcut1', [{ name: ParameterName.forTaxonomy.NETWORK, values: ['value1'] }]),
-    new ShortcutModel('Shortcut2', [{ name: 'name2', values: ['value2'] }])
+    new ShortcutModel('Shortcut2', [{ name: 'name2', values: ['value2'] }]),
   ];
 
   const query = {
-    'from': '2018-01-31T01:20',
-    'hh_before': '1',
-    'hh_after': '2',
-    'network': 'nc awos',
-    'shortcut': 'Shortcut1',
-    'queryType': 'exact',
+    from: '2018-01-31T01:20',
+    hh_before: '1',
+    hh_after: '2',
+    network: 'nc awos',
+    shortcut: 'Shortcut1',
+    queryType: 'exact',
   };
 
-  const dateToSearch = { 'param': dateParam, 'value': [query.from] };
-  const hourRangeToSearch = { 'param': hoursParam, 'value': [{ 'hh_before': '1', 'hh_after': '2'}] };
-  const networkToSearch = { 'param': networkParam, 'value': [query.network] };
-  const shortcutToSearch = { 'param': networkParam, 'value': ['value1'] };
-  const queryTypeToSearch = { 'param': queryTypeParam, 'value': ['exact']};
+  const dateToSearch = { param: dateParam, value: [query.from] };
+  const hourRangeToSearch = {
+    param: hoursParam,
+    value: [{ hh_before: '1', hh_after: '2' }],
+  };
+  const networkToSearch = { param: networkParam, value: [query.network] };
+  const shortcutToSearch = { param: networkParam, value: ['value1'] };
+  const queryTypeToSearch = { param: queryTypeParam, value: ['exact'] };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        SearchURLService
-      ]
+      providers: [SearchURLService],
     });
 
     urlService = TestBed.get(SearchURLService);
@@ -49,7 +50,7 @@ describe('SearchURLService', () => {
 
   it('create url parameters (no shortcut)', () => {
     const dateValue = '2018-02-27T01:00';
-    const hoursValue = { 'hh_before': 10, 'hh_after': 20};
+    const hoursValue = { hh_before: 10, hh_after: 20 };
     const networkValues = ['ca', 'nc awos'];
 
     dateParam.datetime = new Date(dateValue);
@@ -59,36 +60,33 @@ describe('SearchURLService', () => {
     queryTypeParam.checked = true;
 
     const urlParams = [
-      { 'name': ParameterName.FROM, 'value': dateValue },
-      { 'name': 'hh_before',        'value': hoursValue.hh_before },
-      { 'name': 'hh_after',         'value': hoursValue.hh_after },
-      { 'name' : ParameterName.forTaxonomy.NETWORK, 'value': networkValues[0] },
-      { 'name' : ParameterName.forTaxonomy.NETWORK, 'value': networkValues[1] },
-      { 'name' : ParameterName.QUERY_TYPE, 'value' : 'exact' }
+      { name: ParameterName.FROM, value: dateValue },
+      { name: 'hh_before', value: hoursValue.hh_before },
+      { name: 'hh_after', value: hoursValue.hh_after },
+      { name: ParameterName.forTaxonomy.NETWORK, value: networkValues[0] },
+      { name: ParameterName.forTaxonomy.NETWORK, value: networkValues[1] },
+      { name: ParameterName.QUERY_TYPE, value: 'exact' },
     ];
 
     expect(urlService.createUrlParams(displayParams)).toEqual(urlParams);
   });
 
   it('create url parameters with specified uri values (may be different than displayed search label)', () => {
-    const networkChoices = [
-      new ChoiceModel('caLabel', 'caUri'),
-      new ChoiceModel('nc awos label')
-    ];
+    const networkChoices = [new ChoiceModel('caLabel', 'caUri'), new ChoiceModel('nc awos label')];
 
     const newNetworkParam = new SearchParameter('networkWithChoices', networkChoices, false, false);
     newNetworkParam.selected = ['caLabel', 'nc awos label'];
 
     const urlParams = [
-      { 'name' : 'networkWithChoices', 'value': networkChoices[0].uri },
-      { 'name' : 'networkWithChoices', 'value': networkChoices[1].label },
+      { name: 'networkWithChoices', value: networkChoices[0].uri },
+      { name: 'networkWithChoices', value: networkChoices[1].label },
     ];
 
     expect(urlService.createUrlParams([newNetworkParam])).toEqual(urlParams);
   });
 
   it('create url parameter for shortcut', () => {
-    const urlParams = [{ 'name': 'shortcut', 'value': shortcuts[0].label }];
+    const urlParams = [{ name: 'shortcut', value: shortcuts[0].label }];
     expect(urlService.createUrlParams(displayParams, shortcuts[0])).toEqual(urlParams);
   });
 
@@ -128,5 +126,4 @@ describe('SearchURLService', () => {
     // this would return false because not same order, even with .sort()
     // expect(allParams).toEqual(allExpected);
   });
-
 });

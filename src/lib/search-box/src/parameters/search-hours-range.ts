@@ -12,10 +12,7 @@ export class SearchHoursRange extends SearchParameter {
   private defaultBefore;
   private defaultAfter;
 
-  constructor(
-    name: string,
-    required: boolean
-  ) {
+  constructor(name: string, required: boolean) {
     super(name, [], false, required, 1);
     this.setType(ParameterType.SEARCH_HOURS_RANGE);
   }
@@ -60,7 +57,7 @@ export class SearchHoursRange extends SearchParameter {
   }
 
   setHours(before, after) {
-    const hours = (value, defaultHour) => isNaN(value) ? defaultHour : Number(value);
+    const hours = (value, defaultHour) => (isNaN(value) ? defaultHour : Number(value));
     this.hoursBefore = hours(before, this.defaultBefore);
     this.hoursAfter = hours(after, this.defaultAfter);
     this.limitRange();
@@ -100,5 +97,4 @@ export class SearchHoursRange extends SearchParameter {
     }
     return input;
   }
-
 }

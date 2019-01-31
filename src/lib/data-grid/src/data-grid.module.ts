@@ -19,20 +19,8 @@ import { LanguageModule } from 'msc-dms-commons-angular/shared/language';
     VofRendererComponent,
     StationInfoComponent,
   ],
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatTableModule,
-    MatDialogModule,
-    MatSortModule,
-    LanguageModule,
-  ],
-  exports: [
-    QaRendererComponent,
-    DataFlagRendererComponent,
-    QofRendererComponent,
-    VofRendererComponent,
-  ],
+  imports: [CommonModule, MatDialogModule, MatTableModule, MatDialogModule, MatSortModule, LanguageModule],
+  exports: [QaRendererComponent, DataFlagRendererComponent, QofRendererComponent, VofRendererComponent],
   entryComponents: [StationInfoComponent],
 })
-  export class DataGridModule { }
+export class DataGridModule {}

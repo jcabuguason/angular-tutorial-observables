@@ -4,9 +4,7 @@ import { ParseError } from '../error/ParseError';
 
 @Injectable()
 export class MDDescriptionParser {
-
   static parse(raw): MDDescription {
-
     try {
       const language = [].concat(raw['language']);
 
@@ -23,7 +21,6 @@ export class MDDescriptionParser {
       const element: MDDescription = { english, french };
 
       return element;
-
     } catch (error) {
       throw new ParseError('Improper format of description: ' + raw + '\n\t' + error);
     }

@@ -4,10 +4,7 @@ export class SearchDatetime extends SearchParameter {
   datetime: Date;
   formDatetime: Date;
 
-  constructor(
-    name: string,
-    required: boolean,
-  ) {
+  constructor(name: string, required: boolean) {
     super(name, [], true, required, 1);
     this.setType(ParameterType.SEARCH_DATETIME);
   }
@@ -48,9 +45,7 @@ export class SearchDatetime extends SearchParameter {
   }
 
   getDatetimeUrlFormat() {
-    return !this.isEmpty(this.datetime)
-      ? this.formattedDate() + 'T' + this.formattedTime()
-      : '';
+    return !this.isEmpty(this.datetime) ? this.formattedDate() + 'T' + this.formattedTime() : '';
   }
 
   setFullDatetime(date: Date) {
@@ -63,27 +58,30 @@ export class SearchDatetime extends SearchParameter {
 
   // formats to yyyy-MM-dd
   private formattedDate(): string {
-    return this.datetime.getFullYear() + '-'
-      + this.padTimeValue(this.datetime.getMonth() + 1) + '-'
-      + this.padTimeValue(this.datetime.getDate());
+    return (
+      this.datetime.getFullYear() +
+      '-' +
+      this.padTimeValue(this.datetime.getMonth() + 1) +
+      '-' +
+      this.padTimeValue(this.datetime.getDate())
+    );
   }
 
   private formattedTime(): string {
-    return this.padTimeValue(this.datetime.getHours()) + ':'
-      + this.padTimeValue(this.datetime.getMinutes());
+    return this.padTimeValue(this.datetime.getHours()) + ':' + this.padTimeValue(this.datetime.getMinutes());
   }
 
   private padTimeValue(num: number) {
-    return (num < 10)
-      ? `0${num}`
-      : num;
+    return num < 10 ? `0${num}` : num;
   }
 
   /* Creates a valid date parameter, or undefined if unable to create a valid date */
   private getDateFromParam(param) {
-    if (param == null) { return param; }
+    if (param == null) {
+      return param;
+    }
 
     const date = new Date(param);
-    return (date.toString() === 'Invalid Date') ? undefined : date;
+    return date.toString() === 'Invalid Date' ? undefined : date;
   }
 }

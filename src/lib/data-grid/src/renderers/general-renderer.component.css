@@ -6,7 +6,7 @@
   border-radius: 5px;
   padding: 0px 1px 0px 1px;
   font-size: 85%;
-  transition: all .1s ease-in-out
+  transition: all 0.1s ease-in-out;
 }
 
 /* Everything below this comment is temporary */
@@ -23,5 +23,5 @@
 }
 
 .vof {
-  color: red
+  color: red;
 }

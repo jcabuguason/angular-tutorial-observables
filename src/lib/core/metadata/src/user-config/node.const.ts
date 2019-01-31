@@ -738,7 +738,7 @@ export class NodeLookups {
       '20': '50 min',
       '21': '55 min',
       '22': '18 h',
-      '23': '1 mo'
+      '23': '1 mo',
     },
 
     '7': {
@@ -762,6 +762,6 @@ export class NodeLookups {
       '18': '-1.5 m',
       '19': '-3 m',
       '20': '0 m',
-    }
+    },
   };
 }

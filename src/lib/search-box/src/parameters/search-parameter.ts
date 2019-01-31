@@ -18,17 +18,15 @@ export class SearchParameter {
     private restricted: boolean = false,
     private required: boolean = false,
     private timesUsable: number = 500,
-    private placeholder: string = '',
+    private placeholder: string = ''
   ) {
-      this.displayName = name;
-      this.type = ParameterType.SEARCH_PARAMETER;
-      this.multiSelectChoices = this.choices.map(choice => choice.label)
-        .sort()
-        .map(choiceLabel => ({ label: choiceLabel, value: choiceLabel}));
-      this.choicesWithEmpty = [
-        {label: '-', value: ''},
-        ...this.multiSelectChoices
-      ];
+    this.displayName = name;
+    this.type = ParameterType.SEARCH_PARAMETER;
+    this.multiSelectChoices = this.choices
+      .map(choice => choice.label)
+      .sort()
+      .map(choiceLabel => ({ label: choiceLabel, value: choiceLabel }));
+    this.choicesWithEmpty = [{ label: '-', value: '' }, ...this.multiSelectChoices];
   }
 
   getName(): string {
@@ -98,7 +96,7 @@ export class SearchParameter {
     if (this.isEmpty(value)) {
       return false;
     }
-    return (this.isRestricted() && !this.includesChoice(value))
+    return this.isRestricted() && !this.includesChoice(value)
       ? false
       : !this.alreadySelected(value) && this.selected.length < this.timesUsable;
   }
@@ -182,19 +180,15 @@ export class SearchParameter {
   }
 
   private determineChoiceLabel(value: string | ChoiceModel): string {
-    return this.isChoiceModel(value)
-      ? String(value['label'])
-      : String(value);
+    return this.isChoiceModel(value) ? String(value['label']) : String(value);
   }
 
-  cleanEntries = (arr: string[]): string[] => arr
-    .map(entry => entry != null && entry.trim())
-    .filter(trimmed => !!trimmed)
+  cleanEntries = (arr: string[]): string[] =>
+    arr.map(entry => entry != null && entry.trim()).filter(trimmed => !!trimmed);
 
   // some values still gets through from manual user input in the form/bar (ngModel binding)
   // ex. '12345 ' and '12345   ' are technically unique
-  private removeDuplicates = (arr: string[]): string[] => arr
-    .filter((val, index) => arr.indexOf(val) === index)
+  private removeDuplicates = (arr: string[]): string[] => arr.filter((val, index) => arr.indexOf(val) === index);
 }
 
 export enum ParameterType {

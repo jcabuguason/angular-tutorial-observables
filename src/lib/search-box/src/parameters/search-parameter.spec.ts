@@ -47,5 +47,4 @@ describe('SearchParameter', () => {
     expect(paramRestricted.canAddSelected('dndLabel')).toBeTruthy();
     expect(paramRestricted.canAddSelected('123')).toBeFalsy();
   });
-
 });

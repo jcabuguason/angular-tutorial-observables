@@ -8,7 +8,7 @@ export interface AuthAction extends Action {
 
 export enum AuthActionType {
   LOGIN = '[Commons] Login',
-  LOGOUT = '[Commons] Logout'
+  LOGOUT = '[Commons] Logout',
 }
 
 const initialState: AuthResponse = {
@@ -16,7 +16,7 @@ const initialState: AuthResponse = {
   errorMesages: [],
   user_fullname: '',
   user_role: '',
-  username: ''
+  username: '',
 };
 
 export function authReducer(state: AuthResponse = initialState, action: AuthAction) {
@@ -35,5 +35,7 @@ export interface AuthState {
 }
 
 export const selectFeatureAuthState = createFeatureSelector<AuthState>('auth');
-export const selectAuthState = createSelector(selectFeatureAuthState, (state: AuthState) => state ? state.auth : null);
-
+export const selectAuthState = createSelector(
+  selectFeatureAuthState,
+  (state: AuthState) => (state ? state.auth : null)
+);

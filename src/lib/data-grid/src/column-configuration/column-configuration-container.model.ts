@@ -1,9 +1,7 @@
 import { ElementColumnConfiguration } from './element-column-configuration.interface';
 
 export class ColumnConfigurationContainer {
-
-  constructor( public name: string, public configuration: ElementColumnConfiguration) {
-  }
+  constructor(public name: string, public configuration: ElementColumnConfiguration) {}
 
   static convertHeader(elementHeader: string, index?: number): string {
     let header = 'e_' + elementHeader.replace(/\./gi, '_');
@@ -19,6 +17,6 @@ export class ColumnConfigurationContainer {
   }
 
   static valueOrDash(data, key: string): string {
-    return (data && data[key]) ? data[key] : '-';
+    return data && data[key] ? data[key] : '-';
   }
 }

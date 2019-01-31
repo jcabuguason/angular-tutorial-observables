@@ -2,7 +2,6 @@ import { ElementColumnConfiguration } from './element-column-configuration.inter
 import { DataColumnConfiguration } from './data-column-configuration.abstract';
 
 export class DefaultColumnConfiguration extends DataColumnConfiguration implements ElementColumnConfiguration {
-
   createElementHeader(workingNode: any, columnID: string) {
     workingNode.field = columnID;
     workingNode.children = undefined;
@@ -10,8 +9,7 @@ export class DefaultColumnConfiguration extends DataColumnConfiguration implemen
 
   createElementData(element, columnID: string) {
     return {
-      [columnID]: element.value
+      [columnID]: element.value,
     };
   }
-
 }

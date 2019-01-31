@@ -5,13 +5,7 @@ import { MatDialogModule } from '@angular/material';
 import { TextDialogModule } from 'msc-dms-commons-angular/core/text-dialog';
 
 @NgModule({
-  imports: [
-    MatDialogModule,
-    TextDialogModule
-  ],
-  providers: [
-    LockHeartbeatService,
-    LockService
-  ]
+  imports: [MatDialogModule, TextDialogModule],
+  providers: [LockHeartbeatService, LockService],
 })
-export class LockHeartbeatModule { }
+export class LockHeartbeatModule {}

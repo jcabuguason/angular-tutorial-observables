@@ -8,7 +8,7 @@ export class SearchQueryType extends SearchParameter {
   constructor(
     name: string,
     uriChecked: string // uri value to indicate when this should be checked
-    ) {
+  ) {
     super(name, [], true, false, 1);
     this.setType(ParameterType.SEARCH_QUERY_TYPE);
     this.uriChecked = uriChecked;
@@ -47,5 +47,4 @@ export class SearchQueryType extends SearchParameter {
   applyFormValues() {
     this.checked = this.formChecked;
   }
-
 }

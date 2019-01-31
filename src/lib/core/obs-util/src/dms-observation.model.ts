@@ -1,82 +1,82 @@
 export interface DMSElementSummary {
-    aggregations: Aggregations;
+  aggregations: Aggregations;
 }
 
 export interface Aggregations {
-    dataElements: ESDataElements;
+  dataElements: ESDataElements;
 }
 
 export interface ESDataElements {
-    index: ElementIndex;
+  index: ElementIndex;
 }
 
 export interface ElementIndex {
-    buckets: Buckets[];
+  buckets: Buckets[];
 }
 
 export interface Buckets {
-    key: string;
-    maxIndex: Index;
-    minIndex: Index;
+  key: string;
+  maxIndex: Index;
+  minIndex: Index;
 }
 
 export interface Index {
-    value: number;
+  value: number;
 }
 
 export interface DMSObs {
-    identity: string; // URI
-    identifier: string; // Primary station identifier
-    taxonomy: string;
-    obsDateTime: string; // TODO: Switch to moment.js datetime?
-    location: Location;
-    receivedDateTime: string;
-    parentIdentity: string;
-    author: Author;
-    jsonVersion: string;
-    rawMessage: RawMessage;
-    metadataElements: MetadataElements[];
-    dataElements: DataElements[];
+  identity: string; // URI
+  identifier: string; // Primary station identifier
+  taxonomy: string;
+  obsDateTime: string; // TODO: Switch to moment.js datetime?
+  location: Location;
+  receivedDateTime: string;
+  parentIdentity: string;
+  author: Author;
+  jsonVersion: string;
+  rawMessage: RawMessage;
+  metadataElements: MetadataElements[];
+  dataElements: DataElements[];
 }
 
 export interface Author {
-    build: string;
-    name: string;
-    version: number;
+  build: string;
+  name: string;
+  version: number;
 }
 
 export interface DataElements {
-    name: string;
-    value: string;
-    unit: string;
-    elementID: string;
-    overallQASummary?: number;
-    indexValue?: number;
-    index?: IndexDetails;
-    preciseValue?: string;
-    preciseUnit?: string;
-    preferredValue?: string;
-    preferredUnit?: string;
+  name: string;
+  value: string;
+  unit: string;
+  elementID: string;
+  overallQASummary?: number;
+  indexValue?: number;
+  index?: IndexDetails;
+  preciseValue?: string;
+  preciseUnit?: string;
+  preferredValue?: string;
+  preferredUnit?: string;
 }
 
 export interface Location {
-    type: string;
-    coordinates: string;
+  type: string;
+  coordinates: string;
 }
 
 export interface MetadataElements {
-    name: string;
-    value: string;
-    unit: string;
-    elementID: string;
+  name: string;
+  value: string;
+  unit: string;
+  elementID: string;
 }
 
 export interface RawMessage {
-    header: string;
-    message: string;
+  header: string;
+  message: string;
 }
 
 export interface IndexDetails {
-    name: string;
-    value: number;
+  name: string;
+  value: number;
 }

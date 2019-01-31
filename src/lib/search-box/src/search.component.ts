@@ -7,9 +7,8 @@ import { MessageService } from 'primeng/components/common/messageservice';
 @Component({
   selector: 'commons-search',
   templateUrl: './search.component.html',
-  styleUrls: [ './search.component.css' ]
+  styleUrls: ['./search.component.css'],
 })
-
 export class SearchComponent implements OnInit, AfterViewChecked {
   // expanding container for entered search fields
   @ViewChild('paramsContainer') containerElement: ElementRef;
@@ -30,8 +29,20 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   multiSelectDefaultLabel = '';
 
   private weekdays = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
-  private months =
-    ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+  private months = [
+    'JANUARY',
+    'FEBRUARY',
+    'MARCH',
+    'APRIL',
+    'MAY',
+    'JUNE',
+    'JULY',
+    'AUGUST',
+    'SEPTEMBER',
+    'OCTOBER',
+    'NOVEMBER',
+    'DECEMBER',
+  ];
 
   constructor(
     public translate: TranslateService,
@@ -52,7 +63,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   ngAfterViewChecked(): void {
     this.checkOverflow();
@@ -71,7 +82,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   }
 
   clickExpandButton(expandContainer: boolean) {
-    (expandContainer)
+    expandContainer
       ? this.expandParamsContainer()
       : this.containerSettings(this.defaultContainerHeight, this.expandIcon, true);
   }
@@ -89,7 +100,8 @@ export class SearchComponent implements OnInit, AfterViewChecked {
     const matchSubstring = (label: string) => label.toLowerCase().indexOf(event.query.toLowerCase()) !== -1;
     const sortSuggestions = (a: string, b: string) => a.localeCompare(b);
 
-    parameter.filteredSuggestions = parameter.getChoices()
+    parameter.filteredSuggestions = parameter
+      .getChoices()
       .map(choice => choice.label)
       .filter(label => matchSubstring(this.translate.instant(label)))
       .sort((a, b) => sortSuggestions(this.translate.instant(a), this.translate.instant(b)));
@@ -99,8 +111,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   // choice.label can be translated string, only need to keep choice.value to match original (before translation)
   adjustMultiSelectChoices() {
     this.searchService.availableParams.forEach(param =>
-      param.multiSelectChoices.forEach(choice =>
-        choice.label = this.translate.instant(choice.value))
+      param.multiSelectChoices.forEach(choice => (choice.label = this.translate.instant(choice.value)))
     );
   }
 
@@ -114,14 +125,13 @@ export class SearchComponent implements OnInit, AfterViewChecked {
       monthNames: this.instantArray('DATES', this.months),
       monthNamesShort: this.instantArray('DATES', this.months.map(month => `${month}_SHORT`)),
       today: this.translate.instant('SEARCH_BAR.TODAY'),
-      clear:  this.translate.instant('SEARCH_BAR.CLEAR')
+      clear: this.translate.instant('SEARCH_BAR.CLEAR'),
     };
   }
 
-  private adjustMultiSelectDefaultLabel () {
+  private adjustMultiSelectDefaultLabel() {
     this.multiSelectDefaultLabel = this.translate.instant('SEARCH_BAR.SELECT');
   }
 
   private instantArray = (header, keys) => keys.map(key => this.translate.instant(`${header}.${key}`));
-
 }

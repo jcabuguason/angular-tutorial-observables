@@ -31,13 +31,13 @@
 }
 .bar-button.ui-button {
   background-color: #fff;
-  border-color:  #fff;
+  border-color: #fff;
   color: #373a3c;
   display: inline-block;
 }
 .bar-button.ui-button:hover {
   background-color: #fff;
-  border-color:  #fff;
+  border-color: #fff;
   color: #0099ff;
 }
 
@@ -52,8 +52,8 @@
 }
 
 /* search category name in the bar */
-::ng-deep .ui-inputgroup .ui-inputgroup-addon:first-child  {
-  min-width: auto ;
+::ng-deep .ui-inputgroup .ui-inputgroup-addon:first-child {
+  min-width: auto;
 }
 /* dropdown button gets covered by delete button without this */
 ::ng-deep .ui-autocomplete .ui-autocomplete-dropdown {
@@ -71,12 +71,12 @@
   min-height: 29px;
 }
 .ui-inputgroup {
-  font-family: "Roboto", "Trebuchet MS", Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Trebuchet MS', Arial, Helvetica, sans-serif;
   font-size: 15px;
 }
 
 /* form */
-::ng-deep p-dialog .ui-dialog{
+::ng-deep p-dialog .ui-dialog {
   overflow: auto;
   max-height: 100%;
 }
@@ -112,15 +112,15 @@
 }
 
 .reset-button {
-  float: left
+  float: left;
 }
 
- /* needed to fix padding in firefox */
+/* needed to fix padding in firefox */
 .ui-button-icon-only {
-  width:2em !important;
+  width: 2em !important;
 }
 
- /* needed to make X icon red */
+/* needed to make X icon red */
 .ui-inputgroup .ui-button:last-child {
   background-color: #d9534f !important;
   border-color: #d9534f;

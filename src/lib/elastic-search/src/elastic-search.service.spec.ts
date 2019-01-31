@@ -1,5 +1,5 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { ElasticSearchService } from './elastic-search.service';
 import { ELASTIC_SEARCH_CONFIG, ElasticSearchConfig } from './elastic-search.config';
@@ -13,14 +13,11 @@ describe('ElasticSearchService', () => {
 
   beforeEach(() => {
     config = {
-      endpoint: 'http://www.test.com'
+      endpoint: 'http://www.test.com',
     };
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ],
-      providers: [
-        ElasticSearchService,
-        { provide: ELASTIC_SEARCH_CONFIG, useValue: config}
-      ]
+      imports: [HttpClientTestingModule],
+      providers: [ElasticSearchService, { provide: ELASTIC_SEARCH_CONFIG, useValue: config }],
     });
     injector = getTestBed();
     service = injector.get(ElasticSearchService);
@@ -34,13 +31,10 @@ describe('ElasticSearchService', () => {
   describe('#get aliases', () => {
     it('should return a list of strings', () => {
       const dummyAliases = {
-        indexes: [
-          'dms_ca_bulkinsert',
-          'dnd:observation:atmospheric:surface_weather:awos-1.0-binary_11'
-        ]
+        indexes: ['dms_ca_bulkinsert', 'dnd:observation:atmospheric:surface_weather:awos-1.0-binary_11'],
       };
 
-      service.getAllSearchableAliases().subscribe((response) => {
+      service.getAllSearchableAliases().subscribe(response => {
         expect(response).toEqual(dummyAliases.indexes);
       });
 
@@ -53,10 +47,10 @@ describe('ElasticSearchService', () => {
   describe('#observation based endpionts', () => {
     it('should return basic observations', () => {
       const dummyObs = {
-        hello: 'world'
+        hello: 'world',
       };
 
-      service.getBasicObservations('v1.0', 'testNetwork').subscribe((response) => {
+      service.getBasicObservations('v1.0', 'testNetwork').subscribe(response => {
         expect(response).toEqual(dummyObs);
       });
 
@@ -67,10 +61,10 @@ describe('ElasticSearchService', () => {
 
     it('should return unique stations', () => {
       const dummyObs = {
-        hello: 'world'
+        hello: 'world',
       };
 
-      service.getUniqueStations('v1.0', 'testNetwork').subscribe((response) => {
+      service.getUniqueStations('v1.0', 'testNetwork').subscribe(response => {
         expect(response).toEqual(dummyObs);
       });
 
@@ -81,10 +75,10 @@ describe('ElasticSearchService', () => {
 
     it('should return observations from stations', () => {
       const dummyObs = {
-        hello: 'world'
+        hello: 'world',
       };
 
-      service.getObservationsFromStations('v1.0', 'testNetwork', ['1', '2']).subscribe((response) => {
+      service.getObservationsFromStations('v1.0', 'testNetwork', ['1', '2']).subscribe(response => {
         expect(response).toEqual(dummyObs);
       });
 
@@ -95,10 +89,10 @@ describe('ElasticSearchService', () => {
 
     it('should return unique elements', () => {
       const dummyObs = {
-        hello: 'world'
+        hello: 'world',
       };
 
-      service.getUniqueElements('v1.0', 'testNetwork').subscribe((response) => {
+      service.getUniqueElements('v1.0', 'testNetwork').subscribe(response => {
         expect(response).toEqual(dummyObs);
       });
 
@@ -109,10 +103,10 @@ describe('ElasticSearchService', () => {
 
     it('should return observations from elements', () => {
       const dummyObs = {
-        hello: 'world'
+        hello: 'world',
       };
 
-      service.getObservationsFromElements('v1.0', 'testNetwork', ['1', '2']).subscribe((response) => {
+      service.getObservationsFromElements('v1.0', 'testNetwork', ['1', '2']).subscribe(response => {
         expect(response).toEqual(dummyObs);
       });
 
@@ -123,12 +117,12 @@ describe('ElasticSearchService', () => {
 
     describe('#common parameters', () => {
       it('should correctly set type', () => {
-        service.getBasicObservations('v1.0', 'testNetwork', {type: 'metadata'}).subscribe();
+        service.getBasicObservations('v1.0', 'testNetwork', { type: 'metadata' }).subscribe();
         httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?type=metadata`);
       });
 
       it('should correctly set size', () => {
-        service.getBasicObservations('v1.0', 'testNetwork', {size: 10}).subscribe();
+        service.getBasicObservations('v1.0', 'testNetwork', { size: 10 }).subscribe();
         httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?size=10`);
       });
 
@@ -139,7 +133,7 @@ describe('ElasticSearchService', () => {
         date.setDate(20);
         date.setHours(11);
         date.setMinutes(25);
-        service.getBasicObservations('v1.0', 'testNetwork', {from: date}).subscribe();
+        service.getBasicObservations('v1.0', 'testNetwork', { from: date }).subscribe();
         httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?from=201705201125`);
       });
 
@@ -150,30 +144,37 @@ describe('ElasticSearchService', () => {
         date.setDate(20);
         date.setHours(11);
         date.setMinutes(25);
-        service.getBasicObservations('v1.0', 'testNetwork', {to: date}).subscribe();
+        service.getBasicObservations('v1.0', 'testNetwork', { to: date }).subscribe();
         httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?to=201705201125`);
       });
 
       it('should correctly set datetimetype', () => {
-        service.getBasicObservations('v1.0', 'testNetwork', {datetimeType: ElasticSearchDateTimeType.ObservationDateTime}).subscribe();
+        service
+          .getBasicObservations('v1.0', 'testNetwork', {
+            datetimeType: ElasticSearchDateTimeType.ObservationDateTime,
+          })
+          .subscribe();
         httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?datetimeType=obsDateTime`);
       });
 
       it('should correctly set sortFields', () => {
-        service.getBasicObservations('v1.0', 'testNetwork', {sortFields: '+elementID'}).subscribe();
+        service
+          .getBasicObservations('v1.0', 'testNetwork', {
+            sortFields: '+elementID',
+          })
+          .subscribe();
         httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?sortFields=%2BelementID`);
       });
 
       it('should correctly set startIndex', () => {
-        service.getBasicObservations('v1.0', 'testNetwork', {startIndex: '50'}).subscribe();
+        service.getBasicObservations('v1.0', 'testNetwork', { startIndex: '50' }).subscribe();
         httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?startIndex=50`);
       });
 
       it('should correctly set queryType', () => {
-        service.getBasicObservations('v1.0', 'testNetwork', {queryType: 'partial'}).subscribe();
+        service.getBasicObservations('v1.0', 'testNetwork', { queryType: 'partial' }).subscribe();
         httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?queryType=partial`);
       });
     });
-
   });
 });
