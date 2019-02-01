@@ -16,6 +16,7 @@ import {
   MetadataElements,
   DataElements,
   RawMessage,
+  IndexDetails,
 } from 'msc-dms-commons-angular/core/obs-util';
 
 // import { NodeLookups } from 'msc-dms-commons-angular/core/metadata';

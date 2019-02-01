@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { DataChartService } from './data-chart.service';
 import { ChartModule, HIGHCHARTS_MODULES } from 'angular-highcharts';
 import { LanguageModule } from 'msc-dms-commons-angular/shared/language';
 import exporting from 'highcharts/modules/exporting.src';
