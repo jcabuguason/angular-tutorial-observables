@@ -39,7 +39,6 @@ export abstract class DataColumnConfiguration {
       pinned: true,
       sort: 'asc',
       comparator: obsUtil.compareObsTime,
-      cellRenderer: this.renderObsTime,
       lockVisible: true,
       type: 'identity',
     };
@@ -157,10 +156,6 @@ export abstract class DataColumnConfiguration {
       }
       return menuItems;
     };
-  }
-
-  renderObsTime(params) {
-    return `<a href="/core${params.data.uri}" target="_blank">${params.value}</a>`;
   }
 
   // TODO: Find nicer solution, step away from Col-Conf classes?
