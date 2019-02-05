@@ -37,6 +37,7 @@ export class DataGridService implements OnDestroy {
   public chartColumnRequested = new Subject();
   public chartFormRequested = new Subject();
   public chartRequested = new Subject();
+  public chartEditRequested = new Subject();
 
   private columnConfiguration: ElementColumnConfiguration;
   private identityHeader;
@@ -60,6 +61,7 @@ export class DataGridService implements OnDestroy {
     this.chartColumnRequested.unsubscribe();
     this.chartFormRequested.unsubscribe();
     this.chartRequested.unsubscribe();
+    this.chartEditRequested.unsubscribe();
   }
 
   getColumnConfiguration(): ElementColumnConfiguration {
@@ -110,8 +112,12 @@ export class DataGridService implements OnDestroy {
     this.chartColumnRequested.next(param);
   }
 
-  chartObject(param: any) {
+  createChart(param: any) {
     this.chartRequested.next(param);
+  }
+
+  editChart(param: any) {
+    this.chartEditRequested.next(param);
   }
 
   chartFormOnColumn(param: any) {

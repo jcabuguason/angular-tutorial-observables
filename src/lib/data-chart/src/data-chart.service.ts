@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
 import { Chart, Highcharts } from 'angular-highcharts';
+import { ChartObject, Element, Station } from './model/chart.model';
 
 import { UserConfigService } from 'msc-dms-commons-angular/core/metadata';
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
@@ -52,7 +53,7 @@ export class DataChartService {
     );
   }
 
-  chartColumn(chartObj: ChartObject, obs, extraOptions = {}): Chart {
+  chart(chartObj: ChartObject, obs, extraOptions = {}): Chart {
     const series =
       chartObj.stations.length === 1
         ? this.chartMulti(chartObj, obs, extraOptions)
@@ -62,15 +63,13 @@ export class DataChartService {
   }
 
   private chartSingle(chartObj: ChartObject, obs, extraOptions) {
-    const name = chartObj.elements[0];
     return Object.assign(
       {
         chart: {
-          type: !!name ? this.getElementType(name) : '',
           zoomType: 'xy',
         },
         title: {
-          text: !!name ? this.configService.getFullFormattedHeader(name) : '',
+          text: this.configService.getFullFormattedHeader(chartObj.elements[0].id),
         },
         xAxis: {
           type: 'datetime',
@@ -103,15 +102,17 @@ export class DataChartService {
 
       for (const obs of observations
         .filter(obsUtil.latestFromArray)
-        .filter(ob => ob.identifier === station['id'])
+        .filter(ob => ob.identifier === station.id)
         .sort(obsUtil.compareObsTimeFromObs)) {
-        for (const field of elements) {
-          const foundElems = obs.dataElements.filter(elem => elem.elementID === field);
+        for (const e of elements) {
+          const foundElems = obs.dataElements.filter(elem => elem.elementID === e.id);
           this.buildSensor(foundElems, sensor, obs, yTypes);
           name = this.createStationLabel(obs.metadataElements);
         }
       }
-      this.buildSeries(series, sensor, name, yTypes, this.getElementType(elements[0]));
+      const element = chartObj.elements[0];
+      const elemType = element.chartType ? element.chartType : this.getElementType(element.id);
+      this.buildSeries(series, sensor, name, yTypes, elemType);
     }
     return series;
   }
@@ -160,9 +161,9 @@ export class DataChartService {
 
     for (const station of stations) {
       for (const elem of elements) {
-        for (const obs of observations.filter(ob => ob.identifier === station['id'])) {
+        for (const obs of observations.filter(ob => ob.identifier === station.id)) {
           const hasUnit = elem.hasOwnProperty('unit');
-          const foundElem = obs.dataElements.find(elemt => elemt.elementID === elem && !hasUnit);
+          const foundElem = obs.dataElements.find(elemt => elemt.elementID === elem.id && !hasUnit);
 
           if (!!foundElem) {
             if (values.indexOf(foundElem.unit) === -1) {
@@ -203,7 +204,7 @@ export class DataChartService {
           zoomType: 'xy',
         },
         title: {
-          text: chartObj.stations[0]['label'],
+          text: chartObj.stations[0].label,
         },
         xAxis: {
           type: 'datetime',
@@ -233,15 +234,13 @@ export class DataChartService {
     for (const element of elements) {
       const sensor = {};
 
-      for (const obs of observations
-        .sort(obsUtil.compareObsTimeFromObs)
-        .filter(ob => ob.identifier === station['id'])) {
-        const foundElems = obs.dataElements.filter(elemt => elemt.elementID === element);
+      for (const obs of observations.sort(obsUtil.compareObsTimeFromObs).filter(ob => ob.identifier === station.id)) {
+        const foundElems = obs.dataElements.filter(elemt => elemt.elementID === element.id);
         this.buildSensor(foundElems, sensor, obs, yTypes);
       }
 
-      const name = this.configService.buildFullNodeName(element);
-      const type = this.getElementType(element);
+      const name = this.configService.buildFullNodeName(element.id);
+      const type = element.chartType ? element.chartType : this.getElementType(element.id);
       this.buildSeries(series, sensor, name, yTypes, type);
     }
     return series;
@@ -282,14 +281,10 @@ export class DataChartService {
   }
 
   private buildNoDataString(chartObj) {
-    const elems = chartObj.elements.map(elem => `<li>${this.configService.buildFullNodeName(elem)}</li>`).join('');
+    const elems = chartObj.elements.map(elem => `<li>${this.configService.buildFullNodeName(elem.id)}</li>`).join('');
     return `${this.instantSingle('CHART', 'NO_DATA')}: ${elems}`;
   }
 
   private instantSingle = (header, key) => this.translate.instant(`${header}.${key}`);
   private instantArray = (header, keys) => keys.map(key => this.instantSingle(header, key));
-}
-
-export class ChartObject {
-  constructor(public elements: string[], public stations: string[]) {}
 }
