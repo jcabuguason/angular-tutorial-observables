@@ -1,10 +1,13 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+
+import { TranslateService } from '@ngx-translate/core';
+import { Subject } from 'rxjs/Subject';
 
 import { ElementColumnConfiguration } from './column-configuration/element-column-configuration.interface';
 import { ColumnConfigurationContainer } from './column-configuration/column-configuration-container.model';
-
 import { DefaultColumnConfiguration } from './column-configuration/default-column-configuration.class';
-import { MatDialog } from '@angular/material/dialog';
+
 import { StationInfoComponent } from './station-info/station-info.component';
 import { FULL_CONFIG } from './default-grid-configs';
 import { UserConfigService, ElementVisibility } from 'msc-dms-commons-angular/core/metadata/';
@@ -19,11 +22,7 @@ import {
   IndexDetails,
 } from 'msc-dms-commons-angular/core/obs-util';
 
-// import { NodeLookups } from 'msc-dms-commons-angular/core/metadata';
-
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
-import { TranslateService } from '@ngx-translate/core';
-import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class DataGridService implements OnDestroy {
@@ -37,6 +36,7 @@ export class DataGridService implements OnDestroy {
   public chartColumnRequested = new Subject();
   public chartFormRequested = new Subject();
   public chartRequested = new Subject();
+  public recenterObs = new Subject();
   public chartEditRequested = new Subject();
 
   private columnConfiguration: ElementColumnConfiguration;
@@ -61,6 +61,7 @@ export class DataGridService implements OnDestroy {
     this.chartColumnRequested.unsubscribe();
     this.chartFormRequested.unsubscribe();
     this.chartRequested.unsubscribe();
+    this.recenterObs.unsubscribe();
     this.chartEditRequested.unsubscribe();
   }
 

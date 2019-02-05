@@ -73,4 +73,14 @@ describe('ObsUtil', () => {
     expect(obsUtil.formatQAValue(undefined)).toBe('N/A');
     expect(obsUtil.formatQAValue(null)).toBe('N/A');
   });
+
+  it('should modify element ID format correctly', () => {
+    expect(obsUtil.formatElementToColumn('1.2.3.4.5.6.7')).toBe('e_1_2_3_4_5_6_7');
+    expect(obsUtil.formatElementID('e_1_2_3_4_5_6_7')).toBe('1.2.3.4.5.6.7');
+  });
+
+  it('should modify date format correctly', () => {
+    expect(obsUtil.formatDateToISO('2018-11-11T02:00')).toBe('2018-11-11T02:00:00.000Z');
+    expect(obsUtil.formatDateRemoveSeconds('2018-11-11T02:00:00.000Z')).toBe('2018-11-11T02:00');
+  });
 });
