@@ -125,6 +125,7 @@ export class DataChartService {
         data: sensor[key],
         yAxis: yTypes.indexOf(sensor[key][0].unit),
         type: type,
+        isSensor: sensor[key]['isSensor'],
       }))
     );
   }
@@ -132,6 +133,7 @@ export class DataChartService {
   private buildSensor(foundElems, sensor, obs, yTypes) {
     for (const e of foundElems) {
       const sensorType = this.getSensorType(e);
+      const isSensor = !!e.index && e.index.name === 'sensor_index';
       if (!!e) {
         if (yTypes.indexOf(e.unit) === -1) {
           yTypes.push(e.unit);
@@ -142,6 +144,7 @@ export class DataChartService {
           sensor[key] = [];
         }
         sensor[key]['sensorType'] = sensorType;
+        sensor[key]['isSensor'] = isSensor;
         sensor[key].push({
           x: Date.parse(obs.obsDateTime),
           y: Number(e.value),
@@ -216,9 +219,6 @@ export class DataChartService {
         series: this.createMultiSeries(chartObj, observations),
         lang: {
           noData: this.buildNoDataString(chartObj),
-        },
-        credits: {
-          enabled: false,
         },
       },
       extraOptions
