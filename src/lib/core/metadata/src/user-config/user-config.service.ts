@@ -256,7 +256,7 @@ export class UserConfigService {
   getFormattedSubHeader(elementID: string): string {
     const subHeader = this.getSubHeader(elementID);
 
-    return subHeader !== '' ? ' (' + subHeader + ')' : '';
+    return subHeader !== '' ? ', ' + subHeader : '';
   }
 
   getSubHeader(elementID: string): string {
