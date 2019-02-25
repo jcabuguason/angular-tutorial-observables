@@ -79,11 +79,21 @@
                 [autoDisplayFirst]="false"
                 appendTo="body"
               >
-                <ng-template let-choice pTemplate="item">
-                  <span title="{{ p.getChoiceTooltip(choice.value) | translate }}">{{ choice.value | translate }}</span>
-                </ng-template>
                 <ng-template let-choice pTemplate="selectedItem">
-                  <span title="{{ p.getChoiceTooltip(choice.value) | translate }}">{{ choice.value | translate }}</span>
+                  <span *ngIf="p.hasChoiceIcon(choice)" title="{{ p.getChoiceIconTooltip(choice) | translate }}"
+                    ><i class="{{ p.getChoiceFaIcon(choice) }}"></i
+                  ></span>
+                  <span title="{{ p.getChoiceTooltip(choice.value) | translate }}">
+                    {{ choice.value | translate }}</span
+                  >
+                </ng-template>
+                <ng-template let-choice pTemplate="item">
+                  <span *ngIf="p.hasChoiceIcon(choice)" title="{{ p.getChoiceIconTooltip(choice) | translate }}"
+                    ><i class="{{ p.getChoiceFaIcon(choice) }}"></i
+                  ></span>
+                  <span title="{{ p.getChoiceTooltip(choice.value) | translate }}">
+                    {{ choice.value | translate }}</span
+                  >
                 </ng-template>
               </p-dropdown>
 
@@ -102,12 +112,18 @@
                 appendTo="body"
               >
                 <ng-template let-choices pTemplate="selectedItem">
-                  <span title="{{ p.getChoiceTooltip(choices) | translate }}" style="margin-right: 2em;">{{
-                    choices | translate
-                  }}</span>
+                  <span *ngIf="p.hasChoiceIcon(choices)" title="{{ p.getChoiceIconTooltip(choices) | translate }}"
+                    ><i class="{{ p.getChoiceFaIcon(choices) }}"></i
+                  ></span>
+                  <span title="{{ p.getChoiceTooltip(choices) | translate }}" style="margin-right: 2em;">
+                    {{ choices | translate }}</span
+                  >
                 </ng-template>
                 <ng-template let-choices pTemplate="item">
-                  <span title="{{ p.getChoiceTooltip(choices) | translate }}">{{ choices | translate }}</span>
+                  <span *ngIf="p.hasChoiceIcon(choices)" title="{{ p.getChoiceIconTooltip(choices) | translate }}"
+                    ><i class="{{ p.getChoiceFaIcon(choices) }}"></i
+                  ></span>
+                  <span title="{{ p.getChoiceTooltip(choices) | translate }}"> {{ choices | translate }}</span>
                 </ng-template>
               </p-autoComplete>
 
@@ -252,9 +268,15 @@
           appendTo="body"
         >
           <ng-template let-choice pTemplate="selectedItem">
-            <span title="{{ p.getChoiceTooltip(choice.value) | translate }}">{{ choice.value | translate }}</span>
+            <span *ngIf="p.hasChoiceIcon(choice)" title="{{ p.getChoiceIconTooltip(choice) | translate }}"
+              ><i class="{{ p.getChoiceFaIcon(choice) }}"></i
+            ></span>
+            <span title="{{ p.getChoiceTooltip(choice.value) | translate }}"> {{ choice.value | translate }}</span>
           </ng-template>
           <ng-template let-choice pTemplate="item">
+            <span *ngIf="p.hasChoiceIcon(choice)" title="{{ p.getChoiceIconTooltip(choice) | translate }}"
+              ><i class="{{ p.getChoiceFaIcon(choice) }}"></i
+            ></span>
             <span *ngIf="!!choice.value; else emptyValue" title="{{ p.getChoiceTooltip(choice.value) | translate }}">
               {{ choice.value | translate }}
             </span>
@@ -273,7 +295,10 @@
           appendTo="body"
         >
           <ng-template let-choices pTemplate="item">
-            <span title="{{ p.getChoiceTooltip(choices.value) | translate }}">{{ choices.value | translate }}</span>
+            <span *ngIf="p.hasChoiceIcon(choices.value)" title="{{ p.getChoiceIconTooltip(choices.value) | translate }}"
+              ><i class="{{ p.getChoiceFaIcon(choices.value) }}"></i
+            ></span>
+            <span title="{{ p.getChoiceTooltip(choices.value) | translate }}"> {{ choices.value | translate }}</span>
           </ng-template>
         </p-multiSelect>
       </ng-template>

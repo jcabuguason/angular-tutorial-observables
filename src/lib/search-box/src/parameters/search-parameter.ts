@@ -1,5 +1,28 @@
 import { ChoiceModel } from '../model/choice.model';
-import { SearchQueryType } from './search-query-type';
+
+export enum ParameterType {
+  SEARCH_PARAMETER,
+  SEARCH_DATETIME,
+  SEARCH_HOURS_RANGE,
+  SEARCH_QUERY_TYPE,
+}
+
+export const ParameterName = {
+  // used to determine taxonomy
+  forTaxonomy: {
+    NETWORK: 'network',
+    ORGANIZATION: 'organization',
+  },
+  // used by search model sent to ES
+  STATION_NAME: 'stationName',
+  STATION_ID: 'stationID',
+  PROVINCE: 'province',
+  SIZE: 'size',
+  HOURS_RANGE: 'hoursRange',
+  FROM: 'from',
+  TO: 'to',
+  QUERY_TYPE: 'queryType',
+};
 
 export class SearchParameter {
   selected: string[] = [];
@@ -161,6 +184,21 @@ export class SearchParameter {
     return this.choices.find(val => val.uri.toLowerCase() === uri.toLowerCase());
   }
 
+  getChoiceFaIcon(value: string): string {
+    const choice = this.findChoice(this.choices, value);
+    return choice ? choice.icon.faIcon : '';
+  }
+
+  getChoiceIconTooltip(value: string): string {
+    const choice = this.findChoice(this.choices, value);
+    return choice ? choice.icon.iconTooltip : '';
+  }
+
+  hasChoiceIcon(value: string): boolean {
+    const choice = this.findChoice(this.choices, value);
+    return choice != null && choice.icon != null;
+  }
+
   /** For functions that accept both string value and ChoiceModel */
   private isChoiceModel(value) {
     return value != null
@@ -184,33 +222,9 @@ export class SearchParameter {
   }
 
   cleanEntries = (arr: string[]): string[] =>
-    arr.map(entry => entry != null && entry.trim()).filter(trimmed => !!trimmed);
+    arr.map(entry => entry != null && entry.trim()).filter(trimmed => !!trimmed)
 
   // some values still gets through from manual user input in the form/bar (ngModel binding)
   // ex. '12345 ' and '12345   ' are technically unique
   private removeDuplicates = (arr: string[]): string[] => arr.filter((val, index) => arr.indexOf(val) === index);
 }
-
-export enum ParameterType {
-  SEARCH_PARAMETER,
-  SEARCH_DATETIME,
-  SEARCH_HOURS_RANGE,
-  SEARCH_QUERY_TYPE,
-}
-
-export const ParameterName = {
-  // used to determine taxonomy
-  forTaxonomy: {
-    NETWORK: 'network',
-    ORGANIZATION: 'organization',
-  },
-  // used by search model sent to ES
-  STATION_NAME: 'stationName',
-  STATION_ID: 'stationID',
-  PROVINCE: 'province',
-  SIZE: 'size',
-  HOURS_RANGE: 'hoursRange',
-  FROM: 'from',
-  TO: 'to',
-  QUERY_TYPE: 'queryType',
-};
