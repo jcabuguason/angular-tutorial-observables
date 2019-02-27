@@ -19,7 +19,7 @@ export const FULL_CONFIG: MDInstanceDefinition = {
     {
       group: 'nesting',
       name: 'nesting-depth',
-      value: '4',
+      value: '5',
       def_id: '',
       id: '',
       index: '',
@@ -40,7 +40,7 @@ export const FULL_CONFIG: MDInstanceDefinition = {
         {
           group: 'header',
           name: 'sub-header-start',
-          value: '5',
+          value: '6',
           def_id: '',
           id: '',
           index: '',
