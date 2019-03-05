@@ -55,16 +55,14 @@ export class MetadataService {
       .pipe(map(response => MDInstanceDefinitionParser.parse(response)));
   }
 
-  addMetadataInstance(taxonomy: string, outgoing: OutgoingMetadataInstance, id: string) {
-    const otherOptions = Object.assign({ responseType: 'text' }, this.httpOptions);
-    return this.http.post(
-      `${this.config.endpoint}?url=/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json`,
-      outgoing,
-      otherOptions
-    );
-  }
-
-  updateMetadataInstance(taxonomy: string, outgoing: OutgoingMetadataInstance, id: string) {
+  /**
+   * Write a metadata instance in JSON format with full contents
+   *
+   * @param taxonomy dataset taxonomy of the metadata instance to be written
+   * @param outgoing the metadata instance to be written
+   * @param id the URI identifiers of the metadata instance
+   */
+  writeFullInstance(taxonomy: string, outgoing: OutgoingMetadataInstance, id: string) {
     const otherOptions = Object.assign({ responseType: 'text' }, this.httpOptions);
     return this.http.post(
       `${this.config.endpoint}?url=/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json&override=true`,
