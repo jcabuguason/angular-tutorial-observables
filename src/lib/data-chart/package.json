@@ -1,7 +1,7 @@
 {
   "ngPackage": {
     "lib": {
-      "externals": {
+      "umdModuleIds": {
         "angular-highcharts": "angular-highcharts",
         "date-fns": "date-fns",
         "msc-dms-commons-angular/core/metadata": "msc-dms-commons-angular/core/metadata",

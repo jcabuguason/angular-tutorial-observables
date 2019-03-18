@@ -1,7 +1,7 @@
 {
   "ngPackage": {
     "lib": {
-      "externals": {
+      "umdModuleIds": {
         "msc-dms-commons-angular/shared/language": "msc-dms-commons-angular/shared/language"
       }
     }
