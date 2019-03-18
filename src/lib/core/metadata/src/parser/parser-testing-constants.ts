@@ -1,5 +1,6 @@
 import { MDDefinition } from '../model/MDDefinition';
-import { MDInstanceElement, MDInstanceDefinition } from '../model';
+import { MDInstanceElement } from '../model/MDInstanceElement';
+import { MDInstanceDefinition } from '../model/MDInstanceDefinition';
 
 export const DEFINITION_PARSER_INPUT = {
   '@xmlns': 'http://dms.ec.gc.ca/schema/metadata/1.0',

@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-import { Chart, Highcharts } from 'angular-highcharts';
+import * as Highcharts from 'highcharts';
+import { Chart } from 'angular-highcharts';
 import { ChartObject, Element, Station } from './model/chart.model';
 
 import { UserConfigService } from 'msc-dms-commons-angular/core/metadata';
@@ -8,6 +9,7 @@ import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 
 import { UnitCodeConversionService } from 'msc-dms-commons-angular/core/obs-util';
 import { TranslateService } from '@ngx-translate/core';
+import { ChartService } from 'angular-highcharts/lib/chart.service';
 
 @Injectable()
 export class DataChartService {
@@ -54,12 +56,13 @@ export class DataChartService {
   }
 
   chart(chartObj: ChartObject, obs, extraOptions = {}): Chart {
-    const series =
-      chartObj.stations.length === 1
-        ? this.chartMulti(chartObj, obs, extraOptions)
-        : this.chartSingle(chartObj, obs, extraOptions);
+    return new Chart(this.buildOptions(chartObj, obs, extraOptions));
+  }
 
-    return new Chart(series);
+  buildOptions(chartObj: ChartObject, obs, extraOptions = {}) {
+    return chartObj.stations.length === 1
+      ? this.chartMulti(chartObj, obs, extraOptions)
+      : this.chartSingle(chartObj, obs, extraOptions);
   }
 
   private chartSingle(chartObj: ChartObject, obs, extraOptions) {

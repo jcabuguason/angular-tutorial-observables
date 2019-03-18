@@ -2,7 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { TranslateService } from '@ngx-translate/core';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 import { ElementColumnConfiguration } from './column-configuration/element-column-configuration.interface';
 import { ColumnConfigurationContainer } from './column-configuration/column-configuration-container.model';
@@ -10,7 +10,7 @@ import { DefaultColumnConfiguration } from './column-configuration/default-colum
 
 import { StationInfoComponent } from './station-info/station-info.component';
 import { FULL_CONFIG } from './default-grid-configs';
-import { UserConfigService, ElementVisibility } from 'msc-dms-commons-angular/core/metadata/';
+import { UserConfigService, ElementVisibility } from 'msc-dms-commons-angular/core/metadata';
 
 import {
   STN_NAME_FIELD,

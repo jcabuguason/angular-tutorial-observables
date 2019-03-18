@@ -6,8 +6,7 @@ import { UNIT_CODE_CONVERSION_CONFIG, UnitCodeConversionConfig } from './unit-co
 
 import { DMSObs, DataElements } from '../dms-observation.model';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
+import { Observable } from 'rxjs';
 
 const codes = require('assets/codes.json');
 

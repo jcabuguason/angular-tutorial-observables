@@ -14,7 +14,7 @@ import { SEARCH_BOX_CONFIG, SearchBoxConfig } from './search-box.config';
 
 import { SearchURLService } from './search-url.service';
 import { MessageService } from 'primeng/components/common/messageservice';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class SearchService {

@@ -2,19 +2,13 @@ import { Injectable, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable, Subject, Subscription, timer, fromEvent, merge, forkJoin, of } from 'rxjs';
 import { takeUntil, mergeMap, timeout, take, catchError } from 'rxjs/operators';
-import 'rxjs/add/observable/timer';
-import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/observable/forkJoin';
-import 'rxjs/add/observable/of';
 
 import { LOCK_CONFIG, LockConfig } from './lock.config';
 import { LockService } from './lock.service';
 import { TextDialogComponent } from 'msc-dms-commons-angular/core/text-dialog';
+import { LockInfoResponse } from './model/lock-info-response.model';
 
 @Injectable()
 export class LockHeartbeatService {
@@ -38,9 +32,9 @@ export class LockHeartbeatService {
     private lockService: LockService,
     private dialog: MatDialog
   ) {
-    this.heartbeat$ = Observable.timer(0, this.config.coreTTL);
-    const events$ = LockHeartbeatService.INTERRUPTS.map(event => Observable.fromEvent(document, event));
-    this.userActivity$ = Observable.merge(...events$);
+    this.heartbeat$ = timer(0, this.config.coreTTL);
+    const events$ = LockHeartbeatService.INTERRUPTS.map(event => fromEvent(document, event));
+    this.userActivity$ = merge(...events$);
     this.unsubscribe = new Subject<void>();
     this.hasLock = false;
   }
@@ -99,12 +93,12 @@ export class LockHeartbeatService {
               return this.lockService.lockInfo({ resource_id: resourceID, type: this.type }).pipe(
                 catchError(lockInfoError => {
                   this.handleUnknownError(lockInfoError);
-                  return Observable.of(null);
+                  return of(null as LockInfoResponse);
                 })
               );
             });
 
-            Observable.forkJoin(lockInfos).subscribe(lockInfoResponses => {
+            forkJoin(lockInfos).subscribe(lockInfoResponses => {
               lockInfoResponses = lockInfoResponses.filter(info => info != null);
 
               if (lockInfoResponses.length > 0) {

@@ -1,13 +1,14 @@
+import { throwError as observableThrowError, Observable } from 'rxjs';
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MR_MAPPING_CONFIG, MRMappingConfig } from './mr-mapping.config';
-import { Observable } from 'rxjs/Observable';
 import { first, publishLast, refCount, tap, catchError } from 'rxjs/operators';
 
 import { SubHeaderConfig, ElementVisibility, Lang, UserConfig } from './user-config.model';
 
 import { NodeLookups } from './node.const';
-import { MDInstanceDefinition, MDInstanceElement } from '../model/';
+import { MDInstanceElement } from '../model/MDInstanceelement';
+import { MDInstanceDefinition } from '../model/MDInstanceDefinition';
 import { LanguageService } from 'msc-dms-commons-angular/shared/language';
 
 @Injectable()
@@ -43,7 +44,7 @@ export class UserConfigService {
       first(),
       publishLast(),
       refCount(),
-      catchError(e => Observable.throw(e))
+      catchError(e => observableThrowError(e))
     );
   }
 

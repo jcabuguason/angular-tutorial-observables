@@ -1,7 +1,7 @@
 {
   "ngPackage": {
     "lib": {
-      "externals": {
+      "umdModuleIds": {
         "date-fns": "date-fns",
         "@ngx-translate/core": "@ngx-translate/core",
         "rxjs": "rxjs"

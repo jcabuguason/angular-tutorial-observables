@@ -1,4 +1,4 @@
-import { MDInstanceDefinition } from 'msc-dms-commons-angular/core/metadata/';
+import { MDInstanceDefinition } from 'msc-dms-commons-angular/core/metadata';
 
 export const FULL_CONFIG: MDInstanceDefinition = {
   dataset: 'stub',
