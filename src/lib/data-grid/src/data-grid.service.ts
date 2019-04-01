@@ -137,17 +137,15 @@ export class DataGridService implements OnDestroy {
     return this.columnConfiguration.getMainMenuItems(this);
   }
 
-  flattenObsIdentities = (obs: DMSObs) => {
-    return {
-      obsDateTime: obs.obsDateTime,
-      receivedDateTime: obs.receivedDateTime,
-      uri: obs.identity,
-      taxonomy: obs.taxonomy,
-      primaryStationId: obs.identifier,
-      station: obsUtil.findMetadataValue(obs, 'stn_nam'),
-      revision: obsUtil.findRevision(obs),
-    };
-  };
+  flattenObsIdentities = (obs: DMSObs) => ({
+    obsDateTime: obs.obsDateTime,
+    receivedDateTime: obs.receivedDateTime,
+    uri: obs.identity,
+    taxonomy: obs.taxonomy,
+    primaryStationId: obs.identifier,
+    station: obsUtil.findMetadataValue(obs, 'stn_nam'),
+    revision: obsUtil.findRevision(obs),
+  });
 
   flattenMetadataElements(mdElements: MetadataElements[]) {
     const result = {};

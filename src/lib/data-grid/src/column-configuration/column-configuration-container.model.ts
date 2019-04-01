@@ -19,4 +19,8 @@ export class ColumnConfigurationContainer {
   static valueOrDash(data, key: string): string {
     return data && data[key] ? data[key] : '-';
   }
+
+  static removeLayers(element: string): string {
+    return element.replace(/-L[0-9]+/gi, '');
+  }
 }
