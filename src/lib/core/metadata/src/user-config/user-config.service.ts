@@ -7,7 +7,7 @@ import { first, publishLast, refCount, tap, catchError } from 'rxjs/operators';
 import { SubHeaderConfig, ElementVisibility, Lang, UserConfig } from './user-config.model';
 
 import { NodeLookups } from './node.const';
-import { MDInstanceElement } from '../model/MDInstanceelement';
+import { MDInstanceElement } from '../model/MDInstanceElement';
 import { MDInstanceDefinition } from '../model/MDInstanceDefinition';
 import { LanguageService } from 'msc-dms-commons-angular/shared/language';
 

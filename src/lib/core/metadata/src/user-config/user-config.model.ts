@@ -1,4 +1,4 @@
-import { MDInstanceElement } from '../model/MDInstanceelement';
+import { MDInstanceElement } from '../model/MDInstanceElement';
 import { MDInstanceDefinition } from '../model/MDInstanceDefinition';
 import { IncludeExclude } from '../include-exclude/include-exclude.class';
 import { LanguageService } from 'msc-dms-commons-angular/shared/language';
