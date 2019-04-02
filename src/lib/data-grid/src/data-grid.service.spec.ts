@@ -1,14 +1,11 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/map';
 
 import { DataGridService } from './data-grid.service';
-import { DefaultColumnConfiguration } from './column-configuration/default-column-configuration.class';
 import { VUColumnConfiguration } from './column-configuration/vu-column-configuration.class';
-import { AccordianColumnConfiguration } from './column-configuration/accordian-column-configuration.class';
 import { UserConfigService, ElementVisibility, MR_MAPPING_CONFIG } from 'msc-dms-commons-angular/core/metadata';
 import { MatDialog } from '@angular/material';
 import { StationInfoComponent } from './station-info/station-info.component';

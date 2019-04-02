@@ -160,8 +160,8 @@ export class DataChartService {
   }
 
   private buildYAxes(chartObj: ChartObject, observations) {
-    const elements = chartObj.elements;
-    const stations = chartObj.stations;
+    const elements: Element[] = chartObj.elements;
+    const stations: Station[] = chartObj.stations;
     const names = [];
     const values = [];
 

@@ -19,7 +19,6 @@ import {
   MetadataElements,
   DataElements,
   RawMessage,
-  IndexDetails,
 } from 'msc-dms-commons-angular/core/obs-util';
 
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';

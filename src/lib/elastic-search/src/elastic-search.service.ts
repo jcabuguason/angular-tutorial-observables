@@ -6,7 +6,6 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 import { ELASTIC_SEARCH_CONFIG, ElasticSearchConfig } from './elastic-search.config';
-import { ElasticSearchDateTimeType } from './model/elastic-search-date-time-type.model';
 import { BasicObservationsParams } from './model/basic-observations-params.model';
 import { UniqueStationsParams } from './model/unique-stations-params.model';
 import { ObservationsFromStationsParams } from './model/observations-from-stations-params.model';

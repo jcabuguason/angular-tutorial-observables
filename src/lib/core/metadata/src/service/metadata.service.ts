@@ -1,5 +1,5 @@
-import { Injectable, Injector, Inject } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Injectable, Inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -29,7 +29,7 @@ export class MetadataService {
     this.instanceLinks = {};
   }
 
-  loadDefinition(taxonomy: string, version: string) {
+  loadDefinition(taxonomy: string, version: string): Observable<MDDefinition> {
     return this.http
       .get(
         `${this.config.endpoint}?url=/metadata/${taxonomy}/definition-xml-2.0/${version}?format=json`,
@@ -44,7 +44,7 @@ export class MetadataService {
       );
   }
 
-  loadInstance(taxonomy: string, id: string, version?: string) {
+  loadInstance(taxonomy: string, id: string, version?: string): Observable<MDInstanceDefinition> {
     const versionParam = version ? `version=${version}` : '';
 
     return this.http
@@ -73,7 +73,7 @@ export class MetadataService {
 
   // TODO: load instance links should not be tied to the service singleton
   // it should tied to a taxonomy
-  loadInstanceLinks(taxonomy: string) {
+  loadInstanceLinks(taxonomy: string): Promise<InstanceInfo[]> {
     taxonomy = taxonomy.replace('/definition-xml-2.0', '/instance-xml-2.0');
 
     return this.http
@@ -88,7 +88,7 @@ export class MetadataService {
       });
   }
 
-  getDefinitionList() {
+  getDefinitionList(): Observable<MetadataInstanceHistory[]> {
     // TODO: add definitions to MetadataInstanceHistory
     return this.http
       .get<{ definitions: MetadataInstanceHistory[] }>(
@@ -98,7 +98,7 @@ export class MetadataService {
       .pipe(map(response => response.definitions));
   }
 
-  getDefinitionHistory(uri: string) {
+  getDefinitionHistory(uri: string): Observable<MetadataDefinitionHistory[]> {
     const url = `${this.config.endpoint}?url=/metadata/definitions/modification_history?definition_uri=${uri}`;
     return this.http.get<MetadataDefinitionHistory[]>(url, this.httpOptions);
   }
@@ -118,7 +118,7 @@ export class MetadataService {
     return definition.then(def => (def == null ? '' : def[`name_${lang}`] || def.uri));
   }
 
-  getInstanceHistory(uri: string) {
+  getInstanceHistory(uri: string): Observable<MetadataInstanceHistory[]> {
     const url = `${this.config.endpoint}?url=/metadata/instances/modification_history?instance_uri=${uri}`;
     return this.http.get<MetadataInstanceHistory[]>(url, this.httpOptions);
   }
