@@ -44,6 +44,18 @@ export abstract class DataColumnConfiguration {
     };
   }
 
+  buildReceivedDatetimeHeader(): any {
+    return {
+      headerValueGetter: params => this.instantWrapper('RECEIVED_DATE'),
+      field: 'receivedDateTime',
+      colId: 'receivedDateTime',
+      width: 220,
+      pinned: true,
+      comparator: obsUtil.compareObsTime,
+      type: 'identity',
+    };
+  }
+
   buildRevisionHeader(): any {
     return {
       headerValueGetter: params => this.instantWrapper('REV'),
@@ -54,6 +66,20 @@ export abstract class DataColumnConfiguration {
       sort: 'asc',
       comparator: obsUtil.compareRevision,
       lockVisible: true,
+      type: 'identity',
+    };
+  }
+
+  buildNetworkHeader() {
+    return {
+      headerValueGetter: () => this.instantWrapper('NETWORK'),
+      headerTooltip: this.instantWrapper('NETWORK_TOOLTIP'),
+      field: 'taxonomy',
+      colId: 'network',
+      width: 100,
+      pinned: true,
+      suppressPaste: true,
+      lockVisible: false,
       type: 'identity',
     };
   }
