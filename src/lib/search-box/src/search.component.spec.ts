@@ -24,7 +24,7 @@ import { MessagesModule } from 'primeng/messages';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SpinnerModule } from 'primeng/spinner';
 import { SearchURLService } from './search-url.service';
-import { MockUrlService, MockMessageService } from './mock-services';
+import { MockUrlService } from './mock-services';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';

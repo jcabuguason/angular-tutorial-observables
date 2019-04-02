@@ -1,6 +1,5 @@
 import { TestBed, getTestBed, async } from '@angular/core/testing';
 
-import { Chart } from 'angular-highcharts';
 import { Element, Station, ChartObject } from './model/chart.model';
 import { DataChartService } from './data-chart.service';
 import { UserConfigService } from 'msc-dms-commons-angular/core/metadata';

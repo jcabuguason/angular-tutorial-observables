@@ -34,8 +34,8 @@ export interface AuthState {
   auth: AuthResponse;
 }
 
-export const selectFeatureAuthState = createFeatureSelector<AuthState>('auth');
-export const selectAuthState = createSelector(
+export const selectFeatureAuthState: MemoizedSelector<object, AuthState> = createFeatureSelector<AuthState>('auth');
+export const selectAuthState: MemoizedSelector<object, AuthResponse> = createSelector(
   selectFeatureAuthState,
   (state: AuthState) => (state ? state.auth : null)
 );
