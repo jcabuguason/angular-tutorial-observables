@@ -1,5 +1,6 @@
 import { ElementColumnConfiguration } from './element-column-configuration.interface';
 
+// @dynamic
 export class ColumnConfigurationContainer {
   constructor(public name: string, public configuration: ElementColumnConfiguration) {}
 
