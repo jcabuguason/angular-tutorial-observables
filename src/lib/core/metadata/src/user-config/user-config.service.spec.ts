@@ -27,325 +27,395 @@ describe('UserConfigService', () => {
     };
   });
 
-  it('should set elements in the configured order', () => {
-    service.loadConfig(nodeOrderConfig);
-    expect(service.getElementOrder()[0]).toBe('1.19.265.0.66.0.0');
-    expect(service.getElementOrder()[1]).toBe('1.19.265.8.65.12.0');
-    expect(service.getElementOrder()[2]).toBe('1.19.265.7.65.12.0');
+  describe('#emptyConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(emptyConfig);
+    });
+
+    it('should use the default nesting depth', () => {
+      expect(service.getNestingDepth('')).toBe(4);
+    });
+
+    it('should retrieve the default node name', () => {
+      expect(service.getNodeName('1.19.265.0.66.0.0', 2)).toBe('temperature');
+    });
+
+    it('should retrieve the default formatted node name', () => {
+      expect(service.getFormattedNodeName('1.19.265.0.66.0.0', 2)).toBe('Temperature');
+    });
+
+    it('should build the default sub-header', () => {
+      expect(service.getSubHeader('1.19.270.2.1.1.7')).toBe('-1 min, 1 min, -5 cm');
+    });
+
+    it('should format the subheaders', () => {
+      expect(service.getFormattedSubHeader('1.19.270.2.1.1.7')).toBe(', -1 min, 1 min, -5 cm');
+    });
+
+    it('should have an undefined default node name for a non-configured value', () => {
+      expect(service.getDefaultNodeName(3, '10000000000')).toBeUndefined();
+    });
+
+    it('should format an undefined node name as a bad string', () => {
+      expect(service.getFormattedNodeName('1.19.100000.0.66.0.0', 3)).toBe('[UNDEFINED]');
+    });
+
+    it('should return a bad string when getting a node name for non-M NaN values', () => {
+      expect(service.getNodeName('1.2.x.4.5.6.7', 3)).toBe('[UNDEFINED]');
+      expect(service.getNodeName('1.2.N.4.5.6.7', 3)).toBe('[UNDEFINED]');
+    });
+
+    it('should return a bad string for a numeric but unavailable node value', () => {
+      expect(service.getNodeName('1.2.999999999.4.5.6.7', 3)).toBe('[UNDEFINED]');
+    });
+
+    it('should return N/A when getting a node with value M', () => {
+      expect(service.getNodeName('1.2.M.4.5.6.7', 3)).toBe('N/A');
+    });
+
+    it('should return a blank unit', () => {
+      expect(service.getElementUnit('1.2.3.4.5.6.7')).toBe('');
+    });
+
+    it('should show no preferred units', () => {
+      expect(service.hasPreferredUnits()).toBeFalsy();
+    });
+
+    it('should return the default official title', () => {
+      expect(service.getElementOfficialIndexTitle('1.19.6.0.66.0.0')).toBe('GRID.OFFICIAL');
+    });
+
+    it('should return the default layer title', () => {
+      expect(service.getElementIndexTitle('1.19.6.0.66.0.0')).toBe('GRID.LAYER');
+    });
+
+    it('should return an undefined instead of an element description', () => {
+      expect(service.getElementDescription('1.19.265.0.66.0.1')).toBeUndefined();
+    });
+
+    it('should return undefined instead of an node description', () => {
+      expect(service.getNodeDescription('1.2.4.5.6.7.8', 3)).toBeUndefined();
+    });
+
+    it('should return undefined instead of a description', () => {
+      expect(service.getDescription('1.2.3.4.5.6.7', 3)).toBeUndefined();
+    });
+
+    it('should return an empty qa flag toggle list', () => {
+      expect(service.getHideQaFlag()).toEqual([]);
+    });
+
+    it('should not have default preferred units by default', () => {
+      expect(service.isLoadPreferredUnits()).toBeFalsy();
+    });
+
+    it('should return an empty string when getting a node name for value 0', () => {
+      expect(service.getNodeName('1.2.0.4.5.6.7', 3)).toBe('');
+    });
+
+    it('should show the entire element name with zero value headers', () => {
+      expect(service.getFullFormattedHeader('1.19.6.0.66.0.0')).toBe('Temperature / Ozone Concentration, -12 h');
+    });
+
+    it('should show the entire element name with zero value sub headers', () => {
+      expect(service.getFullFormattedHeader('1.12.207.2.1.1.0')).toBe(
+        'Pressure / Mean Sea Level Pressure / Average, -1 min, 1 min'
+      );
+    });
   });
 
-  it('should make an element not in the configured order hidden', () => {
-    service.loadConfig(nodeOrderConfig);
-    expect(service.getElementVisibility('1.2.3.4.5.6.7')).toBe(ElementVisibility.HIDDEN);
+  describe('#orderedConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(nodeOrderConfig);
+    });
+
+    it('should set elements in the configured order', () => {
+      expect(service.getElementOrder()).toEqual(['1.19.265.0.66.0.0', '1.19.265.8.65.12.0', '1.19.265.7.65.12.0']);
+    });
+
+    it('should hide elements not in the config', () => {
+      expect(service.getElementVisibility('1.2.3.4.5.6.7')).toBe(ElementVisibility.HIDDEN);
+    });
   });
 
-  describe('Element loading', () => {
+  describe('#precisionConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(precisionConfig);
+    });
+
+    it('should return an undefined precision value for non-configured element', () => {
+      expect(service.getElementPrecision('1.19.265.0.66.0.1')).toBeUndefined();
+    });
+
+    it('should return an precision value number for a configured element', () => {
+      expect(service.getElementPrecision('1.19.265.0.66.0.0')).toBe(1);
+    });
+  });
+
+  describe('#nestingConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(nestingConfig);
+    });
+
+    it('should have a different nesting depth than the default config', () => {
+      expect(service.getNestingDepth('')).toBe(3);
+    });
+  });
+
+  describe('#simpleRenameConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(simpleRenameConfig);
+    });
+
+    it('should rename configured node using node-rename group element', () => {
+      // config specifies node value 6 at index 3 should be renamed to Test
+      expect(service.getFormattedNodeName('1.19.6.0.66.0.0', 3)).toBe('Test');
+      expect(service.getFormattedNodeName('1.1.6.0.0.0.0', 3)).toBe('Test');
+    });
+
+    it('should rename configured node using element-display group element', () => {
+      // config specifies node value 6 in this element should be Max only for 1.19.265.8.65.12.0
+      expect(service.getFormattedNodeName('1.19.265.8.65.12.0', 6)).toBe('Max');
+      expect(service.getFormattedNodeName('1.1.1.1.1.12.1', 6)).not.toBe('Max');
+    });
+
+    it('should rename element node at max depth using element-display group element', () => {
+      const depth = service.getNestingDepth('');
+      expect(depth).toBe(4);
+      expect(service.getFormattedNodeName('1.19.265.8.65.12.0', depth - 1)).toBe('Air Temperature');
+      expect(service.getFormattedNodeName('1.19.265.8.65.12.0', depth)).toBe('Max Temp');
+    });
+  });
+
+  describe('#langRenameConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(langRenameConfig);
+    });
+
+    it('should provide the configured English node name when in English mode', () => {
+      expect(service.getFormattedNodeName('1.19.6.0.66.0.0', 3)).toBe('En');
+    });
+
+    it('should provide the configured French node name when in French mode', () => {
+      LanguageService.translator.currentLang = 'fr';
+      expect(service.getFormattedNodeName('1.19.6.0.66.0.0', 3)).toBe('Fr');
+    });
+  });
+
+  describe('#noSubHeaderConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(noSubHeaderConfig);
+    });
+
+    it('should not create a sub-header when show-sub-header is false', () => {
+      expect(service.getSubHeader('1.19.270.2.1.1.7')).toBe('');
+    });
+  });
+
+  describe('#subHeaderConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(subHeaderConfig);
+    });
+
+    it('should use global sub-header depth settings', () => {
+      expect(service.getSubHeader('1.19.270.2.1.1.7')).toBe('-1 min, 1 min');
+    });
+
+    it('should use element-specific sub-header depth settings', () => {
+      expect(service.getSubHeader('1.19.270.2.1.1.8')).toBe('1 min, -10 cm');
+    });
+  });
+
+  describe('#parentChildConfig', () => {
+    beforeEach(() => {
+      service.injectProfiles([childConfig]);
+      service.loadConfig(parentConfig);
+    });
+
+    it('should load property from child instance', () => {
+      service.injectProfiles([childConfig]);
+      service.loadConfig(parentConfig);
+      expect(service.getFormattedNodeName('1.19.7.0.66.0.0', 3)).toBe('Simple');
+    });
+
+    it('should load overridden property from parent instance', () => {
+      service.injectProfiles([childConfig]);
+      service.loadConfig(parentConfig);
+      expect(service.getFormattedNodeName('1.19.6.0.66.0.0', 3)).toBe('Good');
+    });
+  });
+
+  describe('#unitConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(unitConfig);
+    });
+
+    it('should return a unit from the generic element-units group element', () => {
+      expect(service.getElementUnit('1.12.207.2.1.1.0')).toBe('K');
+    });
+
+    it('should return a unit from the specific element-display group element', () => {
+      expect(service.getElementUnit('1.19.6.0.66.0.0')).toBe('m');
+    });
+
+    it('should show preferred units', () => {
+      expect(service.hasPreferredUnits()).toBeTruthy();
+    });
+  });
+
+  describe('#complexUnitConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(complexUnitConfig);
+    });
+
+    it('should return a unit from the specific units instead of the generic unit', () => {
+      expect(service.getElementUnit('1.12.207.2.1.1.0')).toBe('m');
+    });
+
+    it('should show preferred units from complex config', () => {
+      expect(service.hasPreferredUnits()).toBeTruthy();
+    });
+  });
+
+  describe('#layerConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(layerConfig);
+    });
+
+    it('should return the configured element-specific official title', () => {
+      expect(service.getElementOfficialIndexTitle('1.12.207.2.1.1.0')).toBe('Proper');
+    });
+
+    it('should return a configured element-specific layer title', () => {
+      expect(service.getElementIndexTitle('1.12.207.2.1.1.0')).toBe('Cloud Index');
+    });
+  });
+
+  describe('#elementGroupConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(elementGroupConfig);
+    });
+
+    it('should return an array containing the group element IDs', () => {
+      expect(service.getElementGroup('1.2.3.4.5.6.7')).toEqual(['1.2.3.4.5.6.7', '1.2.3.4.5.6.75', '1.2.3.4.5.6.70']);
+    });
+
+    it('should return an empty array when element ID does not have a group', () => {
+      expect(service.getElementGroup('1.2.3.4.5.6.1')).toEqual([]);
+    });
+  });
+
+  describe('#parentElementGroupConfig', () => {
+    beforeEach(() => {
+      service.injectProfiles([elementGroupConfig]);
+      service.loadConfig(parentElementGroupConfig);
+    });
+
+    it('should return a combined element group', () => {
+      expect(service.getElementGroup('1.2.3.4.5.6.7')).toEqual([
+        '1.2.3.4.5.6.7',
+        '1.2.3.4.5.6.75',
+        '1.2.3.4.5.6.70',
+        '1.2.3.4.5.6.8',
+        '1.2.3.4.5.6.9',
+      ]);
+    });
+  });
+
+  describe('#includeExcludeConfig', () => {
     beforeEach(() => {
       service.loadConfig(includeExcludeConfig);
     });
 
-    it('No load element', () => {
+    it('should not load the element', () => {
       expect(service.getElementVisibility('1.2.8.0.0.0.0')).toBe(ElementVisibility.NO_LOAD);
     });
 
-    it('Hidden element', () => {
+    it('should set element visibility to Hidden', () => {
       expect(service.getElementVisibility('1.2.9.0.0.0.0')).toBe(ElementVisibility.HIDDEN);
     });
 
-    it('Default element', () => {
+    it('should set element to the default visibility', () => {
       expect(service.getElementVisibility('1.2.3.0.0.0.0')).toBe(ElementVisibility.DEFAULT);
     });
   });
 
-  it('Default nesting level test', () => {
-    service.loadConfig(emptyConfig);
-    expect(service.getNestingDepth('')).toBe(4);
+  describe('#elementDescriptionConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(elementDescriptionConfig);
+    });
+
+    it('should return an element description', () => {
+      expect(service.getElementDescription('1.12.207.2.1.1.0')).toBe('Cloud Index');
+    });
+
+    it('should return undefined as this is not the correct nesting level', () => {
+      const wrongNestingDepth = 2;
+      expect(service.getNestingDepth('')).not.toBe(wrongNestingDepth);
+      expect(service.getElementDescription('1.12.207.2.1.1.0', wrongNestingDepth)).toBeUndefined();
+    });
+
+    it('should return a description from an element config', () => {
+      expect(service.getDescription('1.12.207.2.1.1.0', service.getNestingDepth(''))).toBe('Cloud Index');
+    });
   });
 
-  it('Nesting level test', () => {
-    service.loadConfig(nestingConfig);
-    expect(service.getNestingDepth('')).toBe(3);
+  describe('#nodeDescriptionConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(nodeDescriptionConfig);
+    });
+
+    it('should provide a node description from the config', () => {
+      expect(service.getNodeDescription('1.2.4.5.6.7.8', 3)).toBe('Cloud Index');
+    });
+
+    it('should return undefined if there is no description for a node in the config', () => {
+      expect(service.getNodeDescription('1.2.3.5.6.7.8', 3)).toBeUndefined();
+    });
   });
 
-  it('Default sub header', () => {
-    service.loadConfig(emptyConfig);
-    expect(service.getSubHeader('1.19.270.2.1.1.7')).toBe('-1 min, 1 min, -5 cm');
+  describe('#complexDescriptionConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(complexDescriptionConfig);
+    });
+
+    it('should return a description from the node-rename group element', () => {
+      expect(service.getDescription('1.13.207.2.1.1.0', 4)).toBe('Cloud Index');
+    });
+
+    it('should return a description from the element-display group element', () => {
+      expect(service.getDescription('1.12.207.2.1.1.0', 4)).toBe('Sensor Index');
+    });
   });
 
-  it('No sub header', () => {
-    service.loadConfig(noSubHeaderConfig);
-    expect(service.getSubHeader('1.19.270.2.1.1.7')).toBe('');
+  describe('#qaFlagConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(qaFlagConfig);
+    });
+
+    it('should return a list of qa flag toggles', () => {
+      expect(service.getHideQaFlag().length).toBe(2);
+    });
   });
 
-  it('Global sub header', () => {
-    service.loadConfig(subHeaderConfig);
-    expect(service.getSubHeader('1.19.270.2.1.1.7')).toBe('-1 min, 1 min');
+  describe('#loadPreferredUnitsConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(loadPreferredUnitsConfig);
+    });
+
+    it('should have default preferred units', () => {
+      expect(service.isLoadPreferredUnits()).toBeTruthy();
+    });
   });
 
-  it('Element specific sub header', () => {
-    service.loadConfig(subHeaderConfig);
-    expect(service.getSubHeader('1.19.270.2.1.1.8')).toBe('1 min, -10 cm');
-  });
+  describe('#noLoadPreferredUnitsConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(noLoadPreferredUnitsConfig);
+    });
 
-  it('Default Node', () => {
-    expect(service.getNodeName('1.19.265.0.66.0.0', 2)).toBe('temperature');
-  });
-
-  it('Default Formatted Node', () => {
-    expect(service.getFormattedNodeName('1.19.265.0.66.0.0', 2)).toBe('Temperature');
-  });
-
-  it('Node Rename', () => {
-    service.loadConfig(simpleRenameConfig);
-    expect(service.getFormattedNodeName('1.19.6.0.66.0.0', 3)).toBe('Test');
-  });
-
-  it('Element Node Rename', () => {
-    service.loadConfig(simpleRenameConfig);
-    expect(service.getFormattedNodeName('1.19.265.8.65.12.0', 6)).toBe('Max');
-  });
-
-  it('Element Rename at nested', () => {
-    service.loadConfig(simpleRenameConfig);
-    expect(service.getFormattedNodeName('1.19.265.8.65.12.0', 4)).toBe('Max Temp');
-  });
-
-  it('Element Rename not at nested', () => {
-    service.loadConfig(simpleRenameConfig);
-    expect(service.getFormattedNodeName('1.19.265.8.65.12.0', 3)).toBe('Air Temperature');
-  });
-
-  it('Unknown element node', () => {
-    service.loadConfig(emptyConfig);
-    expect(service.getFormattedNodeName('1.19.100000.0.66.0.0', 3)).toBe('[UNDEFINED]');
-  });
-
-  it('Undefined element node', () => {
-    service.loadConfig(emptyConfig);
-    expect(service.getDefaultNodeName(3, '10000000000')).toBeUndefined();
-  });
-
-  it('English Node Rename', () => {
-    service.loadConfig(langRenameConfig);
-    expect(service.getFormattedNodeName('1.19.6.0.66.0.0', 3)).toBe('En');
-  });
-
-  it('French Node Rename', () => {
-    LanguageService.translator.currentLang = 'fr';
-    service.loadConfig(langRenameConfig);
-    expect(service.getFormattedNodeName('1.19.6.0.66.0.0', 3)).toBe('Fr');
-  });
-
-  it('should load property from child instance', () => {
-    service.injectProfiles([childConfig]);
-    service.loadConfig(parentConfig);
-    expect(service.getFormattedNodeName('1.19.7.0.66.0.0', 3)).toBe('Simple');
-  });
-
-  it('should load overridden property from parent instance', () => {
-    service.injectProfiles([childConfig]);
-    service.loadConfig(parentConfig);
-    expect(service.getFormattedNodeName('1.19.6.0.66.0.0', 3)).toBe('Good');
-  });
-
-  it('should show the entire element name with zero value sub headers', () => {
-    service.loadConfig(emptyConfig);
-    expect(service.getFullFormattedHeader('1.12.207.2.1.1.0')).toBe(
-      'Pressure / Mean Sea Level Pressure / Average (-1 min, 1 min)'
-    );
-  });
-
-  it('should show the entire element name with zero value headers', () => {
-    service.loadConfig(emptyConfig);
-    expect(service.getFullFormattedHeader('1.19.6.0.66.0.0')).toBe('Temperature / Ozone Concentration (-12 h)');
-  });
-
-  it('should return a blank unit', () => {
-    service.loadConfig(emptyConfig);
-    expect(service.getElementUnit('1.2.3.4.5.6.7')).toBe('');
-  });
-
-  it('should return a unit from the generic units', () => {
-    service.loadConfig(unitConfig);
-    expect(service.getElementUnit('1.12.207.2.1.1.0')).toBe('K');
-  });
-
-  it('should return a unit from the specific units', () => {
-    service.loadConfig(unitConfig);
-    expect(service.getElementUnit('1.19.6.0.66.0.0')).toBe('m');
-  });
-
-  it('should return a unit from the specific units instead of the generic unit', () => {
-    service.loadConfig(complexUnitConfig);
-    expect(service.getElementUnit('1.12.207.2.1.1.0')).toBe('m');
-  });
-
-  it('should show no preferred units', () => {
-    service.loadConfig(emptyConfig);
-    expect(service.hasPreferredUnits()).toBeFalsy();
-  });
-
-  it('should show preferred units', () => {
-    service.loadConfig(unitConfig);
-    expect(service.hasPreferredUnits()).toBeTruthy();
-  });
-
-  it('should show preferred units from complex config', () => {
-    service.loadConfig(complexUnitConfig);
-    expect(service.hasPreferredUnits()).toBeTruthy();
-  });
-
-  it('should return the default official title', () => {
-    service.loadConfig(emptyConfig);
-    expect(service.getElementOfficialIndexTitle('1.19.6.0.66.0.0')).toBe('GRID.OFFICIAL');
-  });
-
-  it('should return the specific official title', () => {
-    service.loadConfig(layerConfig);
-    expect(service.getElementOfficialIndexTitle('1.12.207.2.1.1.0')).toBe('Proper');
-  });
-
-  it('should return the default layer title', () => {
-    service.loadConfig(emptyConfig);
-    expect(service.getElementIndexTitle('1.19.6.0.66.0.0')).toBe('GRID.LAYER');
-  });
-
-  it('should return a specific layer title', () => {
-    service.loadConfig(layerConfig);
-    expect(service.getElementIndexTitle('1.12.207.2.1.1.0')).toBe('Cloud Index');
-  });
-
-  it('should return an element group', () => {
-    service.loadConfig(elementGroupConfig);
-    expect(service.getElementGroup('1.2.3.4.5.6.7')[0]).toBe('1.2.3.4.5.6.7');
-    expect(service.getElementGroup('1.2.3.4.5.6.7')[1]).toBe('1.2.3.4.5.6.75');
-    expect(service.getElementGroup('1.2.3.4.5.6.7')[2]).toBe('1.2.3.4.5.6.70');
-  });
-
-  it('should not return an element group', () => {
-    service.loadConfig(elementGroupConfig);
-    expect(service.getElementGroup('1.2.3.4.5.6.1').length).toBe(0);
-  });
-
-  it('should return a combined element group', () => {
-    service.injectProfiles([elementGroupConfig]);
-    service.loadConfig(parentElementGroupConfig);
-    expect(service.getElementGroup('1.2.3.4.5.6.7')[0]).toBe('1.2.3.4.5.6.7');
-    expect(service.getElementGroup('1.2.3.4.5.6.7')[1]).toBe('1.2.3.4.5.6.75');
-    expect(service.getElementGroup('1.2.3.4.5.6.7')[2]).toBe('1.2.3.4.5.6.70');
-    expect(service.getElementGroup('1.2.3.4.5.6.7')[3]).toBe('1.2.3.4.5.6.8');
-    expect(service.getElementGroup('1.2.3.4.5.6.7')[4]).toBe('1.2.3.4.5.6.9');
-  });
-
-  it('should return undefined instead of a precision', () => {
-    service.loadConfig(precisionConfig);
-    expect(service.getElementPrecision('1.19.265.0.66.0.1')).toBeUndefined();
-  });
-
-  it('should return a precision', () => {
-    service.loadConfig(precisionConfig);
-    expect(service.getElementPrecision('1.19.265.0.66.0.0')).toBe(1);
-  });
-
-  it('should return an empty string', () => {
-    service.loadConfig(precisionConfig);
-    expect(service.getElementPrecision('1.19.265.0.66.0.1')).toBeUndefined();
-  });
-
-  it('should return an undefined instead of an element description', () => {
-    service.loadConfig(emptyConfig);
-    expect(service.getElementDescription('1.19.265.0.66.0.1')).toBeUndefined();
-  });
-
-  it('should return an element description', () => {
-    service.loadConfig(elementDescriptionConfig);
-    expect(service.getElementDescription('1.12.207.2.1.1.0')).toBe('Cloud Index');
-  });
-
-  it('should return undefined as this is not the correct nesting level', () => {
-    service.loadConfig(elementDescriptionConfig);
-    expect(service.getElementDescription('1.12.207.2.1.1.0', 2)).toBeUndefined();
-  });
-
-  it('should return undefined instead of an node description', () => {
-    service.loadConfig(emptyConfig);
-    expect(service.getNodeDescription('1.2.4.5.6.7.8', 3)).toBeUndefined();
-  });
-
-  it('should return a node description', () => {
-    service.loadConfig(nodeDescriptionConfig);
-    expect(service.getNodeDescription('1.2.4.5.6.7.8', 3)).toBe('Cloud Index');
-  });
-
-  it('should return undefined instead of a node description', () => {
-    service.loadConfig(nodeDescriptionConfig);
-    expect(service.getNodeDescription('1.2.3.5.6.7.8', 3)).toBeUndefined();
-  });
-
-  it('should return undefined instead of a description', () => {
-    service.loadConfig(emptyConfig);
-    expect(service.getDescription('1.2.3.4.5.6.7', 3)).toBeUndefined();
-  });
-
-  it('should return a description from an element config', () => {
-    service.loadConfig(elementDescriptionConfig);
-    expect(service.getDescription('1.12.207.2.1.1.0', 4)).toBe('Cloud Index');
-  });
-
-  it('should return a description from a node config', () => {
-    service.loadConfig(complexDescriptionConfig);
-    expect(service.getDescription('1.13.207.2.1.1.0', 4)).toBe('Cloud Index');
-  });
-
-  it('should return a description from a complex description config', () => {
-    service.loadConfig(complexDescriptionConfig);
-    expect(service.getDescription('1.12.207.2.1.1.0', 4)).toBe('Sensor Index');
-  });
-
-  it('should return an empty qa flag toggle list', () => {
-    service.loadConfig(emptyConfig);
-    expect(service.getHideQaFlag().length).toBe(0);
-  });
-
-  it('should return a list of qa flag toggles', () => {
-    service.loadConfig(qaFlagConfig);
-    expect(service.getHideQaFlag().length).toBe(2);
-  });
-
-  it('should not have default preferred units by default', () => {
-    service.loadConfig(emptyConfig);
-    expect(service.isLoadPreferredUnits()).toBeFalsy();
-  });
-
-  it('should have default preferred units', () => {
-    service.loadConfig(loadPreferredUnitsConfig);
-    expect(service.isLoadPreferredUnits()).toBeTruthy();
-  });
-
-  it('should not have default preferred units', () => {
-    service.loadConfig(noLoadPreferredUnitsConfig);
-    expect(service.isLoadPreferredUnits()).toBeFalsy();
-  });
-
-  it('should return an empty string when getting a node name for value 0', () => {
-    service.loadConfig(emptyConfig);
-    expect(service.getNodeName('1.2.0.4.5.6.7', 3)).toBe('');
-  });
-
-  it('should return N/A when getting a node with value M', () => {
-    service.loadConfig(emptyConfig);
-    expect(service.getNodeName('1.2.M.4.5.6.7', 3)).toBe('N/A');
-  });
-
-  it('should return a bad string when getting a node name for non-M NaN values', () => {
-    service.loadConfig(emptyConfig);
-    expect(service.getNodeName('1.2.x.4.5.6.7', 3)).toBe('[UNDEFINED]');
-    expect(service.getNodeName('1.2.N.4.5.6.7', 3)).toBe('[UNDEFINED]');
-  });
-
-  it('should return a bad string for a numeric but unavailable node value', () => {
-    service.loadConfig(emptyConfig);
-    expect(service.getNodeName('1.2.999999999.4.5.6.7', 3)).toBe('[UNDEFINED]');
+    it('should not have default preferred units', () => {
+      expect(service.isLoadPreferredUnits()).toBeFalsy();
+    });
   });
 
   const emptyConfig: MDInstanceDefinition = {
