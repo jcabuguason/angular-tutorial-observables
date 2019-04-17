@@ -359,7 +359,7 @@ export class NodeValueMap {
 // Container for the sub header config
 export class SubHeaderConfig {
   displaySubHeader: boolean;
-  subHeaderStart = 6;
+  subHeaderStart = 5;
   subHeaderEnd = 7;
 
   constructor(displaySubHeader: boolean, element?: MDInstanceElement) {
