@@ -35,14 +35,12 @@ export class SearchService {
   defaultNumObs = 300;
 
   addParamsOnBar: boolean;
-  useForm: boolean;
   displayForm = false;
+  readOnlyBar: boolean;
 
   shortcuts: ShortcutModel[] = [];
   shortcutSelected: ShortcutModel;
   shortcutButtons = [];
-
-  details;
 
   constructor(
     @Inject(SEARCH_BOX_CONFIG)
@@ -56,7 +54,7 @@ export class SearchService {
     this.suggestedParams = this.availableParams;
 
     this.addParamsOnBar = this.config.addParamsOnBar;
-    this.useForm = this.config.useForm;
+    this.readOnlyBar = this.config.readOnlyBar;
 
     this.shortcuts = this.config.shortcuts;
     this.createShortcutButtons();
@@ -223,9 +221,11 @@ export class SearchService {
   }
 
   openForm() {
-    this.resetForm();
-    this.displayParams.forEach(p => p.populateFormValues());
-    this.displayForm = true;
+    if (this.readOnlyBar) {
+      this.resetForm();
+      this.displayParams.forEach(p => p.populateFormValues());
+      this.displayForm = true;
+    }
   }
 
   resetForm() {

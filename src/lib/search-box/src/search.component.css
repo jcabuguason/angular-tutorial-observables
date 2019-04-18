@@ -14,9 +14,27 @@
   line-height: 38px;
   z-index: 4;
 }
+
+.bar-icon {
+  padding: 10px;
+  padding-left: 0px;
+}
+
+.hover-color-change:hover {
+  background-color: #eff6fc;
+}
+
+.hover-color-change:hover .bar-icon {
+  background-color: #eff6fc;
+  color: #0099ff;
+}
+
 .parameters-container {
-  display: inline;
+  display: inline-flex;
   overflow: hidden;
+  padding-left: 10px;
+  width: 100%;
+  border-left: 1px solid #ccc;
 }
 
 .parameters-container .selected-parameter {
@@ -25,19 +43,23 @@
   line-height: 19px;
 }
 
+.all-selected-parameters {
+  width: 100%;
+}
+
 .bar-buttons {
   display: flex;
   max-height: 36px;
 }
 .bar-button.ui-button {
-  background-color: #fff;
-  border-color: #fff;
+  background-color: transparent;
+  border-color: transparent;
   color: #373a3c;
   display: inline-block;
 }
 .bar-button.ui-button:hover {
-  background-color: #fff;
-  border-color: #fff;
+  background-color: transparent;
+  border-color: transparent;
   color: #0099ff;
 }
 
@@ -55,10 +77,12 @@
 ::ng-deep .ui-inputgroup .ui-inputgroup-addon:first-child {
   min-width: auto;
 }
+
 /* dropdown button gets covered by delete button without this */
 ::ng-deep .ui-autocomplete .ui-autocomplete-dropdown {
   position: absolute;
 }
+
 .ui-button.beside-autocomplete {
   margin: 0 0 0 29px;
 }
@@ -140,4 +164,9 @@
 :host ::ng-deep .search-bar.single .ui-dropdown-trigger.ui-state-default.ui-corner-right:hover {
   background-color: #1f89ce;
   border: 1px solid #1f89ce;
+}
+
+::ng-deep .ui-state-disabled,
+::ng-deep .ui-widget:disabled {
+  opacity: 0.7;
 }
