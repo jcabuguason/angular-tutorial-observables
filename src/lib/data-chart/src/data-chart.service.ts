@@ -10,6 +10,7 @@ import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 import { UnitCodeConversionService } from 'msc-dms-commons-angular/core/obs-util';
 import { TranslateService } from '@ngx-translate/core';
 import { ChartService } from 'angular-highcharts/lib/chart.service';
+import { DataChartOptions } from './model/options.model';
 
 @Injectable()
 export class DataChartService {
@@ -55,17 +56,17 @@ export class DataChartService {
     );
   }
 
-  chart(chartObj: ChartObject, obs, extraOptions = {}): Chart {
-    return new Chart(this.buildOptions(chartObj, obs, extraOptions));
+  chart(chartObj: ChartObject, obs, options: DataChartOptions = {}): Chart {
+    return new Chart(this.buildOptions(chartObj, obs, options));
   }
 
-  buildOptions(chartObj: ChartObject, obs, extraOptions = {}) {
+  buildOptions(chartObj: ChartObject, obs, options = {}) {
     return chartObj.stations.length === 1
-      ? this.chartMulti(chartObj, obs, extraOptions)
-      : this.chartSingle(chartObj, obs, extraOptions);
+      ? this.chartMulti(chartObj, obs, options)
+      : this.chartSingle(chartObj, obs, options);
   }
 
-  private chartSingle(chartObj: ChartObject, obs, extraOptions) {
+  private chartSingle(chartObj: ChartObject, obs, options) {
     return Object.assign(
       {
         chart: {
@@ -84,16 +85,16 @@ export class DataChartService {
         credits: {
           enabled: false,
         },
-        series: this.createSingleSeries(chartObj, obs),
+        series: this.createSingleSeries(chartObj, obs, options),
         lang: {
           noData: this.buildNoDataString(chartObj),
         },
       },
-      extraOptions
+      options.highchartsOptions
     );
   }
 
-  private createSingleSeries(chartObj: ChartObject, observations) {
+  private createSingleSeries(chartObj: ChartObject, observations, options) {
     const series = [];
     const yTypes = [];
     const stations = chartObj.stations;
@@ -115,12 +116,13 @@ export class DataChartService {
       }
       const element = chartObj.elements[0];
       const elemType = element.chartType ? element.chartType : this.getElementType(element.id);
-      this.buildSeries(series, sensor, name, yTypes, elemType);
+      this.buildSeries(series, sensor, name, yTypes, elemType, options);
     }
     return series;
   }
 
-  private buildSeries(series, sensor, name, yTypes, type) {
+  private buildSeries(series, sensor, name, yTypes, type, options) {
+    const custom = options.customOptions;
     series.push(
       ...Object.keys(sensor).map((key, index) => ({
         name: `${name} ${sensor[key]['sensorType']}`,
@@ -129,6 +131,7 @@ export class DataChartService {
         yAxis: yTypes.indexOf(sensor[key][0].unit),
         type: type,
         isSensor: sensor[key]['isSensor'],
+        visible: sensor[key]['isSensor'] && !!custom ? custom.showSensors : true,
       }))
     );
   }
@@ -203,7 +206,7 @@ export class DataChartService {
     }));
   }
 
-  private chartMulti(chartObj: ChartObject, observations, extraOptions) {
+  private chartMulti(chartObj: ChartObject, observations, options) {
     return Object.assign(
       {
         chart: {
@@ -219,7 +222,7 @@ export class DataChartService {
           },
         },
         yAxis: this.buildYAxes(chartObj, observations),
-        series: this.createMultiSeries(chartObj, observations),
+        series: this.createMultiSeries(chartObj, observations, options),
         lang: {
           noData: this.buildNoDataString(chartObj),
         },
@@ -227,11 +230,11 @@ export class DataChartService {
           enabled: false,
         },
       },
-      extraOptions
+      options.highchartsOptions
     );
   }
 
-  createMultiSeries(chartObj: ChartObject, observations) {
+  createMultiSeries(chartObj: ChartObject, observations, options) {
     const series = [];
     const yTypes = [];
     const station = chartObj.stations[0];
@@ -247,7 +250,7 @@ export class DataChartService {
 
       const name = this.configService.buildFullNodeName(element.id);
       const type = element.chartType ? element.chartType : this.getElementType(element.id);
-      this.buildSeries(series, sensor, name, yTypes, type);
+      this.buildSeries(series, sensor, name, yTypes, type, options);
     }
     return series;
   }
