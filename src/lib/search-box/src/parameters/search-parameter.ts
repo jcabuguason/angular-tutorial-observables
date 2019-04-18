@@ -148,7 +148,7 @@ export class SearchParameter {
   }
 
   populateFormValues() {
-    this.formSelected = this.selected;
+    this.formSelected = JSON.parse(JSON.stringify(this.selected));
   }
 
   isUnfilledForm(): boolean {
@@ -162,7 +162,7 @@ export class SearchParameter {
   }
 
   applyFormValues() {
-    this.selected = this.formSelected;
+    this.selected = JSON.parse(JSON.stringify(this.formSelected));
   }
 
   removeInvalidValues() {
