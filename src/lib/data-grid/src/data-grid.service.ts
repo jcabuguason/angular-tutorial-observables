@@ -136,6 +136,28 @@ export class DataGridService implements OnDestroy {
     return this.columnConfiguration.getMainMenuItems(this);
   }
 
+  expandAllColumns(columnApi, expand: boolean) {
+    const groupIds = [];
+    const getGroupIds = colGroup => {
+      if (colGroup.children) {
+        const allChildrenDisplayed = colGroup.children.length === colGroup.displayedChildren.length;
+        // Mark groups who's children don't match the given expand/collapse command
+        if (expand ? !allChildrenDisplayed : allChildrenDisplayed) {
+          groupIds.push(colGroup.groupId);
+        }
+        colGroup.children.forEach(child => getGroupIds(child));
+      }
+      return colGroup;
+    };
+
+    columnApi
+      .getAllDisplayedColumnGroups()
+      .filter(col => col.groupId !== 'identity' && col.groupId !== 'raw' && col.headerClass !== 'meta')
+      .forEach(col => getGroupIds(col));
+
+    groupIds.forEach(id => columnApi.setColumnGroupOpened(id, expand));
+  }
+
   flattenObsIdentities = (obs: DMSObs) => ({
     obsDateTime: obs.obsDateTime,
     receivedDateTime: obs.receivedDateTime,
@@ -439,6 +461,7 @@ export class DataGridService implements OnDestroy {
       }
       if (element.indexValue) {
         columnToAdd.columnGroupShow = 'open';
+        workingNode.openByDefault = this.columnConfiguration.expandNestedDataColumns;
       }
 
       workingNode.children.push(columnToAdd);
