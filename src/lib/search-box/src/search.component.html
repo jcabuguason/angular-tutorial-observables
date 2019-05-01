@@ -25,7 +25,7 @@
       (click)="searchService.openForm()"
       [ngClass]="{ 'hover-color-change': searchService.readOnlyBar }"
     >
-    <i [ngClass]="{ 'bar-icon fa fa-bars': searchService.readOnlyBar }"></i>
+      <i [ngClass]="{ 'bar-icon fa fa-bars': searchService.readOnlyBar }"></i>
       <!-- search parameters in bar -->
       <div class="all-selected-parameters">
         <div *ngFor="let p of searchService.displayParams; index as i" class="selected-parameter">
@@ -84,7 +84,6 @@
                   [styleClass]="'search-bar single'"
                   [(ngModel)]="p.selected[0]"
                   [options]="p.multiSelectChoices"
-                  [autoWidth]="false"
                   [resetFilterOnHide]="true"
                   [filter]="true"
                   [autoDisplayFirst]="false"
@@ -220,7 +219,7 @@
   header="{{ 'SEARCH_BAR.SEARCH' | translate }}"
   [(visible)]="searchService.displayForm"
   [modal]="true"
-  [width]="600"
+  [style]="{ width: '600px' }"
   class="search-form"
   [blockScroll]="true"
 >
