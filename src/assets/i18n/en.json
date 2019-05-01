@@ -41,7 +41,9 @@
     "ELEMENT_ID": "Element ID",
     "RAW": "Raw",
     "HEADER": "Header",
-    "MESSAGE": "Message"
+    "MESSAGE": "Message",
+    "EXPAND_COLUMNS": "Expand All Nested Elements",
+    "COLLAPSE_COLUMNS": "Collapse All Nested Elements"
   },
   "GRID_DEFAULTS": {
     "page": "Page",
@@ -81,7 +83,7 @@
     "pinColumn": "Pin Column",
     "valueAggregation": "Value Aggregation",
     "autosizeThiscolumn": "Autosize This Column",
-    "autosizeAllColumns": "Autsize All Columns",
+    "autosizeAllColumns": "Autosize All Columns",
     "groupBy": "Group by",
     "ungroupBy": "Un-Group by",
     "resetColumns": "Reset Columns",

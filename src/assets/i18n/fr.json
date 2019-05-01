@@ -41,7 +41,9 @@
     "ELEMENT_ID": "ID de l'élement",
     "RAW": "Brut",
     "HEADER": "Entête",
-    "MESSAGE": "Message"
+    "MESSAGE": "Message",
+    "EXPAND_COLUMNS": "Déplier tous les éléments imbriqués",
+    "COLLAPSE_COLUMNS": "Replier tous les éléments imbriqués"
   },
   "GRID_DEFAULTS": {
     "page": "Page",

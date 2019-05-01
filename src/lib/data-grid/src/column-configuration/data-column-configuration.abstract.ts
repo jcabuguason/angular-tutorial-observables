@@ -4,6 +4,7 @@ import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 
 export abstract class DataColumnConfiguration {
   public allowBlankDataColumns = false;
+  public expandNestedDataColumns = false;
 
   getIdentityHeaders(): any {
     return {
@@ -127,6 +128,19 @@ export abstract class DataColumnConfiguration {
     const instWrap = label => this.instantWrapper(label);
     return function(params) {
       const menuItems = params.defaultItems.slice(0).filter(item => item !== 'toolPanel');
+
+      menuItems.push(
+        'separator',
+        {
+          name: instWrap('EXPAND_COLUMNS'),
+          action: () => gridService.expandAllColumns(params.columnApi, true),
+        },
+        {
+          name: instWrap('COLLAPSE_COLUMNS'),
+          action: () => gridService.expandAllColumns(params.columnApi, false),
+        }
+      );
+
       menuItems.push('separator', {
         name: instWrap('COLUMN_STATS'),
         action: function() {

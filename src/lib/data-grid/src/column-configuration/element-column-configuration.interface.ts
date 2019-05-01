@@ -4,6 +4,9 @@ export interface ElementColumnConfiguration {
   // True iff elements not in the user config should not be able to be toggled on
   allowBlankDataColumns;
 
+  // True if nested data columns should be expanded by default
+  expandNestedDataColumns;
+
   // Optional function for changing header menu items
   getMenuItems?: (params: any) => any;
 
