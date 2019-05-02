@@ -23,7 +23,7 @@
     }
   },
   "peerDependencies": {
-    "primeng": "^7.1.1",
+    "primeng": "^7.1.2",
     "@ngx-translate/core": "^9.0.0"
   }
 }
