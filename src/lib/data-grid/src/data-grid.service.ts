@@ -166,7 +166,7 @@ export class DataGridService implements OnDestroy {
     primaryStationId: obs.identifier,
     station: obsUtil.findMetadataValue(obs, 'stn_nam'),
     revision: obsUtil.findRevision(obs),
-  });
+  })
 
   flattenMetadataElements(mdElements: MetadataElements[]) {
     const result = {};
@@ -175,8 +175,9 @@ export class DataGridService implements OnDestroy {
     const buildColumn = element => {
       if (element.name != null && !this.ignoreElement(element.elementID)) {
         const headerID = ColumnConfigurationContainer.findHeaderID(element);
-        result[headerID] = element.value;
+        result[headerID] = element;
         this.buildMetadataColumn(element, headerID);
+        this.unitService.setPreferredUnits(element);
       }
     };
 
@@ -314,18 +315,18 @@ export class DataGridService implements OnDestroy {
     this.columnDefs = [identity, ...metaCols, ...dataCols, this.rawHeader];
   }
 
-  displayMetadataTable(node) {
+  displayMetadataTable(nodeData) {
     this.dialog.open(StationInfoComponent, {
       data: {
-        name: node[STN_NAME_FIELD],
+        name: obsUtil.getFormattedMetadata(nodeData[STN_NAME_FIELD]),
         allData: this.columnDefs
           .filter(group => group.groupId === 'identity' || group.headerClass === 'meta')
           .map(group => group.children)
           .reduce((acc, val) => acc.concat(val))
-          .filter(child => node[child.field] != null)
+          .filter(child => nodeData[child.field] != null)
           .map(child => ({
             key: !!child.elementID ? this.userConfigService.getFullDefaultHeader(child.elementID, 3) : child.field,
-            value: node[child.field],
+            value: obsUtil.getFormattedMetadata(nodeData[child.field]),
           })),
       },
     });
@@ -531,6 +532,7 @@ export class DataGridService implements OnDestroy {
     }
     parent.children.push(header);
 
+    this.columnConfiguration.createElementHeader(header, headerID);
     this.columnsGenerated.push(headerID);
   }
 

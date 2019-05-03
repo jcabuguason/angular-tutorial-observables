@@ -21,3 +21,18 @@ export function isLatest(params): boolean {
 
   return all.filter(sameObs).every(node => compareRevisionBoolean(current.revision, node.revision));
 }
+
+/** Returns the metadata formatted value with unit */
+export function getFormattedMetadata(metadataElement): string {
+  if (!!metadataElement && !!metadataElement.value) {
+    const unit = metadataElement.unit;
+    const value = metadataElement.value;
+    return showElementUnit(unit) ? `${value} ${unit}` : value;
+  }
+  return metadataElement;
+}
+
+/** Checks if the unit of a metadata or data element should be displayed */
+export function showElementUnit(unit): boolean {
+  return unit != null && unit !== 'code' && unit !== 'unitless' && unit !== 'datetime';
+}
