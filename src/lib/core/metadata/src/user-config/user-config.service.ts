@@ -1,4 +1,4 @@
-import { throwError as observableThrowError, Observable } from 'rxjs';
+import { throwError as observableThrowError, Observable, BehaviorSubject } from 'rxjs';
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MR_MAPPING_CONFIG, MRMappingConfig } from './mr-mapping.config';
@@ -14,20 +14,16 @@ import { LanguageService } from 'msc-dms-commons-angular/shared/language';
 @Injectable()
 export class UserConfigService {
   public nodeInfo$: Observable<any>;
+  public profileLoading$ = new BehaviorSubject(undefined);
 
   private userConfig: UserConfig;
-
   private nodeInfo;
-
   // The language used in the config
   private lang: Lang = Lang.ENGLISH;
-
   // Locally available profiles (might be removed once MR is used)
   private profiles: MDInstanceDefinition[] = [];
-
   // Function for creating an inclusive array with the specific range
   private range = (start, end) => Array.from({ length: end + 1 - start }, (v, k) => k + start);
-
   private nodeValueAt = (elementID, i) => elementID.split('.')[i - 1];
 
   // constructor(private metadataService: MetadataService) {
@@ -65,9 +61,13 @@ export class UserConfigService {
 
   // Loads the given user configuration
   loadConfig(mdInstance: MDInstanceDefinition) {
+    this.profileLoading$.next(true);
+
     this.defaultHeader();
 
     this.loadInstance(mdInstance);
+
+    this.profileLoading$.next(false);
   }
 
   private loadProfile(configName: string) {
