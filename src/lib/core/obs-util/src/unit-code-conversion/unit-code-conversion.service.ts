@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { FromUnits, UnitConversion, CodeSources, CodeResult, UnitConversionResult } from './unit-code-conversion.model';
 import { UNIT_CODE_CONVERSION_CONFIG, UnitCodeConversionConfig } from './unit-code-conversion.config';
 
-import { DataElements } from '../dms-observation.model';
+import { DataElements, MetadataElements } from '../dms-observation.model';
 
 import { Observable } from 'rxjs';
 
@@ -25,7 +25,7 @@ export class UnitCodeConversionService {
     this.codeSubs = codes['codeSubstitutionResult'];
   }
 
-  setPreferredUnits(element: DataElements) {
+  setPreferredUnits(element: DataElements | MetadataElements) {
     this.usePreferredUnits
       ? ((element.value = element.preferredValue), (element.unit = element.preferredUnit))
       : ((element.value = element.preciseValue), (element.unit = element.preciseUnit));
@@ -43,7 +43,12 @@ export class UnitCodeConversionService {
     return this.codeSubs.hasOwnProperty(codeSrc) && this.codeSubs[codeSrc].hasOwnProperty(codeTyp);
   }
 
-  convertElement(element: DataElements, unitConversions: FromUnits, preferredUnit: string, elementPrecision?: number) {
+  convertElement(
+    element: DataElements | MetadataElements,
+    unitConversions: FromUnits,
+    preferredUnit: string,
+    elementPrecision?: number
+  ) {
     const applyPrecision = (value: number, base: number): number => Math.round(value * base) / base;
 
     const convertUnit = (value: number, conversion: UnitConversion[]): number =>

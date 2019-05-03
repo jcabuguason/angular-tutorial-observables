@@ -69,6 +69,10 @@ export interface MetadataElements {
   value: string;
   unit: string;
   elementID: string;
+  preciseValue?: string;
+  preciseUnit?: string;
+  preferredValue?: string;
+  preferredUnit?: string;
 }
 
 export interface RawMessage {
