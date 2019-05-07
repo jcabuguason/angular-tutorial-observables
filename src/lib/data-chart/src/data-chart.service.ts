@@ -243,7 +243,10 @@ export class DataChartService {
     for (const element of elements) {
       const sensor = {};
 
-      for (const obs of observations.sort(obsUtil.compareObsTimeFromObs).filter(ob => ob.identifier === station.id)) {
+      for (const obs of observations
+        .filter(obsUtil.latestFromArray)
+        .sort(obsUtil.compareObsTimeFromObs)
+        .filter(ob => ob.identifier === station.id)) {
         const foundElems = obs.dataElements.filter(elemt => elemt.elementID === element.id);
         this.buildSensor(foundElems, sensor, obs, yTypes);
       }
