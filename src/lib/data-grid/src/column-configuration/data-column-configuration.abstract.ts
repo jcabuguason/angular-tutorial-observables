@@ -85,7 +85,7 @@ export abstract class DataColumnConfiguration {
     };
   }
 
-  csvExcelExporter(params) {
+  csvExcelExporter(params): any {
     const settings = { columnGroups: true };
     return {
       name: this.instantWrapper('EXPORT'),
