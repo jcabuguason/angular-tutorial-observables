@@ -82,7 +82,7 @@ describe('SearchService', () => {
         new SearchTaxonomy(dndAwosIndex, 'dnd awos', 'dnd'),
       ],
       addParamsOnBar: true,
-      useForm: false,
+      readOnlyBar: false,
       shortcuts: [new ShortcutModel('Shortcut1', [{ name: ParameterName.forTaxonomy.NETWORK, values: ['ca', 'ra'] }])],
     };
 
@@ -316,8 +316,8 @@ describe('SearchService', () => {
     );
   });
 
-  it('populate bar values to form', () => {
-    searchService.config.useForm = true;
+  it('should populate bar values to form', () => {
+    searchService.readOnlyBar = true;
     searchService.addSuggestedParameter(sParams.provinceParam, ['BC']);
     searchService.addSuggestedParameter(sParams.startDateParam, ['2018-01-01T00:10']);
     searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: 1, hh_after: 2 }]);
@@ -329,7 +329,7 @@ describe('SearchService', () => {
     expect(sParams.hoursParam.formHoursAfter).toEqual(2);
   });
 
-  it('populate form values to bar', () => {
+  it('should populate form values to bar', () => {
     sParams.sizeParam.formSelected = ['10'];
     sParams.startDateParam.formDatetime = new Date('2018-01-30T05:00');
     sParams.hoursParam.formHoursBefore = 10;

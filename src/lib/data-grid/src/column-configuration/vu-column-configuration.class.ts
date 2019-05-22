@@ -3,6 +3,9 @@ import { DataColumnConfiguration } from './data-column-configuration.abstract';
 
 export class VUColumnConfiguration extends DataColumnConfiguration implements ElementColumnConfiguration {
   createElementHeader(workingNode: any, elementTaxonomy: string) {
+    if (workingNode.children == null) {
+      workingNode.children = [];
+    }
     workingNode.children.push(
       ...[
         {
