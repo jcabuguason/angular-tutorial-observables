@@ -72,9 +72,25 @@ describe('DataChartService', () => {
     expect(options.series[0].data.length).toBe(7);
   });
 
+  it('should build charts with a given element type', () => {
+    const options = service.buildOptions(
+      new ChartObject(
+        [new Element('1.12.206.0.0.0.0', 'area')],
+        [new Station('COMOX, 1021831, CYQQ', 'COMOX', '1021831')]
+      ),
+      hits
+    );
+    expect(options.series.length).toBe(1);
+    expect(options.series[0].type).toBe('area');
+  });
+
   it('should accept optional settings', () => {
-    const options = service.buildOptions(chartObj, hits, { chart: { type: 'area' } });
+    const options = service.buildOptions(chartObj, hits, {
+      highchartsOptions: { chart: { type: 'area' }, credits: { enabled: true }, tooltip: { enabled: false } },
+    });
     expect(options.chart.type).toBe('area');
+    expect(options.credits.enabled).toBe(true);
+    expect(options.tooltip.enabled).toBe(false);
   });
 
   it('should make element the title with multiple stations', () => {

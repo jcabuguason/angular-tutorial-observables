@@ -3,6 +3,9 @@ import { DataColumnConfiguration } from './data-column-configuration.abstract';
 
 export class AccordianColumnConfiguration extends DataColumnConfiguration implements ElementColumnConfiguration {
   createElementHeader(workingNode: any, columnID: string) {
+    if (workingNode.children == null) {
+      workingNode.children = [];
+    }
     workingNode.children.push(
       {
         headerName: 'Value',
