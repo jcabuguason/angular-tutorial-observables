@@ -34,5 +34,5 @@ export function getFormattedMetadata(metadataElement): string {
 
 /** Checks if the unit of a metadata or data element should be displayed */
 export function showElementUnit(unit): boolean {
-  return unit != null && unit !== 'code' && unit !== 'unitless' && unit !== 'datetime';
+  return unit != null && unit !== 'code' && unit !== 'unitless' && unit !== 'datetime' && unit !== 'boolean';
 }
