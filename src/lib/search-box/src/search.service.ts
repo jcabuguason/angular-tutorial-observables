@@ -264,29 +264,42 @@ export class SearchService {
     return this.displayParams.filter(p => p.isUnfilled());
   }
 
+  /** Determines if all the search parameters are empty */
+  private isEmptySearch() {
+    return this.config.searchList.every(param => param.isUnfilled());
+  }
+
   /** Checks for any missing parameters and displays a message */
   private hasValidParameters(): boolean {
-    const empty = this.findEmptyDisplayParameters().map(p => p.getDisplayName());
-    const missing = this.findMissingRequiredParameters().map(p => p.getDisplayName());
+    const emptyParams = this.findEmptyDisplayParameters().map(p => p.getDisplayName());
+    const missingParams = this.findMissingRequiredParameters().map(p => p.getDisplayName());
 
     let valid = true;
 
     this.messageService.clear();
 
-    if (empty.length > 0) {
+    if (emptyParams.length > 0) {
       this.messageService.add({
         key: 'search-messages',
         summary: 'SEARCH_BAR.UNFILLED_FIELD',
-        data: empty,
+        data: emptyParams,
         sticky: true,
       });
       valid = false;
     }
-    if (missing.length > 0) {
+    if (missingParams.length > 0) {
       this.messageService.add({
         key: 'search-messages',
         summary: 'SEARCH_BAR.MISSING_REQUIRED',
-        data: missing,
+        data: missingParams,
+        sticky: true,
+      });
+      valid = false;
+    }
+    if (this.isEmptySearch()) {
+      this.messageService.add({
+        key: 'search-messages',
+        summary: 'SEARCH_BAR.NO_PARAMS',
         sticky: true,
       });
       valid = false;
