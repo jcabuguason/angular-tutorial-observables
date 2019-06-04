@@ -5,6 +5,7 @@
     "SUBMIT": "Submit",
     "MISSING_REQUIRED": "Missing Required Search Fields",
     "UNFILLED_FIELD": "Fields added but do not have a value or correct format (note: Invalid values could have been automatically removed)",
+    "NO_PARAMS": "At least one field is required to search",
     "SELECT": "Select",
     "SELECTED_ITEMS": "items selected",
     "CLEAR": "Clear",
