@@ -130,89 +130,87 @@ export class SearchService {
   /** Emits the search model used for ES and updates the url */
   submitSearch(updateUrlParams: boolean = true, shortcut?: ShortcutModel) {
     this.shortcutSelected = shortcut;
-    const model = this.getSearchModel();
+    if (this.hasValidParameters()) {
+      const model = this.getSearchModel();
 
-    if (updateUrlParams) {
-      this.updateUrl();
+      if (updateUrlParams) {
+        this.updateUrl();
+      }
+      this.searchRequested.next(model);
+      this.displayForm = false;
     }
-    this.searchRequested.next(model);
-    this.displayForm = false;
   }
 
   /** Gets the search model used for ES and updates any values outside of its limits (ex. size and hours range) */
   getSearchModel(): SearchModel {
     let model = new SearchModel([], []);
+    const elements: SearchElement[] = [];
+    let startDate: Date;
+    let endDate: Date;
+    let numObs: number = this.defaultNumObs;
+    let operator: string;
 
-    if (this.hasValidParameters()) {
-      const elements: SearchElement[] = [];
-      let startDate: Date;
-      let endDate: Date;
-      let numObs: number = this.defaultNumObs;
-      let operator: string;
+    const addToElements = (elementID, value) =>
+      elements.push(new SearchElement(elementID, 'metadataElements', 'value', value));
 
-      const addToElements = (elementID, value) =>
-        elements.push(new SearchElement(elementID, 'metadataElements', 'value', value));
-
-      this.displayParams.forEach(p => {
-        const selected = p.getSelected();
-        const addStationToElements = (station, stdPkgId = null) => {
-          const adjusted = this.adjustWildcard(station);
-          const id = stdPkgId || this.determineStdPkgId(adjusted);
-          addToElements(id, adjusted);
-        };
-        const updateValue = (value, index, newValue) => {
-          if (newValue !== value) {
-            p.setSelectedAt(index, newValue);
-          }
-        };
-
-        switch (p.getName()) {
-          case ParameterName.STATION_ID:
-            selected.forEach((value, index) => {
-              const stationID = value.replace(/\s+/g, '');
-              updateValue(value, index, stationID);
-              addStationToElements(stationID);
-            });
-            operator = 'AND';
-            break;
-          case ParameterName.STATION_NAME:
-            selected.forEach(value => addStationToElements(value, SearchableElement.STATION_NAME.id));
-            operator = 'AND';
-            break;
-          case ParameterName.PROVINCE:
-            selected.forEach(s => addToElements(SearchableElement.PROVINCE.id, s));
-            operator = 'AND';
-            break;
-          case ParameterName.SIZE:
-            selected.forEach((s, index) => {
-              numObs = this.fixNumObs(s);
-              updateValue(s, index, String(numObs));
-            });
-            break;
-          case ParameterName.FROM:
-            startDate = (p as SearchDatetime).getFullDatetime();
-            break;
-          case ParameterName.TO:
-            endDate = (p as SearchDatetime).getFullDatetime();
-            break;
+    this.displayParams.forEach(p => {
+      const selected = p.getSelected();
+      const addStationToElements = (station, stdPkgId = null) => {
+        const adjusted = this.adjustWildcard(station);
+        const id = stdPkgId || this.determineStdPkgId(adjusted);
+        addToElements(id, adjusted);
+      };
+      const updateValue = (value, index, newValue) => {
+        if (newValue !== value) {
+          p.setSelectedAt(index, newValue);
         }
-      });
+      };
 
-      // apps currently do not use both endDate and hoursRange
-      // Pegasus uses: start date and end date
-      // Midas uses: a date and hours range
-      // TODO: need to handle it if both features are combined (maybe with toggle to switch on/off which pair of params to use)
-      const hoursParam = this.availableParams.find(p => p.getName() === ParameterName.HOURS_RANGE && !p.isUnfilled());
-      if (startDate != null && hoursParam != null) {
-        const range = hoursParam as SearchHoursRange;
-        const date = startDate;
-        range.limitRange();
-        startDate = subHours(date, range.hoursBefore);
-        endDate = addHours(date, range.hoursAfter);
+      switch (p.getName()) {
+        case ParameterName.STATION_ID:
+          selected.forEach((value, index) => {
+            const stationID = value.replace(/\s+/g, '');
+            updateValue(value, index, stationID);
+            addStationToElements(stationID);
+          });
+          operator = 'AND';
+          break;
+        case ParameterName.STATION_NAME:
+          selected.forEach(value => addStationToElements(value, SearchableElement.STATION_NAME.id));
+          operator = 'AND';
+          break;
+        case ParameterName.PROVINCE:
+          selected.forEach(s => addToElements(SearchableElement.PROVINCE.id, s));
+          operator = 'AND';
+          break;
+        case ParameterName.SIZE:
+          selected.forEach((s, index) => {
+            numObs = this.fixNumObs(s);
+            updateValue(s, index, String(numObs));
+          });
+          break;
+        case ParameterName.FROM:
+          startDate = (p as SearchDatetime).getFullDatetime();
+          break;
+        case ParameterName.TO:
+          endDate = (p as SearchDatetime).getFullDatetime();
+          break;
       }
+    });
 
-      model = new SearchModel(this.determineTaxonomies(), elements, startDate, endDate, numObs, operator);
+    // apps currently do not use both endDate and hoursRange
+    // Pegasus uses: start date and end date
+    // Midas uses: a date and hours range
+    // TODO: need to handle it if both features are combined (maybe with toggle to switch on/off which pair of params to use)
+    const hoursParam = this.availableParams.find(p => p.getName() === ParameterName.HOURS_RANGE && !p.isUnfilled());
+    if (startDate != null && hoursParam != null) {
+      const range = hoursParam as SearchHoursRange;
+      const date = startDate;
+      range.limitRange();
+      startDate = subHours(date, range.hoursBefore);
+      endDate = addHours(date, range.hoursAfter);
     }
+    model = new SearchModel(this.determineTaxonomies(), elements, startDate, endDate, numObs, operator);
     return model;
   }
 
