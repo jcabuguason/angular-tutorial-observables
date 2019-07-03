@@ -29,7 +29,12 @@ export class DataGridService implements OnDestroy {
   public rowData: object[] = [];
   public columnDefs: any[];
   public columnTypes = { identity: {} };
-  public defaultColDef = { menuTabs: ['generalMenuTab', 'filterMenuTab'] };
+  public defaultColDef = {
+    filter: true,
+    resizable: true,
+    sortable: true,
+    menuTabs: ['generalMenuTab', 'filterMenuTab'],
+  };
   public reloadRequested = new Subject();
   public sortRequested = new Subject();
   public chartColumnRequested = new Subject();
@@ -166,7 +171,7 @@ export class DataGridService implements OnDestroy {
     primaryStationId: obs.identifier,
     station: obsUtil.findMetadataValue(obs, 'stn_nam'),
     revision: obsUtil.findRevision(obs),
-  })
+  });
 
   flattenMetadataElements(mdElements: MetadataElements[]) {
     const result = {};
