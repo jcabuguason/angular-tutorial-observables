@@ -359,8 +359,8 @@ describe('SearchService', () => {
     expect(searchService.getSearchModel().elements).toEqual([stationId.searchElement, stationName.searchElement]);
   });
 
-  it('should return all taxonomies', () => {
-    expect(searchService.getSearchModel().taxonomy).toEqual([caIndex, raIndex, dndAwosIndex]);
+  it('should return no taxonomies when not given network or organization parameters', () => {
+    expect(searchService.getSearchModel().taxonomy).toEqual([]);
   });
 
   it('should return taxonomies with matching network', () => {
