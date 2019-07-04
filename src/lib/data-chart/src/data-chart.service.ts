@@ -1,7 +1,9 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
 import * as Highcharts from 'highcharts';
-import { Chart } from 'angular-highcharts';
+import HC_no_data_to_display from 'highcharts/modules/no-data-to-display';
+import HC_exporting from 'highcharts/modules/exporting';
+import HC_offline_exporting from 'highcharts/modules/offline-exporting';
 import { ChartObject, Element, Station } from './model/chart.model';
 
 import { UserConfigService } from 'msc-dms-commons-angular/core/metadata';
@@ -9,7 +11,6 @@ import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 
 import { UnitCodeConversionService } from 'msc-dms-commons-angular/core/obs-util';
 import { TranslateService } from '@ngx-translate/core';
-import { ChartService } from 'angular-highcharts/lib/chart.service';
 import { DataChartOptions } from './model/options.model';
 
 @Injectable()
@@ -21,6 +22,10 @@ export class DataChartService {
     public configService: UserConfigService,
     public unitService: UnitCodeConversionService
   ) {
+    HC_no_data_to_display(Highcharts);
+    HC_exporting(Highcharts);
+    HC_offline_exporting(Highcharts);
+
     const weekdays = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
     const months = [
       'JANUARY',
@@ -54,10 +59,6 @@ export class DataChartService {
         },
       })
     );
-  }
-
-  chart(chartObj: ChartObject, obs, options: DataChartOptions = {}): Chart {
-    return new Chart(this.buildOptions(chartObj, obs, options));
   }
 
   buildOptions(chartObj: ChartObject, obs, options = {}) {
