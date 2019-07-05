@@ -28,7 +28,7 @@
       <i [ngClass]="{ 'bar-icon fa fa-bars': searchService.readOnlyBar }"></i>
       <!-- search parameters in bar -->
       <div class="all-selected-parameters">
-        <div *ngFor="let p of searchService.displayParams; index as i" class="selected-parameter">
+        <div *ngFor="let p of searchService.displayParams; index as i" class="selected-parameter" [ngClass]="{ 'disabled-parameter': searchService.readOnlyBar }">
           <!-- editable search parameters -->
           <div class="ui-inputgroup" *ngIf="p.getType() === paramType.SEARCH_PARAMETER">
             <span class="ui-inputgroup-addon">{{ p.getDisplayName() | translate }}</span>
