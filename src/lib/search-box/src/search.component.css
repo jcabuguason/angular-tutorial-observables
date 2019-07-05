@@ -170,3 +170,8 @@
 ::ng-deep .ui-widget:disabled {
   opacity: 0.7;
 }
+
+/* needed to open search form when clicking disabled parameters in Firefox */
+.disabled-parameter {
+  pointer-events: none;
+}
