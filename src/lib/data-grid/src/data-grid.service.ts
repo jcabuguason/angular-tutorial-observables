@@ -398,8 +398,6 @@ export class DataGridService implements OnDestroy {
   private makeDefaultColumn(node) {
     const columnToAdd = this.columnBoilerplate(node, this.userConfigService.getDefaultTag());
     node.children.unshift(columnToAdd);
-    // workaround - ensures getChildNode does split early
-    node.elementID = undefined;
     return columnToAdd;
   }
 
