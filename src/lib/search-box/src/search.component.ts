@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { SearchService } from './search.service';
-import { ParameterType, SearchParameter } from './parameters/search-parameter';
+import { ParameterType, SearchParameter, ParameterName } from './parameters/search-parameter';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
@@ -113,6 +113,10 @@ export class SearchComponent implements OnInit, AfterViewChecked {
     this.searchService.availableParams.forEach(param =>
       param.multiSelectChoices.forEach(choice => (choice.label = this.translate.instant(choice.value)))
     );
+  }
+
+  onRangeTypeChange(event) {
+    this.searchService.setSelectedRangeType(event.value.value);
   }
 
   private adjustCalendar() {

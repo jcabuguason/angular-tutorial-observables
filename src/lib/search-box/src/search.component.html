@@ -28,7 +28,11 @@
       <i [ngClass]="{ 'bar-icon fa fa-bars': searchService.readOnlyBar }"></i>
       <!-- search parameters in bar -->
       <div class="all-selected-parameters">
-        <div *ngFor="let p of searchService.displayParams; index as i" class="selected-parameter" [ngClass]="{ 'disabled-parameter': searchService.readOnlyBar }">
+        <div
+          *ngFor="let p of searchService.displayParams; index as i"
+          class="selected-parameter"
+          [ngClass]="{ 'disabled-parameter': searchService.readOnlyBar }"
+        >
           <!-- editable search parameters -->
           <div class="ui-inputgroup" *ngIf="p.getType() === paramType.SEARCH_PARAMETER">
             <span class="ui-inputgroup-addon">{{ p.getDisplayName() | translate }}</span>
@@ -157,8 +161,7 @@
                 size="7"
                 placeholder="hrs before"
                 [(ngModel)]="p.hoursBefore"
-                [min]="p.minHour"
-                [max]="p.maxHour"
+                [min]="0"
                 [disabled]="searchService.readOnlyBar"
               >
               </p-spinner>
@@ -166,8 +169,7 @@
                 size="7"
                 placeholder="hrs after"
                 [(ngModel)]="p.hoursAfter"
-                [min]="p.minHour"
-                [max]="p.maxHour"
+                [min]="0"
                 [disabled]="searchService.readOnlyBar"
               >
               </p-spinner>
@@ -201,7 +203,7 @@
   </div>
 
   <!-- suggestions/categories that show up-->
-  <ng-container *ngIf="searchService.addParamsOnBar">
+  <ng-container *ngIf="!searchService.readOnlyBar">
     <div class="search-parameter-suggestions" *ngFor="let suggestion of searchService.suggestedParams">
       <button
         pButton
@@ -219,8 +221,7 @@
   header="{{ 'SEARCH_BAR.SEARCH' | translate }}"
   [(visible)]="searchService.displayForm"
   [modal]="true"
-  [style]="{ width: '600px' }"
-  class="search-form"
+  styleClass="search-form"
   [blockScroll]="true"
 >
   <!-- <p-accordion>
@@ -239,15 +240,16 @@
     tabindex="0"
     (keyup.enter)="searchService.submitSearchForm()"
   >
-    <div>
-      <ng-container *ngIf="p.getType() === paramType.SEARCH_QUERY_TYPE; else notCheckbox">
-        <!-- for checkbox, use the label property so it's displayed right next to the checkbox -->
+    <ng-container *ngIf="p.getType() === paramType.SEARCH_QUERY_TYPE">
+      <!-- for checkbox, use the label property so it's displayed right next to the checkbox -->
+      <div>
         <p-checkbox [(ngModel)]="p.formChecked" binary="true" label="{{ p.getDisplayName() | translate }}"></p-checkbox>
-      </ng-container>
-      <ng-template #notCheckbox> {{ p.getDisplayName() | translate }} </ng-template>
-    </div>
+      </div>
+    </ng-container>
 
     <ng-container *ngIf="p.getType() === paramType.SEARCH_PARAMETER">
+      <div>{{ p.getDisplayName() | translate }}</div>
+
       <ng-container *ngIf="p.getChoices().length === 0; else hasChoices">
         <!-- no choice, one value -->
         <input
@@ -318,25 +320,38 @@
       </ng-template>
     </ng-container>
 
-    <ng-container *ngIf="p.getType() === paramType.SEARCH_HOURS_RANGE">
-      <p-spinner size="7" placeholder="hrs before" [(ngModel)]="p.formHoursBefore" [min]="0" [max]="p.maxHour">
-      </p-spinner>
-      <p-spinner size="7" placeholder="hrs after" [(ngModel)]="p.formHoursAfter" [min]="0" [max]="p.maxHour">
-      </p-spinner>
-    </ng-container>
-
-    <ng-container *ngIf="p.getType() === paramType.SEARCH_DATETIME">
-      <p-calendar
-        [(ngModel)]="p.formDatetime"
-        [showTime]="true"
-        [defaultDate]="defaultDate"
-        placeholder="{{ p.getPlaceholder() }}"
-        appendTo="body"
-        [locale]="calendarLocale"
-      >
-      </p-calendar>
+    <ng-container *ngIf="!searchService.useDateAndHoursRange">
+      <ng-container *ngTemplateOutlet="datetimeParam; context: { param: p }"> </ng-container>
+      <ng-container *ngTemplateOutlet="hoursRangeParam; context: { param: p }"> </ng-container>
     </ng-container>
   </div>
+
+  <!-- datetime and ranges -->
+  <div *ngIf="searchService.useDateAndHoursRange" class="date-range-toggle">
+    <div>{{ 'SEARCH_BAR.SELECT_DATE_PICKER' | translate }}</div>
+    <p-selectButton
+      [options]="searchService.rangeTypes"
+      [(ngModel)]="searchService.selectedRangeType"
+      (onChange)="onRangeTypeChange($event)"
+    >
+      <ng-template let-item>
+        <div style="padding: .5em 1em">
+          <span>{{ item.label | translate }}</span>
+        </div>
+      </ng-template>
+    </p-selectButton>
+
+    <div
+      *ngFor="let p of searchService.formRangeParams; index as i"
+      class="selected-parameter"
+      tabindex="0"
+      (keyup.enter)="searchService.submitSearchForm()"
+    >
+      <ng-container *ngTemplateOutlet="datetimeParam; context: { param: p }"> </ng-container>
+      <ng-container *ngTemplateOutlet="hoursRangeParam; context: { param: p }"> </ng-container>
+    </div>
+  </div>
+
   <!-- </p-accordionTab>
   </p-accordion> -->
 
@@ -356,16 +371,52 @@
       class="submit-button"
     ></button>
   </p-footer>
+
+  <ng-container *ngTemplateOutlet="toastMessages"></ng-container>
 </p-dialog>
 
-<p-toast key="search-messages" position="center">
-  <ng-template let-message pTemplate="message">
+<div *ngIf="!searchService.displayForm">
+  <ng-container *ngTemplateOutlet="toastMessages"></ng-container>
+</div>
+
+<ng-template #toastMessages>
+  <p-toast key="search-messages" position="center">
+    <ng-template let-message pTemplate="message">
+      <div>
+        <i class="pi pi-exclamation-triangle" style="font-size: 3em"></i>
+        <p>{{ message.summary | translate }}</p>
+        <ul>
+          <li *ngFor="let field of message.data">{{ field | translate }}</li>
+        </ul>
+      </div>
+    </ng-template>
+  </p-toast>
+</ng-template>
+
+<ng-template #hoursRangeParam let-p="param">
+  <ng-container *ngIf="p.getType() === paramType.SEARCH_HOURS_RANGE">
     <div>
-      <i class="pi pi-exclamation-triangle" style="font-size: 3em"></i>
-      <p>{{ message.summary | translate }}</p>
-      <ul>
-        <li *ngFor="let field of message.data">{{ field | translate }}</li>
-      </ul>
+      <div>{{ 'SEARCH_BAR.HOURS_BEFORE' | translate }}</div>
+      <p-spinner size="7" placeholder="hrs before" [(ngModel)]="p.formHoursBefore" [min]="0"></p-spinner>
     </div>
-  </ng-template>
-</p-toast>
+    <div>
+      <div>{{ 'SEARCH_BAR.HOURS_AFTER' | translate }}</div>
+      <p-spinner size="7" placeholder="hrs after" [(ngModel)]="p.formHoursAfter" [min]="0"></p-spinner>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #datetimeParam let-p="param">
+  <ng-container *ngIf="p.getType() === paramType.SEARCH_DATETIME">
+    <div>{{ p.getDisplayName() | translate }}</div>
+    <p-calendar
+      [(ngModel)]="p.formDatetime"
+      [showTime]="true"
+      [defaultDate]="defaultDate"
+      placeholder="{{ p.getPlaceholder() }}"
+      appendTo="body"
+      [locale]="calendarLocale"
+    >
+    </p-calendar>
+  </ng-container>
+</ng-template>

@@ -34,13 +34,23 @@ export class SearchService {
   maxNumObs = 1500;
   defaultNumObs = 300;
 
-  addParamsOnBar: boolean;
   displayForm = false;
   readOnlyBar: boolean;
 
   shortcuts: ShortcutModel[] = [];
   shortcutSelected: ShortcutModel;
   shortcutButtons = [];
+
+  formRangeParams: SearchParameter[] = [];
+  hoursRangeParams: SearchParameter[] = [];
+  dateRangeParams: SearchParameter[] = [];
+
+  useDateAndHoursRange = false;
+  selectedRangeType;
+  rangeTypes = [
+    { label: 'SEARCH_BAR.RELATIVE_DATE_PICKER_LABEL', value: 'hoursRange' },
+    { label: 'SEARCH_BAR.ASOLUTE_DATE_PICKER_LABEL', value: 'dateRange' },
+  ];
 
   constructor(
     @Inject(SEARCH_BOX_CONFIG)
@@ -53,11 +63,19 @@ export class SearchService {
     this.availableParams = this.config.searchList;
     this.suggestedParams = this.availableParams;
 
-    this.addParamsOnBar = this.config.addParamsOnBar;
     this.readOnlyBar = this.config.readOnlyBar;
 
     this.shortcuts = this.config.shortcuts;
     this.createShortcutButtons();
+
+    this.hoursRangeParams = this.availableParams.filter(
+      p => p.getName() === ParameterName.HOURS_RANGE || p.getName() === ParameterName.HOURS_RANGE_DATETIME
+    );
+    this.dateRangeParams = this.availableParams.filter(
+      p => p.getName() === ParameterName.FROM || p.getName() === ParameterName.TO
+    );
+    this.useDateAndHoursRange = !!this.hoursRangeParams.length && !!this.dateRangeParams.length;
+    this.setSelectedRangeType('hoursRange');
   }
 
   /** Executes parameters for a search request */
@@ -130,9 +148,9 @@ export class SearchService {
   /** Emits the search model used for ES and updates the url */
   submitSearch(updateUrlParams: boolean = true, shortcut?: ShortcutModel) {
     this.shortcutSelected = shortcut;
+
     if (this.hasValidParameters()) {
       const model = this.getSearchModel();
-
       if (updateUrlParams) {
         this.updateUrl();
       }
@@ -144,11 +162,13 @@ export class SearchService {
   /** Gets the search model used for ES and updates any values outside of its limits (ex. size and hours range) */
   getSearchModel(): SearchModel {
     let model = new SearchModel([], []);
+
     const elements: SearchElement[] = [];
     let startDate: Date;
     let endDate: Date;
     let numObs: number = this.defaultNumObs;
     let operator: string;
+    let hoursRangeDate: Date;
 
     const addToElements = (elementID, value) =>
       elements.push(new SearchElement(elementID, 'metadataElements', 'value', value));
@@ -195,20 +215,18 @@ export class SearchService {
         case ParameterName.TO:
           endDate = (p as SearchDatetime).getFullDatetime();
           break;
+        case ParameterName.HOURS_RANGE_DATETIME:
+          hoursRangeDate = (p as SearchDatetime).getFullDatetime();
+          break;
       }
     });
 
-    // apps currently do not use both endDate and hoursRange
-    // Pegasus uses: start date and end date
-    // Midas uses: a date and hours range
-    // TODO: need to handle it if both features are combined (maybe with toggle to switch on/off which pair of params to use)
-    const hoursParam = this.availableParams.find(p => p.getName() === ParameterName.HOURS_RANGE && !p.isUnfilled());
-    if (startDate != null && hoursParam != null) {
-      const range = hoursParam as SearchHoursRange;
-      const date = startDate;
-      range.limitRange();
-      startDate = subHours(date, range.hoursBefore);
-      endDate = addHours(date, range.hoursAfter);
+    if (this.selectedRangeType.value === 'hoursRange' && hoursRangeDate != null) {
+      const hoursRange = this.hoursRangeParams.find(p => p.getName() === ParameterName.HOURS_RANGE) as SearchHoursRange;
+      if (hoursRange != null) {
+        startDate = subHours(hoursRangeDate, hoursRange.hoursBefore);
+        endDate = addHours(hoursRangeDate, hoursRange.hoursAfter);
+      }
     }
     model = new SearchModel(this.determineTaxonomies(), elements, startDate, endDate, numObs, operator);
     return model;
@@ -241,6 +259,11 @@ export class SearchService {
     this.submitSearch();
   }
 
+  setSelectedRangeType(type: 'dateRange' | 'hoursRange') {
+    this.selectedRangeType = type === 'hoursRange' ? this.rangeTypes[0] : this.rangeTypes[1];
+    this.formRangeParams = type === 'hoursRange' ? this.hoursRangeParams : this.dateRangeParams;
+  }
+
   /** Determines the std-pkg-id depending on the station entered (defaults to MSC_ID) */
   private determineStdPkgId(stationID: string) {
     const stationType = SearchableElement.STATION_TYPE;
@@ -268,7 +291,12 @@ export class SearchService {
   }
 
   /** Checks for any missing parameters and displays a message */
-  private hasValidParameters(): boolean {
+  hasValidParameters(): boolean {
+    if (this.useDateAndHoursRange) {
+      const removeParams = this.selectedRangeType.value === 'dateRange' ? this.hoursRangeParams : this.dateRangeParams;
+      removeParams.forEach(p => this.removeDisplayParameter(p));
+    }
+
     const emptyParams = this.findEmptyDisplayParameters().map(p => p.getDisplayName());
     const missingParams = this.findMissingRequiredParameters().map(p => p.getDisplayName());
 
@@ -302,6 +330,7 @@ export class SearchService {
       });
       valid = false;
     }
+
     return valid;
   }
 
@@ -336,9 +365,23 @@ export class SearchService {
 
   /** Populate search box with information from specific URL parameters */
   private addRequestParams(qParams) {
-    this.urlService
-      .getAllRequestParams(qParams, this.availableParams, this.shortcuts)
+    const matchingName = (param: SearchParameter, name: string) => param.getName() === name;
+    const allRequestParams = this.urlService.getAllRequestParams(qParams, this.availableParams, this.shortcuts);
+    const useHoursRange = allRequestParams.some(obj => matchingName(obj.param, ParameterName.HOURS_RANGE_DATETIME));
+    const paramsFilter = param =>
+      useHoursRange
+        ? !matchingName(param, ParameterName.FROM) && !matchingName(param, ParameterName.TO)
+        : !matchingName(param, ParameterName.HOURS_RANGE) && !matchingName(param, ParameterName.HOURS_RANGE_DATETIME);
+
+    allRequestParams
+      .filter(obj => paramsFilter(obj.param))
       .forEach(obj => this.addSuggestedParameter(obj.param, obj.value));
+
+    if (useHoursRange && this.displayParams.find(p => p.getName() === ParameterName.HOURS_RANGE) == null) {
+      this.addParameterByName(ParameterName.HOURS_RANGE);
+    }
+
+    this.setSelectedRangeType(useHoursRange ? 'hoursRange' : 'dateRange');
   }
 
   /** Limits the number of observations to return from ES */

@@ -9,7 +9,12 @@
     "SELECT": "Sélectionner",
     "SELECTED_ITEMS": "éléments sélectionnés",
     "CLEAR": "Effacer",
-    "TODAY": "Aujourd'hui"
+    "TODAY": "Aujourd'hui",
+    "SELECT_DATE_PICKER": "Sélectionner",
+    "ASOLUTE_DATE_PICKER_LABEL": "Plage de dates Absolue",
+    "RELATIVE_DATE_PICKER_LABEL": "Plage de dates Relative",
+    "HOURS_BEFORE": "Heures avant",
+    "HOURS_AFTER": "Hours après"
   },
   "GRID": {
     "LAYER": "Couche",

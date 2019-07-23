@@ -9,7 +9,12 @@
     "SELECT": "Select",
     "SELECTED_ITEMS": "items selected",
     "CLEAR": "Clear",
-    "TODAY": "Today"
+    "TODAY": "Today",
+    "SELECT_DATE_PICKER": "Select Date Picker",
+    "ASOLUTE_DATE_PICKER_LABEL": "Absolute",
+    "RELATIVE_DATE_PICKER_LABEL": "Relative",
+    "HOURS_BEFORE": "Hours Before",
+    "HOURS_AFTER": "Hours After"
   },
   "GRID": {
     "LAYER": "Layer",
