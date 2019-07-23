@@ -19,6 +19,7 @@ export const ParameterName = {
   PROVINCE: 'province',
   SIZE: 'size',
   HOURS_RANGE: 'hoursRange',
+  HOURS_RANGE_DATETIME: 'obs_datetime',
   FROM: 'from',
   TO: 'to',
   QUERY_TYPE: 'queryType',
@@ -222,7 +223,7 @@ export class SearchParameter {
   }
 
   cleanEntries = (arr: string[]): string[] =>
-    arr.map(entry => entry != null && entry.trim()).filter(trimmed => !!trimmed)
+    arr.map(entry => entry != null && entry.trim()).filter(trimmed => !!trimmed);
 
   // some values still gets through from manual user input in the form/bar (ngModel binding)
   // ex. '12345 ' and '12345   ' are technically unique

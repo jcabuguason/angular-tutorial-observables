@@ -3,8 +3,6 @@ import { SearchParameter, ParameterType } from './search-parameter';
 export class SearchHoursRange extends SearchParameter {
   hoursBefore: number;
   hoursAfter: number;
-  maxHour = 36;
-  minHour = 0;
 
   formHoursBefore: number;
   formHoursAfter: number;
@@ -17,8 +15,7 @@ export class SearchHoursRange extends SearchParameter {
     this.setType(ParameterType.SEARCH_HOURS_RANGE);
   }
 
-  // Will use given default hours and send to ES even if not visible to search bar. Note maxHour range may need to be adjusted
-  enableDefaultHours(hrsBefore?: number, hrsAfter?: number) {
+  setDefaultHours(hrsBefore?: number, hrsAfter?: number) {
     this.defaultBefore = hrsBefore;
     this.defaultAfter = hrsAfter;
     this.resetValues();
@@ -57,15 +54,9 @@ export class SearchHoursRange extends SearchParameter {
   }
 
   setHours(before, after) {
-    const hours = (value, defaultHour) => (isNaN(value) ? defaultHour : Number(value));
+    const hours = (value, defaultHour) => (isNaN(value) ? (!!defaultHour ? defaultHour : 0) : Number(value));
     this.hoursBefore = hours(before, this.defaultBefore);
     this.hoursAfter = hours(after, this.defaultAfter);
-    this.limitRange();
-  }
-
-  limitRange() {
-    this.hoursBefore = this.fixValue(this.hoursBefore, 0, this.maxHour);
-    this.hoursAfter = this.fixValue(this.hoursAfter, 0, this.maxHour);
   }
 
   applyFormValues() {
@@ -86,15 +77,5 @@ export class SearchHoursRange extends SearchParameter {
     return checkForm
       ? this.isEmpty(this.formHoursBefore) && this.isEmpty(this.formHoursAfter)
       : this.isEmpty(this.hoursBefore) && this.isEmpty(this.hoursAfter);
-  }
-
-  private fixValue(input: any, min: number, max: number, defaultNum: number = 0): number {
-    input = isNaN(input) ? defaultNum : input;
-    if (max <= input) {
-      return max;
-    } else if (input <= min) {
-      return min;
-    }
-    return input;
   }
 }

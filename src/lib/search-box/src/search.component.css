@@ -114,10 +114,14 @@
   margin: 0 5px 5px 0;
 }
 
-.search-form .selected-parameter {
+::ng-deep .search-form {
+  min-width: 450px !important;
+}
+
+::ng-deep .search-form .selected-parameter {
   margin: 5px 5px 0 0;
 }
-.search-form .selected-parameter:focus {
+::ng-deep .search-form .selected-parameter:focus {
   outline: none;
 }
 

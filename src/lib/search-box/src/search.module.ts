@@ -23,6 +23,7 @@ import { MessagesModule } from 'primeng/messages';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SpinnerModule } from 'primeng/spinner';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 @NgModule({
   imports: [
@@ -45,6 +46,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
     MessagesModule,
     MultiSelectModule,
     SpinnerModule,
+    SelectButtonModule,
   ],
   providers: [SearchService, SearchURLService, MessageService],
   declarations: [SearchComponent],

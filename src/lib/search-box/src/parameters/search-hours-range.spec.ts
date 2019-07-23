@@ -1,17 +1,17 @@
 import { SearchHoursRange } from './search-hours-range';
 
-describe('SearchDatetime', () => {
+describe('SearchHoursRange', () => {
   let hoursParam: SearchHoursRange;
 
   beforeEach(() => {
     hoursParam = new SearchHoursRange('hoursParam', false);
   });
 
-  it('should enable default hours', () => {
+  it('should set default hours', () => {
     expect(hoursParam.hoursBefore).toBeUndefined();
     expect(hoursParam.hoursAfter).toBeUndefined();
 
-    hoursParam.enableDefaultHours(12, 24);
+    hoursParam.setDefaultHours(12, 24);
     expect(hoursParam.hoursBefore).toEqual(12);
     expect(hoursParam.hoursAfter).toEqual(24);
   });
@@ -47,23 +47,17 @@ describe('SearchDatetime', () => {
   });
 
   it('should set hour to default if field is undefined', () => {
-    hoursParam.enableDefaultHours(12, 12);
+    hoursParam.setDefaultHours(12, 12);
     hoursParam.setHours(undefined, 4);
     expect(hoursParam.hoursBefore).toEqual(12);
     expect(hoursParam.hoursAfter).toEqual(4);
   });
 
   it('should set hour to default if field is is NaN', () => {
-    hoursParam.enableDefaultHours(12, 12);
+    hoursParam.setDefaultHours(12, 12);
     hoursParam.setHours('abc', 4);
     expect(hoursParam.hoursBefore).toEqual(12);
     expect(hoursParam.hoursAfter).toEqual(4);
-  });
-
-  it('should limit hours', () => {
-    hoursParam.addSelected({ hh_before: -100, hh_after: 100 });
-    expect(hoursParam.hoursBefore).toEqual(hoursParam.minHour);
-    expect(hoursParam.hoursAfter).toEqual(hoursParam.maxHour);
   });
 
   it('should remove hours', () => {
@@ -81,7 +75,7 @@ describe('SearchDatetime', () => {
   });
 
   it('should reset hours to specified default', () => {
-    hoursParam.enableDefaultHours(12, 12);
+    hoursParam.setDefaultHours(12, 12);
     hoursParam.hoursBefore = 1;
     hoursParam.hoursAfter = 1;
     hoursParam.removeAllSelected();

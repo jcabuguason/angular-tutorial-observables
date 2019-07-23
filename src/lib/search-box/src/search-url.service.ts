@@ -1,4 +1,4 @@
-import { SearchParameter, ParameterType } from './parameters/search-parameter';
+import { SearchParameter, ParameterType, ParameterName } from './parameters/search-parameter';
 import { SearchDatetime } from './parameters/search-datetime';
 import { SearchHoursRange } from './parameters/search-hours-range';
 import { ShortcutModel } from './model/shortcut.model';
@@ -48,8 +48,8 @@ export class SearchURLService {
 
   /** Reads the URL parameters and returns a list of the corresponding SearchParameter with its values */
   getAllRequestParams(qParams, availableParams: SearchParameter[], shortcuts: ShortcutModel[]) {
-    const findParam = name => availableParams.find(p => p.getName() === name);
-    const paramValueObj = (name, value) => this.paramValueObj(findParam(name), this.toArray(value));
+    const paramValueObj = (name, value) =>
+      this.paramValueObj(this.findParamByName(availableParams, name), this.toArray(value));
     const getLabel = (param, values) =>
       values.map(val => {
         const choice = param.findChoiceByUri(val);
@@ -86,8 +86,7 @@ export class SearchURLService {
   }
 
   getShortcutRequestParams(qParams, availableParams: SearchParameter[], shortcuts: ShortcutModel[]) {
-    const findParam = name => availableParams.find(p => p.getName() === name);
-    const paramValueObj = param => this.paramValueObj(findParam(param.name), param.values);
+    const paramValueObj = param => this.paramValueObj(this.findParamByName(availableParams, param.name), param.values);
 
     const flatten = (a, b) => a.concat(b);
     return [].concat(
@@ -103,10 +102,12 @@ export class SearchURLService {
     const datetimes = availableParams.filter(p => p.getType() === ParameterType.SEARCH_DATETIME);
     const fromDate = this.firstValue(qParams.from);
     const toDate = this.firstValue(qParams.to);
+    const hoursRangeDate = this.firstValue(qParams.obs_datetime);
 
     return [
-      this.paramValueObj(datetimes.find(p => p.getName() === 'from'), [fromDate]),
-      this.paramValueObj(datetimes.find(p => p.getName() === 'to'), [toDate]),
+      this.paramValueObj(this.findParamByName(datetimes, ParameterName.FROM), [fromDate]),
+      this.paramValueObj(this.findParamByName(datetimes, ParameterName.TO), [toDate]),
+      this.paramValueObj(this.findParamByName(datetimes, ParameterName.HOURS_RANGE_DATETIME), [hoursRangeDate]),
     ].filter(obj => obj.param != null && obj.value[0] != null);
   }
 
@@ -134,11 +135,10 @@ export class SearchURLService {
       : [];
   }
 
-  private toArray(value) {
-    return Array.isArray(value) ? value : [value].filter(val => val != null);
-  }
+  private toArray = value => (Array.isArray(value) ? value : [value].filter(val => val != null));
 
-  private firstValue(value) {
-    return this.toArray(value)[0];
-  }
+  private firstValue = value => this.toArray(value)[0];
+
+  private findParamByName = (searchParams: SearchParameter[], name: string) =>
+    searchParams.find(p => p.getName() === name);
 }

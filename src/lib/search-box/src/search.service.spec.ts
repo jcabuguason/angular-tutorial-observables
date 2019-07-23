@@ -35,6 +35,7 @@ describe('SearchService', () => {
     startDateParam: null,
     endDateParam: null,
     hoursParam: null,
+    hoursRangeDate: null,
     provinceParam: null,
     sizeParam: null,
   };
@@ -69,6 +70,7 @@ describe('SearchService', () => {
       startDateParam: new SearchDatetime(ParameterName.FROM, required),
       endDateParam: new SearchDatetime(ParameterName.TO, required),
       hoursParam: new SearchHoursRange(ParameterName.HOURS_RANGE, required),
+      hoursRangeDate: new SearchDatetime(ParameterName.HOURS_RANGE_DATETIME, required),
       provinceParam: new SearchParameter(ParameterName.PROVINCE, provinces, true, required),
       sizeParam: new SearchParameter(ParameterName.SIZE, [], false, required, 1),
     };
@@ -81,7 +83,6 @@ describe('SearchService', () => {
         new SearchTaxonomy(raIndex, 'ra', 'msc'),
         new SearchTaxonomy(dndAwosIndex, 'dnd awos', 'dnd'),
       ],
-      addParamsOnBar: true,
       readOnlyBar: false,
       shortcuts: [new ShortcutModel('Shortcut1', [{ name: ParameterName.forTaxonomy.NETWORK, values: ['ca', 'ra'] }])],
     };
@@ -155,44 +156,35 @@ describe('SearchService', () => {
     const dateValue = '2018-01-31T00:00';
     const hoursValue = { hh_before: 1, hh_after: 2 };
 
-    searchService.addSuggestedParameter(sParams.startDateParam, [dateValue]);
+    searchService.addSuggestedParameter(sParams.hoursRangeDate, [dateValue]);
     searchService.addSuggestedParameter(sParams.hoursParam, [hoursValue]);
 
-    expect(searchService.displayParams).toEqual([sParams.startDateParam, sParams.hoursParam]);
-    expect(sParams.startDateParam.getFullDatetime()).toEqual(new Date(dateValue));
+    expect(searchService.displayParams).toEqual([sParams.hoursRangeDate, sParams.hoursParam]);
+    expect(sParams.hoursRangeDate.getFullDatetime()).toEqual(new Date(dateValue));
     expect(sParams.hoursParam.hoursBefore).toEqual(1);
     expect(sParams.hoursParam.hoursAfter).toEqual(2);
   });
 
-  it('should limit range and size on add', () => {
-    const hoursValue = { hh_before: '-100', hh_after: '100' };
-    searchService.addSuggestedParameter(sParams.hoursParam, [hoursValue]);
-    expect(sParams.hoursParam.hoursBefore).toEqual(sParams.hoursParam.minHour);
-    expect(sParams.hoursParam.hoursAfter).toEqual(sParams.hoursParam.maxHour);
-
+  it('should limit size on add', () => {
     const sizeValue = '2000';
     searchService.addSuggestedParameter(sParams.sizeParam, [sizeValue]);
     expect(sParams.sizeParam.getSelected()).toEqual([searchService.maxNumObs.toString()]);
   });
 
-  it('should limit range and size on submit', () => {
-    searchService.addSuggestedParameter(sParams.startDateParam, ['2018-01-03T12:00']);
-    searchService.addSuggestedParameter(sParams.hoursParam);
+  it('should limit size on submit', () => {
+    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-01-03T12:00']);
     searchService.addSuggestedParameter(sParams.sizeParam);
-
-    sParams.hoursParam.hoursBefore = -100;
-    sParams.hoursParam.hoursAfter = 100;
+    searchService.setSelectedRangeType('hoursRange');
     sParams.sizeParam.selected = ['2000'];
 
     searchService.getSearchModel();
-    expect(sParams.hoursParam.hoursBefore).toEqual(sParams.hoursParam.minHour);
-    expect(sParams.hoursParam.hoursAfter).toEqual(sParams.hoursParam.maxHour);
     expect(sParams.sizeParam.selected).toEqual([searchService.maxNumObs.toString()]);
   });
 
   it('should adjust datetime in model if given hours range', () => {
-    searchService.addSuggestedParameter(sParams.startDateParam, ['2018-01-03T12:00']);
+    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-01-03T12:00']);
     searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: '12', hh_after: '36' }]);
+    searchService.setSelectedRangeType('hoursRange');
 
     const model = searchService.getSearchModel();
     expect(model.from).toEqual(new Date('2018-01-03T00:00'));
@@ -200,8 +192,10 @@ describe('SearchService', () => {
   });
 
   it('should use default hours if specified', () => {
-    sParams.hoursParam.enableDefaultHours(5, 6);
-    searchService.addSuggestedParameter(sParams.startDateParam, ['2018-01-07T05:30']);
+    sParams.hoursParam.setDefaultHours(5, 6);
+    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-01-07T05:30']);
+    searchService.addSuggestedParameter(sParams.hoursParam);
+    searchService.setSelectedRangeType('hoursRange');
 
     const model = searchService.getSearchModel();
     expect(model.from).toEqual(new Date('2018-01-07T00:30'));
@@ -227,7 +221,7 @@ describe('SearchService', () => {
   it('should populate search box from url parameters', () => {
     // should be formatted differently, but for testing purposes urlService will return this back
     const params = [
-      paramValueObj(sParams.startDateParam, ['2018-01-31T00:00']),
+      paramValueObj(sParams.hoursRangeDate, ['2018-01-31T00:00']),
       paramValueObj(sParams.hoursParam, [{ hh_before: '12', hh_after: '21' }]),
       paramValueObj(sParams.networkParam, ['dnd awos']),
       paramValueObj(sParams.stationIdParam, ['123', 'abc']),
@@ -240,13 +234,13 @@ describe('SearchService', () => {
     expect(location.go).toHaveBeenCalledTimes(0);
     expect(searchService.submitSearch).toHaveBeenCalled();
     expect(searchService.displayParams).toEqual([
-      sParams.startDateParam,
+      sParams.hoursRangeDate,
       sParams.hoursParam,
       sParams.networkParam,
       sParams.stationIdParam,
       sParams.sizeParam,
     ]);
-    expect(sParams.startDateParam.datetime).toEqual(new Date('2018-01-31T00:00'));
+    expect(sParams.hoursRangeDate.datetime).toEqual(new Date('2018-01-31T00:00'));
     expect(sParams.hoursParam.hoursBefore).toEqual(12);
     expect(sParams.hoursParam.hoursAfter).toEqual(21);
     expect(sParams.networkParam.selected).toEqual(['dnd awos']);
@@ -319,25 +313,26 @@ describe('SearchService', () => {
   it('should populate bar values to form', () => {
     searchService.readOnlyBar = true;
     searchService.addSuggestedParameter(sParams.provinceParam, ['BC']);
-    searchService.addSuggestedParameter(sParams.startDateParam, ['2018-01-01T00:10']);
+    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-01-01T00:10']);
     searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: 1, hh_after: 2 }]);
     searchService.openForm();
 
     expect(sParams.provinceParam.formSelected).toEqual(['BC']);
-    expect(sParams.startDateParam.formDatetime).toEqual(new Date('2018-01-01T00:10'));
+    expect(sParams.hoursRangeDate.formDatetime).toEqual(new Date('2018-01-01T00:10'));
     expect(sParams.hoursParam.formHoursBefore).toEqual(1);
     expect(sParams.hoursParam.formHoursAfter).toEqual(2);
   });
 
   it('should populate form values to bar', () => {
     sParams.sizeParam.formSelected = ['10'];
-    sParams.startDateParam.formDatetime = new Date('2018-01-30T05:00');
+    sParams.hoursRangeDate.formDatetime = new Date('2018-01-30T05:00');
     sParams.hoursParam.formHoursBefore = 10;
     sParams.hoursParam.formHoursAfter = 20;
+    searchService.setSelectedRangeType('hoursRange');
 
     searchService.submitSearchForm();
     expect(sParams.sizeParam.getSelected()).toEqual(['10']);
-    expect(sParams.startDateParam.datetime).toEqual(new Date('2018-01-30T05:00'));
+    expect(sParams.hoursRangeDate.datetime).toEqual(new Date('2018-01-30T05:00'));
     expect(sParams.hoursParam.hoursBefore).toEqual(10);
     expect(sParams.hoursParam.hoursAfter).toEqual(20);
   });
@@ -359,8 +354,13 @@ describe('SearchService', () => {
     expect(searchService.getSearchModel().elements).toEqual([stationId.searchElement, stationName.searchElement]);
   });
 
-  it('should return no taxonomies when not given network or organization parameters', () => {
-    expect(searchService.getSearchModel().taxonomy).toEqual([]);
+  it('should mark empty searches as invalid', () => {
+    expect(searchService.hasValidParameters()).toBeFalsy();
+  });
+
+  it('should mark non-empty searches as valid', () => {
+    searchService.addSuggestedParameter(sParams.organizationParam, ['msc']);
+    expect(searchService.hasValidParameters()).toBeTruthy();
   });
 
   it('should return taxonomies with matching network', () => {
@@ -377,5 +377,29 @@ describe('SearchService', () => {
     searchService.addSuggestedParameter(sParams.networkParam, ['ca', 'dnd awos']);
     searchService.addSuggestedParameter(sParams.organizationParam, ['msc']);
     expect(searchService.getSearchModel().taxonomy).toEqual([caIndex]);
+  });
+
+  it('should use datetime on submit', () => {
+    searchService.addSuggestedParameter(sParams.startDateParam, ['2018-01-01T00:00']);
+    searchService.addSuggestedParameter(sParams.endDateParam, ['2018-02-01T00:00']);
+    searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: 1, hh_after: 1 }]);
+    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-03-01T03:00']);
+    searchService.setSelectedRangeType('dateRange');
+
+    const model = searchService.getSearchModel();
+    expect(model.from).toEqual(new Date('2018-01-01T00:00'));
+    expect(model.to).toEqual(new Date('2018-02-01T00:00'));
+  });
+
+  it('should use hour ranges on submit', () => {
+    searchService.addSuggestedParameter(sParams.startDateParam, ['2018-01-01T00:00']);
+    searchService.addSuggestedParameter(sParams.endDateParam, ['2018-02-01T00:00']);
+    searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: 1, hh_after: 1 }]);
+    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-03-01T03:00']);
+    searchService.setSelectedRangeType('hoursRange');
+
+    const model = searchService.getSearchModel();
+    expect(model.from).toEqual(new Date('2018-03-01T02:00'));
+    expect(model.to).toEqual(new Date('2018-03-01T04:00'));
   });
 });
