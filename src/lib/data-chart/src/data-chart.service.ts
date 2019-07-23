@@ -111,7 +111,7 @@ export class DataChartService {
         .sort(obsUtil.compareObsTimeFromObs)) {
         for (const e of elements) {
           const foundElems = obs.dataElements.filter(elem => elem.elementID === e.id);
-          this.buildSensor(foundElems, sensor, obs, yTypes);
+          this.buildSensor(foundElems, sensor, obs, yTypes, options);
           name = this.createStationLabel(obs.metadataElements);
         }
       }
@@ -137,7 +137,7 @@ export class DataChartService {
     );
   }
 
-  private buildSensor(foundElems, sensor, obs, yTypes) {
+  private buildSensor(foundElems, sensor, obs, yTypes, options) {
     for (const e of foundElems) {
       const sensorType = this.getSensorType(e);
       const isSensor = !!e.index && e.index.name === 'sensor_index';
@@ -154,13 +154,20 @@ export class DataChartService {
         sensor[key]['isSensor'] = isSensor;
         sensor[key].push({
           x: Date.parse(obs.obsDateTime),
-          y: Number(e.value),
+          y: this.parseElementValue(e, options),
           // custom fields
           unit: e.unit || '',
           qa: obsUtil.formatQAValue(e.overallQASummary),
         });
       }
     }
+  }
+
+  private parseElementValue(element, options) {
+    const custom = options.customOptions;
+    return !!custom && custom.showOriginalValue && element.hasOwnProperty('original')
+      ? Number(element.original.value)
+      : Number(element.value);
   }
 
   private buildYAxes(chartObj: ChartObject, observations) {
@@ -249,7 +256,7 @@ export class DataChartService {
         .sort(obsUtil.compareObsTimeFromObs)
         .filter(ob => ob.identifier === station.id)) {
         const foundElems = obs.dataElements.filter(elemt => elemt.elementID === element.id);
-        this.buildSensor(foundElems, sensor, obs, yTypes);
+        this.buildSensor(foundElems, sensor, obs, yTypes, options);
       }
 
       const name = this.configService.buildFullNodeName(element.id);
