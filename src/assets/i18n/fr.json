@@ -6,6 +6,7 @@
     "MISSING_REQUIRED": "Champs de recherche obligatoires manquants",
     "UNFILLED_FIELD": "Champs ajoutés mais n'ont pas de valeur ou un format correct (remarque: des valeurs non valides auraient pu être automatiquement supprimées)",
     "NO_PARAMS": "Au moins un champ est requis pour la recherche",
+    "QUERY_MISSING": "Des champs supplémentaires sont requis pour effectuer une recherche avec ce type de requête",
     "SELECT": "Sélectionner",
     "SELECTED_ITEMS": "éléments sélectionnés",
     "CLEAR": "Effacer",
