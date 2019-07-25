@@ -14,8 +14,8 @@ describe('SearchURLService', () => {
   const dateParam = new SearchDatetime(ParameterName.FROM, false);
   const hoursParam = new SearchHoursRange(ParameterName.HOURS_RANGE, false);
   const networkParam = new SearchParameter(ParameterName.forTaxonomy.NETWORK, [], false, false);
-  const queryTypeParam = new SearchQueryType(ParameterName.QUERY_TYPE, 'exact');
-  const displayParams = [dateParam, hoursParam, networkParam, queryTypeParam];
+  const independentQueryParam = new SearchQueryType(ParameterName.QUERY_TYPE, 'exact', []);
+  const displayParams = [dateParam, hoursParam, networkParam, independentQueryParam];
 
   const shortcuts = [
     new ShortcutModel('Shortcut1', [{ name: ParameterName.forTaxonomy.NETWORK, values: ['value1'] }]),
@@ -38,7 +38,7 @@ describe('SearchURLService', () => {
   };
   const networkToSearch = { param: networkParam, value: [query.network] };
   const shortcutToSearch = { param: networkParam, value: ['value1'] };
-  const queryTypeToSearch = { param: queryTypeParam, value: ['exact'] };
+  const queryTypeToSearch = { param: independentQueryParam, value: ['exact'] };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -57,7 +57,7 @@ describe('SearchURLService', () => {
     hoursParam.hoursBefore = Number(hoursValue.hh_before);
     hoursParam.hoursAfter = Number(hoursValue.hh_after);
     networkParam.selected = networkValues;
-    queryTypeParam.checked = true;
+    independentQueryParam.checked = true;
 
     const urlParams = [
       { name: ParameterName.FROM, value: dateValue },
@@ -83,6 +83,33 @@ describe('SearchURLService', () => {
     ];
 
     expect(urlService.createUrlParams([newNetworkParam])).toEqual(urlParams);
+  });
+
+  it('should update the URI with a dependent query parameter', () => {
+    const newNetworkValues = ['ca', 'nc awos'];
+    networkParam.selected = newNetworkValues;
+
+    const dependentQueryParam = new SearchQueryType(ParameterName.QUERY_TYPE, 'exact', [networkParam]);
+    dependentQueryParam.checked = true;
+
+    const urlParams = [
+      { name: ParameterName.forTaxonomy.NETWORK, value: newNetworkValues[0] },
+      { name: ParameterName.forTaxonomy.NETWORK, value: newNetworkValues[1] },
+    ];
+
+    expect(urlService.createUrlParams([networkParam])).toEqual(urlParams);
+  });
+
+  it('should not update the URI with a dependent query parameter if its missing requirements', () => {
+    // Equivalent to the networkParam being unfilled
+    networkParam.selected.length = 0;
+
+    const dependentQueryParam = new SearchQueryType(ParameterName.QUERY_TYPE, 'exact', [networkParam]);
+    dependentQueryParam.checked = true;
+
+    const urlParams = [];
+
+    expect(urlService.createUrlParams([networkParam])).toEqual(urlParams);
   });
 
   it('create url parameter for shortcut', () => {

@@ -2,7 +2,8 @@ import { Injectable, Inject } from '@angular/core';
 import { Location } from '@angular/common';
 import { addHours, subHours } from 'date-fns';
 
-import { SearchParameter, ParameterName } from './parameters/search-parameter';
+import { SearchParameter, ParameterName, ParameterType } from './parameters/search-parameter';
+import { SearchQueryType } from './parameters/search-query-type';
 import { SearchDatetime } from './parameters/search-datetime';
 import { SearchHoursRange } from './parameters/search-hours-range';
 import { SearchTaxonomy } from './search-taxonomy';
@@ -287,7 +288,7 @@ export class SearchService {
 
   /** Determines if all the search parameters are empty */
   private isEmptySearch() {
-    return this.config.searchList.every(param => param.isUnfilled());
+    return this.availableParams.every(param => param.isUnfilled());
   }
 
   /** Checks for any missing parameters and displays a message */
@@ -299,20 +300,13 @@ export class SearchService {
 
     const emptyParams = this.findEmptyDisplayParameters().map(p => p.getDisplayName());
     const missingParams = this.findMissingRequiredParameters().map(p => p.getDisplayName());
-
+    const queryParams = this.availableParams.filter(
+      param => param.getType() === ParameterType.SEARCH_QUERY_TYPE && !param.isUnfilled()
+    ) as SearchQueryType[];
     let valid = true;
 
     this.messageService.clear();
 
-    if (emptyParams.length > 0) {
-      this.messageService.add({
-        key: 'search-messages',
-        summary: 'SEARCH_BAR.UNFILLED_FIELD',
-        data: emptyParams,
-        sticky: true,
-      });
-      valid = false;
-    }
     if (missingParams.length > 0) {
       this.messageService.add({
         key: 'search-messages',
@@ -321,8 +315,27 @@ export class SearchService {
         sticky: true,
       });
       valid = false;
-    }
-    if (this.isEmptySearch()) {
+    } else if (queryParams.length > 0) {
+      for (let param of queryParams) {
+        if (!param.hasFilledRequirements()) {
+          this.messageService.add({
+            key: 'search-messages',
+            summary: 'SEARCH_BAR.QUERY_MISSING',
+            data: param.requiredParams.map(p => p.getDisplayName()),
+            sticky: true,
+          });
+          valid = false;
+        }
+      }
+    } else if (emptyParams.length > 0) {
+      this.messageService.add({
+        key: 'search-messages',
+        summary: 'SEARCH_BAR.UNFILLED_FIELD',
+        data: emptyParams,
+        sticky: true,
+      });
+      valid = false;
+    } else if (this.isEmptySearch()) {
       this.messageService.add({
         key: 'search-messages',
         summary: 'SEARCH_BAR.NO_PARAMS',
