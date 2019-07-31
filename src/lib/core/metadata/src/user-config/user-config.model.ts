@@ -116,6 +116,11 @@ export class UserConfig {
       else if (checkElementGroupAndName('element-display', 'load-preferred-units')) {
         config.loadPreferredUnits = 'true' === element.value;
       }
+
+      // Configuring element editing
+      else if (checkElementGroupAndName('element-edit', 'element')) {
+        ElementConfig.updateConfig(config.elementConfigs, element);
+      }
     }
   }
 
@@ -136,6 +141,7 @@ export class ElementConfig {
   indexTitle: LanguageLabel;
   precision: number;
   elementDescription: LanguageLabel;
+  availableDataFlags: string[];
 
   private constructor(elementID: string) {
     this.nodeNames = [];
@@ -201,6 +207,11 @@ export class ElementConfig {
       // Configuring element description
       else if (checkElementGroupAndName('element-display', 'element-description')) {
         currentConfig.elementDescription = LanguageLabel.createLanguageLabel(element);
+      }
+
+      // Configuring editable data flags
+      else if (checkElementGroupAndName('element-edit', 'available-data-flag')) {
+        currentConfig.availableDataFlags = element.value.split(',').map(flag => flag.trim());
       }
     }
   }
