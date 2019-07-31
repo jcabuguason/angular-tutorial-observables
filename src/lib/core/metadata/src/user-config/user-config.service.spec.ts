@@ -418,6 +418,16 @@ describe('UserConfigService', () => {
     });
   });
 
+  describe('#dataFlagConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(elementDataflagConfig);
+    })
+
+    it('should return list of editable data flags for an element', () => {
+      expect(service.getElementEditableDataFlags('1.5.66.2.1.1.0')).toEqual(['2', '5'])
+    })
+  });
+
   const emptyConfig: MDInstanceDefinition = {
     dataset: 'stub',
     parent: 'stub',
@@ -1491,6 +1501,37 @@ describe('UserConfigService', () => {
         uom: '',
         language: { english: '', french: '' },
         instelements: [],
+      },
+    ],
+  };
+
+  const elementDataflagConfig: MDInstanceDefinition = {
+    dataset: 'stub',
+    parent: 'stub',
+    identificationElements: [],
+    elements: [
+      {
+        group: 'element-edit',
+        name: 'element',
+        value: '1.5.66.2.1.1.0',
+        def_id: '',
+        id: '',
+        index: '',
+        uom: '',
+        language: { english: '', french: '' },
+        instelements: [
+          {
+            group: 'element-edit',
+            name: 'available-data-flag',
+            value: '2,5',
+            def_id: '',
+            id: '',
+            index: '',
+            uom: '',
+            language: { english: '', french: '' },
+            instelements: [],
+          },
+        ],
       },
     ],
   };

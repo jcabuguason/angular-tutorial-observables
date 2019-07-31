@@ -182,6 +182,13 @@ export class UserConfigService {
     }
   }
 
+  getElementEditableDataFlags(elementID: string): string[] {
+    return this.userConfig.elementConfigs
+      .filter(config => config.elementID === elementID)
+      .map(config => config.availableDataFlags)
+      .shift();
+  }
+
   getDescription(elementID: string, nodeIndex: number = this.getNestingDepth(elementID)): string {
     return this.getElementDescription(elementID, nodeIndex) || this.getNodeDescription(elementID, nodeIndex);
   }
@@ -265,9 +272,9 @@ export class UserConfigService {
 
     return headerConfig.displaySubHeader
       ? this.range(headerConfig.subHeaderStart, headerConfig.subHeaderEnd)
-          .map(nodeIndex => this.getNodeName(elementID, nodeIndex))
-          .filter(nodeValue => nodeValue !== '')
-          .join(', ')
+        .map(nodeIndex => this.getNodeName(elementID, nodeIndex))
+        .filter(nodeValue => nodeValue !== '')
+        .join(', ')
       : '';
   }
 
@@ -314,10 +321,10 @@ export class UserConfigService {
   getByElementName(elementID: string, nodeIndex: number = this.getNestingDepth(elementID)): string {
     return nodeIndex === this.getNestingDepth(elementID)
       ? this.userConfig.elementConfigs
-          .filter(config => config.elementID === elementID)
-          .map(config => config.elementName)
-          .map(elementName => elementName.getName())
-          .shift()
+        .filter(config => config.elementID === elementID)
+        .map(config => config.elementName)
+        .map(elementName => elementName.getName())
+        .shift()
       : '';
   }
 
