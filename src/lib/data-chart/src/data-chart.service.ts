@@ -11,7 +11,6 @@ import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 
 import { UnitCodeConversionService } from 'msc-dms-commons-angular/core/obs-util';
 import { TranslateService } from '@ngx-translate/core';
-import { DataChartOptions } from './model/options.model';
 
 @Injectable()
 export class DataChartService {
@@ -268,10 +267,9 @@ export class DataChartService {
 
   getSensorType(e) {
     if (e.indexValue === 0) {
-      return this.translate.instant('GRID.OFFICIAL');
+      return this.translate.instant('OBS.OFFICIAL');
     } else if (e.indexValue > 0) {
-      const label = this.translate.instant(`GRID.${e.index.name.toUpperCase()}_LABEL`);
-      return `${label} ${e.indexValue}`;
+      return `${this.translate.instant(obsUtil.getIndexLabelTranslationKey(e))} ${e.indexValue}`;
     } else {
       return '';
     }

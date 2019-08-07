@@ -1,4 +1,5 @@
 import { getTime } from 'date-fns';
+import { DataElements } from './dms-observation.model';
 
 export function findMetadataValue(obs, name) {
   return obs.metadataElements.filter(md => md.name === name).map(md => md.value)[0];
@@ -132,9 +133,9 @@ export function formatElementToColumn(elementID: string): string {
 export function formatElementID(elementID: string): string {
   return !!elementID
     ? elementID
-        .replace('e_', '')
-        .split('_')
-        .join('.')
+      .replace('e_', '')
+      .split('_')
+      .join('.')
     : '';
 }
 
@@ -144,4 +145,21 @@ export function formatDateToISO(date: string): string {
 
 export function formatDateRemoveSeconds(date: string): string {
   return !!date ? date.replace(':00.000Z', '') : '';
+}
+
+export function getIndexLabelTranslationKey(element: DataElements): string {
+  let label: string;
+  switch (element.index.name) {
+    case 'sensor_index': /* falls through */
+    case 'cloud_layer_index': /* falls through */
+    case 'observed_weather_index': {
+      label = `${element.index.name.toUpperCase()}_LABEL`;
+      break;
+    }
+    default: {
+      label = 'SENSOR_INDEX_LABEL';
+      break;
+    }
+  }
+  return `OBS.${label}`;
 }
