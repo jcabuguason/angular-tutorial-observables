@@ -18,12 +18,6 @@
     "HOURS_AFTER": "Hours After"
   },
   "GRID": {
-    "LAYER": "Layer",
-    "DEFAULT": "Default",
-    "OFFICIAL": "Official",
-    "SENSOR_INDEX_LABEL": "Sensor",
-    "CLOUD_LAYER_INDEX_LABEL": "Layer",
-    "OBSERVED_WEATHER_INDEX_LABEL": "Type",
     "VALUE": "Value",
     "UNIT": "Unit",
     "QA_SUMMARY": "QA Summary",
@@ -181,5 +175,13 @@
     "ACCEPTED": "Accepted / Passed",
     "NO_QA_TEST": "Qa test(s) not performed",
     "NO_OPTIMIZED_RANGE_TEST": "Optimized range test not performed"
+  },
+  "OBS": {
+    "LAYER": "Layer",
+    "DEFAULT": "Default",
+    "OFFICIAL": "Official",
+    "SENSOR_INDEX_LABEL": "Sensor",
+    "CLOUD_LAYER_INDEX_LABEL": "Layer",
+    "OBSERVED_WEATHER_INDEX_LABEL": "Type"
   }
 }

@@ -82,11 +82,11 @@ describe('UserConfigService', () => {
     });
 
     it('should return the default official title', () => {
-      expect(service.getElementOfficialIndexTitle('1.19.6.0.66.0.0')).toBe('GRID.OFFICIAL');
+      expect(service.getElementOfficialIndexTitle('1.19.6.0.66.0.0')).toBe('OBS.OFFICIAL');
     });
 
     it('should return the default layer title', () => {
-      expect(service.getElementIndexTitle('1.19.6.0.66.0.0')).toBe('GRID.LAYER');
+      expect(service.getElementIndexTitle('1.19.6.0.66.0.0')).toBe('OBS.LAYER');
     });
 
     it('should return an undefined instead of an element description', () => {

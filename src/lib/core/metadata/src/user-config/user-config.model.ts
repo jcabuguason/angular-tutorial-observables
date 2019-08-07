@@ -125,7 +125,7 @@ export class UserConfig {
   }
 
   instant(key) {
-    return LanguageService.translator.instant(`GRID.${key}`);
+    return LanguageService.translator.instant(`OBS.${key}`);
   }
 }
 

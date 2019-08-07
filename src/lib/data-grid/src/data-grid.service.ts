@@ -458,7 +458,9 @@ export class DataGridService implements OnDestroy {
     // Generate layer children if needed
     let columnToAdd;
     if (element.indexValue !== undefined) {
-      const headerName = element.indexValue ? `${this.getIndexLabel(element)} ${element.indexValue}` : officialTitle;
+      const headerName = element.indexValue 
+        ? `${this.translate.instant(obsUtil.getIndexLabelTranslationKey(element))} ${element.indexValue}` 
+        : officialTitle;
       columnToAdd = this.columnBoilerplate(workingNode, headerName);
       if (workingNode.children === undefined) {
         workingNode.children = [];
@@ -483,23 +485,6 @@ export class DataGridService implements OnDestroy {
 
     this.columnConfiguration.createElementHeader(columnToAdd, headerID);
     this.columnsGenerated.push(headerID);
-  }
-
-  private getIndexLabel(element: DataElements): string {
-    let label: string;
-    switch (element.index.name) {
-      case 'sensor_index': /* falls through */
-      case 'cloud_layer_index': /* falls through */
-      case 'observed_weather_index': {
-        label = `${element.index.name.toUpperCase()}_LABEL`;
-        break;
-      }
-      default: {
-        label = 'SENSOR_INDEX_LABEL';
-        break;
-      }
-    }
-    return this.translate.instant(`GRID.${label}`);
   }
 
   private buildMetadataColumn(element, headerID) {
