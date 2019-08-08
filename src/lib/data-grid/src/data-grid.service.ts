@@ -359,7 +359,13 @@ export class DataGridService implements OnDestroy {
   }
 
   // Get the child node, or create it if it doesn't exist
-  private getChildNode(currentNodes: any[], headerName: string, nodeNumber: string, elementID: string) {
+  private getChildNode(
+    currentNodes: any[],
+    headerName: string,
+    nodeNumber: string,
+    elementID: string,
+    isMaxDepth?: boolean
+  ) {
     const possibleMatches = currentNodes.filter(node => node.nodeNumber === nodeNumber);
 
     // workaround - we need to re-evaluate the elementID checking here:
@@ -368,9 +374,11 @@ export class DataGridService implements OnDestroy {
       return elementMatch;
     }
     // requires setting the ID to bottom-level columns to undefined if they become parents
-    const parentMatch = possibleMatches.find(node => node.elementID == null);
-    if (parentMatch != null) {
-      return parentMatch;
+    if (!isMaxDepth) {
+      const parentMatch = possibleMatches.find(node => node.elementID == null);
+      if (parentMatch != null) {
+        return parentMatch;
+      }
     }
 
     const newNode: object = {
@@ -398,6 +406,7 @@ export class DataGridService implements OnDestroy {
   private makeDefaultColumn(node) {
     const columnToAdd = this.columnBoilerplate(node, this.userConfigService.getDefaultTag());
     node.children.unshift(columnToAdd);
+    node.elementID = undefined;
     return columnToAdd;
   }
 
@@ -427,7 +436,7 @@ export class DataGridService implements OnDestroy {
         break;
       }
 
-      workingNode = this.getChildNode(currentNodes, headerName, nodes[nodeIndex], elementID);
+      workingNode = this.getChildNode(currentNodes, headerName, nodes[nodeIndex], elementID, i === nestingDepth);
 
       if (workingNode.headerTooltip == null) {
         workingNode.headerTooltip = this.userConfigService.getDescription(elementID, i);
@@ -458,8 +467,8 @@ export class DataGridService implements OnDestroy {
     // Generate layer children if needed
     let columnToAdd;
     if (element.indexValue !== undefined) {
-      const headerName = element.indexValue 
-        ? `${this.translate.instant(obsUtil.getIndexLabelTranslationKey(element))} ${element.indexValue}` 
+      const headerName = element.indexValue
+        ? `${this.translate.instant(obsUtil.getIndexLabelTranslationKey(element))} ${element.indexValue}`
         : officialTitle;
       columnToAdd = this.columnBoilerplate(workingNode, headerName);
       if (workingNode.children === undefined) {
