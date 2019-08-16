@@ -431,12 +431,13 @@ export class DataGridService implements OnDestroy {
       const headerName = this.userConfigService.getFormattedNodeName(elementID, i);
       const nodeIndex = i - 1;
 
-      // End processing if no header field is found
-      if (!headerName) {
+      // When we reach a "0" node, try to use the previous working node if it exists
+      // Otherwise create a new child node for the new header
+      if (!headerName && workingNode == null) {
         break;
+      } else if (!!headerName) {
+        workingNode = this.getChildNode(currentNodes, headerName, nodes[nodeIndex], elementID, i === nestingDepth);
       }
-
-      workingNode = this.getChildNode(currentNodes, headerName, nodes[nodeIndex], elementID, i === nestingDepth);
 
       if (workingNode.headerTooltip == null) {
         workingNode.headerTooltip = this.userConfigService.getDescription(elementID, i);
