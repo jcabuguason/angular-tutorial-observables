@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { SearchService } from './search.service';
-import { ParameterType, SearchParameter, ParameterName } from './parameters/search-parameter';
+import { ParameterType, SearchParameter } from './parameters/search-parameter';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
@@ -21,12 +21,14 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   expandButtonIcon = this.expandIcon;
   expandOnClick = true;
   containerHeight = this.defaultContainerHeight;
+  reloadBarParams = true;
 
   paramType = ParameterType;
   defaultDate = new Date();
   calendarLocale;
   message;
   multiSelectDefaultLabel = '';
+  multiSelectSelectedItemsLabel = '';
 
   private weekdays = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
   private months = [
@@ -52,18 +54,21 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   ) {
     // this is used to set the time to 00:00 when the calendar/time pops up
     this.defaultDate.setHours(0, 0);
-    // use labels in current language in case nothing has been emitted by translate.onLangChange before they get created
-    this.adjustCalendar();
-    this.adjustMultiSelectDefaultLabel();
-
-    translate.onLangChange.subscribe(evt => {
-      this.adjustMultiSelectDefaultLabel();
-      this.adjustMultiSelectChoices();
-      this.adjustCalendar();
-    });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // use labels in current language in case nothing has been emitted by translate.onLangChange before they get created
+    this.adjustCalendar();
+    this.adjustMultiSelectLabels();
+    this.reload();
+
+    this.translate.onLangChange.subscribe(evt => {
+      this.adjustMultiSelectLabels();
+      this.adjustMultiSelectChoices();
+      this.adjustCalendar();
+      this.reload();
+    });
+  }
 
   ngAfterViewChecked(): void {
     this.checkOverflow();
@@ -119,6 +124,13 @@ export class SearchComponent implements OnInit, AfterViewChecked {
     this.searchService.setSelectedRangeType(event.value.value);
   }
 
+  multiSelectOnChange(event) {
+    // prevents "Loading" value from being selected
+    if (event.itemValue === "SEARCH_BAR.LOADING") {
+      event.value.pop();
+    }
+  }
+
   private adjustCalendar() {
     const weekdaysShort = this.instantArray('DATES', this.weekdays.map(day => `${day}_SHORT`));
     this.calendarLocale = {
@@ -133,9 +145,16 @@ export class SearchComponent implements OnInit, AfterViewChecked {
     };
   }
 
-  private adjustMultiSelectDefaultLabel() {
+  private adjustMultiSelectLabels() {
     this.multiSelectDefaultLabel = this.translate.instant('SEARCH_BAR.SELECT');
+    this.multiSelectSelectedItemsLabel = this.translate.instant('SEARCH_BAR.SELECTED_ITEMS');
   }
 
   private instantArray = (header, keys) => keys.map(key => this.translate.instant(`${header}.${key}`));
+
+  // Need to reload for multiSelectSelectedItemsLabel to update properly  
+  private reload(): void {
+    this.reloadBarParams = false;
+    setTimeout(() => this.reloadBarParams = true, 1);
+  }
 }

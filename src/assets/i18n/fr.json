@@ -15,7 +15,8 @@
     "ASOLUTE_DATE_PICKER_LABEL": "Plage de dates Absolue",
     "RELATIVE_DATE_PICKER_LABEL": "Plage de dates Relative",
     "HOURS_BEFORE": "Heures avant",
-    "HOURS_AFTER": "Hours après"
+    "HOURS_AFTER": "Hours après",
+    "LOADING": "Chargement..."
   },
   "GRID": {
     "VALUE": "Valeur",

@@ -32,6 +32,7 @@ import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-transla
 import { CombinedHttpLoader } from 'msc-dms-commons-angular/shared/language';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('SearchComponent', () => {
   let searchComponent: SearchComponent;
@@ -59,6 +60,7 @@ describe('SearchComponent', () => {
         SpinnerModule,
         SelectButtonModule,
         HttpClientTestingModule,
+        RouterTestingModule,
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
@@ -74,7 +76,6 @@ describe('SearchComponent', () => {
         SearchService,
         MessageService,
         { provide: SEARCH_BOX_CONFIG, useValue: { searchList: [] } },
-        { provide: Location, useValue: { go: () => {} } },
         { provide: SearchURLService, useClass: MockUrlService },
       ],
     })

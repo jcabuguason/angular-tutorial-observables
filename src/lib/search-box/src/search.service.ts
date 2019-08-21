@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { Location } from '@angular/common';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { addHours, subHours } from 'date-fns';
 
 import { SearchParameter, ParameterName, ParameterType } from './parameters/search-parameter';
@@ -31,6 +31,7 @@ export class SearchService {
   suggestedParams: SearchParameter[] = [];
   // Serves as the announcer of new search requests
   searchRequested = new Subject<SearchModel>();
+  searchConfigUpdated = new Subject<SearchBoxConfig>();
   // Maximum number of obs to return for a taxonomy
   maxNumObs = 1500;
   defaultNumObs = 300;
@@ -56,10 +57,18 @@ export class SearchService {
   constructor(
     @Inject(SEARCH_BOX_CONFIG)
     public config: SearchBoxConfig,
-    public location: Location,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private messageService: MessageService,
     private urlService: SearchURLService
   ) {
+    this.updateConfig(config);
+  }
+
+  updateConfig(config: SearchBoxConfig) {
+    this.removeAllDisplayParameters();
+
+    this.config = config;
     this.taxonomies = this.config.taxonomies;
     this.availableParams = this.config.searchList;
     this.suggestedParams = this.availableParams;
@@ -77,6 +86,8 @@ export class SearchService {
     );
     this.useDateAndHoursRange = !!this.hoursRangeParams.length && !!this.dateRangeParams.length;
     this.setSelectedRangeType('hoursRange');
+
+    this.searchConfigUpdated.next(config);
   }
 
   /** Executes parameters for a search request */
@@ -88,15 +99,21 @@ export class SearchService {
 
   /** Re-directs to url with search parameters */
   updateUrl(clearUrl = false) {
-    if (clearUrl) {
-      this.location.go('/');
-    } else {
-      const urlParams = new URLSearchParams();
+    const urlParams: Params = {};
+    if (!clearUrl) {
       this.urlService
         .createUrlParams(this.displayParams, this.shortcutSelected)
-        .forEach(p => urlParams.append(p.name, p.value));
-      this.location.go('/?' + urlParams.toString().replace(/\+/gi, ' '));
+        .forEach(param =>
+          urlParams.hasOwnProperty(param.name)
+            ? urlParams[param.name].push(param.value)
+            : (urlParams[param.name] = [param.value])
+        );
     }
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: urlParams,
+    });
   }
 
   /** Add and display parameter with value if it exists */
@@ -175,7 +192,7 @@ export class SearchService {
       elements.push(new SearchElement(elementID, 'metadataElements', 'value', value));
 
     this.displayParams.forEach(p => {
-      const selected = p.getSelected();
+      const selected = p.getSelectedModels().map(model => model.value);
       const addStationToElements = (station, stdPkgId = null) => {
         const adjusted = this.adjustWildcard(station);
         const id = stdPkgId || this.determineStdPkgId(adjusted);
@@ -281,7 +298,7 @@ export class SearchService {
   }
 
   /** Find added parameters but are not filled in */
-  private findEmptyDisplayParameters(): SearchParameter[] {
+  findEmptyDisplayParameters(): SearchParameter[] {
     this.displayParams.forEach(p => p.removeInvalidValues());
     return this.displayParams.filter(p => p.isUnfilled());
   }
