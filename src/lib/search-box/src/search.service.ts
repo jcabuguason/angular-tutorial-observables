@@ -282,6 +282,8 @@ export class SearchService {
     this.formRangeParams = type === 'hoursRange' ? this.hoursRangeParams : this.dateRangeParams;
   }
 
+  onParameterValueChange(parameter: SearchParameter, newValue: any) { }
+
   /** Determines the std-pkg-id depending on the station entered (defaults to MSC_ID) */
   private determineStdPkgId(stationID: string) {
     const stationType = SearchableElement.STATION_TYPE;
