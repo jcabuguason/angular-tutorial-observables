@@ -1,4 +1,4 @@
-import { ChoiceModel } from '../model/choice.model';
+import { ChoiceModel, LOADING_MODEL } from '../model/choice.model';
 
 export enum ParameterType {
   SEARCH_PARAMETER,
@@ -71,6 +71,15 @@ export class SearchParameter {
 
   includesChoice(choice): boolean {
     return this.findChoice(this.choices, choice) != null;
+  }
+
+  updateChoices(choices) {
+    this.choices = choices;
+    this.multiSelectChoices = this.choices
+      .map(choice => choice.label)
+      .sort()
+      .map(choiceLabel => ({ label: choiceLabel, value: choiceLabel }));
+    this.choicesWithEmpty = [{ label: '-', value: '' }, ...this.multiSelectChoices];
   }
 
   isRestricted(): boolean {
@@ -198,6 +207,10 @@ export class SearchParameter {
   hasChoiceIcon(value: string): boolean {
     const choice = this.findChoice(this.choices, value);
     return choice != null && choice.icon != null;
+  }
+
+  isLoadingChoices(): boolean {
+    return this.choices.includes(LOADING_MODEL);
   }
 
   /** For functions that accept both string value and ChoiceModel */

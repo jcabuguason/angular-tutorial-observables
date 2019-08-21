@@ -1,5 +1,9 @@
 <div class="search-component">
-  <div class="search-container" tabindex="0" (keyup.enter)="searchService.submitSearch()">
+  <div
+    class="search-container"
+    tabindex="0"
+    (keyup.enter)="searchService.submitSearch()"
+  >
     <div class="bar-buttons">
       <button
         pButton
@@ -27,14 +31,20 @@
     >
       <i [ngClass]="{ 'bar-icon fa fa-bars': searchService.readOnlyBar }"></i>
       <!-- search parameters in bar -->
-      <div class="all-selected-parameters">
+      <div
+        class="all-selected-parameters"
+        *ngIf="reloadBarParams"
+      >
         <div
           *ngFor="let p of searchService.displayParams; index as i"
           class="selected-parameter"
           [ngClass]="{ 'disabled-parameter': searchService.readOnlyBar }"
         >
           <!-- editable search parameters -->
-          <div class="ui-inputgroup" *ngIf="p.getType() === paramType.SEARCH_PARAMETER">
+          <div
+            class="ui-inputgroup"
+            *ngIf="p.getType() === paramType.SEARCH_PARAMETER"
+          >
             <span class="ui-inputgroup-addon">{{ p.getDisplayName() | translate }}</span>
 
             <ng-container *ngIf="p.getType() === paramType.SEARCH_PARAMETER">
@@ -62,17 +72,21 @@
                   [disabled]="searchService.readOnlyBar"
                 >
                   <ng-container *ngIf="searchService.readOnlyBar">
-                    <ng-template let-choice pTemplate="item">
-                      <span *ngIf="p.hasChoiceIcon(choice)" title="{{ p.getChoiceIconTooltip(choice) | translate }}"
-                        ><i class="{{ p.getChoiceFaIcon(choice) }}"></i
-                      ></span>
+                    <ng-template
+                      let-choice
+                      pTemplate="item"
+                    >
+                      <span
+                        *ngIf="p.hasChoiceIcon(choice)"
+                        title="{{ p.getChoiceIconTooltip(choice) | translate }}"
+                      ><i class="{{ p.getChoiceFaIcon(choice) }}"></i></span>
                       <span title="{{ p.getChoiceTooltip(choice) | translate }}"> {{ choice | translate }}</span>
                     </ng-template>
                   </ng-container>
                 </p-chips>
 
                 <button
-                  *ngIf="!searchService.readOnlyBar"
+                  *ngIf="!searchService.readOnlyBar && !p.isRequired()"
                   pButton
                   type="button"
                   icon="pi pi-times"
@@ -93,67 +107,72 @@
                   [autoDisplayFirst]="false"
                   appendTo="body"
                 >
-                  <ng-template let-choice pTemplate="selectedItem">
-                    <span *ngIf="p.hasChoiceIcon(choice)" title="{{ p.getChoiceIconTooltip(choice) | translate }}"
-                      ><i class="{{ p.getChoiceFaIcon(choice) }}"></i
-                    ></span>
+                  <ng-template
+                    let-choice
+                    pTemplate="selectedItem"
+                  >
+                    <span
+                      *ngIf="p.hasChoiceIcon(choice)"
+                      title="{{ p.getChoiceIconTooltip(choice) | translate }}"
+                    ><i class="{{ p.getChoiceFaIcon(choice) }}"></i></span>
                     <span title="{{ p.getChoiceTooltip(choice.value) | translate }}">
-                      {{ choice.value | translate }}</span
-                    >
+                      {{ choice.value | translate }}</span>
                   </ng-template>
-                  <ng-template let-choice pTemplate="item">
-                    <span *ngIf="p.hasChoiceIcon(choice)" title="{{ p.getChoiceIconTooltip(choice) | translate }}"
-                      ><i class="{{ p.getChoiceFaIcon(choice) }}"></i
-                    ></span>
+                  <ng-template
+                    let-choice
+                    pTemplate="item"
+                  >
+                    <span
+                      *ngIf="p.hasChoiceIcon(choice)"
+                      title="{{ p.getChoiceIconTooltip(choice) | translate }}"
+                    ><i class="{{ p.getChoiceFaIcon(choice) }}"></i></span>
                     <span title="{{ p.getChoiceTooltip(choice.value) | translate }}">
-                      {{ choice.value | translate }}</span
-                    >
+                      {{ choice.value | translate }}</span>
                   </ng-template>
                 </p-dropdown>
 
-                <p-autoComplete
+                <p-multiSelect
                   *ngIf="p.getTimesUsable() > 1"
                   [styleClass]="'search-bar multiple'"
                   [(ngModel)]="p.selected"
-                  [suggestions]="p.filteredSuggestions"
-                  (completeMethod)="createSuggestions($event, p)"
-                  [minLength]="1"
-                  [dropdown]="true"
-                  size="15"
-                  [forceSelection]="p.isRestricted()"
-                  placeholder="{{ p.getPlaceholder() }}"
-                  [multiple]="true"
+                  [options]="p.multiSelectChoices"
+                  [defaultLabel]="multiSelectDefaultLabel"
+                  [resetFilterOnHide]="true"
+                  [showToggleAll]="false"
+                  (onChange)="multiSelectOnChange($event)"
+                  maxSelectedLabels="1"
+                  selectedItemsLabel="{0} {{ multiSelectSelectedItemsLabel }}"
                   appendTo="body"
                 >
-                  <ng-template let-choices pTemplate="selectedItem">
-                    <span *ngIf="p.hasChoiceIcon(choices)" title="{{ p.getChoiceIconTooltip(choices) | translate }}"
-                      ><i class="{{ p.getChoiceFaIcon(choices) }}"></i
-                    ></span>
-                    <span title="{{ p.getChoiceTooltip(choices) | translate }}" style="margin-right: 2em;">
-                      {{ choices | translate }}</span
-                    >
+                  <ng-template
+                    let-choices
+                    pTemplate="item"
+                  >
+                    <span
+                      *ngIf="p.hasChoiceIcon(choices.value)"
+                      title="{{ p.getChoiceIconTooltip(choices.value) | translate }}"
+                    ><i class="{{ p.getChoiceFaIcon(choices.value) }}"></i></span>
+                    <span title="{{ p.getChoiceTooltip(choices.value) | translate }}">
+                      {{ choices.value | translate }}</span>
                   </ng-template>
-                  <ng-template let-choices pTemplate="item">
-                    <span *ngIf="p.hasChoiceIcon(choices)" title="{{ p.getChoiceIconTooltip(choices) | translate }}"
-                      ><i class="{{ p.getChoiceFaIcon(choices) }}"></i
-                    ></span>
-                    <span title="{{ p.getChoiceTooltip(choices) | translate }}"> {{ choices | translate }}</span>
-                  </ng-template>
-                </p-autoComplete>
+                </p-multiSelect>
 
                 <button
+                  *ngIf="!searchService.readOnlyBar && !p.isRequired()"
                   pButton
                   type="button"
                   icon="pi pi-times"
-                  class="ui-button-danger beside-autocomplete"
-                  [class.beside-autocomplete]="p.getTimesUsable() > 1"
+                  class="ui-button-danger"
                   (click)="searchService.removeDisplayParameter(p); checkOverflow()"
                 ></button>
               </ng-template>
             </ng-container>
           </div>
 
-          <div class="ui-inputgroup" *ngIf="p.getType() !== paramType.SEARCH_PARAMETER">
+          <div
+            class="ui-inputgroup"
+            *ngIf="p.getType() !== paramType.SEARCH_PARAMETER"
+          >
             <span class="ui-inputgroup-addon">{{ p.getDisplayName() | translate }}</span>
 
             <ng-container *ngIf="p.getType() === paramType.SEARCH_HOURS_RANGE">
@@ -189,7 +208,7 @@
             </ng-container>
 
             <button
-              *ngIf="!searchService.readOnlyBar"
+              *ngIf="!searchService.readOnlyBar && !p.isRequired()"
               pButton
               type="button"
               icon="pi pi-times"
@@ -204,7 +223,10 @@
 
   <!-- suggestions/categories that show up-->
   <ng-container *ngIf="!searchService.readOnlyBar">
-    <div class="search-parameter-suggestions" *ngFor="let suggestion of searchService.suggestedParams">
+    <div
+      class="search-parameter-suggestions"
+      *ngFor="let suggestion of searchService.suggestedParams"
+    >
       <button
         pButton
         type="button"
@@ -243,7 +265,11 @@
     <ng-container *ngIf="p.getType() === paramType.SEARCH_QUERY_TYPE">
       <!-- for checkbox, use the label property so it's displayed right next to the checkbox -->
       <div>
-        <p-checkbox [(ngModel)]="p.formChecked" binary="true" label="{{ p.getDisplayName() | translate }}"></p-checkbox>
+        <p-checkbox
+          [(ngModel)]="p.formChecked"
+          binary="true"
+          label="{{ p.getDisplayName() | translate }}"
+        ></p-checkbox>
       </div>
     </ng-container>
 
@@ -283,17 +309,28 @@
           [resetFilterOnHide]="true"
           appendTo="body"
         >
-          <ng-template let-choice pTemplate="selectedItem">
-            <span *ngIf="p.hasChoiceIcon(choice)" title="{{ p.getChoiceIconTooltip(choice) | translate }}"
-              ><i class="{{ p.getChoiceFaIcon(choice) }}"></i
-            ></span>
+          <ng-template
+            let-choice
+            pTemplate="selectedItem"
+          >
+            <span
+              *ngIf="p.hasChoiceIcon(choice)"
+              title="{{ p.getChoiceIconTooltip(choice) | translate }}"
+            ><i class="{{ p.getChoiceFaIcon(choice) }}"></i></span>
             <span title="{{ p.getChoiceTooltip(choice.value) | translate }}"> {{ choice.value | translate }}</span>
           </ng-template>
-          <ng-template let-choice pTemplate="item">
-            <span *ngIf="p.hasChoiceIcon(choice)" title="{{ p.getChoiceIconTooltip(choice) | translate }}"
-              ><i class="{{ p.getChoiceFaIcon(choice) }}"></i
-            ></span>
-            <span *ngIf="!!choice.value; else emptyValue" title="{{ p.getChoiceTooltip(choice.value) | translate }}">
+          <ng-template
+            let-choice
+            pTemplate="item"
+          >
+            <span
+              *ngIf="p.hasChoiceIcon(choice)"
+              title="{{ p.getChoiceIconTooltip(choice) | translate }}"
+            ><i class="{{ p.getChoiceFaIcon(choice) }}"></i></span>
+            <span
+              *ngIf="!!choice.value; else emptyValue"
+              title="{{ p.getChoiceTooltip(choice.value) | translate }}"
+            >
               {{ choice.value | translate }}
             </span>
             <ng-template #emptyValue>-</ng-template>
@@ -306,14 +343,19 @@
           [defaultLabel]="multiSelectDefaultLabel"
           [resetFilterOnHide]="true"
           [(ngModel)]="p.formSelected"
+          (onChange)="multiSelectOnChange($event)"
           maxSelectedLabels="1"
-          selectedItemsLabel="{0} {{ 'SEARCH_BAR.SELECTED_ITEMS' | translate }}"
+          selectedItemsLabel="{0} {{ multiSelectSelectedItemsLabel }}"
           appendTo="body"
         >
-          <ng-template let-choices pTemplate="item">
-            <span *ngIf="p.hasChoiceIcon(choices.value)" title="{{ p.getChoiceIconTooltip(choices.value) | translate }}"
-              ><i class="{{ p.getChoiceFaIcon(choices.value) }}"></i
-            ></span>
+          <ng-template
+            let-choices
+            pTemplate="item"
+          >
+            <span
+              *ngIf="p.hasChoiceIcon(choices.value)"
+              title="{{ p.getChoiceIconTooltip(choices.value) | translate }}"
+            ><i class="{{ p.getChoiceFaIcon(choices.value) }}"></i></span>
             <span title="{{ p.getChoiceTooltip(choices.value) | translate }}"> {{ choices.value | translate }}</span>
           </ng-template>
         </p-multiSelect>
@@ -327,7 +369,10 @@
   </div>
 
   <!-- datetime and ranges -->
-  <div *ngIf="searchService.useDateAndHoursRange" class="date-range-toggle">
+  <div
+    *ngIf="searchService.useDateAndHoursRange"
+    class="date-range-toggle"
+  >
     <div>{{ 'SEARCH_BAR.SELECT_DATE_PICKER' | translate }}</div>
     <p-selectButton
       [options]="searchService.rangeTypes"
@@ -380,10 +425,19 @@
 </div>
 
 <ng-template #toastMessages>
-  <p-toast key="search-messages" position="center">
-    <ng-template let-message pTemplate="message">
+  <p-toast
+    key="search-messages"
+    position="center"
+  >
+    <ng-template
+      let-message
+      pTemplate="message"
+    >
       <div>
-        <i class="pi pi-exclamation-triangle" style="font-size: 3em"></i>
+        <i
+          class="pi pi-exclamation-triangle"
+          style="font-size: 3em"
+        ></i>
         <p>{{ message.summary | translate }}</p>
         <ul>
           <li *ngFor="let field of message.data">{{ field | translate }}</li>
@@ -393,20 +447,36 @@
   </p-toast>
 </ng-template>
 
-<ng-template #hoursRangeParam let-p="param">
+<ng-template
+  #hoursRangeParam
+  let-p="param"
+>
   <ng-container *ngIf="p.getType() === paramType.SEARCH_HOURS_RANGE">
     <div>
       <div>{{ 'SEARCH_BAR.HOURS_BEFORE' | translate }}</div>
-      <p-spinner size="7" placeholder="hrs before" [(ngModel)]="p.formHoursBefore" [min]="0"></p-spinner>
+      <p-spinner
+        size="7"
+        placeholder="hrs before"
+        [(ngModel)]="p.formHoursBefore"
+        [min]="0"
+      ></p-spinner>
     </div>
     <div>
       <div>{{ 'SEARCH_BAR.HOURS_AFTER' | translate }}</div>
-      <p-spinner size="7" placeholder="hrs after" [(ngModel)]="p.formHoursAfter" [min]="0"></p-spinner>
+      <p-spinner
+        size="7"
+        placeholder="hrs after"
+        [(ngModel)]="p.formHoursAfter"
+        [min]="0"
+      ></p-spinner>
     </div>
   </ng-container>
 </ng-template>
 
-<ng-template #datetimeParam let-p="param">
+<ng-template
+  #datetimeParam
+  let-p="param"
+>
   <ng-container *ngIf="p.getType() === paramType.SEARCH_DATETIME">
     <div>{{ p.getDisplayName() | translate }}</div>
     <p-calendar

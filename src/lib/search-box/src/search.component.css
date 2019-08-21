@@ -78,13 +78,8 @@
   min-width: auto;
 }
 
-/* dropdown button gets covered by delete button without this */
 ::ng-deep .ui-autocomplete .ui-autocomplete-dropdown {
-  position: absolute;
-}
-
-.ui-button.beside-autocomplete {
-  margin: 0 0 0 29px;
+  height: 29px
 }
 
 ::ng-deep .selected-parameter .ui-autocomplete-multiple-container .ui-autocomplete-input-token input {
@@ -97,6 +92,7 @@
 .ui-inputgroup {
   font-family: 'Roboto', 'Trebuchet MS', Arial, Helvetica, sans-serif;
   font-size: 15px;
+  height: 29px;
 }
 
 /* form */
@@ -127,6 +123,7 @@
 
 ::ng-deep .ui-multiselect {
   min-width: 190px;
+  height: 29px;
 }
 
 :host ::ng-deep .ui-toast-message {

@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Location } from '@angular/common';
-
+import { RouterTestingModule } from '@angular/router/testing';
 import { SearchService } from './search.service';
 import { SearchURLService } from './search-url.service';
 
@@ -17,7 +16,6 @@ import { MessageService } from 'primeng/components/common/messageservice';
 
 describe('SearchService', () => {
   let searchService: SearchService;
-  let location: Location;
 
   const nameValueObj = (name, value) => ({ name: name, value: value });
   const paramValueObj = (param, value) => ({ param: param, value: value });
@@ -55,6 +53,7 @@ describe('SearchService', () => {
       return qParams;
     }
   }
+  class EmptyComponent { }
 
   beforeEach(() => {
     const organization: ChoiceModel[] = choiceModels(['msc', 'dnd'].sort());
@@ -87,18 +86,19 @@ describe('SearchService', () => {
       shortcuts: [new ShortcutModel('Shortcut1', [{ name: ParameterName.forTaxonomy.NETWORK, values: ['ca', 'ra'] }])],
     };
 
+    const routes = [{ path: '', component: EmptyComponent }];
+
     TestBed.configureTestingModule({
+      imports: [RouterTestingModule.withRoutes(routes)],
       providers: [
         SearchService,
         MessageService,
-        { provide: Location, useValue: { go: () => {} } },
         { provide: SEARCH_BOX_CONFIG, useValue: config },
         { provide: SearchURLService, useClass: MockUrlService },
       ],
     });
 
     searchService = TestBed.get(SearchService);
-    location = TestBed.get(Location);
   });
 
   it('should check if parameter was already added', () => {
@@ -206,16 +206,9 @@ describe('SearchService', () => {
     searchService.addSuggestedParameter(sParams.networkParam, ['ca']);
     searchService.addSuggestedParameter(sParams.networkParam, ['dnd awos']);
 
-    spyOn(location, 'go');
+    spyOn(searchService, 'updateUrl');
     searchService.submitSearch();
-    expect(location.go).toHaveBeenCalledWith('/?paramName=param Values&paramName=param Values');
-
-    searchService.submitSearch(true, searchService.config.shortcuts[0]);
-    expect(location.go).toHaveBeenCalledWith('/?shortcut=shortcutLabel');
-
-    // location.go should not be called on the 3rd submit
-    searchService.submitSearch(false);
-    expect(location.go).toHaveBeenCalledTimes(2);
+    expect(searchService.updateUrl).toHaveBeenCalledTimes(1);
   });
 
   it('should populate search box from url parameters', () => {
@@ -227,11 +220,11 @@ describe('SearchService', () => {
       paramValueObj(sParams.stationIdParam, ['123', 'abc']),
       paramValueObj(sParams.sizeParam, ['100']),
     ];
-    spyOn(location, 'go');
     spyOn(searchService, 'submitSearch');
+    spyOn(searchService, 'updateUrl');
 
     searchService.executeSearch(params);
-    expect(location.go).toHaveBeenCalledTimes(0);
+    expect(searchService.updateUrl).toHaveBeenCalledTimes(0);
     expect(searchService.submitSearch).toHaveBeenCalled();
     expect(searchService.displayParams).toEqual([
       sParams.hoursRangeDate,

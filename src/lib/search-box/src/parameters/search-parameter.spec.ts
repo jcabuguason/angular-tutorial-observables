@@ -6,9 +6,9 @@ describe('SearchParameter', () => {
   let paramRestricted: SearchParameter;
 
   const choices = [
-    new ChoiceModel('mscLabel', 'mscUri', 'mscTooltip'),
-    new ChoiceModel('dndLabel', 'dndUri'),
-    new ChoiceModel('ncLabel', 'ncUri'),
+    new ChoiceModel('mscLabel', 'mscValue', 'mscUri', 'mscTooltip'),
+    new ChoiceModel('dndLabel', 'dndValue', 'dndUri'),
+    new ChoiceModel('ncLabel', 'ncValue', 'ncUri'),
   ];
 
   beforeEach(() => {

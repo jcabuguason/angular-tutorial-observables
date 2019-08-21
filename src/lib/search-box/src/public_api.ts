@@ -3,6 +3,7 @@ export * from './search.service';
 export * from './search.component';
 
 export * from './search.reducer';
+export * from './search-config.reducer';
 
 export * from './search-box.config';
 export * from './search-taxonomy';

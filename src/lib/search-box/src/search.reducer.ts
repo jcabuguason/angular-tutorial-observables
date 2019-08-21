@@ -17,13 +17,13 @@ export const initialState: SearchModel = {
 export class SearchAction implements Action {
   readonly type = BUILD_SEARCH;
 
-  constructor(public payload: SearchModel) {}
+  constructor(public payload: SearchModel) { }
 }
 
 export class ClearSearchAction implements Action {
   readonly type = CLEAR_SEARCH;
 
-  constructor() {}
+  constructor() { }
 }
 
 export function searchReducer(state = initialState, action: SearchAction | ClearSearchAction): SearchModel {
