@@ -106,6 +106,7 @@
                   [filter]="true"
                   [autoDisplayFirst]="false"
                   appendTo="body"
+                  (onChange)="onDropdownValueChange(p, $event)"
                 >
                   <ng-template
                     let-choice
@@ -308,6 +309,7 @@
           [filter]="true"
           [resetFilterOnHide]="true"
           appendTo="body"
+          (onChange)="onDropdownValueChange(p, $event)"
         >
           <ng-template
             let-choice

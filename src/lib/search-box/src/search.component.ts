@@ -131,6 +131,12 @@ export class SearchComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  onDropdownValueChange(searchParam: SearchParameter, event) {
+    if (!!event.value) {
+      this.searchService.onParameterValueChange(searchParam, event.value);
+    }
+  }
+
   private adjustCalendar() {
     const weekdaysShort = this.instantArray('DATES', this.weekdays.map(day => `${day}_SHORT`));
     this.calendarLocale = {
