@@ -177,7 +177,7 @@ describe('SearchService', () => {
     searchService.setSelectedRangeType('hoursRange');
     sParams.sizeParam.selected = ['2000'];
 
-    searchService.getSearchModel();
+    searchService.buildSearchModel();
     expect(sParams.sizeParam.selected).toEqual([searchService.maxNumObs.toString()]);
   });
 
@@ -186,7 +186,7 @@ describe('SearchService', () => {
     searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: '12', hh_after: '36' }]);
     searchService.setSelectedRangeType('hoursRange');
 
-    const model = searchService.getSearchModel();
+    const model = searchService.buildSearchModel();
     expect(model.from).toEqual(new Date('2018-01-03T00:00'));
     expect(model.to).toEqual(new Date('2018-01-05T00:00'));
   });
@@ -197,7 +197,7 @@ describe('SearchService', () => {
     searchService.addSuggestedParameter(sParams.hoursParam);
     searchService.setSelectedRangeType('hoursRange');
 
-    const model = searchService.getSearchModel();
+    const model = searchService.buildSearchModel();
     expect(model.from).toEqual(new Date('2018-01-07T00:30'));
     expect(model.to).toEqual(new Date('2018-01-07T11:30'));
   });
@@ -223,7 +223,7 @@ describe('SearchService', () => {
     spyOn(searchService, 'submitSearch');
     spyOn(searchService, 'updateUrl');
 
-    searchService.executeSearch(params);
+    searchService.searchByURLParameters(params);
     expect(searchService.updateUrl).toHaveBeenCalledTimes(0);
     expect(searchService.submitSearch).toHaveBeenCalled();
     expect(searchService.displayParams).toEqual([
@@ -260,7 +260,7 @@ describe('SearchService', () => {
       'AND'
     );
 
-    expect(searchService.getSearchModel()).toEqual(expectedModel);
+    expect(searchService.buildSearchModel()).toEqual(expectedModel);
   });
 
   it('differentiate between station ids', () => {
@@ -277,7 +277,7 @@ describe('SearchService', () => {
     ];
     searchService.addSuggestedParameter(sParams.stationIdParam, stations.map(s => s.station));
 
-    expect(searchService.getSearchModel().elements).toEqual(stations.map(s => s.searchElement));
+    expect(searchService.buildSearchModel().elements).toEqual(stations.map(s => s.searchElement));
   });
 
   it('should adjust wildcard in station', () => {
@@ -298,7 +298,7 @@ describe('SearchService', () => {
     searchService.addSuggestedParameter(sParams.stationIdParam, stations.map(s => s.station));
     searchService.addSuggestedParameter(sParams.stationNameParam, [stationName.station]);
 
-    expect(searchService.getSearchModel().elements).toEqual(
+    expect(searchService.buildSearchModel().elements).toEqual(
       stations.map(s => s.searchElement).concat(stationName.searchElement)
     );
   });
@@ -344,7 +344,7 @@ describe('SearchService', () => {
     searchService.addSuggestedParameter(sParams.stationIdParam, [stationId.station]);
     searchService.addSuggestedParameter(sParams.stationNameParam, [stationName.station]);
 
-    expect(searchService.getSearchModel().elements).toEqual([stationId.searchElement, stationName.searchElement]);
+    expect(searchService.buildSearchModel().elements).toEqual([stationId.searchElement, stationName.searchElement]);
   });
 
   it('should mark empty searches as invalid', () => {
@@ -358,18 +358,18 @@ describe('SearchService', () => {
 
   it('should return taxonomies with matching network', () => {
     searchService.addSuggestedParameter(sParams.networkParam, ['ca', 'dnd awos']);
-    expect(searchService.getSearchModel().taxonomy).toEqual([caIndex, dndAwosIndex]);
+    expect(searchService.buildSearchModel().taxonomy).toEqual([caIndex, dndAwosIndex]);
   });
 
   it('should return taxonomies with matching organization', () => {
     searchService.addSuggestedParameter(sParams.organizationParam, ['msc']);
-    expect(searchService.getSearchModel().taxonomy).toEqual([caIndex, raIndex]);
+    expect(searchService.buildSearchModel().taxonomy).toEqual([caIndex, raIndex]);
   });
 
   it('should return taxonomies with matching network & organization', () => {
     searchService.addSuggestedParameter(sParams.networkParam, ['ca', 'dnd awos']);
     searchService.addSuggestedParameter(sParams.organizationParam, ['msc']);
-    expect(searchService.getSearchModel().taxonomy).toEqual([caIndex]);
+    expect(searchService.buildSearchModel().taxonomy).toEqual([caIndex]);
   });
 
   it('should use datetime on submit', () => {
@@ -379,7 +379,7 @@ describe('SearchService', () => {
     searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-03-01T03:00']);
     searchService.setSelectedRangeType('dateRange');
 
-    const model = searchService.getSearchModel();
+    const model = searchService.buildSearchModel();
     expect(model.from).toEqual(new Date('2018-01-01T00:00'));
     expect(model.to).toEqual(new Date('2018-02-01T00:00'));
   });
@@ -391,7 +391,7 @@ describe('SearchService', () => {
     searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-03-01T03:00']);
     searchService.setSelectedRangeType('hoursRange');
 
-    const model = searchService.getSearchModel();
+    const model = searchService.buildSearchModel();
     expect(model.from).toEqual(new Date('2018-03-01T02:00'));
     expect(model.to).toEqual(new Date('2018-03-01T04:00'));
   });
