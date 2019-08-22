@@ -90,10 +90,10 @@ export class SearchService {
     this.searchConfigUpdated.next(config);
   }
 
-  /** Executes parameters for a search request */
-  executeSearch(qParams) {
+  /** Runs search using URL query parameters */
+  searchByURLParameters(queryParams) {
     this.displayForm = false;
-    this.addRequestParams(qParams);
+    this.addRequestParams(queryParams);
     this.submitSearch(false);
   }
 
@@ -168,7 +168,7 @@ export class SearchService {
     this.shortcutSelected = shortcut;
 
     if (this.hasValidParameters()) {
-      const model = this.getSearchModel();
+      const model = this.buildSearchModel();
       if (updateUrlParams) {
         this.updateUrl();
       }
@@ -178,7 +178,7 @@ export class SearchService {
   }
 
   /** Gets the search model used for ES and updates any values outside of its limits (ex. size and hours range) */
-  getSearchModel(): SearchModel {
+  buildSearchModel(): SearchModel {
     let model = new SearchModel([], []);
 
     const elements: SearchElement[] = [];
