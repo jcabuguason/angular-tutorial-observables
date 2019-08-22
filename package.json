@@ -45,6 +45,7 @@
     "highcharts": "^7.0.0",
     "highcharts-angular": "^2.4.0",
     "ldapjs": "^1.0.1",
+    "ol": "^5.3.2",
     "rxjs": "~6.3.0",
     "rxjs-compat": "^6.4.0",
     "zone.js": "^0.8.29"
@@ -58,6 +59,7 @@
     "@types/d3": "4.9.0",
     "@types/jasmine": "~2.5.53",
     "@types/jasminewd2": "~2.0.2",
+    "@types/ol": "^4.6.5",
     "@types/node": "~6.0.60",
     "@types/webpack": "^3.0.13",
     "@types/webpack-env": "^1.13.0",
