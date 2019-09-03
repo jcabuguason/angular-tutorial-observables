@@ -20,7 +20,7 @@ export class MDDefinitionParser {
       id = raw['member']['Metadata']['metadata']['set']['general']['id']['@href'];
     } catch (error) {
       if (error instanceof TypeError) {
-        throw new ParseError('Metadata definition is incomplete: ' + raw + '\n\t' + error);
+        throw new ParseError(`Metadata definition is incomplete: ${raw} \n\t ${error}`);
       } else {
         throw error;
       }

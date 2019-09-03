@@ -10,11 +10,11 @@ export class VUColumnConfiguration extends DataColumnConfiguration implements El
       ...[
         {
           headerName: 'Value',
-          field: elementTaxonomy + '_v',
+          field: `${elementTaxonomy}_v`,
         },
         {
           headerName: 'Unit',
-          field: elementTaxonomy + '_u',
+          field: `${elementTaxonomy}_u`,
         },
       ]
     );
@@ -22,8 +22,8 @@ export class VUColumnConfiguration extends DataColumnConfiguration implements El
 
   createElementData(element, columnID: string) {
     return {
-      [columnID + '_v']: element.value,
-      [columnID + '_u']: element.unit,
+      [`${columnID}_v`]: element.value,
+      [`${columnID}_u`]: element.unit,
     };
   }
 }

@@ -37,8 +37,8 @@ export class MDElementParser {
       let french: boolean;
       if (raw['required-language'] !== undefined) {
         const requiredLanguages = [].concat(raw['required-language']).map(lang => lang['@name']);
-        english = requiredLanguages.indexOf('en') !== -1;
-        french = requiredLanguages.indexOf('fr') !== -1;
+        english = requiredLanguages.includes('en');
+        french = requiredLanguages.includes('fr');
       }
 
       const element: MDElement = {
@@ -65,7 +65,7 @@ export class MDElementParser {
 
       return element;
     } catch (error) {
-      throw new ParseError('Improper format of element: ' + JSON.stringify(raw) + '\n\t' + error);
+      throw new ParseError(`Improper format of element: ${JSON.stringify(raw)} \n\t ${error}`);
     }
   }
 }

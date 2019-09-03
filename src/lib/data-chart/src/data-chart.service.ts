@@ -141,7 +141,7 @@ export class DataChartService {
       const sensorType = this.getSensorType(e);
       const isSensor = !!e.index && e.index.name === 'sensor_index';
       if (!!e) {
-        if (yTypes.indexOf(e.unit) === -1) {
+        if (!yTypes.includes(e.unit)) {
           yTypes.push(e.unit);
         }
         this.unitService.setPreferredUnits(e);
@@ -182,7 +182,7 @@ export class DataChartService {
           const foundElem = obs.dataElements.find(elemt => elemt.elementID === elem.id && !hasUnit);
 
           if (!!foundElem) {
-            if (values.indexOf(foundElem.unit) === -1) {
+            if (!values.includes(foundElem.unit)) {
               values.push(foundElem.unit);
               names.push({
                 unit: foundElem.unit,

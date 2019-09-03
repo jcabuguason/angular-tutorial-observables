@@ -17,7 +17,7 @@ export class AuthService {
     private config: AuthConfig,
     private http: HttpClient,
     private store: Store<AuthState>
-  ) {}
+  ) { }
 
   login(domain: string, username: string, password: string): Observable<AuthResponse> {
     const body = {
@@ -33,8 +33,7 @@ export class AuthService {
       iv: iv,
     });
 
-    const payload =
-      encryptedBody.ciphertext.toString(CryptoJS.enc.Base64) + ':' + encryptedBody.iv.toString(CryptoJS.enc.Base64);
+    const payload = `${encryptedBody.ciphertext.toString(CryptoJS.enc.Base64)}:${encryptedBody.iv.toString(CryptoJS.enc.Base64)}`;
 
     return this.http.post<AuthResponse>(`${this.config.endpoint}`, payload).pipe(
       map(response => {

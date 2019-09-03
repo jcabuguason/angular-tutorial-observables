@@ -127,7 +127,7 @@ export function qaTranslationKey(qa: number | string): string {
 }
 
 export function formatElementToColumn(elementID: string): string {
-  return !!elementID ? 'e_' + elementID.split('.').join('_') : '';
+  return !!elementID ? `e_${elementID.split('.').join('_')}` : '';
 }
 
 export function formatElementID(elementID: string): string {
@@ -140,7 +140,7 @@ export function formatElementID(elementID: string): string {
 }
 
 export function formatDateToISO(date: string): string {
-  return !!date ? date + ':00.000Z' : '';
+  return !!date ? `${date}:00.000Z` : '';
 }
 
 export function formatDateRemoveSeconds(date: string): string {

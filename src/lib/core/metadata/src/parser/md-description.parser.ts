@@ -22,7 +22,7 @@ export class MDDescriptionParser {
 
       return element;
     } catch (error) {
-      throw new ParseError('Improper format of description: ' + raw + '\n\t' + error);
+      throw new ParseError(`Improper format of description: ${raw} \n\t ${error}`);
     }
   }
 }

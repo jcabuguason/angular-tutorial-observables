@@ -203,7 +203,7 @@ export class DataGridService implements OnDestroy {
 
     const buildColumn = element => {
       if (!this.ignoreElement(element.elementID)) {
-        if (this.elementsFound.indexOf(element.elementID) === -1) {
+        if (!this.elementsFound.includes(element.elementID)) {
           this.elementsFound.push(element.elementID);
         }
         const headerID = ColumnConfigurationContainer.findHeaderID(element);
@@ -274,7 +274,7 @@ export class DataGridService implements OnDestroy {
   private addEmptyDataColumns() {
     this.userConfigService
       .getElementOrder()
-      .filter(id => !this.ignoreElement(id) && this.elementsFound.indexOf(id) === -1)
+      .filter(id => !this.ignoreElement(id) && !this.elementsFound.includes(id))
       .map(id => ({ elementID: id }))
       .forEach(elem => this.buildElementColumn(elem as DataElements));
   }
@@ -307,11 +307,11 @@ export class DataGridService implements OnDestroy {
       col.groupId !== 'identity' &&
       col.groupId !== 'raw' &&
       col.headerClass !== 'meta' &&
-      configOrder.indexOf(getID(col)) === -1;
+      !configOrder.includes(getID(col));
 
     const remainingCols = this.columnDefs.filter(remainingDataCol);
     const remainingIdentityCols = identityChildren.filter(
-      col => configOrder.indexOf(col.elementID) === -1 && pinned.indexOf(col) === -1
+      col => !configOrder.includes(col.elementID) && !pinned.includes(col)
     );
 
     dataCols.push(...remainingCols);
@@ -414,7 +414,7 @@ export class DataGridService implements OnDestroy {
     element: DataElements,
     headerID: string = ColumnConfigurationContainer.findHeaderID(element)
   ) {
-    if (this.columnsGenerated.indexOf(headerID) !== -1) {
+    if (this.columnsGenerated.includes(headerID)) {
       return;
     }
     const elementID = element.elementID;
@@ -498,7 +498,7 @@ export class DataGridService implements OnDestroy {
   }
 
   private buildMetadataColumn(element, headerID) {
-    if (this.columnsGenerated.indexOf(headerID) !== -1) {
+    if (this.columnsGenerated.includes(headerID)) {
       return;
     }
     const nodes = element.elementID.split('.');

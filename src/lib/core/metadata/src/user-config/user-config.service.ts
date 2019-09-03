@@ -7,9 +7,9 @@ import { first, publishLast, refCount, tap, catchError } from 'rxjs/operators';
 import { SubHeaderConfig, ElementVisibility, Lang, UserConfig } from './user-config.model';
 
 import { NodeLookups } from './node.const';
-import { MDInstanceElement } from '../model/MDInstanceElement';
 import { MDInstanceDefinition } from '../model/MDInstanceDefinition';
 import { LanguageService } from 'msc-dms-commons-angular/shared/language';
+import { modifiedOrBlank } from 'msc-dms-commons-angular/shared/util';
 
 @Injectable()
 export class UserConfigService {
@@ -120,7 +120,7 @@ export class UserConfigService {
   isHidden(elementID) {
     return (
       !this.userConfig.visibleDataElements.checkIncludeExclude(elementID) ||
-      (this.hasElementOrder() && this.getElementOrder().indexOf(elementID) === -1)
+      (this.hasElementOrder() && !this.getElementOrder().includes(elementID))
     );
   }
 
@@ -263,8 +263,7 @@ export class UserConfigService {
 
   getFormattedSubHeader(elementID: string): string {
     const subHeader = this.getSubHeader(elementID);
-
-    return subHeader !== '' ? ', ' + subHeader : '';
+    return modifiedOrBlank(subHeader, (s) => `, ${s}`);
   }
 
   getSubHeader(elementID: string): string {

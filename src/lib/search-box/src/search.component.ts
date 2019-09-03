@@ -102,7 +102,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   // SearchParameter checks the original choice.labels on search submit
   // keep filteredSuggestions to match original choice.labels (before translation)
   createSuggestions(event, parameter: SearchParameter) {
-    const matchSubstring = (label: string) => label.toLowerCase().indexOf(event.query.toLowerCase()) !== -1;
+    const matchSubstring = (label: string) => label.toLowerCase().includes(event.query.toLowerCase());
     const sortSuggestions = (a: string, b: string) => a.localeCompare(b);
 
     parameter.filteredSuggestions = parameter

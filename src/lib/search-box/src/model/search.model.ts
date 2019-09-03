@@ -8,7 +8,7 @@ export class SearchModel {
     public operator?: string,
     public sortFields?: string,
     public queryType?: string
-  ) {}
+  ) { }
 }
 
 export class SearchElement {
@@ -19,14 +19,12 @@ export class SearchElement {
     public valueType?: string,
     // the actual value
     public value?: string
-  ) {}
+  ) { }
   // used by ES
   elementToString(): string {
-    let result = 'elementID=' + this.elementID + '|type=' + this.elementType;
-    if (this.valueType != null && this.value != null) {
-      result += '|' + this.valueType + '=' + this.value;
-    }
-    return result;
+    const basicQuery = `elementID=${this.elementID}|type=${this.elementType}`;
+    const valueQuery = (this.valueType != null && this.value != null) ? `|${this.valueType}=${this.value}` : '';
+    return `${basicQuery}${valueQuery}`;
   }
 }
 
