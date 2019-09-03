@@ -2,7 +2,8 @@
   "ngPackage": {
     "lib": {
       "umdModuleIds": {
-        "msc-dms-commons-angular/shared/language": "msc-dms-commons-angular/shared/language"
+        "msc-dms-commons-angular/shared/language": "msc-dms-commons-angular/shared/language",
+        "msc-dms-commons-angular/shared/util": "msc-dms-commons-angular/shared/util"
       }
     }
   }

@@ -9,16 +9,16 @@ export class AccordianColumnConfiguration extends DataColumnConfiguration implem
     workingNode.children.push(
       {
         headerName: 'Value',
-        field: columnID + '_v',
+        field: `${columnID}_v`,
       },
       {
         headerName: 'Unit',
-        field: columnID + '_u',
+        field: `${columnID}_u`,
         columnGroupShow: 'open',
       },
       {
         headerName: 'QA Summary',
-        field: columnID + '_qa',
+        field: `${columnID}_qa`,
         columnGroupShow: 'open',
       }
     );
@@ -26,9 +26,9 @@ export class AccordianColumnConfiguration extends DataColumnConfiguration implem
 
   createElementData(element, columnID: string) {
     return {
-      [columnID + '_v']: element.value,
-      [columnID + '_u']: element.unit,
-      [columnID + '_qa']: element.overallQASummary,
+      [`${columnID}_v`]: element.value,
+      [`${columnID}_u`]: element.unit,
+      [`${columnID}_qa`]: element.overallQASummary,
     };
   }
 }

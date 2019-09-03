@@ -2,13 +2,13 @@ import { ElementColumnConfiguration } from './element-column-configuration.inter
 
 // @dynamic
 export class ColumnConfigurationContainer {
-  constructor(public name: string, public configuration: ElementColumnConfiguration) {}
+  constructor(public name: string, public configuration: ElementColumnConfiguration) { }
 
   static convertHeader(elementHeader: string, index?: number): string {
-    let header = 'e_' + elementHeader.replace(/\./gi, '_');
+    let header = `e_${elementHeader.replace(/\./gi, '_')}`;
 
     if (index !== undefined) {
-      header += '-L' + Math.trunc(index);
+      header += `-L${Math.trunc(index)}`;
     }
     return header;
   }

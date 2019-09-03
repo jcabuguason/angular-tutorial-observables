@@ -20,7 +20,7 @@ export class MDInstanceElementParser {
         english = english != null ? english['@value'] : null;
         french = french != null ? french['@value'] : null;
       } catch (error) {
-        throw new ParseError('Improper format of language values: ' + raw + '\n\t' + error);
+        throw new ParseError(`Improper format of language values: ${raw} \n\t ${error}`);
       }
     }
 

@@ -118,7 +118,7 @@ export class SearchService {
 
   /** Add and display parameter with value if it exists */
   addSuggestedParameter(parameter: SearchParameter, values?: any[]) {
-    if (this.displayParams.indexOf(parameter) === -1) {
+    if (!this.displayParams.includes(parameter)) {
       this.displayParams.push(parameter);
       this.updateSuggestedParameters();
     }
@@ -145,7 +145,7 @@ export class SearchService {
 
   /** Suggest parameters that are not already selected */
   updateSuggestedParameters() {
-    this.suggestedParams = this.availableParams.filter(p => this.displayParams.indexOf(p) === -1);
+    this.suggestedParams = this.availableParams.filter(p => !this.displayParams.includes(p));
   }
 
   removeDisplayParameter(displayParam: SearchParameter) {
@@ -251,7 +251,7 @@ export class SearchService {
   }
 
   findMissingRequiredParameters(): SearchParameter[] {
-    return this.availableParams.filter(p => p.isRequired()).filter(p => this.displayParams.indexOf(p) === -1);
+    return this.availableParams.filter(p => p.isRequired()).filter(p => !this.displayParams.includes(p));
   }
 
   openForm() {

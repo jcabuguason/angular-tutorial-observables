@@ -17,7 +17,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 class MockUnitService {
-  setPreferredUnits(element: DataElements, usePreferredUnits: boolean) {}
+  setPreferredUnits(element: DataElements, usePreferredUnits: boolean) { }
 
   usePreferredUnits(): boolean {
     return false;
@@ -57,7 +57,7 @@ describe('DataGridService', () => {
           return ElementVisibility.DEFAULT;
       }
     }
-    getMetaElementVisibility(elementID) {}
+    getMetaElementVisibility(elementID) { }
     getDescription(elementID: string, nodeIndex: number): string {
       return '';
     }
@@ -87,7 +87,7 @@ describe('DataGridService', () => {
         TranslateService,
         { provide: UserConfigService, useClass: MockConfigService },
         { provide: MR_MAPPING_CONFIG, useValue: {} },
-        { provide: MatDialog, useValue: { open: () => {} } },
+        { provide: MatDialog, useValue: { open: () => { } } },
         { provide: UnitCodeConversionService, useClass: MockUnitService },
       ],
     });
@@ -163,7 +163,7 @@ describe('DataGridService', () => {
     service.addRowData(hits[0]);
 
     const row = service.rowData[0];
-    const getKey = (eti: string) => row['e_' + eti.replace(/\./g, '_')];
+    const getKey = (eti: string) => row[`e_${eti.replace(/\./g, '_')}`];
     expect(getKey(someDisplayCols[0])).toBe('MSNG');
     expect(getKey(someDisplayCols[1])).toBe('100900.0');
     expect(getKey(noLoadElement)).toBeUndefined();
@@ -186,7 +186,7 @@ describe('DataGridService', () => {
     service.addRowData(hits[0]);
 
     const row = service.rowData[0];
-    const getKey = (eti: string) => row['e_' + eti.replace(/\./g, '_')];
+    const getKey = (eti: string) => row[`e_${eti.replace(/\./g, '_')}`];
     expect(getKey(blankElement)).toBeUndefined();
     expect(service.columnDefs.length).toBe(17);
   });

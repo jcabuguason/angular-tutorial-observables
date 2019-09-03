@@ -12,16 +12,16 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 class MockConfigService {
   getFullFormattedHeader(elementID: string) {
-    return 'mock ' + elementID;
+    return `mock ${elementID}`;
   }
   getElementOfficialIndexTitle = (elementID: string) => 'Official';
   getDefaultTag = () => 'Layer';
-  getFormattedNodeName = elementID => 'mock ' + elementID;
-  buildFullNodeName = elementID => 'mock ' + elementID;
+  getFormattedNodeName = elementID => `mock ${elementID}`;
+  buildFullNodeName = elementID => `mock ${elementID}`;
 }
 
 class MockUnitService {
-  setPreferredUnits(element: DataElements, usePreferredUnits: boolean) {}
+  setPreferredUnits(element: DataElements, usePreferredUnits: boolean) { }
 
   usePreferredUnits(): boolean {
     return false;

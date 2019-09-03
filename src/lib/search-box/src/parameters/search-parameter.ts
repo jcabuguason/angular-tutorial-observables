@@ -146,7 +146,7 @@ export class SearchParameter {
   }
 
   alreadySelected(value: string) {
-    return this.selected.indexOf(value) !== -1;
+    return this.selected.includes(value);
   }
 
   removeAllSelected() {

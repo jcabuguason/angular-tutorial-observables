@@ -45,7 +45,7 @@ export class SearchDatetime extends SearchParameter {
   }
 
   getDatetimeUrlFormat() {
-    return !this.isEmpty(this.datetime) ? this.formattedDate() + 'T' + this.formattedTime() : '';
+    return !this.isEmpty(this.datetime) ? `${this.formattedDate()}T${this.formattedTime()}` : '';
   }
 
   setFullDatetime(date: Date) {
@@ -58,17 +58,11 @@ export class SearchDatetime extends SearchParameter {
 
   // formats to yyyy-MM-dd
   private formattedDate(): string {
-    return (
-      this.datetime.getFullYear() +
-      '-' +
-      this.padTimeValue(this.datetime.getMonth() + 1) +
-      '-' +
-      this.padTimeValue(this.datetime.getDate())
-    );
+    return `${this.datetime.getFullYear()}-${this.padTimeValue(this.datetime.getMonth() + 1)}-${this.padTimeValue(this.datetime.getDate())}`;
   }
 
   private formattedTime(): string {
-    return this.padTimeValue(this.datetime.getHours()) + ':' + this.padTimeValue(this.datetime.getMinutes());
+    return `${this.padTimeValue(this.datetime.getHours())}:${this.padTimeValue(this.datetime.getMinutes())}`;
   }
 
   private padTimeValue(num: number) {
