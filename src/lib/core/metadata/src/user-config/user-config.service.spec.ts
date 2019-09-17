@@ -1,10 +1,10 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { UserConfigService } from './user-config.service';
-import { MDInstanceDefinition } from '../model/MDInstanceDefinition';
-import { ElementVisibility } from './user-config.model';
+import { getTestBed, TestBed } from '@angular/core/testing';
 import { LanguageService } from 'msc-dms-commons-angular/shared/language';
-import { MR_MAPPING_CONFIG, MRMappingConfig } from './mr-mapping.config';
+import { MDInstanceDefinition } from '../model/MDInstanceDefinition';
+import { MRMappingConfig, MR_MAPPING_CONFIG } from './mr-mapping.config';
+import { ElementVisibility } from './user-config.model';
+import { UserConfigService } from './user-config.service';
 
 describe('UserConfigService', () => {
   let injector: TestBed;
@@ -121,6 +121,14 @@ describe('UserConfigService', () => {
       expect(service.getFullFormattedHeader('1.12.207.2.1.1.0')).toBe(
         'Pressure / Mean Sea Level Pressure / Average, -1 min, 1 min'
       );
+    });
+
+    it('should have raw data by default', () => {
+      expect(service.isLoadRawData()).toBeTruthy();
+    });
+
+    it('should show raw data by default', () => {
+      expect(service.isVisibleRawData()).toBeTruthy();
     });
   });
 
@@ -421,11 +429,51 @@ describe('UserConfigService', () => {
   describe('#dataFlagConfig', () => {
     beforeEach(() => {
       service.loadConfig(elementDataflagConfig);
-    })
+    });
 
     it('should return list of editable data flags for an element', () => {
-      expect(service.getElementEditableDataFlags('1.5.66.2.1.1.0')).toEqual(['2', '5'])
-    })
+      expect(service.getElementEditableDataFlags('1.5.66.2.1.1.0')).toEqual(['2', '5']);
+    });
+  });
+
+  describe('#loadRawDataConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(loadRawDataConfig);
+    });
+
+    it('should have raw data', () => {
+      expect(service.isLoadRawData()).toBeTruthy();
+    });
+  });
+
+  describe('#noLoadRawDataConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(noLoadRawDataConfig);
+    });
+
+    it('should not have raw data', () => {
+      expect(service.isLoadRawData()).toBeFalsy();
+    });
+  });
+
+  describe('#visibleRawDataConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(visibleRawDataConfig);
+    });
+
+    it('should show raw data', () => {
+      expect(service.isVisibleRawData()).toBeTruthy();
+    });
+  });
+
+  describe('#noVisibleRawDataConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(noVisibleRawDataConfig);
+    });
+
+    it('should hide raw data', () => {
+      expect(service.isVisibleRawData()).toBeFalsy();
+    });
   });
 
   const emptyConfig: MDInstanceDefinition = {
@@ -1536,3 +1584,79 @@ describe('UserConfigService', () => {
     ],
   };
 });
+
+const loadRawDataConfig: MDInstanceDefinition = {
+  dataset: 'stub',
+  parent: 'stub',
+  identificationElements: [],
+  elements: [
+    {
+      group: 'raw-data',
+      name: 'load-raw-data',
+      value: 'true',
+      def_id: '',
+      id: '',
+      index: '',
+      uom: '',
+      language: { english: '', french: '' },
+      instelements: [],
+    },
+  ],
+};
+
+const noLoadRawDataConfig: MDInstanceDefinition = {
+  dataset: 'stub',
+  parent: 'stub',
+  identificationElements: [],
+  elements: [
+    {
+      group: 'raw-data',
+      name: 'load-raw-data',
+      value: 'false',
+      def_id: '',
+      id: '',
+      index: '',
+      uom: '',
+      language: { english: '', french: '' },
+      instelements: [],
+    },
+  ],
+};
+
+const visibleRawDataConfig: MDInstanceDefinition = {
+  dataset: 'stub',
+  parent: 'stub',
+  identificationElements: [],
+  elements: [
+    {
+      group: 'raw-data',
+      name: 'visible-raw-data',
+      value: 'true',
+      def_id: '',
+      id: '',
+      index: '',
+      uom: '',
+      language: { english: '', french: '' },
+      instelements: [],
+    },
+  ],
+};
+
+const noVisibleRawDataConfig: MDInstanceDefinition = {
+  dataset: 'stub',
+  parent: 'stub',
+  identificationElements: [],
+  elements: [
+    {
+      group: 'raw-data',
+      name: 'visible-raw-data',
+      value: 'false',
+      def_id: '',
+      id: '',
+      index: '',
+      uom: '',
+      language: { english: '', french: '' },
+      instelements: [],
+    },
+  ],
+};
