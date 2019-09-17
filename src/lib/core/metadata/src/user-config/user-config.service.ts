@@ -1,15 +1,13 @@
-import { throwError as observableThrowError, Observable, BehaviorSubject } from 'rxjs';
-import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { MR_MAPPING_CONFIG, MRMappingConfig } from './mr-mapping.config';
-import { first, publishLast, refCount, tap, catchError } from 'rxjs/operators';
-
-import { SubHeaderConfig, ElementVisibility, Lang, UserConfig } from './user-config.model';
-
-import { NodeLookups } from './node.const';
-import { MDInstanceDefinition } from '../model/MDInstanceDefinition';
+import { Inject, Injectable } from '@angular/core';
 import { LanguageService } from 'msc-dms-commons-angular/shared/language';
 import { modifiedOrBlank } from 'msc-dms-commons-angular/shared/util';
+import { BehaviorSubject, Observable, throwError as observableThrowError } from 'rxjs';
+import { catchError, first, publishLast, refCount, tap } from 'rxjs/operators';
+import { MDInstanceDefinition } from '../model/MDInstanceDefinition';
+import { MRMappingConfig, MR_MAPPING_CONFIG } from './mr-mapping.config';
+import { NodeLookups } from './node.const';
+import { ElementVisibility, Lang, SubHeaderConfig, UserConfig } from './user-config.model';
 
 @Injectable()
 export class UserConfigService {
@@ -263,7 +261,7 @@ export class UserConfigService {
 
   getFormattedSubHeader(elementID: string): string {
     const subHeader = this.getSubHeader(elementID);
-    return modifiedOrBlank(subHeader, (s) => `, ${s}`);
+    return modifiedOrBlank(subHeader, s => `, ${s}`);
   }
 
   getSubHeader(elementID: string): string {
@@ -271,9 +269,9 @@ export class UserConfigService {
 
     return headerConfig.displaySubHeader
       ? this.range(headerConfig.subHeaderStart, headerConfig.subHeaderEnd)
-        .map(nodeIndex => this.getNodeName(elementID, nodeIndex))
-        .filter(nodeValue => nodeValue !== '')
-        .join(', ')
+          .map(nodeIndex => this.getNodeName(elementID, nodeIndex))
+          .filter(nodeValue => nodeValue !== '')
+          .join(', ')
       : '';
   }
 
@@ -320,10 +318,10 @@ export class UserConfigService {
   getByElementName(elementID: string, nodeIndex: number = this.getNestingDepth(elementID)): string {
     return nodeIndex === this.getNestingDepth(elementID)
       ? this.userConfig.elementConfigs
-        .filter(config => config.elementID === elementID)
-        .map(config => config.elementName)
-        .map(elementName => elementName.getName())
-        .shift()
+          .filter(config => config.elementID === elementID)
+          .map(config => config.elementName)
+          .map(elementName => elementName.getName())
+          .shift()
       : '';
   }
 
@@ -371,5 +369,13 @@ export class UserConfigService {
     } else {
       return this.getFullFormattedHeader(elem);
     }
+  }
+
+  isLoadRawData(): boolean {
+    return this.userConfig.loadRawData;
+  }
+
+  isVisibleRawData(): boolean {
+    return this.userConfig.visibleRawData;
   }
 }

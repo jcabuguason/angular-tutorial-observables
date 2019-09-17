@@ -1,27 +1,22 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-
 import { TranslateService } from '@ngx-translate/core';
-import { Subject } from 'rxjs';
-
-import { ElementColumnConfiguration } from './column-configuration/element-column-configuration.interface';
-import { ColumnConfigurationContainer } from './column-configuration/column-configuration-container.model';
-import { DefaultColumnConfiguration } from './column-configuration/default-column-configuration.class';
-
-import { StationInfoComponent } from './station-info/station-info.component';
-import { FULL_CONFIG } from './default-grid-configs';
-import { UserConfigService, ElementVisibility } from 'msc-dms-commons-angular/core/metadata';
-
+import { ElementVisibility, UserConfigService } from 'msc-dms-commons-angular/core/metadata';
+import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 import {
-  STN_NAME_FIELD,
-  UnitCodeConversionService,
+  DataElements,
   DMSObs,
   MetadataElements,
-  DataElements,
   RawMessage,
+  STN_NAME_FIELD,
+  UnitCodeConversionService,
 } from 'msc-dms-commons-angular/core/obs-util';
-
-import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
+import { Subject } from 'rxjs';
+import { ColumnConfigurationContainer } from './column-configuration/column-configuration-container.model';
+import { DefaultColumnConfiguration } from './column-configuration/default-column-configuration.class';
+import { ElementColumnConfiguration } from './column-configuration/element-column-configuration.interface';
+import { FULL_CONFIG } from './default-grid-configs';
+import { StationInfoComponent } from './station-info/station-info.component';
 
 @Injectable()
 export class DataGridService implements OnDestroy {
@@ -221,6 +216,9 @@ export class DataGridService implements OnDestroy {
 
   flattenRawMessage(raw: RawMessage) {
     const result = {};
+    if (!this.userConfigService.isLoadRawData()) {
+      return result;
+    }
     if (this.rawHeader == null) {
       this.rawHeader = {
         headerName: this.translate.instant('GRID.RAW'),
@@ -231,6 +229,7 @@ export class DataGridService implements OnDestroy {
             field: 'raw_header',
             width: 220,
             valueFormatter: this.removeLineBreaks,
+            hide: !this.userConfigService.isVisibleRawData(),
           },
         ],
       };
@@ -243,6 +242,7 @@ export class DataGridService implements OnDestroy {
         width: 440,
         columnGroupShow: 'open',
         valueFormatter: this.removeLineBreaks,
+        hide: !this.userConfigService.isVisibleRawData(),
       });
     }
 
@@ -317,7 +317,10 @@ export class DataGridService implements OnDestroy {
     dataCols.push(...remainingCols);
     identity.children = identityCols.concat(remainingIdentityCols);
 
-    this.columnDefs = [identity, ...metaCols, ...dataCols, this.rawHeader];
+    this.columnDefs = [identity, ...metaCols, ...dataCols];
+    if (this.userConfigService.isLoadRawData()) {
+      this.columnDefs.push(this.rawHeader);
+    }
   }
 
   displayMetadataTable(nodeData) {

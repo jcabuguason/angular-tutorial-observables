@@ -84,5 +84,16 @@ export const FULL_CONFIG: MDInstanceDefinition = {
       language: { english: '', french: '' },
       instelements: [],
     },
+    {
+      group: 'raw-data',
+      name: 'load-raw-data',
+      value: 'true',
+      def_id: '',
+      id: '',
+      index: '',
+      uom: '',
+      language: { english: '', french: '' },
+      instelements: [],
+    },
   ],
 };

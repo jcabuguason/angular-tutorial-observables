@@ -1,7 +1,7 @@
-import { MDInstanceElement } from '../model/MDInstanceElement';
-import { MDInstanceDefinition } from '../model/MDInstanceDefinition';
-import { IncludeExclude } from '../include-exclude/include-exclude.class';
 import { LanguageService } from 'msc-dms-commons-angular/shared/language';
+import { IncludeExclude } from '../include-exclude/include-exclude.class';
+import { MDInstanceDefinition } from '../model/MDInstanceDefinition';
+import { MDInstanceElement } from '../model/MDInstanceElement';
 
 // Enum to dictate how an element should be displayed/loaded
 export enum ElementVisibility {
@@ -29,6 +29,8 @@ export class UserConfig {
   genericNodes: GenericNodeConfig[];
   qaHideFlags: number[];
   loadPreferredUnits: boolean;
+  loadRawData: boolean;
+  visibleRawData: boolean;
 
   private constructor() {
     this.loadMetaElements = new IncludeExclude([], []);
@@ -44,6 +46,8 @@ export class UserConfig {
     this.genericNodes = [];
     this.qaHideFlags = [];
     this.loadPreferredUnits = false;
+    this.loadRawData = true;
+    this.visibleRawData = true;
   }
 
   public static createConfig(): UserConfig {
@@ -120,6 +124,16 @@ export class UserConfig {
       // Configuring element editing
       else if (checkElementGroupAndName('element-edit', 'element')) {
         ElementConfig.updateConfig(config.elementConfigs, element);
+      }
+
+      // Configuring raw data
+      else if (checkElementGroupAndName('raw-data', 'load-raw-data')) {
+        config.loadRawData = 'true' === element.value;
+      }
+
+      // Configuring raw data
+      else if (checkElementGroupAndName('raw-data', 'visible-raw-data')) {
+        config.visibleRawData = 'true' === element.value;
       }
     }
   }
