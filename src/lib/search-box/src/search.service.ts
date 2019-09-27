@@ -193,9 +193,9 @@ export class SearchService {
 
     this.displayParams.forEach(p => {
       const selected = p.getSelectedModels().map(model => model.value);
-      const addStationToElements = (station, stdPkgId = null) => {
+      const addStationToElements = (station, elementID = null) => {
         const adjusted = this.adjustWildcard(station);
-        const id = stdPkgId || this.determineStdPkgId(adjusted);
+        const id = elementID || this.determineStationElementID(adjusted);
         addToElements(id, adjusted);
       };
       const updateValue = (value, index, newValue) => {
@@ -284,8 +284,8 @@ export class SearchService {
 
   onParameterValueChange(parameter: SearchParameter, newValue: any) { }
 
-  /** Determines the std-pkg-id depending on the station entered (defaults to MSC_ID) */
-  private determineStdPkgId(stationID: string) {
+  /** Determines the element ID depending on the station entered (defaults to MSC_ID) */
+  determineStationElementID(stationID: string): string {
     const stationType = SearchableElement.STATION_TYPE;
     const defaultID = stationType.MSC_ID.id;
 
