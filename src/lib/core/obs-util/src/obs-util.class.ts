@@ -1,19 +1,39 @@
 import { getTime } from 'date-fns';
 import { DataElements } from './dms-observation.model';
 
-export function findMetadataValue(obs, name) {
-  return obs.metadataElements.filter(md => md.name === name).map(md => md.value)[0];
+// observation identification elements
+export const STATION_ID_ELEMENT = '1.7.80.0.0.0.0';
+export const WMO_ID_ELEMENT = '1.7.82.0.0.0.0';
+export const STATION_NAME_ELEMENT = '1.7.83.0.0.0.0';
+export const TC_ID_ELEMENT = '1.7.84.0.0.0.0';
+export const CLIMATE_ID_ELEMENT = '1.7.85.0.0.0.0';
+export const MSC_ID_ELEMENT = '1.7.86.0.0.0.0';
+export const ICAO_ID_ELEMENT = '1.7.102.0.0.0.0';
+export const PROVINCE_ELEMENT = '1.7.117.0.0.0.0';
+export const CORRECTION_ELEMENT = '1.7.105.0.0.0.0';
+export const VERSION_ELEMENT = '1.7.408.0.0.0.0';
+export const REVISION_ELEMENT = '1.7.371.0.0.0.0';
+export const OBS_DATE_ELEMENT = '1.7.78.0.0.0.0';
+export const LATITUDE_ELEMENT = '1.7.97.0.0.0.0';
+export const LONGITUDE_ELEMENT = '1.7.98.0.0.0.0';
+
+// report identification elements
+export const STATION_ID_ELEMENT_REPORT = '8.7.80.0.0.0.0';
+export const STATION_NAME_ELEMENT_REPORT = '8.7.83.0.0.0.0';
+
+export function findMetadataValue(obs, elementID) {
+  return obs.metadataElements.filter(md => md.elementID === elementID).map(md => md.value)[0];
 }
 
 /** Most observations come in with a cor and ver in their metadata, but some come with a rev */
 export function findRevision(obs) {
-  const find = name => findMetadataValue(obs, name);
-  const correction = find('cor');
+  const find = elementID => findMetadataValue(obs, elementID);
+  const correction = find(CORRECTION_ELEMENT);
   if (correction !== undefined) {
-    const version = find('ver');
+    const version = find(VERSION_ELEMENT);
     return Number(version) > 0 ? `${correction}_v${version}` : correction;
   } else {
-    const rev = find('rev');
+    const rev = find(REVISION_ELEMENT);
     return rev || '';
   }
 }
@@ -133,9 +153,9 @@ export function formatElementToColumn(elementID: string): string {
 export function formatElementID(elementID: string): string {
   return !!elementID
     ? elementID
-      .replace('e_', '')
-      .split('_')
-      .join('.')
+        .replace('e_', '')
+        .split('_')
+        .join('.')
     : '';
 }
 

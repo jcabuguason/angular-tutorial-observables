@@ -5,14 +5,14 @@ describe('ObsUtil', () => {
   const obs1 = obsList[0]._source;
   const obs2 = obsList[1]._source;
   it('should find metadata', () => {
-    expect(obsUtil.findMetadataValue(obs1, 'prov')).toBe('BC');
+    expect(obsUtil.findMetadataValue(obs1, obsUtil.PROVINCE_ELEMENT)).toBe('BC');
 
     expect(obsUtil.findMetadataValue(obs1, 'nonexistant')).toBeUndefined();
   });
 
   it('should find revision', () => {
-    expect(obsUtil.findMetadataValue(obs1, 'cor')).toBe('orig');
-    expect(obsUtil.findMetadataValue(obs1, 'ver')).toBe('0');
+    expect(obsUtil.findMetadataValue(obs1, obsUtil.CORRECTION_ELEMENT)).toBe('orig');
+    expect(obsUtil.findMetadataValue(obs1, obsUtil.VERSION_ELEMENT)).toBe('0');
     expect(obsUtil.findRevision(obs1)).toBe('orig');
 
     const setMeta = (n, v) => (obs1.metadataElements.find(md => md.name === n).value = v);
