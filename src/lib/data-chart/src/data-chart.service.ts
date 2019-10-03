@@ -1,16 +1,19 @@
-import { Injectable, EventEmitter } from '@angular/core';
-
+import { EventEmitter, Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import * as Highcharts from 'highcharts';
-import HC_no_data_to_display from 'highcharts/modules/no-data-to-display';
 import HC_exporting from 'highcharts/modules/exporting';
+import HC_no_data_to_display from 'highcharts/modules/no-data-to-display';
 import HC_offline_exporting from 'highcharts/modules/offline-exporting';
-import { ChartObject, Element, Station } from './model/chart.model';
-
 import { UserConfigService } from 'msc-dms-commons-angular/core/metadata';
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
-
-import { UnitCodeConversionService } from 'msc-dms-commons-angular/core/obs-util';
-import { TranslateService } from '@ngx-translate/core';
+import {
+  CLIMATE_ID_ELEMENT,
+  ICAO_ID_ELEMENT,
+  STATION_NAME_ELEMENT,
+  TC_ID_ELEMENT,
+  UnitCodeConversionService,
+} from 'msc-dms-commons-angular/core/obs-util';
+import { ChartObject, Element, Station } from './model/chart.model';
 
 @Injectable()
 export class DataChartService {
@@ -287,15 +290,18 @@ export class DataChartService {
   }
 
   private createStationLabel(metadataElements) {
-    const getObjValue = name => {
-      const obj = metadataElements.find(elem => elem.name === name);
+    const getObjValue = elementID => {
+      const obj = metadataElements.find(elem => elem.elementID === elementID);
       return obj ? obj.value : null;
     };
-    const formatId = name => {
-      const id = getObjValue(name);
+    const formatId = elementID => {
+      const id = getObjValue(elementID);
       return id != null ? ` - ${id}` : '';
     };
-    return `${getObjValue('stn_nam')}` + formatId('clim_id') + (formatId('tc_id') || formatId('icao_stn_id'));
+    return (
+      `${getObjValue(STATION_NAME_ELEMENT)}${formatId(CLIMATE_ID_ELEMENT)}` +
+      `${formatId(TC_ID_ELEMENT) || formatId(ICAO_ID_ELEMENT)}`
+    );
   }
 
   private buildNoDataString(chartObj) {

@@ -1,3 +1,12 @@
+import {
+  ICAO_ID_ELEMENT,
+  MSC_ID_ELEMENT,
+  PROVINCE_ELEMENT,
+  STATION_NAME_ELEMENT,
+  TC_ID_ELEMENT,
+  WMO_ID_ELEMENT
+} from 'msc-dms-commons-angular/core/obs-util';
+
 export class SearchModel {
   constructor(
     public taxonomy: string[],
@@ -30,12 +39,12 @@ export class SearchElement {
 
 // Searchable metadataElements
 export const SearchableElement = {
-  STATION_NAME: { id: '1.7.83.0.0.0.0' },
-  PROVINCE: { id: '1.7.117.0.0.0.0' },
+  STATION_NAME: { id: STATION_NAME_ELEMENT },
+  PROVINCE: { id: PROVINCE_ELEMENT },
   STATION_TYPE: {
-    TC_ID: { id: '1.7.84.0.0.0.0', regex: /^[a-zA-Z]{3}$/ },
-    WMO_ID: { id: '1.7.82.0.0.0.0', regex: /^[0-9]{5}$/ },
-    MSC_ID: { id: '1.7.86.0.0.0.0', regex: /^[a-zA-Z0-9]{7}$/ },
-    ICAO_ID: { id: '1.7.102.0.0.0.0', regex: /^[a-zA-Z]{4}$/ },
+    TC_ID: { id: TC_ID_ELEMENT, regex: /^[a-zA-Z]{3}$/ },
+    WMO_ID: { id: WMO_ID_ELEMENT, regex: /^[0-9]{5}$/ },
+    MSC_ID: { id: MSC_ID_ELEMENT, regex: /^[a-zA-Z0-9]{7}$/ },
+    ICAO_ID: { id: ICAO_ID_ELEMENT, regex: /^[a-zA-Z]{4}$/ },
   },
 };

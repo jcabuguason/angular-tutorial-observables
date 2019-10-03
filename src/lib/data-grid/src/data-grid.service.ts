@@ -8,7 +8,10 @@ import {
   DMSObs,
   MetadataElements,
   RawMessage,
-  STN_NAME_FIELD,
+  STATION_NAME_ELEMENT,
+  STATION_NAME_ELEMENT_REPORT,
+  STATION_NAME_FIELD,
+  STATION_NAME_FIELD_REPORT,
   UnitCodeConversionService,
 } from 'msc-dms-commons-angular/core/obs-util';
 import { Subject } from 'rxjs';
@@ -164,7 +167,9 @@ export class DataGridService implements OnDestroy {
     uri: obs.identity,
     taxonomy: obs.taxonomy,
     primaryStationId: obs.identifier,
-    station: obsUtil.findMetadataValue(obs, 'stn_nam'),
+    station:
+      obsUtil.findMetadataValue(obs, STATION_NAME_ELEMENT) ||
+      obsUtil.findMetadataValue(obs, STATION_NAME_ELEMENT_REPORT),
     revision: obsUtil.findRevision(obs),
   });
 
@@ -326,7 +331,7 @@ export class DataGridService implements OnDestroy {
   displayMetadataTable(nodeData) {
     this.dialog.open(StationInfoComponent, {
       data: {
-        name: obsUtil.getFormattedMetadata(nodeData[STN_NAME_FIELD]),
+        name: obsUtil.getFormattedMetadata(nodeData[STATION_NAME_FIELD] || nodeData[STATION_NAME_FIELD_REPORT]),
         allData: this.columnDefs
           .filter(group => group.groupId === 'identity' || group.headerClass === 'meta')
           .map(group => group.children)
