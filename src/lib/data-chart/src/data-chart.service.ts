@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
@@ -13,16 +13,17 @@ import {
   TC_ID_ELEMENT,
   UnitCodeConversionService,
 } from 'msc-dms-commons-angular/core/obs-util';
+import { Subject } from 'rxjs';
 import { ChartObject, Element, Station } from './model/chart.model';
 
 @Injectable()
 export class DataChartService {
-  public wipeCharts = new EventEmitter();
+  public wipeCharts = new Subject();
 
   constructor(
     public translate: TranslateService,
     public configService: UserConfigService,
-    public unitService: UnitCodeConversionService
+    public unitService: UnitCodeConversionService,
   ) {
     HC_no_data_to_display(Highcharts);
     HC_exporting(Highcharts);
@@ -59,7 +60,7 @@ export class DataChartService {
           months: this.instantArray('DATES', months),
           weekdays: this.instantArray('DATES', weekdays),
         },
-      })
+      }),
     );
   }
 
@@ -93,7 +94,7 @@ export class DataChartService {
           noData: this.buildNoDataString(chartObj),
         },
       },
-      options.highchartsOptions
+      options.highchartsOptions,
     );
   }
 
@@ -135,7 +136,7 @@ export class DataChartService {
         type: type,
         isSensor: sensor[key]['isSensor'],
         visible: sensor[key]['isSensor'] && !!custom ? custom.showSensors : true,
-      }))
+      })),
     );
   }
 
@@ -240,7 +241,7 @@ export class DataChartService {
           enabled: false,
         },
       },
-      options.highchartsOptions
+      options.highchartsOptions,
     );
   }
 
