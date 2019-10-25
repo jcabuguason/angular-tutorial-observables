@@ -50,7 +50,7 @@ export class DataGridService implements OnDestroy {
     public translate: TranslateService,
     public userConfigService: UserConfigService,
     public unitService: UnitCodeConversionService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
   ) {
     userConfigService.loadConfig(FULL_CONFIG);
     this.columnConfiguration = new DefaultColumnConfiguration();
@@ -224,34 +224,10 @@ export class DataGridService implements OnDestroy {
     if (!this.userConfigService.isLoadRawData()) {
       return result;
     }
-    if (this.rawHeader == null) {
-      this.rawHeader = {
-        headerName: this.translate.instant('GRID.RAW'),
-        groupId: 'raw',
-        children: [
-          {
-            headerName: this.translate.instant('GRID.HEADER'),
-            field: 'raw_header',
-            width: 220,
-            valueFormatter: this.removeLineBreaks,
-            hide: !this.userConfigService.isVisibleRawData(),
-          },
-        ],
-      };
-      this.columnDefs.push(this.rawHeader);
+    this.buildRawColumn(raw.message);
+    for (const [key, value] of Object.entries(raw)) {
+      result[`raw_${key}`] = key === 'message' ? obsUtil.decodeRawMessage(value) : value;
     }
-    if (this.rawHeader.children.length === 1 && !!raw.message) {
-      this.rawHeader.children.push({
-        headerName: this.translate.instant('GRID.MESSAGE'),
-        field: 'raw_message',
-        width: 440,
-        columnGroupShow: 'open',
-        valueFormatter: this.removeLineBreaks,
-        hide: !this.userConfigService.isVisibleRawData(),
-      });
-    }
-
-    Object.keys(raw).forEach(key => (result[`raw_${key}`] = raw[key]));
     return result;
   }
 
@@ -316,7 +292,7 @@ export class DataGridService implements OnDestroy {
 
     const remainingCols = this.columnDefs.filter(remainingDataCol);
     const remainingIdentityCols = identityChildren.filter(
-      col => !configOrder.includes(col.elementID) && !pinned.includes(col)
+      col => !configOrder.includes(col.elementID) && !pinned.includes(col),
     );
 
     dataCols.push(...remainingCols);
@@ -372,7 +348,7 @@ export class DataGridService implements OnDestroy {
     headerName: string,
     nodeNumber: string,
     elementID: string,
-    isMaxDepth?: boolean
+    isMaxDepth?: boolean,
   ) {
     const possibleMatches = currentNodes.filter(node => node.nodeNumber === nodeNumber);
 
@@ -420,7 +396,7 @@ export class DataGridService implements OnDestroy {
 
   private buildElementColumn(
     element: DataElements,
-    headerID: string = ColumnConfigurationContainer.findHeaderID(element)
+    headerID: string = ColumnConfigurationContainer.findHeaderID(element),
   ) {
     if (this.columnsGenerated.includes(headerID)) {
       return;
@@ -514,7 +490,7 @@ export class DataGridService implements OnDestroy {
       this.columnDefs,
       this.userConfigService.getSpecificNodeValue(2, nodes[1]),
       nodes[1],
-      element.elementID
+      element.elementID,
     );
     const getHeaderName = () => {
       const node2 = this.userConfigService.getFormattedNodeName(element.elementID, 2);
@@ -587,9 +563,16 @@ export class DataGridService implements OnDestroy {
     return valueA > valueB ? 1 : valueA < valueB ? -1 : 0;
   }
 
-  private removeLineBreaks(line) {
-    if (line.value != null) {
-      return line.value.replace(/(\r\n\t|\n|\r\t)/gm, ' ');
+  private buildRawColumn(rawMessage: string) {
+    if (this.rawHeader == null) {
+      this.rawHeader = this.columnConfiguration.getRawGroupHeader();
+      this.columnDefs.push(this.rawHeader);
+    }
+    if (this.rawHeader.children.length === 1 && !!rawMessage) {
+      this.rawHeader.children.push(this.columnConfiguration.getRawMessageHeader());
+    }
+    for (const rawCol of this.rawHeader.children) {
+      rawCol.hide = !this.userConfigService.isVisibleRawData();
     }
   }
 }

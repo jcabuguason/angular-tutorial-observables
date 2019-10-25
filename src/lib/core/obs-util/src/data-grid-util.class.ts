@@ -45,3 +45,9 @@ export function getFormattedMetadata(metadataElement): string {
 export function showElementUnit(unit): boolean {
   return unit != null && unit !== 'code' && unit !== 'unitless' && unit !== 'datetime' && unit !== 'boolean';
 }
+
+export function removeLineBreaks(line): string {
+  if (line.value != null) {
+    return line.value.replace(/(\r\n\t|\n|\r\t)/gm, ' ');
+  }
+}

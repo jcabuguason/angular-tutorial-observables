@@ -183,3 +183,8 @@ export function getIndexLabelTranslationKey(element: DataElements): string {
   }
   return `OBS.${label}`;
 }
+
+export function decodeRawMessage(message: string): string {
+  const base64Indicator = 'base64: ';
+  return !!message && message.includes(base64Indicator) ? atob(message.replace(base64Indicator, '')) : message;
+}

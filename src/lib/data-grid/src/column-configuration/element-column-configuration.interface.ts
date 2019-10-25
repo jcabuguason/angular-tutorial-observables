@@ -22,4 +22,8 @@ export interface ElementColumnConfiguration {
 
   // TODO: Get rid of gridService here once the chart select UI changes
   getMainMenuItems(gridService: DataGridService);
+
+  getRawGroupHeader();
+
+  getRawMessageHeader();
 }

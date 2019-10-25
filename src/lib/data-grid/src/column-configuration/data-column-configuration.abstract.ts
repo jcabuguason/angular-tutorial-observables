@@ -1,6 +1,5 @@
-import { DataGridService } from '../data-grid.service';
-import { StationInfoComponent } from '../station-info/station-info.component';
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
+import { DataGridService } from '../data-grid.service';
 
 export abstract class DataColumnConfiguration {
   public allowBlankDataColumns = false;
@@ -85,6 +84,38 @@ export abstract class DataColumnConfiguration {
     };
   }
 
+  getRawGroupHeader(): any {
+    return {
+      headerValueGetter: params => this.instantWrapper('RAW'),
+      groupId: 'raw',
+      suppressPaste: true,
+      children: [this.buildRawHeader()],
+    };
+  }
+
+  getRawMessageHeader(): any {
+    return this.buildRawMessageHeader();
+  }
+
+  buildRawHeader(): any {
+    return {
+      headerValueGetter: () => this.instantWrapper('HEADER'),
+      field: 'raw_header',
+      width: 220,
+      valueFormatter: obsUtil.removeLineBreaks,
+    };
+  }
+
+  buildRawMessageHeader(): any {
+    return {
+      headerValueGetter: () => this.instantWrapper('MESSAGE'),
+      field: 'raw_message',
+      width: 440,
+      columnGroupShow: 'open',
+      valueFormatter: obsUtil.removeLineBreaks,
+    };
+  }
+
   csvExcelExporter(params): any {
     const settings = { columnGroups: true };
     return {
@@ -138,7 +169,7 @@ export abstract class DataColumnConfiguration {
         {
           name: instWrap('COLLAPSE_COLUMNS'),
           action: () => gridService.expandAllColumns(params.columnApi, false),
-        }
+        },
       );
 
       menuItems.push('separator', {
