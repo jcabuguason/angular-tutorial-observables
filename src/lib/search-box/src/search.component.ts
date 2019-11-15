@@ -50,7 +50,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
     public translate: TranslateService,
     public searchService: SearchService,
     public messageService: MessageService,
-    private changeDectector: ChangeDetectorRef
+    private changeDectector: ChangeDetectorRef,
   ) {
     // this is used to set the time to 00:00 when the calendar/time pops up
     this.defaultDate.setHours(0, 0);
@@ -58,16 +58,10 @@ export class SearchComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     // use labels in current language in case nothing has been emitted by translate.onLangChange before they get created
-    this.adjustCalendar();
-    this.adjustMultiSelectLabels();
-    this.reload();
+    this.reloadLabels();
 
-    this.translate.onLangChange.subscribe(evt => {
-      this.adjustMultiSelectLabels();
-      this.adjustMultiSelectChoices();
-      this.adjustCalendar();
-      this.reload();
-    });
+    this.translate.onLangChange.subscribe(() => this.reloadLabels());
+    this.searchService.searchConfigUpdated.subscribe(() => this.reloadLabels());
   }
 
   ngAfterViewChecked(): void {
@@ -116,7 +110,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   // choice.label can be translated string, only need to keep choice.value to match original (before translation)
   adjustMultiSelectChoices() {
     this.searchService.availableParams.forEach(param =>
-      param.multiSelectChoices.forEach(choice => (choice.label = this.translate.instant(choice.value)))
+      param.multiSelectChoices.forEach(choice => (choice.label = this.translate.instant(choice.value))),
     );
   }
 
@@ -126,7 +120,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
 
   multiSelectOnChange(event) {
     // prevents "Loading" value from being selected
-    if (event.itemValue === "SEARCH_BAR.LOADING") {
+    if (event.itemValue === 'SEARCH_BAR.LOADING') {
       event.value.pop();
     }
   }
@@ -158,9 +152,16 @@ export class SearchComponent implements OnInit, AfterViewChecked {
 
   private instantArray = (header, keys) => keys.map(key => this.translate.instant(`${header}.${key}`));
 
-  // Need to reload for multiSelectSelectedItemsLabel to update properly  
+  // Need to reload for multiSelectSelectedItemsLabel to update properly
   private reload(): void {
     this.reloadBarParams = false;
-    setTimeout(() => this.reloadBarParams = true, 1);
+    setTimeout(() => (this.reloadBarParams = true), 1);
+  }
+
+  private reloadLabels(): void {
+    this.adjustMultiSelectLabels();
+    this.adjustMultiSelectChoices();
+    this.adjustCalendar();
+    this.reload();
   }
 }
