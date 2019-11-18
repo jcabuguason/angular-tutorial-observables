@@ -177,7 +177,6 @@ export class DataGridService implements OnDestroy {
 
   flattenMetadataElements(mdElements: MetadataElements[]) {
     const result = {};
-    const configElements = this.userConfigService.getElementOrder();
 
     const buildColumn = element => {
       if (element.name != null && !this.ignoreElement(element.elementID)) {
@@ -189,13 +188,6 @@ export class DataGridService implements OnDestroy {
     };
 
     mdElements.filter(e => e != null && e.elementID != null).forEach(buildColumn);
-
-    // added at the same time with user config
-    if (this.columnConfiguration.allowBlankDataColumns) {
-      const inMdElements = configElement => mdElements.some(mdElement => mdElement.elementID === configElement);
-
-      configElements.filter(e => this.isMetadataElement(e) && !inMdElements(e)).forEach(buildColumn);
-    }
 
     return result;
   }
@@ -259,7 +251,11 @@ export class DataGridService implements OnDestroy {
       .getElementOrder()
       .filter(id => !this.ignoreElement(id) && !this.elementsFound.includes(id))
       .map(id => ({ elementID: id }))
-      .forEach(elem => this.buildElementColumn(elem as DataElements));
+      .forEach(elem => {
+        this.isMetadataElement(elem.elementID)
+          ? this.buildMetadataColumn(elem as MetadataElements)
+          : this.buildElementColumn(elem as DataElements);
+      });
   }
 
   // TODO: This function assumes a flat column config
@@ -483,7 +479,7 @@ export class DataGridService implements OnDestroy {
     this.columnsGenerated.push(headerID);
   }
 
-  private buildMetadataColumn(element, headerID) {
+  private buildMetadataColumn(element, headerID: string = ColumnConfigurationContainer.findHeaderID(element)) {
     if (this.columnsGenerated.includes(headerID)) {
       return;
     }
