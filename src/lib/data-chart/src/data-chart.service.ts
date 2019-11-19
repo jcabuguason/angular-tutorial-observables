@@ -93,6 +93,11 @@ export class DataChartService {
         lang: {
           noData: this.buildNoDataString(chartObj),
         },
+        plotOptions: {
+          series: {
+            turboThreshold: 1500,
+          },
+        },
       },
       options.highchartsOptions,
     );
