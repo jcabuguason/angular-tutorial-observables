@@ -146,7 +146,8 @@ export class DataChartService {
   }
 
   private buildSensor(foundElems, sensor, obs, yTypes, options) {
-    for (const e of foundElems) {
+    const newFoundElems = this.duplicateElemFilter(foundElems);
+    for (const e of newFoundElems) {
       const sensorType = this.getSensorType(e);
       const isSensor = !!e.index && e.index.name === 'sensor_index';
       if (!!e) {
@@ -178,6 +179,11 @@ export class DataChartService {
       : Number(element.value);
   }
 
+  private duplicateElemFilter(foundElems) {
+    const isProblemElem = foundElems.length > 1 && foundElems.every(e => !e.index || e.index.name !== 'sensor_index');
+    return isProblemElem ? foundElems.filter(e => !e.dataType) : foundElems;
+  }
+
   private buildYAxes(chartObj: ChartObject, observations) {
     const elements: Element[] = chartObj.elements;
     const stations: Station[] = chartObj.stations;
@@ -188,14 +194,14 @@ export class DataChartService {
       for (const elem of elements) {
         for (const obs of observations.filter(ob => ob.identifier === station.id)) {
           const hasUnit = elem.hasOwnProperty('unit');
-          const foundElem = obs.dataElements.find(elemt => elemt.elementID === elem.id && !hasUnit);
-
-          if (!!foundElem) {
-            if (!values.includes(foundElem.unit)) {
-              values.push(foundElem.unit);
+          const foundElem = obs.dataElements.filter(elemt => elemt.elementID === elem.id && !hasUnit);
+          const newFoundElems = this.duplicateElemFilter(foundElem);
+          if (newFoundElems.length > 0) {
+            if (!values.includes(newFoundElems[0].unit)) {
+              values.push(newFoundElems[0].unit);
               names.push({
-                unit: foundElem.unit,
-                name: this.configService.getFormattedNodeName(foundElem.elementID, 2),
+                unit: newFoundElems[0].unit,
+                name: this.configService.getFormattedNodeName(newFoundElems[0].elementID, 2),
               });
             }
           }
