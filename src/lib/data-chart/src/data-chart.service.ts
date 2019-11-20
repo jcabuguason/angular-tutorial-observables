@@ -93,11 +93,6 @@ export class DataChartService {
         lang: {
           noData: this.buildNoDataString(chartObj),
         },
-        plotOptions: {
-          series: {
-            turboThreshold: 1500,
-          },
-        },
       },
       options.highchartsOptions,
     );
@@ -141,6 +136,7 @@ export class DataChartService {
         type: type,
         isSensor: sensor[key]['isSensor'],
         visible: sensor[key]['isSensor'] && !!custom ? custom.showSensors : true,
+        turboThreshold: 1500,
       })),
     );
   }
