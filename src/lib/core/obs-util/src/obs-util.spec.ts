@@ -82,5 +82,6 @@ describe('ObsUtil', () => {
   it('should modify date format correctly', () => {
     expect(obsUtil.formatDateToISO('2018-11-11T02:00')).toBe('2018-11-11T02:00:00.000Z');
     expect(obsUtil.formatDateRemoveSeconds('2018-11-11T02:00:00.000Z')).toBe('2018-11-11T02:00');
+    expect(obsUtil.formatDateRemoveSecondsAndTimeDelimeter('2018-11-11T02:00:00.000Z')).toBe('2018-11-11 02:00');
   });
 });
