@@ -167,6 +167,10 @@ export function formatDateRemoveSeconds(date: string): string {
   return !!date ? date.replace(':00.000Z', '') : '';
 }
 
+export function formatDateRemoveSecondsAndTimeDelimeter(date: string): string {
+  return formatDateRemoveSeconds(date).replace('T', ' ');
+}
+
 export function getIndexLabelTranslationKey(element: DataElements): string {
   let label: string;
   switch (element.index.name) {
