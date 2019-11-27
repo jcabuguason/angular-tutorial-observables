@@ -60,7 +60,7 @@ export class SearchService {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private messageService: MessageService,
-    private urlService: SearchURLService
+    private urlService: SearchURLService,
   ) {
     this.updateConfig(config);
   }
@@ -79,14 +79,16 @@ export class SearchService {
     this.createShortcutButtons();
 
     this.hoursRangeParams = this.availableParams.filter(
-      p => p.getName() === ParameterName.HOURS_RANGE || p.getName() === ParameterName.HOURS_RANGE_DATETIME
+      p => p.getName() === ParameterName.HOURS_RANGE || p.getName() === ParameterName.HOURS_RANGE_DATETIME,
     );
     this.dateRangeParams = this.availableParams.filter(
-      p => p.getName() === ParameterName.FROM || p.getName() === ParameterName.TO
+      p => p.getName() === ParameterName.FROM || p.getName() === ParameterName.TO,
     );
     this.useDateAndHoursRange = !!this.hoursRangeParams.length && !!this.dateRangeParams.length;
     this.setSelectedRangeType('hoursRange');
 
+    this.addDefaultParameters();
+    
     this.searchConfigUpdated.next(config);
   }
 
@@ -106,7 +108,7 @@ export class SearchService {
         .forEach(param =>
           urlParams.hasOwnProperty(param.name)
             ? urlParams[param.name].push(param.value)
-            : (urlParams[param.name] = [param.value])
+            : (urlParams[param.name] = [param.value]),
         );
     }
 
@@ -141,6 +143,11 @@ export class SearchService {
     if (parameter != null) {
       this.addSuggestedParameter(parameter, values);
     }
+  }
+
+  /** Add default parameters and values */
+  addDefaultParameters() {
+    // empty, but allow apps to overwrite this
   }
 
   /** Suggest parameters that are not already selected */
@@ -282,7 +289,7 @@ export class SearchService {
     this.formRangeParams = type === 'hoursRange' ? this.hoursRangeParams : this.dateRangeParams;
   }
 
-  onParameterValueChange(parameter: SearchParameter, newValue: any) { }
+  onParameterValueChange(parameter: SearchParameter, newValue: any) {}
 
   /** Determines the element ID depending on the station entered (defaults to MSC_ID) */
   determineStationElementID(stationID: string): string {
@@ -320,7 +327,7 @@ export class SearchService {
     const emptyParams = this.findEmptyDisplayParameters().map(p => p.getDisplayName());
     const missingParams = this.findMissingRequiredParameters().map(p => p.getDisplayName());
     const queryParams = this.availableParams.filter(
-      param => param.getType() === ParameterType.SEARCH_QUERY_TYPE && !param.isUnfilled()
+      param => param.getType() === ParameterType.SEARCH_QUERY_TYPE && !param.isUnfilled(),
     ) as SearchQueryType[];
     let valid = true;
 
