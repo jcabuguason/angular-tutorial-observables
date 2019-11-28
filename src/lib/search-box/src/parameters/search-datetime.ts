@@ -3,10 +3,15 @@ import { SearchParameter, ParameterType } from './search-parameter';
 export class SearchDatetime extends SearchParameter {
   datetime: Date;
   formDatetime: Date;
+  includeTime = true;
 
   constructor(name: string, required: boolean) {
     super(name, [], true, required, 1);
     this.setType(ParameterType.SEARCH_DATETIME);
+  }
+
+  enableTime(value: boolean) {
+    this.includeTime = value;
   }
 
   canAddSelected(value): boolean {
@@ -58,7 +63,9 @@ export class SearchDatetime extends SearchParameter {
 
   // formats to yyyy-MM-dd
   private formattedDate(): string {
-    return `${this.datetime.getFullYear()}-${this.padTimeValue(this.datetime.getMonth() + 1)}-${this.padTimeValue(this.datetime.getDate())}`;
+    return `${this.datetime.getFullYear()}-${this.padTimeValue(this.datetime.getMonth() + 1)}-${this.padTimeValue(
+      this.datetime.getDate(),
+    )}`;
   }
 
   private formattedTime(): string {
