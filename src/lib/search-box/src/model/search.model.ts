@@ -4,20 +4,22 @@ import {
   PROVINCE_ELEMENT,
   STATION_NAME_ELEMENT,
   TC_ID_ELEMENT,
-  WMO_ID_ELEMENT
+  WMO_ID_ELEMENT,
 } from 'msc-dms-commons-angular/core/obs-util';
+import { HttpParams } from '@angular/common/http';
 
-export class SearchModel {
-  constructor(
-    public taxonomy: string[],
-    public elements: SearchElement[],
-    public from?: Date,
-    public to?: Date,
-    public size?: number,
-    public operator?: string,
-    public sortFields?: string,
-    public queryType?: string
-  ) { }
+export interface SearchModel {
+  // information to send to ES
+  taxonomy: string[];
+  elements: SearchElement[];
+  from?: Date;
+  to?: Date;
+  size?: number;
+  operator?: string;
+  sortFields?: string;
+  queryType?: string;
+  // HttpParams created from the search parameters
+  httpParams?: HttpParams;
 }
 
 export class SearchElement {
@@ -27,12 +29,12 @@ export class SearchElement {
     // could be 'value', 'unit', 'overallQASummary', etc
     public valueType?: string,
     // the actual value
-    public value?: string
-  ) { }
+    public value?: string,
+  ) {}
   // used by ES
   elementToString(): string {
     const basicQuery = `elementID=${this.elementID}|type=${this.elementType}`;
-    const valueQuery = (this.valueType != null && this.value != null) ? `|${this.valueType}=${this.value}` : '';
+    const valueQuery = this.valueType != null && this.value != null ? `|${this.valueType}=${this.value}` : '';
     return `${basicQuery}${valueQuery}`;
   }
 }
