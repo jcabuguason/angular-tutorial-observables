@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { HttpParams } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SearchService } from './search.service';
 import { SearchURLService } from './search-url.service';
@@ -53,7 +54,7 @@ describe('SearchService', () => {
       return qParams;
     }
   }
-  class EmptyComponent { }
+  class EmptyComponent {}
 
   beforeEach(() => {
     const organization: ChoiceModel[] = choiceModels(['msc', 'dnd'].sort());
@@ -248,17 +249,27 @@ describe('SearchService', () => {
     searchService.addSuggestedParameter(sParams.endDateParam, ['2018-02-01T00:00']);
     searchService.addSuggestedParameter(sParams.provinceParam, ['AB']);
 
-    const expectedModel = new SearchModel(
-      [caIndex, dndAwosIndex],
-      [
+    const expectedHttpParams: HttpParams = new HttpParams({
+      fromObject: {
+        network: ['ca', 'dnd awos'],
+        stationName: ['station name'],
+        startDate: ['2018-01-01T00:00'],
+        endDate: ['2018-02-01T00:00'],
+        province: ['AB'],
+      },
+    });
+    const expectedModel: SearchModel = {
+      taxonomy: [caIndex, dndAwosIndex],
+      elements: [
         new SearchElement(SearchableElement.STATION_NAME.id, 'metadataElements', 'value', 'station name'),
         new SearchElement(SearchableElement.PROVINCE.id, 'metadataElements', 'value', 'AB'),
       ],
-      new Date('2018-01-01T00:00'),
-      new Date('2018-02-01T00:00'),
-      300,
-      'AND'
-    );
+      from: new Date('2018-01-01T00:00'),
+      to: new Date('2018-02-01T00:00'),
+      size: 300,
+      operator: 'AND',
+      httpParams: expectedHttpParams,
+    };
 
     expect(searchService.buildSearchModel()).toEqual(expectedModel);
   });
@@ -275,7 +286,10 @@ describe('SearchService', () => {
       createElement('123abcd', 'MSC_ID'),
       createElement('someId', 'MSC_ID'),
     ];
-    searchService.addSuggestedParameter(sParams.stationIdParam, stations.map(s => s.station));
+    searchService.addSuggestedParameter(
+      sParams.stationIdParam,
+      stations.map(s => s.station),
+    );
 
     expect(searchService.buildSearchModel().elements).toEqual(stations.map(s => s.searchElement));
   });
@@ -295,11 +309,14 @@ describe('SearchService', () => {
     ];
     const stationName = createElement('name*', nameId, 'name.*');
 
-    searchService.addSuggestedParameter(sParams.stationIdParam, stations.map(s => s.station));
+    searchService.addSuggestedParameter(
+      sParams.stationIdParam,
+      stations.map(s => s.station),
+    );
     searchService.addSuggestedParameter(sParams.stationNameParam, [stationName.station]);
 
     expect(searchService.buildSearchModel().elements).toEqual(
-      stations.map(s => s.searchElement).concat(stationName.searchElement)
+      stations.map(s => s.searchElement).concat(stationName.searchElement),
     );
   });
 

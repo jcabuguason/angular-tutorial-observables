@@ -1,4 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { addHours, subHours } from 'date-fns';
 
@@ -88,7 +89,7 @@ export class SearchService {
     this.setSelectedRangeType('hoursRange');
 
     this.addDefaultParameters();
-    
+
     this.searchConfigUpdated.next(config);
   }
 
@@ -101,21 +102,21 @@ export class SearchService {
 
   /** Re-directs to url with search parameters */
   updateUrl(clearUrl = false) {
-    const urlParams: Params = {};
-    if (!clearUrl) {
-      this.urlService
-        .createUrlParams(this.displayParams, this.shortcutSelected)
-        .forEach(param =>
-          urlParams.hasOwnProperty(param.name)
-            ? urlParams[param.name].push(param.value)
-            : (urlParams[param.name] = [param.value]),
-        );
-    }
-
+    const urlParams: Params = clearUrl ? {} : this.buildUrlParameters();
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
       queryParams: urlParams,
     });
+  }
+
+  buildUrlParameters(): Params {
+    const urlParams: Params = {};
+    for (const param of this.urlService.createUrlParams(this.displayParams, this.shortcutSelected)) {
+      urlParams.hasOwnProperty(param.name)
+        ? urlParams[param.name].push(param.value)
+        : (urlParams[param.name] = [param.value]);
+    }
+    return urlParams;
   }
 
   /** Add and display parameter with value if it exists */
@@ -186,8 +187,6 @@ export class SearchService {
 
   /** Gets the search model used for ES and updates any values outside of its limits (ex. size and hours range) */
   buildSearchModel(): SearchModel {
-    let model = new SearchModel([], []);
-
     const elements: SearchElement[] = [];
     let startDate: Date;
     let endDate: Date;
@@ -253,8 +252,15 @@ export class SearchService {
         endDate = addHours(hoursRangeDate, hoursRange.hoursAfter);
       }
     }
-    model = new SearchModel(this.determineTaxonomies(), elements, startDate, endDate, numObs, operator);
-    return model;
+    return {
+      taxonomy: this.determineTaxonomies(),
+      elements: elements,
+      from: startDate,
+      to: endDate,
+      size: numObs,
+      operator: operator,
+      httpParams: new HttpParams({ fromObject: this.buildUrlParameters() }),
+    };
   }
 
   findMissingRequiredParameters(): SearchParameter[] {
