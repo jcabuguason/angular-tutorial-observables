@@ -305,7 +305,9 @@ export class DataGridService implements OnDestroy {
   displayMetadataTable(nodeData) {
     this.dialog.open(StationInfoComponent, {
       data: {
-        name: obsUtil.getFormattedMetadata(nodeData[STATION_NAME_FIELD] || nodeData[STATION_NAME_FIELD_REPORT]),
+        name:
+          obsUtil.getFormattedMetadata(nodeData[STATION_NAME_FIELD] || nodeData[STATION_NAME_FIELD_REPORT]) ||
+          nodeData.primaryStationId,
         allData: this.columnDefs
           .filter(group => group.groupId === 'identity' || group.headerClass === 'meta')
           .map(group => group.children)
