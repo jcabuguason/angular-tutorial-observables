@@ -181,6 +181,7 @@
     "LAYER": "Couche",
     "DEFAULT": "Défaut",
     "OFFICIAL": "Officiel",
+    "DEFAULT_INDEX_LABEL": "Indice",
     "SENSOR_INDEX_LABEL": "Capteur",
     "CLOUD_LAYER_INDEX_LABEL": "Couche",
     "OBSERVED_WEATHER_INDEX_LABEL": "Type"
