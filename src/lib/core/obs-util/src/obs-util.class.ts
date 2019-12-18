@@ -181,7 +181,7 @@ export function getIndexLabelTranslationKey(element: DataElements): string {
       break;
     }
     default: {
-      label = 'SENSOR_INDEX_LABEL';
+      label = 'DEFAULT_INDEX_LABEL';
       break;
     }
   }

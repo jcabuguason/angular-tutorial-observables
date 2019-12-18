@@ -181,6 +181,7 @@
     "LAYER": "Layer",
     "DEFAULT": "Default",
     "OFFICIAL": "Official",
+    "DEFAULT_INDEX_LABEL": "Index",
     "SENSOR_INDEX_LABEL": "Sensor",
     "CLOUD_LAYER_INDEX_LABEL": "Layer",
     "OBSERVED_WEATHER_INDEX_LABEL": "Type"
