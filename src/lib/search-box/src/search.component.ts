@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { SearchService } from './search.service';
 import { ParameterType, SearchParameter } from './parameters/search-parameter';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { NON_SELECTABLE } from './model/choice.model';
 
 @Component({
   selector: 'commons-search',
@@ -118,10 +119,17 @@ export class SearchComponent implements OnInit, AfterViewChecked {
     this.searchService.setSelectedRangeType(event.value.value);
   }
 
-  multiSelectOnChange(event) {
-    // prevents "Loading" value from being selected
-    if (event.itemValue === 'SEARCH_BAR.LOADING') {
+  onMultiSelectChange(searchParam: SearchParameter, event) {
+    // prevents values like "Loading" from being selected
+    const nonSelectableLabels = searchParam
+      .getChoices()
+      .filter(choice => choice.value === NON_SELECTABLE)
+      .map(choice => choice.label);
+
+    if (nonSelectableLabels.includes(event.itemValue)) {
       event.value.pop();
+    } else if (!!event.value) {
+      this.searchService.onParameterValueChange(searchParam, event.value);
     }
   }
 
@@ -132,14 +140,20 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   }
 
   private adjustCalendar() {
-    const weekdaysShort = this.instantArray('DATES', this.weekdays.map(day => `${day}_SHORT`));
+    const weekdaysShort = this.instantArray(
+      'DATES',
+      this.weekdays.map(day => `${day}_SHORT`),
+    );
     this.calendarLocale = {
       firstDayOfWeek: 1,
       dayNames: this.instantArray('DATES', this.weekdays),
       dayNamesShort: weekdaysShort,
       dayNamesMin: weekdaysShort.map(day => day.substr(0, 2)),
       monthNames: this.instantArray('DATES', this.months),
-      monthNamesShort: this.instantArray('DATES', this.months.map(month => `${month}_SHORT`)),
+      monthNamesShort: this.instantArray(
+        'DATES',
+        this.months.map(month => `${month}_SHORT`),
+      ),
       today: this.translate.instant('SEARCH_BAR.TODAY'),
       clear: this.translate.instant('SEARCH_BAR.CLEAR'),
     };
