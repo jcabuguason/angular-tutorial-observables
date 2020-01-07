@@ -42,7 +42,7 @@ export class SearchParameter {
     private restricted: boolean = false,
     private required: boolean = false,
     private timesUsable: number = 500,
-    private placeholder: string = ''
+    private placeholder: string = '',
   ) {
     this.displayName = name;
     this.type = ParameterType.SEARCH_PARAMETER;
@@ -86,6 +86,10 @@ export class SearchParameter {
     return this.restricted;
   }
 
+  setRestricted(restricted: boolean) {
+    this.restricted = restricted;
+  }
+
   isRequired(): boolean {
     return this.required;
   }
@@ -96,6 +100,10 @@ export class SearchParameter {
 
   getPlaceholder(): string {
     return this.placeholder;
+  }
+
+  setPlaceholder(placeholder: string) {
+    this.placeholder = placeholder;
   }
 
   getTimesUsable(): number {
