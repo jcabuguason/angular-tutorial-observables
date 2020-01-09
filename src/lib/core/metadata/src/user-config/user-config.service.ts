@@ -28,7 +28,7 @@ export class UserConfigService {
   constructor(
     @Inject(MR_MAPPING_CONFIG)
     private config: MRMappingConfig,
-    private http: HttpClient
+    private http: HttpClient,
   ) {
     this.defaultHeader();
 
@@ -38,7 +38,7 @@ export class UserConfigService {
       first(),
       publishLast(),
       refCount(),
-      catchError(e => observableThrowError(e))
+      catchError(e => observableThrowError(e)),
     );
   }
 
@@ -377,5 +377,9 @@ export class UserConfigService {
 
   isVisibleRawData(): boolean {
     return this.userConfig.visibleRawData;
+  }
+
+  isLoadRawHeader(): boolean {
+    return this.userConfig.loadRawHeader;
   }
 }

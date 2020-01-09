@@ -31,6 +31,7 @@ export class UserConfig {
   loadPreferredUnits: boolean;
   loadRawData: boolean;
   visibleRawData: boolean;
+  loadRawHeader: boolean;
 
   private constructor() {
     this.loadMetaElements = new IncludeExclude([], []);
@@ -48,6 +49,7 @@ export class UserConfig {
     this.loadPreferredUnits = false;
     this.loadRawData = true;
     this.visibleRawData = true;
+    this.loadRawHeader = true;
   }
 
   public static createConfig(): UserConfig {
@@ -134,6 +136,11 @@ export class UserConfig {
       // Configuring raw data
       else if (checkElementGroupAndName('raw-data', 'visible-raw-data')) {
         config.visibleRawData = 'true' === element.value;
+      }
+
+      // Configuring raw header
+      else if (checkElementGroupAndName('raw-data', 'load-raw-header')) {
+        config.loadRawHeader = 'true' === element.value;
       }
     }
   }
@@ -376,7 +383,7 @@ export class NodeValueMap {
   update(element: MDInstanceElement) {
     this.nodeName = LanguageLabel.createLanguageLabel(element.instelements.find(elem => elem.name === 'node-name'));
     this.nodeDescription = LanguageLabel.createLanguageLabel(
-      element.instelements.find(elem => elem.name === 'node-description')
+      element.instelements.find(elem => elem.name === 'node-description'),
     );
   }
 }
