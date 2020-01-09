@@ -89,8 +89,12 @@ export abstract class DataColumnConfiguration {
       headerValueGetter: params => this.instantWrapper('RAW'),
       groupId: 'raw',
       suppressPaste: true,
-      children: [this.buildRawHeader()],
+      children: [],
     };
+  }
+
+  getRawHeader(): any {
+    return this.buildRawHeader();
   }
 
   getRawMessageHeader(): any {

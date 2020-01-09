@@ -119,7 +119,7 @@ describe('UserConfigService', () => {
 
     it('should show the entire element name with zero value sub headers', () => {
       expect(service.getFullFormattedHeader('1.12.207.2.1.1.0')).toBe(
-        'Pressure / Mean Sea Level Pressure / Average, -1 min, 1 min'
+        'Pressure / Mean Sea Level Pressure / Average, -1 min, 1 min',
       );
     });
 
@@ -473,6 +473,26 @@ describe('UserConfigService', () => {
 
     it('should hide raw data', () => {
       expect(service.isVisibleRawData()).toBeFalsy();
+    });
+  });
+
+  describe('#loadRawHeaderConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(loadRawHeaderConfig);
+    });
+
+    it('should have raw header', () => {
+      expect(service.isLoadRawHeader()).toBeTruthy();
+    });
+  });
+
+  describe('#noLoadRawHeaderConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(noLoadRawHeaderConfig);
+    });
+
+    it('should not have raw header', () => {
+      expect(service.isLoadRawHeader()).toBeFalsy();
     });
   });
 
@@ -1650,6 +1670,44 @@ const noVisibleRawDataConfig: MDInstanceDefinition = {
     {
       group: 'raw-data',
       name: 'visible-raw-data',
+      value: 'false',
+      def_id: '',
+      id: '',
+      index: '',
+      uom: '',
+      language: { english: '', french: '' },
+      instelements: [],
+    },
+  ],
+};
+
+const loadRawHeaderConfig: MDInstanceDefinition = {
+  dataset: 'stub',
+  parent: 'stub',
+  identificationElements: [],
+  elements: [
+    {
+      group: 'raw-data',
+      name: 'load-raw-header',
+      value: 'true',
+      def_id: '',
+      id: '',
+      index: '',
+      uom: '',
+      language: { english: '', french: '' },
+      instelements: [],
+    },
+  ],
+};
+
+const noLoadRawHeaderConfig: MDInstanceDefinition = {
+  dataset: 'stub',
+  parent: 'stub',
+  identificationElements: [],
+  elements: [
+    {
+      group: 'raw-data',
+      name: 'load-raw-header',
       value: 'false',
       def_id: '',
       id: '',

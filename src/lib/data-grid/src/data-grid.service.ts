@@ -44,7 +44,7 @@ export class DataGridService implements OnDestroy {
 
   private columnConfiguration: ElementColumnConfiguration;
   private identityHeader;
-  private rawHeader;
+  private rawGroupHeader;
   private elementsFound: string[] = [];
 
   constructor(
@@ -298,7 +298,7 @@ export class DataGridService implements OnDestroy {
 
     this.columnDefs = [identity, ...metaCols, ...dataCols];
     if (this.userConfigService.isLoadRawData()) {
-      this.columnDefs.push(this.rawHeader);
+      this.columnDefs.push(this.rawGroupHeader);
     }
   }
 
@@ -337,7 +337,7 @@ export class DataGridService implements OnDestroy {
 
   private resetHeader() {
     this.identityHeader = this.columnConfiguration.getIdentityHeaders();
-    this.rawHeader = null;
+    this.rawGroupHeader = null;
     this.columnDefs = [];
     this.columnDefs.push(this.identityHeader);
   }
@@ -564,14 +564,23 @@ export class DataGridService implements OnDestroy {
   }
 
   private buildRawColumn(rawMessage: string) {
-    if (this.rawHeader == null) {
-      this.rawHeader = this.columnConfiguration.getRawGroupHeader();
-      this.columnDefs.push(this.rawHeader);
+    if (this.rawGroupHeader == null) {
+      this.rawGroupHeader = this.columnConfiguration.getRawGroupHeader();
+      if (this.userConfigService.isLoadRawHeader()) {
+        this.rawGroupHeader.children.push(this.columnConfiguration.getRawHeader());
+      }
+      this.columnDefs.push(this.rawGroupHeader);
     }
-    if (this.rawHeader.children.length === 1 && !!rawMessage) {
-      this.rawHeader.children.push(this.columnConfiguration.getRawMessageHeader());
+
+    if (!!rawMessage) {
+      const rawMessageHeader = this.columnConfiguration.getRawMessageHeader();
+      const children = this.rawGroupHeader.children.map(child => child.field);
+      if (!children.includes(rawMessageHeader.field)) {
+        this.rawGroupHeader.children.push(rawMessageHeader);
+      }
     }
-    for (const rawCol of this.rawHeader.children) {
+
+    for (const rawCol of this.rawGroupHeader.children) {
       rawCol.hide = !this.userConfigService.isVisibleRawData();
     }
   }

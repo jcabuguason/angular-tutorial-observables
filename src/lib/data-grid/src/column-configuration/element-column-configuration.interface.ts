@@ -25,5 +25,7 @@ export interface ElementColumnConfiguration {
 
   getRawGroupHeader();
 
+  getRawHeader();
+
   getRawMessageHeader();
 }
