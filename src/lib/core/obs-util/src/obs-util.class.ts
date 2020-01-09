@@ -21,8 +21,16 @@ export const LONGITUDE_ELEMENT = '1.7.98.0.0.0.0';
 export const STATION_ID_ELEMENT_REPORT = '8.7.80.0.0.0.0';
 export const STATION_NAME_ELEMENT_REPORT = '8.7.83.0.0.0.0';
 
+function findValue(elems, id) {
+  return elems.filter(elem => elem.elementID === id).map(elem => elem.value)[0];
+}
+
 export function findMetadataValue(obs, elementID) {
-  return obs.metadataElements.filter(md => md.elementID === elementID).map(md => md.value)[0];
+  return findValue(obs.metadataElements, elementID);
+}
+
+export function findDataValue(obs, elementID) {
+  return findValue(obs.dataElements, elementID);
 }
 
 /** Most observations come in with a cor and ver in their metadata, but some come with a rev */

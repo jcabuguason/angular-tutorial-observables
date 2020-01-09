@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { LanguageService } from 'msc-dms-commons-angular/shared/language';
-import { modifiedOrBlank } from 'msc-dms-commons-angular/shared/util';
+import { modifiedOrBlank, range } from 'msc-dms-commons-angular/shared/util';
 import { BehaviorSubject, Observable, throwError as observableThrowError } from 'rxjs';
 import { catchError, first, publishLast, refCount, tap } from 'rxjs/operators';
 import { MDInstanceDefinition } from '../model/MDInstanceDefinition';
@@ -20,8 +20,6 @@ export class UserConfigService {
   private lang: Lang = Lang.ENGLISH;
   // Locally available profiles (might be removed once MR is used)
   private profiles: MDInstanceDefinition[] = [];
-  // Function for creating an inclusive array with the specific range
-  private range = (start, end) => Array.from({ length: end + 1 - start }, (v, k) => k + start);
   private nodeValueAt = (elementID, i) => elementID.split('.')[i - 1];
 
   // constructor(private metadataService: MetadataService) {
@@ -244,14 +242,14 @@ export class UserConfigService {
 
   getFullDefaultHeader(elementID: string, depth: number = this.getNestingDepth(elementID)): string {
     const split = elementID.split('.');
-    return this.range(2, depth)
+    return range(2, depth)
       .map(nodeIndex => this.getDefaultNodeName(nodeIndex, split[nodeIndex - 1]))
       .filter(nodeName => nodeName !== '')
       .join(' / ');
   }
 
   getFullFormattedHeader(elementID: string) {
-    const main = this.range(2, this.getNestingDepth(elementID))
+    const main = range(2, this.getNestingDepth(elementID))
       .map(nodeIndex => this.getFormattedNodeName(elementID, nodeIndex))
       .filter(nodeName => nodeName !== '')
       .join(' / ');
@@ -268,7 +266,7 @@ export class UserConfigService {
     const headerConfig = this.getSubHeaderConfig(elementID);
 
     return headerConfig.displaySubHeader
-      ? this.range(headerConfig.subHeaderStart, headerConfig.subHeaderEnd)
+      ? range(headerConfig.subHeaderStart, headerConfig.subHeaderEnd)
           .map(nodeIndex => this.getNodeName(elementID, nodeIndex))
           .filter(nodeValue => nodeValue !== '')
           .join(', ')
