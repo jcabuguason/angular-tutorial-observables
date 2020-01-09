@@ -9,9 +9,7 @@ import {
   MetadataElements,
   RawMessage,
   STATION_NAME_ELEMENT,
-  STATION_NAME_ELEMENT_REPORT,
   STATION_NAME_FIELD,
-  STATION_NAME_FIELD_REPORT,
   UnitCodeConversionService,
 } from 'msc-dms-commons-angular/core/obs-util';
 import { Subject } from 'rxjs';
@@ -163,17 +161,17 @@ export class DataGridService implements OnDestroy {
     groupIds.forEach(id => columnApi.setColumnGroupOpened(id, expand));
   }
 
-  flattenObsIdentities = (obs: DMSObs) => ({
-    obsDateTime: obs.obsDateTime,
-    receivedDateTime: obs.receivedDateTime,
-    uri: obs.identity,
-    taxonomy: obs.taxonomy,
-    primaryStationId: obs.identifier,
-    station:
-      obsUtil.findMetadataValue(obs, STATION_NAME_ELEMENT) ||
-      obsUtil.findMetadataValue(obs, STATION_NAME_ELEMENT_REPORT),
-    revision: obsUtil.findRevision(obs),
-  });
+  flattenObsIdentities(obs: DMSObs) {
+    return {
+      obsDateTime: obs.obsDateTime,
+      receivedDateTime: obs.receivedDateTime,
+      uri: obs.identity,
+      taxonomy: obs.taxonomy,
+      primaryStationId: obs.identifier,
+      station: obsUtil.findMetadataValue(obs, STATION_NAME_ELEMENT),
+      revision: obsUtil.findRevision(obs),
+    };
+  }
 
   flattenMetadataElements(mdElements: MetadataElements[]) {
     const result = {};
@@ -302,22 +300,24 @@ export class DataGridService implements OnDestroy {
     }
   }
 
+  getMetadataTableInfo(nodeData) {
+    return {
+      name: obsUtil.getFormattedMetadata(nodeData[STATION_NAME_FIELD]),
+      allData: this.columnDefs
+        .filter(group => group.groupId === 'identity' || group.headerClass === 'meta')
+        .map(group => group.children)
+        .reduce((acc, val) => acc.concat(val))
+        .filter(child => nodeData[child.field] != null)
+        .map(child => ({
+          key: !!child.elementID ? this.userConfigService.getFullDefaultHeader(child.elementID, 3) : child.field,
+          value: obsUtil.getFormattedMetadata(nodeData[child.field]),
+        })),
+    };
+  }
+
   displayMetadataTable(nodeData) {
     this.dialog.open(StationInfoComponent, {
-      data: {
-        name:
-          obsUtil.getFormattedMetadata(nodeData[STATION_NAME_FIELD] || nodeData[STATION_NAME_FIELD_REPORT]) ||
-          nodeData.primaryStationId,
-        allData: this.columnDefs
-          .filter(group => group.groupId === 'identity' || group.headerClass === 'meta')
-          .map(group => group.children)
-          .reduce((acc, val) => acc.concat(val))
-          .filter(child => nodeData[child.field] != null)
-          .map(child => ({
-            key: !!child.elementID ? this.userConfigService.getFullDefaultHeader(child.elementID, 3) : child.field,
-            value: obsUtil.getFormattedMetadata(nodeData[child.field]),
-          })),
-      },
+      data: this.getMetadataTableInfo(nodeData),
     });
   }
 

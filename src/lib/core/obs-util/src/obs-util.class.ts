@@ -2,7 +2,6 @@ import { getTime } from 'date-fns';
 import { DataElements } from './dms-observation.model';
 
 // observation identification elements
-export const STATION_ID_ELEMENT = '1.7.80.0.0.0.0';
 export const WMO_ID_ELEMENT = '1.7.82.0.0.0.0';
 export const STATION_NAME_ELEMENT = '1.7.83.0.0.0.0';
 export const TC_ID_ELEMENT = '1.7.84.0.0.0.0';
@@ -13,13 +12,6 @@ export const PROVINCE_ELEMENT = '1.7.117.0.0.0.0';
 export const CORRECTION_ELEMENT = '1.7.105.0.0.0.0';
 export const VERSION_ELEMENT = '1.7.408.0.0.0.0';
 export const REVISION_ELEMENT = '1.7.371.0.0.0.0';
-export const OBS_DATE_ELEMENT = '1.7.78.0.0.0.0';
-export const LATITUDE_ELEMENT = '1.7.97.0.0.0.0';
-export const LONGITUDE_ELEMENT = '1.7.98.0.0.0.0';
-
-// report identification elements
-export const STATION_ID_ELEMENT_REPORT = '8.7.80.0.0.0.0';
-export const STATION_NAME_ELEMENT_REPORT = '8.7.83.0.0.0.0';
 
 function findValue(elems, id) {
   return elems.filter(elem => elem.elementID === id).map(elem => elem.value)[0];
