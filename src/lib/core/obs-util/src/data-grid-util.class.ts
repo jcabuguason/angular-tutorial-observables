@@ -3,15 +3,12 @@ import {
   formatElementToColumn,
   MSC_ID_ELEMENT,
   STATION_NAME_ELEMENT,
-  STATION_NAME_ELEMENT_REPORT,
   TC_ID_ELEMENT,
 } from './obs-util.class';
 
 export const STATION_NAME_FIELD = formatElementToColumn(STATION_NAME_ELEMENT);
 export const MSC_ID_FIELD = formatElementToColumn(MSC_ID_ELEMENT);
 export const TC_ID_FIELD = formatElementToColumn(TC_ID_ELEMENT);
-
-export const STATION_NAME_FIELD_REPORT = formatElementToColumn(STATION_NAME_ELEMENT_REPORT);
 
 /** Checks if it is the latest obs loaded into the grid */
 export function isLatest(params): boolean {
