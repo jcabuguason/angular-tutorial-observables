@@ -1,13 +1,15 @@
 import { Action } from '@ngrx/store';
 import { ChartObject } from './model/chart.model';
 
-export const CHART_CLEAR = 'CHART_CLEAR';
-export const CHART_FORM = 'CHART_FORM';
-export const CHART_REMOVE = 'CHART_REMOVE';
-export const CHART_EDIT = 'CHART_EDIT';
+export enum ChartActionType {
+  CLEAR = '[Chart] Clear All',
+  CREATE = '[Chart] Create new chart',
+  REMOVE = '[Chart] Remove chart',
+  EDIT = '[Chart] Edit',
+}
 
 export class ChartAction implements Action {
-  readonly type = CHART_FORM;
+  readonly type = ChartActionType.CREATE;
 
   constructor(public payload: ChartObject[]) {}
 }
@@ -15,13 +17,13 @@ export class ChartAction implements Action {
 export const initialState = [];
 
 export class ClearChartAction implements Action {
-  readonly type = CHART_CLEAR;
+  readonly type = ChartActionType.CLEAR;
 
   constructor() {}
 }
 
 export class EditChartAction implements Action {
-  readonly type = CHART_EDIT;
+  readonly type = ChartActionType.EDIT;
 
   constructor(public payload, public index) {
     this.index = index;
@@ -29,26 +31,26 @@ export class EditChartAction implements Action {
 }
 
 export class RemoveChartAction implements Action {
-  readonly type = CHART_REMOVE;
+  readonly type = ChartActionType.REMOVE;
 
   constructor(public payload) {}
 }
 
 export function chartReducer(
   state = initialState,
-  action: ChartAction | ClearChartAction | RemoveChartAction | EditChartAction
+  action: ChartAction | ClearChartAction | RemoveChartAction | EditChartAction,
 ) {
   switch (action.type) {
-    case CHART_FORM: {
+    case ChartActionType.CREATE: {
       return [...state, ...action.payload];
     }
-    case CHART_CLEAR: {
+    case ChartActionType.CLEAR: {
       return initialState;
     }
-    case CHART_REMOVE: {
+    case ChartActionType.REMOVE: {
       return [...state.slice(0, action.payload), ...state.slice(action.payload + 1)];
     }
-    case CHART_EDIT: {
+    case ChartActionType.EDIT: {
       const copy = state.slice();
       copy[action.index] = action.payload;
       return copy;

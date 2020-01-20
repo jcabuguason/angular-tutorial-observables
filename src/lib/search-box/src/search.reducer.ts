@@ -2,8 +2,10 @@ import { Action } from '@ngrx/store';
 
 import { SearchModel } from './model/search.model';
 
-export const BUILD_SEARCH = 'BUILD_SEARCH';
-export const CLEAR_SEARCH = 'CLEAR_SEARCH';
+export enum SearchActionType {
+  BUILD = '[Search] Build',
+  CLEAR = '[Search] Clear',
+}
 
 export const initialState: SearchModel = {
   taxonomy: [],
@@ -15,23 +17,23 @@ export const initialState: SearchModel = {
 };
 
 export class SearchAction implements Action {
-  readonly type = BUILD_SEARCH;
+  readonly type = SearchActionType.BUILD;
 
-  constructor(public payload: SearchModel) { }
+  constructor(public payload: SearchModel) {}
 }
 
 export class ClearSearchAction implements Action {
-  readonly type = CLEAR_SEARCH;
+  readonly type = SearchActionType.CLEAR;
 
-  constructor() { }
+  constructor() {}
 }
 
 export function searchReducer(state = initialState, action: SearchAction | ClearSearchAction): SearchModel {
   switch (action.type) {
-    case BUILD_SEARCH: {
+    case SearchActionType.BUILD: {
       return action.payload;
     }
-    case CLEAR_SEARCH: {
+    case SearchActionType.CLEAR: {
       return initialState;
     }
     default: {

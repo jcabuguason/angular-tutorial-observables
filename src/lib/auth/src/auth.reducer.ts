@@ -7,8 +7,8 @@ export interface AuthAction extends Action {
 }
 
 export enum AuthActionType {
-  LOGIN = '[Commons] Login',
-  LOGOUT = '[Commons] Logout',
+  LOGIN = '[Auth] Login',
+  LOGOUT = '[Auth] Logout',
 }
 
 const initialState: AuthResponse = {
