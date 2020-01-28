@@ -56,7 +56,10 @@ export class DataChartService {
           loading: this.instantSingle('CHART_DEFAULTS', 'loading'),
           resetZoom: this.instantSingle('CHART_DEFAULTS', 'resetZoom'),
           resetZoomTitle: this.instantSingle('CHART_DEFAULTS', 'resetZoomTitle'),
-          shortMonths: this.instantArray('DATES', months.map(month => `${month}_SHORT`)),
+          shortMonths: this.instantArray(
+            'DATES',
+            months.map(month => `${month}_SHORT`),
+          ),
           months: this.instantArray('DATES', months),
           weekdays: this.instantArray('DATES', weekdays),
         },
@@ -114,7 +117,8 @@ export class DataChartService {
         .sort(obsUtil.compareObsTimeFromObs)) {
         for (const e of elements) {
           const foundElems = obs.dataElements.filter(elem => elem.elementID === e.id);
-          this.buildSensor(foundElems, sensor, obs, yTypes, options);
+          const type = e.chartType ? e.chartType : this.getElementType(e.id);
+          this.buildSensor(foundElems, sensor, obs, yTypes, options, type);
           name = this.createStationLabel(obs.metadataElements);
         }
       }
@@ -141,7 +145,32 @@ export class DataChartService {
     );
   }
 
-  private buildSensor(foundElems, sensor, obs, yTypes, options) {
+  private getQAColor(sensorQA: Number): string {
+    switch (sensorQA) {
+      case 100:
+        return '#008000';
+      case 101:
+        return '#ffc0cb';
+      case 110:
+        return '#eeeeee';
+      case 20:
+        return '#0000ff';
+      case 15:
+        return '#ffff00';
+      case 10:
+        return '#FFA500';
+      case 0:
+        return '#ff0000';
+      case -1:
+        return '#000000';
+      case -10:
+        return '#8b4513';
+      default:
+        return '#FFFFFF';
+    }
+  }
+
+  private buildSensor(foundElems, sensor, obs, yTypes, options, chartType) {
     const newFoundElems = this.duplicateElemFilter(foundElems);
     for (const e of newFoundElems) {
       const sensorType = this.getSensorType(e);
@@ -155,24 +184,36 @@ export class DataChartService {
         if (!sensor[key]) {
           sensor[key] = [];
         }
+        const qa = this.parseElementValue(e, options, 'overallQASummary');
         sensor[key]['sensorType'] = sensorType;
         sensor[key]['isSensor'] = isSensor;
         sensor[key].push({
           x: Date.parse(obs.obsDateTime),
-          y: this.parseElementValue(e, options),
+          y: Number(this.parseElementValue(e, options, 'value')),
           // custom fields
           unit: e.unit || '',
-          qa: obsUtil.formatQAValue(e.overallQASummary),
+          qa: obsUtil.formatQAValue(qa),
+          ...(this.shouldAddQA(options, chartType) && {
+            color: this.getQAColor(qa),
+            marker: {
+              lineColor: 'black',
+              lineWidth: 2,
+            },
+          }),
         });
       }
     }
   }
 
-  private parseElementValue(element, options) {
+  private shouldAddQA(options, chartType) {
+    return !!options.customOptions && options.customOptions.showQAColors && chartType !== 'column';
+  }
+
+  private parseElementValue(element, options, property: 'value' | 'overallQASummary') {
     const custom = options.customOptions;
     return !!custom && custom.showOriginalValue && element.hasOwnProperty('original')
-      ? Number(element.original.value)
-      : Number(element.value);
+      ? element.original[property]
+      : element[property];
   }
 
   private duplicateElemFilter(foundElems) {
@@ -260,17 +301,17 @@ export class DataChartService {
 
     for (const element of elements) {
       const sensor = {};
+      const type = element.chartType ? element.chartType : this.getElementType(element.id);
 
       for (const obs of observations
         .filter(obsUtil.latestFromArray)
         .sort(obsUtil.compareObsTimeFromObs)
         .filter(ob => ob.identifier === station.id)) {
         const foundElems = obs.dataElements.filter(elemt => elemt.elementID === element.id);
-        this.buildSensor(foundElems, sensor, obs, yTypes, options);
+        this.buildSensor(foundElems, sensor, obs, yTypes, options, type);
       }
 
       const name = this.configService.buildFullNodeName(element.id);
-      const type = element.chartType ? element.chartType : this.getElementType(element.id);
       this.buildSeries(series, sensor, name, yTypes, type, options);
     }
     return series;
