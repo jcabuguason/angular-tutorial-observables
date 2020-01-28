@@ -3,5 +3,6 @@ export class DataChartOptions {
   customOptions?: {
     showSensors: boolean;
     showOriginalValue?: boolean;
+    showQAColors?: boolean;
   };
 }

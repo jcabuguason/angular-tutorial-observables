@@ -1,14 +1,12 @@
-import { TestBed, getTestBed, async } from '@angular/core/testing';
-
-import { Element, Station, ChartObject } from './model/chart.model';
-import { DataChartService } from './data-chart.service';
-import { UserConfigService } from 'msc-dms-commons-angular/core/metadata';
-import { UnitCodeConversionService, DataElements } from 'msc-dms-commons-angular/core/obs-util';
-
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { CombinedHttpLoader } from 'msc-dms-commons-angular/shared/language';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { UserConfigService } from 'msc-dms-commons-angular/core/metadata';
+import { DataElements, UnitCodeConversionService } from 'msc-dms-commons-angular/core/obs-util';
+import { CombinedHttpLoader } from 'msc-dms-commons-angular/shared/language';
+import { DataChartService } from './data-chart.service';
+import { ChartObject, Element, Station } from './model/chart.model';
 
 class MockConfigService {
   getFullFormattedHeader(elementID: string) {
@@ -21,7 +19,7 @@ class MockConfigService {
 }
 
 class MockUnitService {
-  setPreferredUnits(element: DataElements, usePreferredUnits: boolean) { }
+  setPreferredUnits(element: DataElements, usePreferredUnits: boolean) {}
 
   usePreferredUnits(): boolean {
     return false;
@@ -38,7 +36,7 @@ describe('DataChartService', () => {
   const station = [new Station('COMOX, 1021831, CYQQ', 'COMOX', '1021831')];
   const chartObj = new ChartObject(
     [new Element('1.12.206.0.0.0.0')],
-    [new Station('COMOX, 1021831, CYQQ', 'COMOX', '1021831')]
+    [new Station('COMOX, 1021831, CYQQ', 'COMOX', '1021831')],
   );
 
   beforeEach(() => {
@@ -76,9 +74,9 @@ describe('DataChartService', () => {
     const options = service.buildOptions(
       new ChartObject(
         [new Element('1.12.206.0.0.0.0', 'area')],
-        [new Station('COMOX, 1021831, CYQQ', 'COMOX', '1021831')]
+        [new Station('COMOX, 1021831, CYQQ', 'COMOX', '1021831')],
       ),
-      hits
+      hits,
     );
     expect(options.series.length).toBe(1);
     expect(options.series[0].type).toBe('area');
@@ -136,5 +134,35 @@ describe('DataChartService', () => {
     const chartObj2 = new ChartObject(elems, station);
     const options = service.buildOptions(chartObj2, hits, {});
     expect(options.lang.noData).toBe('CHART.NO_DATA: <li>mock dummy-elem</li>');
+  });
+
+  it('should highlight points by QA when showQAColors is set', () => {
+    const elems = [new Element('1.12.206.0.0.0.0')];
+    const chartObj2 = new ChartObject(elems, station);
+    const options = service.buildOptions(chartObj2, hits, {
+      highchartsOptions: { colors: ['#d5a349'] },
+      customOptions: { showQAColors: true },
+    });
+    expect(options.series[0].data[0].color).not.toBe('#d5a349');
+  });
+
+  it('should be line colour when showQAColors is not set', () => {
+    const elems = [new Element('1.12.206.0.0.0.0')];
+    const chartObj2 = new ChartObject(elems, station);
+    const options = service.buildOptions(chartObj2, hits, {
+      highchartsOptions: { colors: ['#d5a349'] },
+      customOptions: { showQAColors: false },
+    });
+    expect(options.series[0].data[0].color).toBeFalsy();
+  });
+
+  it('should not be coloured when using bar charts', () => {
+    const elems = [new Element('1.12.206.0.0.0.0', 'column')];
+    const chartObj2 = new ChartObject(elems, station);
+    const options = service.buildOptions(chartObj2, hits, {
+      highchartsOptions: { colors: ['#d5a349'] },
+      customOptions: { showQAColors: true },
+    });
+    expect(options.series[0].data[0].color).toBeFalsy();
   });
 });
