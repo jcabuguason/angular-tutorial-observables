@@ -38,7 +38,6 @@ export class DataGridService implements OnDestroy {
   public chartRequested = new Subject();
   public recenterObs = new Subject();
   public chartEditRequested = new Subject();
-  public bulkEdit = new Subject();
 
   private columnConfiguration: ElementColumnConfiguration;
   private identityHeader;
@@ -64,7 +63,6 @@ export class DataGridService implements OnDestroy {
     this.chartRequested.unsubscribe();
     this.recenterObs.unsubscribe();
     this.chartEditRequested.unsubscribe();
-    this.bulkEdit.unsubscribe();
   }
 
   getColumnConfiguration(): ElementColumnConfiguration {
