@@ -4,7 +4,7 @@ export enum MapProjectionActionType {
   SWITCH = '[Map] Switch Projection',
 }
 
-export type Projection = 'EPSG:3857' | 'EPSG:3995';
+export type Projection = 'EPSG:3857' | 'EPSG:5937';
 export const initialProjection: Projection = 'EPSG:3857';
 
 export class SwitchProjectionAction implements Action {
