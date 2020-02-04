@@ -9,7 +9,12 @@ import { VUColumnConfiguration } from './column-configuration/vu-column-configur
 import { UserConfigService, ElementVisibility, MR_MAPPING_CONFIG } from 'msc-dms-commons-angular/core/metadata';
 import { MatDialog } from '@angular/material';
 import { StationInfoComponent } from './station-info/station-info.component';
-import { UnitCodeConversionService, DataElements } from 'msc-dms-commons-angular/core/obs-util';
+import {
+  UnitCodeConversionService,
+  DataElements,
+  MetadataElements,
+  ValueFormatterService,
+} from 'msc-dms-commons-angular/core/obs-util';
 
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CombinedHttpLoader } from 'msc-dms-commons-angular/shared/language';
@@ -17,11 +22,15 @@ import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 class MockUnitService {
-  setPreferredUnits(element: DataElements, usePreferredUnits: boolean) { }
+  setPreferredUnits(element: DataElements, usePreferredUnits: boolean) {}
 
   usePreferredUnits(): boolean {
     return false;
   }
+}
+
+class MockValueFormatterService {
+  setFormattedValue(element: DataElements | MetadataElements) {}
 }
 
 describe('DataGridService', () => {
@@ -57,7 +66,7 @@ describe('DataGridService', () => {
           return ElementVisibility.DEFAULT;
       }
     }
-    getMetaElementVisibility(elementID) { }
+    getMetaElementVisibility(elementID) {}
     getDescription(elementID: string, nodeIndex: number): string {
       return '';
     }
@@ -87,8 +96,9 @@ describe('DataGridService', () => {
         TranslateService,
         { provide: UserConfigService, useClass: MockConfigService },
         { provide: MR_MAPPING_CONFIG, useValue: {} },
-        { provide: MatDialog, useValue: { open: () => { } } },
+        { provide: MatDialog, useValue: { open: () => {} } },
         { provide: UnitCodeConversionService, useClass: MockUnitService },
+        { provide: ValueFormatterService, useClass: MockValueFormatterService },
       ],
     });
 
@@ -108,7 +118,7 @@ describe('DataGridService', () => {
     expect(service.columnDefs.length).toBe(1);
     expect(service.columnDefs[0].groupId).toBe('identity');
     expect(service.columnDefs[0].children.length).toBe(
-      service.getColumnConfiguration().getIdentityHeaders().children.length
+      service.getColumnConfiguration().getIdentityHeaders().children.length,
     );
 
     service.addRowData(hits[0]);
@@ -125,7 +135,7 @@ describe('DataGridService', () => {
     expect(
       service.columnDefs
         .filter(col => !(col.groupId === 'identity' || col.groupId === 'raw' || col.headerClass === 'meta'))
-        .map(col => Number(col.nodeNumber))
+        .map(col => Number(col.nodeNumber)),
     ).toEqual([11, 19, 12, 5, 20, 17, 23, 6, 24, 13, 2]);
   });
 
@@ -199,7 +209,10 @@ describe('DataGridService', () => {
       },
       {
         headerClass: 'meta',
-        children: [{ field: 'stn_nam', type: 'identity' }, { field: 'msc_id', type: 'identity' }],
+        children: [
+          { field: 'stn_nam', type: 'identity' },
+          { field: 'msc_id', type: 'identity' },
+        ],
       },
       {
         headerName: 'Rain',
@@ -221,7 +234,10 @@ describe('DataGridService', () => {
     const calledWithData = {
       data: {
         name: 'Test!',
-        allData: [{ key: 'station', value: 'StationA' }, { key: 'msc_id', value: '1234567' }],
+        allData: [
+          { key: 'station', value: 'StationA' },
+          { key: 'msc_id', value: '1234567' },
+        ],
       },
     };
     spyOn(service.dialog, 'open');

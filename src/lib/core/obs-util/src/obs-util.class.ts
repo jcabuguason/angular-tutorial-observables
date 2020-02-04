@@ -1,5 +1,6 @@
 import { getTime } from 'date-fns';
 import { DataElements } from './dms-observation.model';
+import { LanguageService } from 'msc-dms-commons-angular/shared/language';
 
 // observation identification elements
 export const WMO_ID_ELEMENT = '1.7.82.0.0.0.0';
@@ -191,4 +192,30 @@ export function getIndexLabelTranslationKey(element: DataElements): string {
 export function decodeRawMessage(message: string): string {
   const base64Indicator = 'base64: ';
   return !!message && message.includes(base64Indicator) ? atob(message.replace(base64Indicator, '')) : message;
+}
+
+/** Converts decimal degrees to degrees minutes seconds
+ * https://dms-gitlab.cmc.ec.gc.ca/DMS/MSC-MCWeb-App-QC-Tool/blob/c91ac4fb2ee90c64ec35a0a0e18e13434764fffb/html/js/fn/obs-analysis-shared-fn.js#L219
+ */
+export function convertDDToDMS(elementValue: number, isLatitude: boolean): string {
+  if (isNaN(elementValue)) {
+    return String(elementValue);
+  }
+
+  const directionLabel = key => LanguageService.translator.instant(`DIRECTION.${key}_SHORT`);
+  const padZero = value => String(value).padStart(2, '0');
+
+  const absDecimalDegrees = Math.abs(elementValue);
+  const degrees = Math.floor(absDecimalDegrees);
+  const minutes = Math.floor(60 * (absDecimalDegrees - degrees));
+  const seconds = Number(3600 * (absDecimalDegrees - degrees - minutes / 60)).toFixed(3);
+
+  let direction = '';
+  if (isLatitude) {
+    direction = elementValue < 0 ? directionLabel('SOUTH') : directionLabel('NORTH');
+  } else {
+    direction = elementValue < 0 ? directionLabel('WEST') : directionLabel('EAST');
+  }
+
+  return `${degrees}\xB0 ${padZero(minutes)}' ${padZero(seconds)}" ${direction}`;
 }

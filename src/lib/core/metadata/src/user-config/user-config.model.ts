@@ -32,6 +32,7 @@ export class UserConfig {
   loadRawData: boolean;
   visibleRawData: boolean;
   loadRawHeader: boolean;
+  loadPreferredFormats: boolean;
 
   private constructor() {
     this.loadMetaElements = new IncludeExclude([], []);
@@ -50,6 +51,7 @@ export class UserConfig {
     this.loadRawData = true;
     this.visibleRawData = true;
     this.loadRawHeader = true;
+    this.loadPreferredFormats = false;
   }
 
   public static createConfig(): UserConfig {
@@ -137,10 +139,13 @@ export class UserConfig {
       else if (checkElementGroupAndName('raw-data', 'visible-raw-data')) {
         config.visibleRawData = 'true' === element.value;
       }
-
       // Configuring raw header
       else if (checkElementGroupAndName('raw-data', 'load-raw-header')) {
         config.loadRawHeader = 'true' === element.value;
+      }
+      // Configuring display format
+      else if (checkElementGroupAndName('element-display', 'load-preferred-formats')) {
+        config.loadPreferredFormats = 'true' === element.value;
       }
     }
   }
@@ -163,6 +168,7 @@ export class ElementConfig {
   precision: number;
   elementDescription: LanguageLabel;
   availableDataFlags: string[];
+  displayFormat: string;
 
   private constructor(elementID: string) {
     this.nodeNames = [];
@@ -233,6 +239,11 @@ export class ElementConfig {
       // Configuring editable data flags
       else if (checkElementGroupAndName('element-edit', 'available-data-flag')) {
         currentConfig.availableDataFlags = element.value.split(',').map(flag => flag.trim());
+      }
+
+      // Configuring display format
+      else if (checkElementGroupAndName('element-display', 'display-format')) {
+        currentConfig.displayFormat = element.value;
       }
     }
   }

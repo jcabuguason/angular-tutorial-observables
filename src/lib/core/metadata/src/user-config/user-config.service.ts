@@ -380,4 +380,15 @@ export class UserConfigService {
   isLoadRawHeader(): boolean {
     return this.userConfig.loadRawHeader;
   }
+
+  isLoadPreferredFormats(): boolean {
+    return this.userConfig.loadPreferredFormats;
+  }
+
+  getElementDisplayFormat(elementID: string): string {
+    return this.userConfig.elementConfigs
+      .filter(config => config.elementID === elementID)
+      .map(config => config.displayFormat)
+      .shift();
+  }
 }

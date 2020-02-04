@@ -57,6 +57,8 @@ export interface DataElements {
   preciseUnit?: string;
   preferredValue?: string;
   preferredUnit?: string;
+  displayFormat?: string;
+  formattedValue?: string;
 }
 
 export interface Location {
@@ -73,6 +75,8 @@ export interface MetadataElements {
   preciseUnit?: string;
   preferredValue?: string;
   preferredUnit?: string;
+  displayFormat?: string;
+  formattedValue?: string;
 }
 
 export interface RawMessage {
