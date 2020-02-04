@@ -46,11 +46,7 @@ export class SearchParameter {
   ) {
     this.displayName = name;
     this.type = ParameterType.SEARCH_PARAMETER;
-    this.multiSelectChoices = this.choices
-      .map(choice => choice.label)
-      .sort()
-      .map(choiceLabel => ({ label: choiceLabel, value: choiceLabel }));
-    this.choicesWithEmpty = [{ label: '-', value: '' }, ...this.multiSelectChoices];
+    this.updateChoices(this.choices);
   }
 
   getName(): string {
@@ -73,12 +69,14 @@ export class SearchParameter {
     return this.findChoice(this.choices, choice) != null;
   }
 
-  updateChoices(choices) {
+  updateChoices(choices, sortAlpha: boolean = true) {
     this.choices = choices;
     this.multiSelectChoices = this.choices
       .map(choice => choice.label)
-      .sort()
       .map(choiceLabel => ({ label: choiceLabel, value: choiceLabel }));
+    if (sortAlpha) {
+      this.multiSelectChoices = this.multiSelectChoices.sort((a, b) => a.label.localeCompare(b.label));
+    }
     this.choicesWithEmpty = [{ label: '-', value: '' }, ...this.multiSelectChoices];
   }
 
