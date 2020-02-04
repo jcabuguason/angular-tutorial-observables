@@ -476,6 +476,26 @@ describe('UserConfigService', () => {
     });
   });
 
+  describe('#formatConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(formatConfig);
+    });
+
+    it('should return the element format', () => {
+      expect(service.getElementDisplayFormat('1.2.3.4.5.6.7')).toBe('DMS');
+    });
+  });
+
+  describe('#formatConfig', () => {
+    beforeEach(() => {
+      service.loadConfig(loadPreferredFormatsConfig);
+    });
+
+    it('should load formats', () => {
+      expect(service.isLoadPreferredFormats()).toBeTruthy();
+    });
+  });
+
   describe('#loadRawHeaderConfig', () => {
     beforeEach(() => {
       service.loadConfig(loadRawHeaderConfig);
@@ -1709,6 +1729,56 @@ const noLoadRawHeaderConfig: MDInstanceDefinition = {
       group: 'raw-data',
       name: 'load-raw-header',
       value: 'false',
+      def_id: '',
+      id: '',
+      index: '',
+      uom: '',
+      language: { english: '', french: '' },
+      instelements: [],
+    },
+  ],
+};
+
+const formatConfig: MDInstanceDefinition = {
+  dataset: 'stub',
+  parent: 'stub',
+  identificationElements: [],
+  elements: [
+    {
+      group: 'element-display',
+      name: 'element',
+      value: '1.2.3.4.5.6.7',
+      def_id: '',
+      id: '',
+      index: '',
+      uom: '',
+      language: { english: '', french: '' },
+      instelements: [
+        {
+          group: 'element-display',
+          name: 'display-format',
+          value: 'DMS', // short for degree-minute-second
+          def_id: '',
+          id: '',
+          index: '1',
+          uom: '',
+          language: { english: '', french: '' },
+          instelements: [],
+        },
+      ],
+    },
+  ],
+};
+
+const loadPreferredFormatsConfig: MDInstanceDefinition = {
+  dataset: 'stub',
+  parent: 'stub',
+  identificationElements: [],
+  elements: [
+    {
+      group: 'element-display',
+      name: 'load-preferred-formats',
+      value: 'true',
       def_id: '',
       id: '',
       index: '',

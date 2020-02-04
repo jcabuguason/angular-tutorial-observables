@@ -11,6 +11,7 @@ import {
   STATION_NAME_ELEMENT,
   STATION_NAME_FIELD,
   UnitCodeConversionService,
+  ValueFormatterService,
 } from 'msc-dms-commons-angular/core/obs-util';
 import { Subject } from 'rxjs';
 import { ColumnConfigurationContainer } from './column-configuration/column-configuration-container.model';
@@ -49,6 +50,7 @@ export class DataGridService implements OnDestroy {
     public userConfigService: UserConfigService,
     public unitService: UnitCodeConversionService,
     public dialog: MatDialog,
+    public valueFormatterService: ValueFormatterService,
   ) {
     userConfigService.loadConfig(FULL_CONFIG);
     this.columnConfiguration = new DefaultColumnConfiguration();
@@ -179,7 +181,7 @@ export class DataGridService implements OnDestroy {
         const headerID = ColumnConfigurationContainer.findHeaderID(element);
         result[headerID] = element;
         this.buildMetadataColumn(element, headerID);
-        this.unitService.setPreferredUnits(element);
+        this.updateElementValue(element);
       }
     };
 
@@ -198,7 +200,7 @@ export class DataGridService implements OnDestroy {
         }
         const headerID = ColumnConfigurationContainer.findHeaderID(element);
         this.buildElementColumn(element, headerID);
-        this.unitService.setPreferredUnits(element);
+        this.updateElementValue(element);
         const elementData = this.columnConfiguration.createElementData(element, headerID);
         Object.keys(elementData).forEach(key => (result[key] = elementData[key]));
       }
@@ -586,5 +588,13 @@ export class DataGridService implements OnDestroy {
     for (const rawCol of this.rawGroupHeader.children) {
       rawCol.hide = !this.userConfigService.isVisibleRawData();
     }
+  }
+
+  private updateElementValue(element: MetadataElements | DataElements) {
+    this.unitService.setPreferredUnits(element);
+    this.valueFormatterService.setFormattedValue(
+      element,
+      this.userConfigService.getElementDisplayFormat(element.elementID),
+    );
   }
 }
