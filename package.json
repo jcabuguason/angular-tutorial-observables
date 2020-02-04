@@ -17,6 +17,9 @@
     "cleanup": "rimraf ./dist && rimraf ./node_modules/msc-dms-commons-angular && mkdirp ./node_modules/msc-dms-commons-angular"
   },
   "private": true,
+  "publishConfig": {
+    "registry": "http://dms-zeus.cmc.ec.gc.ca/nexus/repository/npm-private/"
+  },
   "dependencies": {
     "@angular/animations": "7.2.7",
     "@angular/cdk": "^7.3.3",
