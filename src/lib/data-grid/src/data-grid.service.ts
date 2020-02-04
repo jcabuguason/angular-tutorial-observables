@@ -501,7 +501,7 @@ export class DataGridService implements OnDestroy {
       headerTooltip: this.userConfigService.getDescription(element.elementID),
       field: headerID,
       width: 80,
-      hide: true,
+      hide: this.hideMetadataElement(element.elementID),
       type: 'identity',
       elementID: element.elementID,
     };
@@ -518,6 +518,11 @@ export class DataGridService implements OnDestroy {
 
   private ignoreElement(elementID: string): boolean {
     return elementID == null || this.userConfigService.getElementVisibility(elementID) === ElementVisibility.NO_LOAD;
+  }
+
+  /** Metadata elements are hidden by default regardless of profile, unless specified by app to use profile settings */
+  hideMetadataElement(elementID: string): boolean {
+    return true;
   }
 
   private hideDataElement(elementID: string): boolean {
