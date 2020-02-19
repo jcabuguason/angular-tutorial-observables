@@ -17,7 +17,7 @@ export class IncludeExclude {
     return this.includeList.length === 0 || checkList(this.includeList);
   }
 
-  asRegex = (element: string) => RegExp(element.replace(/\./g, '\\.'));
+  asRegex = (element: string) => RegExp(element.replace(/\./g, '\\.').replace(/\*/g, '.*'));
   include = (item: string) => this.includeList.push(this.asRegex(item));
   exclude = (item: string) => this.excludeList.push(this.asRegex(item));
 }
