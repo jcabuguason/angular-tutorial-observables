@@ -7,6 +7,7 @@ import {
   WMO_ID_ELEMENT,
 } from 'msc-dms-commons-angular/core/obs-util';
 import { HttpParams } from '@angular/common/http';
+import { ESOperator, ESSortType, ESQueryType } from 'msc-dms-commons-angular/core/elastic-search';
 
 export interface SearchModel {
   // information to send to ES
@@ -15,9 +16,9 @@ export interface SearchModel {
   from?: Date;
   to?: Date;
   size?: number;
-  operator?: string;
-  sortFields?: string;
-  queryType?: string;
+  operator?: ESOperator;
+  sortFields?: ESSortType;
+  queryType?: ESQueryType;
   // HttpParams created from the search parameters
   httpParams?: HttpParams;
 }

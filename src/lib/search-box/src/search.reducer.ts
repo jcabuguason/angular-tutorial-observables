@@ -13,7 +13,6 @@ export const initialState: SearchModel = {
   from: new Date(),
   to: new Date(),
   size: 300,
-  operator: '',
 };
 
 export class SearchAction implements Action {
