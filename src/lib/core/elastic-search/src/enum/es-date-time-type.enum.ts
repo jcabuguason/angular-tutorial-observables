@@ -1,4 +1,4 @@
-export enum ElasticSearchDateTimeType {
+export enum ESDateTimeType {
   ObservationDateTime = 'obsDateTime',
   ReceivedDateTime = 'receivedDateTime',
 }

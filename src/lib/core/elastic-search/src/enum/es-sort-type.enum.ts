@@ -1,4 +1,4 @@
-export enum ElasticSearchSortType {
+export enum ESSortType {
   ObservationDateTimeAsc = '+obsDateTime',
   ObservationDateTimeDesc = '-obsDateTime',
 }

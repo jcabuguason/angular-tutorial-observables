@@ -1,4 +1,4 @@
-export enum ElasticSearchQueryType {
+export enum ESQueryType {
   Caseless = 'caseless',
   Partial = 'partial',
 }

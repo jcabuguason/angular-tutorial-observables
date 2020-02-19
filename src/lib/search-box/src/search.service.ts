@@ -3,6 +3,8 @@ import { HttpParams } from '@angular/common/http';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { addHours, subHours } from 'date-fns';
 
+import { ESOperator } from 'msc-dms-commons-angular/core/elastic-search';
+
 import { SearchParameter, ParameterName, ParameterType } from './parameters/search-parameter';
 import { SearchQueryType } from './parameters/search-query-type';
 import { SearchDatetime } from './parameters/search-datetime';
@@ -191,7 +193,7 @@ export class SearchService {
     let startDate: Date;
     let endDate: Date;
     let numObs: number = this.defaultNumObs;
-    let operator: string;
+    let operator: ESOperator;
     let hoursRangeDate: Date;
 
     const addToElements = (elementID, value) =>
@@ -217,15 +219,15 @@ export class SearchService {
             updateValue(value, index, stationID);
             addStationToElements(stationID);
           });
-          operator = 'AND';
+          operator = ESOperator.And;
           break;
         case ParameterName.STATION_NAME:
           selected.forEach(value => addStationToElements(value, SearchableElement.STATION_NAME.id));
-          operator = 'AND';
+          operator = ESOperator.And;
           break;
         case ParameterName.PROVINCE:
           selected.forEach(s => addToElements(SearchableElement.PROVINCE.id, s));
-          operator = 'AND';
+          operator = ESOperator.And;
           break;
         case ParameterName.SIZE:
           selected.forEach((s, index) => {

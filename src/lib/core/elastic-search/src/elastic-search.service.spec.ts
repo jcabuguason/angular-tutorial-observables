@@ -3,7 +3,9 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 
 import { ElasticSearchService } from './elastic-search.service';
 import { ELASTIC_SEARCH_CONFIG, ElasticSearchConfig } from './elastic-search.config';
-import { ElasticSearchDateTimeType } from './model/elastic-search-date-time-type.model';
+import { ESDateTimeType } from './enum/es-date-time-type.enum';
+import { ESSortType } from './enum/es-sort-type.enum';
+import { ESQueryType } from './enum/es-query-type.enum';
 
 describe('ElasticSearchService', () => {
   let injector: TestBed;
@@ -151,7 +153,7 @@ describe('ElasticSearchService', () => {
       it('should correctly set datetimetype', () => {
         service
           .getBasicObservations('v1.0', 'testNetwork', {
-            datetimeType: ElasticSearchDateTimeType.ObservationDateTime,
+            datetimeType: ESDateTimeType.ObservationDateTime,
           })
           .subscribe();
         httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?datetimeType=obsDateTime`);
@@ -160,10 +162,10 @@ describe('ElasticSearchService', () => {
       it('should correctly set sortFields', () => {
         service
           .getBasicObservations('v1.0', 'testNetwork', {
-            sortFields: '+elementID',
+            sortFields: ESSortType.ObservationDateTimeAsc,
           })
           .subscribe();
-        httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?sortFields=%2BelementID`);
+        httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?sortFields=%2BobsDateTime`);
       });
 
       it('should correctly set startIndex', () => {
@@ -172,7 +174,7 @@ describe('ElasticSearchService', () => {
       });
 
       it('should correctly set queryType', () => {
-        service.getBasicObservations('v1.0', 'testNetwork', { queryType: 'partial' }).subscribe();
+        service.getBasicObservations('v1.0', 'testNetwork', { queryType: ESQueryType.Partial }).subscribe();
         httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?queryType=partial`);
       });
     });

@@ -10,7 +10,7 @@ import { BasicObservationsParams } from './model/basic-observations-params.model
 import { UniqueStationsParams } from './model/unique-stations-params.model';
 import { ObservationsFromStationsParams } from './model/observations-from-stations-params.model';
 import { UniqueElementsParams } from './model/unique-elements-params.model';
-import { CommonElasticSearchParams } from './model/common-elastic-search-params.model';
+import { CommonESParams } from './model/common-es-params.model';
 import { ObservationsFromElementsParams } from './model/observations-from-elements-params.model';
 import { URIComponentEncoder } from './uri-component-encoder';
 
@@ -21,7 +21,7 @@ export class ElasticSearchService {
   constructor(
     @Inject(ELASTIC_SEARCH_CONFIG)
     private config: ElasticSearchConfig,
-    private http: HttpClient
+    private http: HttpClient,
   ) {
     this.commonHeaders = new HttpHeaders();
     this.commonHeaders.append('Accept-Encoding', 'gzip');
@@ -49,14 +49,14 @@ export class ElasticSearchService {
     version: string,
     index: string,
     stationList: string[],
-    parameters: ObservationsFromStationsParams = {}
+    parameters: ObservationsFromStationsParams = {},
   ): Observable<any> {
     const params = this.getCommonParams(parameters);
     const stationListString = stationList.join(',');
     const options = { params, headers: this.commonHeaders };
     return this.http.get<any>(
       `${this.config.endpoint}/search/${version}/${index}/stations/${stationListString}`,
-      options
+      options,
     );
   }
 
@@ -70,7 +70,7 @@ export class ElasticSearchService {
     version: string,
     index: string,
     elementList: string[],
-    parameters: ObservationsFromElementsParams = {}
+    parameters: ObservationsFromElementsParams = {},
   ): Observable<any> {
     let params = this.getCommonParams(parameters);
     if (parameters.operator != null) {
@@ -80,13 +80,13 @@ export class ElasticSearchService {
     const options = { params, headers: this.commonHeaders };
     return this.http.get<any>(
       `${this.config.endpoint}/search/${version}/${index}/elements/${elementListString}`,
-      options
+      options,
     );
   }
 
-  private getCommonParams(parameters: CommonElasticSearchParams): HttpParams {
+  private getCommonParams(parameters: CommonESParams): HttpParams {
     let params = new HttpParams({ encoder: new URIComponentEncoder() });
-    // these if statements are needed to restrict which HttpParams get added or ignored even though it expects CommonElasticSearchParams
+    // these if statements are needed to restrict which HttpParams get added or ignored even though it expects CommonESParams
     if (parameters.type != null) {
       params = params.set('type', parameters.type);
     }

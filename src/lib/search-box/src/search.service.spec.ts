@@ -14,6 +14,7 @@ import { SearchTaxonomy } from './search-taxonomy';
 import { SearchableElement, SearchElement, SearchModel } from './model/search.model';
 import { ChoiceModel } from './model/choice.model';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { ESOperator } from 'msc-dms-commons-angular/core/elastic-search';
 
 describe('SearchService', () => {
   let searchService: SearchService;
@@ -267,7 +268,7 @@ describe('SearchService', () => {
       from: new Date('2018-01-01T00:00'),
       to: new Date('2018-02-01T00:00'),
       size: 300,
-      operator: 'AND',
+      operator: ESOperator.And,
       httpParams: expectedHttpParams,
     };
 
