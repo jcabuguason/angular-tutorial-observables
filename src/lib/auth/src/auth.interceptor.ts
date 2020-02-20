@@ -13,7 +13,7 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(
     @Inject(AUTH_CONFIG)
     private config: AuthConfig,
-    private store: Store<AuthState>
+    private store: Store<AuthState>,
   ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -27,7 +27,7 @@ export class AuthInterceptor implements HttpInterceptor {
             },
           });
         }),
-        switchMap(req => next.handle(req))
+        switchMap(req => next.handle(req)),
       );
     } else {
       return next.handle(request);

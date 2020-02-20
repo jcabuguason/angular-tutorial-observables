@@ -1,6 +1,8 @@
 import { Action, createFeatureSelector, createSelector, MemoizedSelector } from '@ngrx/store';
 import { AuthResponse } from './auth-response.interface';
 
+export const authReducerKey = 'auth';
+
 export interface AuthAction extends Action {
   type: AuthActionType;
   payload: any;
@@ -34,8 +36,10 @@ export interface AuthState {
   auth: AuthResponse;
 }
 
-export const selectFeatureAuthState: MemoizedSelector<object, AuthState> = createFeatureSelector<AuthState>('auth');
+export const selectFeatureAuthState: MemoizedSelector<object, AuthResponse> = createFeatureSelector<AuthResponse>(
+  authReducerKey,
+);
 export const selectAuthState: MemoizedSelector<object, AuthResponse> = createSelector(
   selectFeatureAuthState,
-  (state: AuthState) => (state ? state.auth : null)
+  (state: AuthResponse) => (!!state ? state : null),
 );
