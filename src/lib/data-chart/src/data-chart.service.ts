@@ -138,6 +138,7 @@ export class DataChartService {
         data: sensor[key],
         yAxis: yTypes.indexOf(sensor[key][0].unit),
         type: type,
+        zIndex: sensor[key]['isOfficial'] ? 1 : 0,
         isSensor: sensor[key]['isSensor'],
         visible: sensor[key]['isSensor'] && !!custom ? custom.showSensors : true,
         turboThreshold: 1500,
@@ -187,6 +188,7 @@ export class DataChartService {
         const qa = this.parseElementValue(e, options, 'overallQASummary');
         sensor[key]['sensorType'] = sensorType;
         sensor[key]['isSensor'] = isSensor;
+        sensor[key]['isOfficial'] = e.indexValue === 0;
         sensor[key].push({
           x: Date.parse(obs.obsDateTime),
           y: Number(this.parseElementValue(e, options, 'value')),
