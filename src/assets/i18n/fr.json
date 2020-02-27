@@ -39,6 +39,9 @@
     "MIN": "Min",
     "MAX": "Max",
     "CHART_ELEMENT": "Graphique de l'élement",
+    "CHART": "Graphique...",
+    "ELEMENT": "Élement",
+    "BOTH": "Combo",
     "ELEMENT_INFO": "Info de l'élement",
     "ELEMENT_ID": "ID de l'élement",
     "RAW": "Brut",
@@ -113,7 +116,8 @@
   "CHART": {
     "DATE_TIME": "Date et heure (UTC)",
     "VALUES": "Valeurs",
-    "NO_DATA": "Aucunes données pour ces éléments"
+    "NO_DATA": "Aucunes données pour ces éléments",
+    "HOURLY": "Heures"
   },
   "CHART_DEFAULTS": {
     "contextButtonTitle": "Menu graphique",

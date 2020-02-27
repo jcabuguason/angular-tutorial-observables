@@ -3,10 +3,10 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { UserConfigService } from 'msc-dms-commons-angular/core/metadata';
-import { DataElements, UnitCodeConversionService } from 'msc-dms-commons-angular/core/obs-util';
+import { DataElements, UnitCodeConversionService, updateNodeValue } from 'msc-dms-commons-angular/core/obs-util';
 import { CombinedHttpLoader } from 'msc-dms-commons-angular/shared/language';
 import { DataChartService } from './data-chart.service';
-import { ChartObject, Element, Station } from './model/chart.model';
+import { Element, Station, Chart, SeriesType, QualifierType } from './model/chart.model';
 
 class MockConfigService {
   getFullFormattedHeader(elementID: string) {
@@ -33,11 +33,15 @@ describe('DataChartService', () => {
     ...require('./sample-data-1032731.json').hits.hits.map(json => json._source),
     ...require('./sample-data-1021831.json').hits.hits.map(json => json._source),
   ];
-  const station = [new Station('COMOX, 1021831, CYQQ', 'COMOX', '1021831')];
-  const chartObj = new ChartObject(
-    [new Element('1.12.206.0.0.0.0')],
-    [new Station('COMOX, 1021831, CYQQ', 'COMOX', '1021831')],
-  );
+  const defaultStation = new Station({
+    label: 'COMOX, 1021831, CYQQ',
+    value: '1021831',
+  });
+  const defaultElement = new Element({ id: '1.12.206.0.0.0.0' });
+  const defaultChart = new Chart({
+    elements: [defaultElement],
+    stations: [defaultStation],
+  });
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -64,7 +68,7 @@ describe('DataChartService', () => {
   });
 
   it('should create chart object', () => {
-    const options = service.buildOptions(chartObj, hits, {});
+    const options = service.buildOptions(defaultChart, hits, {});
     expect(options.title.text).toBe('COMOX, 1021831, CYQQ');
     expect(options.xAxis['type']).toBe('datetime');
     expect(options.series[0].data.length).toBe(7);
@@ -72,18 +76,24 @@ describe('DataChartService', () => {
 
   it('should build charts with a given element type', () => {
     const options = service.buildOptions(
-      new ChartObject(
-        [new Element('1.12.206.0.0.0.0', 'area')],
-        [new Station('COMOX, 1021831, CYQQ', 'COMOX', '1021831')],
-      ),
+      new Chart({
+        stations: [defaultStation],
+        elements: [
+          new Element({
+            id: '1.12.206.0.0.0.0',
+            seriesType: SeriesType.AREA,
+          }),
+        ],
+      }),
       hits,
+      {},
     );
     expect(options.series.length).toBe(1);
     expect(options.series[0].type).toBe('area');
   });
 
   it('should accept optional settings', () => {
-    const options = service.buildOptions(chartObj, hits, {
+    const options = service.buildOptions(defaultChart, hits, {
       highchartsOptions: { chart: { type: 'area' }, credits: { enabled: true }, tooltip: { enabled: false } },
     });
     expect(options.chart.type).toBe('area');
@@ -92,54 +102,61 @@ describe('DataChartService', () => {
   });
 
   it('should make element the title with multiple stations', () => {
-    const elems = [new Element('1.12.206.0.0.0.0')];
-    const stations = [new Station('TEST, 1, A', 'TEST', '1'), new Station('OTHER, 2, B', 'OTHER', '2')];
-    const multiStations = new ChartObject(elems, stations);
+    const multiStations = new Chart({
+      elements: [defaultElement],
+      stations: [new Station({ label: 'TEST, 1, A', value: '1' }), new Station({ label: 'OTHER, 2, B', value: '2' })],
+    });
     const options = service.buildOptions(multiStations, hits, {});
     expect(options.title.text).toBe('mock 1.12.206.0.0.0.0');
   });
 
   it('should make station the title with single station', () => {
-    const elems = [new Element('1.12.206.0.0.0.0'), new Element('1.19.265.8.67.14.0')];
-    const chartObj2 = new ChartObject(elems, station);
-    const options1 = service.buildOptions(chartObj, hits, {});
-    const options2 = service.buildOptions(chartObj2, hits, {});
-    expect(options1.title.text).toBe('COMOX, 1021831, CYQQ');
-    expect(options2.title.text).toBe('COMOX, 1021831, CYQQ');
+    const multiElementChart = new Chart({
+      elements: [defaultElement, new Element({ id: '1.19.265.8.67.14.0' })],
+      stations: [defaultStation],
+    });
+    const defaultOptions = service.buildOptions(defaultChart, hits, {});
+    const multiElementOptions = service.buildOptions(multiElementChart, hits, {});
+    expect(defaultOptions.title.text).toBe('COMOX, 1021831, CYQQ');
+    expect(multiElementOptions.title.text).toBe('COMOX, 1021831, CYQQ');
   });
 
   it('should create a yAxis with the element as the title', () => {
-    const options = service.buildOptions(chartObj, hits, {});
+    const options = service.buildOptions(defaultChart, hits, {});
     expect(options.yAxis[0].title['text']).toBe('mock 1.12.206.0.0.0.0 (Pa)');
   });
 
   it('should create two yAxis with two different elements of different values', () => {
-    const elems = [new Element('1.12.206.0.0.0.0'), new Element('1.19.265.8.67.14.0')];
-    const chartObj2 = new ChartObject(elems, station);
-    const options = service.buildOptions(chartObj2, hits, {});
+    const multiElemDiffGroup = new Chart({
+      elements: [defaultElement, new Element({ id: '1.19.265.8.67.14.0' })],
+      stations: [defaultStation],
+    });
+    const options = service.buildOptions(multiElemDiffGroup, hits, {});
     const yAxesArray: any = options.yAxis;
     expect(yAxesArray.length).toBe(2);
   });
 
   it('should create one yAxis with two different elements of the same value', () => {
-    const elems = [new Element('1.12.206.0.0.0.0'), new Element('1.12.208.3.62.9.0')];
-    const chartObj2 = new ChartObject(elems, station);
-    const options = service.buildOptions(chartObj2, hits, {});
+    const multiElemSameGroupUnit = new Chart({
+      elements: [defaultElement, new Element({ id: '1.12.208.3.62.9.0' })],
+      stations: [defaultStation],
+    });
+    const options = service.buildOptions(multiElemSameGroupUnit, hits, {});
     const yAxesArray: any = options.yAxis;
     expect(yAxesArray.length).toBe(1);
   });
 
   it('should display no data message for elements with no data', () => {
-    const elems = [new Element('dummy-elem')];
-    const chartObj2 = new ChartObject(elems, station);
-    const options = service.buildOptions(chartObj2, hits, {});
+    const badChart = new Chart({
+      elements: [new Element({ id: 'dummy-elem' })],
+      stations: [defaultStation],
+    });
+    const options = service.buildOptions(badChart, hits, {});
     expect(options.lang.noData).toBe('CHART.NO_DATA: <li>mock dummy-elem</li>');
   });
 
   it('should highlight points by QA when showQAColors is set', () => {
-    const elems = [new Element('1.12.206.0.0.0.0')];
-    const chartObj2 = new ChartObject(elems, station);
-    const options = service.buildOptions(chartObj2, hits, {
+    const options = service.buildOptions(defaultChart, hits, {
       highchartsOptions: { colors: ['#d5a349'] },
       customOptions: { showQAColors: true },
     });
@@ -147,9 +164,7 @@ describe('DataChartService', () => {
   });
 
   it('should be line colour when showQAColors is not set', () => {
-    const elems = [new Element('1.12.206.0.0.0.0')];
-    const chartObj2 = new ChartObject(elems, station);
-    const options = service.buildOptions(chartObj2, hits, {
+    const options = service.buildOptions(defaultChart, hits, {
       highchartsOptions: { colors: ['#d5a349'] },
       customOptions: { showQAColors: false },
     });
@@ -157,12 +172,49 @@ describe('DataChartService', () => {
   });
 
   it('should not be coloured when using bar charts', () => {
-    const elems = [new Element('1.12.206.0.0.0.0', 'column')];
-    const chartObj2 = new ChartObject(elems, station);
-    const options = service.buildOptions(chartObj2, hits, {
-      highchartsOptions: { colors: ['#d5a349'] },
-      customOptions: { showQAColors: true },
-    });
+    const options = service.buildOptions(
+      new Chart({
+        stations: [defaultStation],
+        elements: [
+          new Element({
+            id: '1.12.206.0.0.0.0',
+            seriesType: SeriesType.BAR,
+          }),
+        ],
+      }),
+      hits,
+      {
+        highchartsOptions: { colors: ['#d5a349'] },
+        customOptions: { showQAColors: true },
+      },
+    );
     expect(options.series[0].data[0].color).toBeFalsy();
+  });
+
+  it('should create a longitudinal chart for hourly qualifiers', () => {
+    const placeholderID = '8.7.98.0.0.0.0';
+    const hourlyChart = new Chart({
+      elements: [new Element({ id: placeholderID })],
+      stations: [
+        new Station({
+          label: 'Data from report',
+          value: '46131',
+          identifierID: '8.7.80.0.0.0.0',
+        }),
+      ],
+      qualifierType: QualifierType.HOURLY,
+    });
+    const reportHits = [require('./sample-report-46131.json')];
+    const options = service.buildOptions(hourlyChart, reportHits, {});
+
+    const actualIDs = service.qualifierHourlyValues.map(nodeValue => updateNodeValue(placeholderID, nodeValue, 4));
+    const findMatchingElem = id => reportHits[0]['dataElements'].find(element => element.elementID === id);
+
+    expect(reportHits.length).toBe(1);
+    expect(findMatchingElem(placeholderID)).toBeFalsy();
+    actualIDs.forEach(id => expect(findMatchingElem(id)).toBeTruthy());
+    expect(options.series.length).toBe(1);
+    // 14Z and 21Z elements are being reported, but with non-numeric values, so they're ignored.
+    expect(options.series[0].data.length).toBe(22);
   });
 });

@@ -1,0 +1,306 @@
+{
+  "identifier": "marine_daily_report",
+  "obsDateTime": "2019-12-17T00:00:00.000Z",
+  "receivedDateTime": "2019-12-18T00:27:00.000Z",
+  "identity": "/data/dms/system/metrics/reports/metrics-1.0-json/product-json-1.0/201912170000/marine_daily_report/dms-dev15/9100624/elasticsearch/201912180027/orig_v24",
+  "author": { "build": "build.10952", "name": "MSC-DMS-PG-MAF-Reports", "version": "1.5" },
+  "metadataElements": [
+    {
+      "elementID": "8.7.801.0.0.0.0",
+      "unit": "unitless",
+      "name": "report_name",
+      "value": "marine_daily_report",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.80.0.0.0.0",
+      "unit": "unitless",
+      "valueNum": 46131,
+      "name": "station_identifier",
+      "value": "46131",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.86.0.0.0.0",
+      "unit": "unitless",
+      "valueNum": 9100624,
+      "name": "msc_identifier",
+      "value": "9100624",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.82.0.0.0.0",
+      "unit": "unitless",
+      "valueNum": 46131,
+      "name": "wmo_identifier",
+      "value": "46131",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.83.0.0.0.0",
+      "unit": "unitless",
+      "name": "station_name",
+      "value": "SENTRY SHOAL",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.849.0.0.0.0",
+      "unit": "unitless",
+      "name": "deployment_region",
+      "value": "West",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.39.857.0.0.0.0",
+      "unit": "unitless",
+      "valueNum": 4,
+      "name": "geofence_radius",
+      "value": "4.0",
+      "group": "station_configuration"
+    },
+    {
+      "elementID": "8.7.861.0.0.0.0",
+      "unit": "Â°",
+      "valueNum": 49.906,
+      "name": "anchor_latitude",
+      "value": "49.906000",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.862.0.0.0.0",
+      "unit": "Â°",
+      "valueNum": -124.985,
+      "name": "anchor_longitude",
+      "value": "-124.985000",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.119.0.0.0.0",
+      "unit": "unitless",
+      "name": "observation_source",
+      "value": "MSC Marine",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.40.802.0.0.0.0",
+      "unit": "unitless",
+      "valueNum": 24,
+      "name": "reported_hours",
+      "value": "24",
+      "group": "report_statistics"
+    },
+    {
+      "elementID": "8.40.406.0.0.0.0",
+      "unit": "datetime",
+      "valueNum": 2.0191217e11,
+      "name": "start_date_time",
+      "value": "201912170000",
+      "group": "report_statistics"
+    },
+    {
+      "elementID": "8.40.407.0.0.0.0",
+      "unit": "datetime",
+      "valueNum": 2.01912172359e11,
+      "name": "end_date_time",
+      "value": "201912172359",
+      "group": "report_statistics"
+    }
+  ],
+  "jsonVersion": 1,
+  "taxonomy": "dms/system/metrics/reports/metrics-1.0-json/product-json-1.0",
+  "primaryID": "marine_daily_report",
+  "dataElements": [
+    {
+      "elementID": "8.7.98.0.86.0.0",
+      "unit": "unitless",
+      "valueNum": -124.59806,
+      "name": "longitude",
+      "value": "-124.59806",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.87.0.0",
+      "unit": "unitless",
+      "valueNum": -124.59792,
+      "name": "longitude",
+      "value": "-124.59792",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.88.0.0",
+      "unit": "unitless",
+      "valueNum": -124.59801,
+      "name": "longitude",
+      "value": "-124.59801",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.89.0.0",
+      "unit": "unitless",
+      "valueNum": -124.59795,
+      "name": "longitude",
+      "value": "-124.59795",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.90.0.0",
+      "unit": "unitless",
+      "valueNum": -124.5979,
+      "name": "longitude",
+      "value": "-124.5979",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.91.0.0",
+      "unit": "unitless",
+      "valueNum": -124.5979,
+      "name": "longitude",
+      "value": "-124.5979",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.92.0.0",
+      "unit": "unitless",
+      "valueNum": -124.59792,
+      "name": "longitude",
+      "value": "-124.59792",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.93.0.0",
+      "unit": "unitless",
+      "valueNum": -124.59792,
+      "name": "longitude",
+      "value": "-124.59792",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.94.0.0",
+      "unit": "unitless",
+      "valueNum": -124.59828,
+      "name": "longitude",
+      "value": "-124.59828",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.95.0.0",
+      "unit": "unitless",
+      "valueNum": -124.5979,
+      "name": "longitude",
+      "value": "-124.5979",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.96.0.0",
+      "unit": "unitless",
+      "valueNum": -124.59798,
+      "name": "longitude",
+      "value": "-124.59798",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.97.0.0",
+      "unit": "unitless",
+      "valueNum": -124.59792,
+      "name": "longitude",
+      "value": "-124.59792",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.98.0.0",
+      "unit": "unitless",
+      "valueNum": -124.59801,
+      "name": "longitude",
+      "value": "-124.59801",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.99.0.0",
+      "unit": "unitless",
+      "valueNum": -124.59801,
+      "name": "longitude",
+      "value": "-124.59801",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.101.0.0",
+      "unit": "unitless",
+      "valueNum": -124.59812,
+      "name": "longitude",
+      "value": "-124.59812",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.102.0.0",
+      "unit": "unitless",
+      "valueNum": -124.59806,
+      "name": "longitude",
+      "value": "-124.59806",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.103.0.0",
+      "unit": "unitless",
+      "valueNum": -124.59801,
+      "name": "longitude",
+      "value": "-124.59801",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.104.0.0",
+      "unit": "unitless",
+      "valueNum": -124.59784,
+      "name": "longitude",
+      "value": "-124.59784",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.105.0.0",
+      "unit": "unitless",
+      "valueNum": -124.59779,
+      "name": "longitude",
+      "value": "-124.59779",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.106.0.0",
+      "unit": "unitless",
+      "valueNum": -124.59803,
+      "name": "longitude",
+      "value": "-124.59803",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.108.0.0",
+      "unit": "unitless",
+      "valueNum": -124.59823,
+      "name": "longitude",
+      "value": "-124.59823",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.109.0.0",
+      "unit": "unitless",
+      "valueNum": -124.9858,
+      "name": "longitude",
+      "value": "-124.9858",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.100.0.0",
+      "unit": "unitless",
+      "name": "longitude",
+      "value": "-",
+      "group": "identification"
+    },
+    {
+      "elementID": "8.7.98.0.107.0.0",
+      "unit": "unitless",
+      "name": "longitude",
+      "value": "-",
+      "group": "identification"
+    }
+  ],
+  "rawMessage": {},
+  "parentIdentity": "/data/input/trigger"
+}

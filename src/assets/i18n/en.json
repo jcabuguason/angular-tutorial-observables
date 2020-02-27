@@ -39,6 +39,9 @@
     "MIN": "Min",
     "MAX": "Max",
     "CHART_ELEMENT": "Chart Element",
+    "CHART": "Chart...",
+    "ELEMENT": "Element",
+    "BOTH": "Both",
     "ELEMENT_INFO": "Element Info",
     "ELEMENT_ID": "Element ID",
     "RAW": "Raw",
@@ -113,7 +116,8 @@
   "CHART": {
     "DATE_TIME": "Date and Time (UTC)",
     "VALUES": "Values",
-    "NO_DATA": "No data for elements"
+    "NO_DATA": "No data for elements",
+    "HOURLY": "Hourly"
   },
   "CHART_DEFAULTS": {
     "contextButtonTitle": "Chart context menu",
