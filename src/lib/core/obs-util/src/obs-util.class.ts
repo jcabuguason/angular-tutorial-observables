@@ -191,3 +191,19 @@ export function convertDDToDMS(elementValue: number, isLatitude: boolean): strin
 
   return `${degrees}\xB0 ${padZero(minutes)}' ${padZero(seconds)}" ${direction}`;
 }
+
+export function findObsIdentifier(obs, elementID?: string): string {
+  return elementID == null ? obs.identifier : findMetadataValue(obs, elementID) || obs.identifier;
+}
+
+export function updateNodeValue(
+  givenElement: string | string[],
+  newValue: string | number,
+  nodePosition: number,
+): string {
+  const nodes = givenElement instanceof Array ? givenElement : givenElement.split('.');
+  const rejoinElement = (start: number, end?: number) => nodes.slice(start, end).join('.');
+  const prefix = rejoinElement(0, nodePosition);
+  const suffix = rejoinElement(nodePosition + 1);
+  return `${prefix}.${newValue}.${suffix}`;
+}

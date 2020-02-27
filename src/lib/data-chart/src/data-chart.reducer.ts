@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { ChartObject } from './model/chart.model';
+import { Chart } from './model/chart.model';
 
 export enum ChartActionType {
   CLEAR = '[Chart] Clear All',
@@ -11,7 +11,7 @@ export enum ChartActionType {
 export class ChartAction implements Action {
   readonly type = ChartActionType.CREATE;
 
-  constructor(public payload: ChartObject[]) {}
+  constructor(public payload: Chart[]) {}
 }
 
 export const initialState = [];

@@ -5,6 +5,7 @@ import { DataGridService } from '../data-grid.service';
 export abstract class DataColumnConfiguration {
   public allowBlankDataColumns = false;
   public expandNestedDataColumns = false;
+  public buildColumnChartOption = false;
 
   getIdentityHeaders(): any {
     return {
@@ -156,11 +157,63 @@ export abstract class DataColumnConfiguration {
         name: this.instantWrapper('STATION_INFO'),
         action: () => gridService.displayMetadataTable(params.node.data),
       },
-    ];
+      this.buildChartContextItem(params, gridService),
+    ].filter(item => item != null);
   }
 
-  // TODO: Get rid of gridService here once the chart select UI changes
+  buildChartContextItem(params, gridService) {
+    const actions = [];
+
+    let station: string;
+    let element: string;
+
+    try {
+      station = params.node.data.primaryStationId;
+    } catch {}
+
+    try {
+      element = params.column.colDef.field.startsWith('e_') ? params.column.colDef.elementID : '';
+    } catch {}
+
+    if (!!station) {
+      actions.push({
+        name: this.instantWrapper('STATION'),
+        action: () =>
+          gridService.requestFilledChartForm({
+            station: station,
+          }),
+      });
+    }
+    if (!!element) {
+      actions.push({
+        name: this.instantWrapper('ELEMENT'),
+        action: () =>
+          gridService.requestFilledChartForm({
+            element: element,
+          }),
+      });
+    }
+    if (!!station && !!element) {
+      actions.push({
+        name: this.instantWrapper('BOTH'),
+        action: () =>
+          gridService.requestFilledChartForm({
+            station: station,
+            element: element,
+          }),
+      });
+    }
+
+    if (!!actions.length) {
+      return {
+        name: this.instantWrapper('CHART'),
+        subMenu: actions,
+      };
+    }
+  }
+
   getMainMenuItems(gridService: DataGridService) {
+    const buildColumnChartOption = this.buildColumnChartOption;
     const instWrap = label => this.instantWrapper(label);
     return function(params) {
       const menuItems = params.defaultItems.slice(0).filter(item => item !== 'toolPanel');
@@ -201,12 +254,14 @@ export abstract class DataColumnConfiguration {
         },
       });
       const element = params.column.colDef;
-      if (!!element && element.field.startsWith('e')) {
+      // Add Chart Option to column (turned off for most apps)
+      if (buildColumnChartOption && !!element && element.field.startsWith('e')) {
         menuItems.push({
           name: instWrap('CHART_ELEMENT'),
-          action: function() {
-            gridService.chartFormOnColumn(element.field);
-          },
+          action: () =>
+            gridService.requestFilledChartForm({
+              element: element.elementID,
+            }),
         });
       }
       // get the elementID and only add the submenu if it exists
