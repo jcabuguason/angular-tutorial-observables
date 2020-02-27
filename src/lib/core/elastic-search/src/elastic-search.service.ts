@@ -1,7 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 
-import { format } from 'date-fns';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
@@ -13,6 +12,7 @@ import { UniqueElementsParams } from './model/unique-elements-params.model';
 import { CommonESParams } from './model/common-es-params.model';
 import { ObservationsFromElementsParams } from './model/observations-from-elements-params.model';
 import { URIComponentEncoder } from './uri-component-encoder';
+import { formatDateToString, DateFormatOptions } from 'msc-dms-commons-angular/shared/util';
 
 @Injectable()
 export class ElasticSearchService {
@@ -86,6 +86,8 @@ export class ElasticSearchService {
 
   private getCommonParams(parameters: CommonESParams): HttpParams {
     let params = new HttpParams({ encoder: new URIComponentEncoder() });
+    // format as YYYYMMDDHHmm
+    const dateFormat: DateFormatOptions = { dateSeparator: '', timeSeparator: '', dateAndTimeSeparator: '' };
     // these if statements are needed to restrict which HttpParams get added or ignored even though it expects CommonESParams
     if (parameters.type != null) {
       params = params.set('type', parameters.type);
@@ -94,10 +96,10 @@ export class ElasticSearchService {
       params = params.set('size', String(parameters.size));
     }
     if (parameters.from != null) {
-      params = params.set('from', format(parameters.from, 'YYYYMMDDHHmm'));
+      params = params.set('from', formatDateToString(parameters.from, dateFormat));
     }
     if (parameters.to != null) {
-      params = params.set('to', format(parameters.to, 'YYYYMMDDHHmm'));
+      params = params.set('to', formatDateToString(parameters.to, dateFormat));
     }
     if (parameters.datetimeType != null) {
       params = params.set('datetimeType', parameters.datetimeType);

@@ -1,5 +1,5 @@
-import { getTime } from 'date-fns';
 import { DataElements } from './dms-observation.model';
+import { compareTime } from 'msc-dms-commons-angular/shared/util';
 import { LanguageService } from 'msc-dms-commons-angular/shared/language';
 
 // observation identification elements
@@ -39,24 +39,8 @@ export function findRevision(obs) {
   }
 }
 
-/** Takes in a Date or a formatted string (see getTime) */
-export function compareObsTime(date1, date2): number {
-  const date1Time = getTime(date1);
-  const date2Time = getTime(date2);
-  if (isNaN(date1Time) && isNaN(date2Time)) {
-    return 0;
-  }
-  if (isNaN(date1Time)) {
-    return -1;
-  }
-  if (isNaN(date2Time)) {
-    return 1;
-  }
-  return date1Time - date2Time;
-}
-
 export function compareObsTimeFromObs(obs1, obs2) {
-  return compareObsTime(obs1.obsDateTime, obs2.obsDateTime);
+  return compareTime(obs1.obsDateTime, obs2.obsDateTime);
 }
 
 /** Assumes that alphabetical is okay for non-orig corrections. */
@@ -158,18 +142,6 @@ export function formatElementID(elementID: string): string {
         .split('_')
         .join('.')
     : '';
-}
-
-export function formatDateToISO(date: string): string {
-  return !!date ? `${date}:00.000Z` : '';
-}
-
-export function formatDateRemoveSeconds(date: string): string {
-  return !!date ? date.replace(':00.000Z', '') : '';
-}
-
-export function formatDateRemoveSecondsAndTimeDelimeter(date: string): string {
-  return formatDateRemoveSeconds(date).replace('T', ' ');
 }
 
 export function getIndexLabelTranslationKey(element: DataElements): string {

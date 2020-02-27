@@ -1,8 +1,9 @@
 import { SearchParameter, ParameterType } from './search-parameter';
+import { formatDateToString, DateFormatOptions, isValidDate } from 'msc-dms-commons-angular/shared/util';
 
 export class SearchDatetime extends SearchParameter {
-  datetime: Date;
-  formDatetime: Date;
+  datetime: string; // using formatted string to ignore the time zone (see: https://stackoverflow.com/a/54755073)
+  formDatetime: string;
   includeTime = true;
 
   constructor(name: string, required: boolean) {
@@ -15,13 +16,12 @@ export class SearchDatetime extends SearchParameter {
   }
 
   canAddSelected(value): boolean {
-    return this.getDateFromParam(value) != null;
+    return isValidDate(value);
   }
 
   addSelected(value) {
-    const date = this.getDateFromParam(value);
-    if (date != null) {
-      this.setFullDatetime(date);
+    if (this.canAddSelected(value)) {
+      this.setFullDatetime(this.formatSearchDate(value));
     }
   }
 
@@ -45,44 +45,37 @@ export class SearchDatetime extends SearchParameter {
     return this.formDatetime == null;
   }
 
-  getFullDatetime() {
-    return this.datetime;
+  getFullDatetime(): Date {
+    return new Date(this.formatSearchDate(this.datetime, { dateAndTimeSeparator: ' ', includeZulu: true }));
   }
 
-  getDatetimeUrlFormat() {
-    return !this.isEmpty(this.datetime) ? `${this.formattedDate()}T${this.formattedTime()}` : '';
+  getDatetimeUrlFormat(): string {
+    return this.formatSearchDate(this.datetime, { dateAndTimeSeparator: 'T' }) || '';
   }
 
-  setFullDatetime(date: Date) {
-    this.datetime = date;
+  setFullDatetime(date: string | Date) {
+    this.datetime = this.formatSearchDate(date, { dateAndTimeSeparator: ' ' });
   }
 
   applyFormValues() {
     this.setFullDatetime(this.formDatetime);
   }
 
-  // formats to yyyy-MM-dd
-  private formattedDate(): string {
-    return `${this.datetime.getFullYear()}-${this.padTimeValue(this.datetime.getMonth() + 1)}-${this.padTimeValue(
-      this.datetime.getDate(),
-    )}`;
+  getPlaceholder() {
+    return super.getPlaceholder() || this.includeTime ? 'YYYY-MM-DD HH:MM' : 'YYYY-MM-DD';
   }
 
-  private formattedTime(): string {
-    return `${this.padTimeValue(this.datetime.getHours())}:${this.padTimeValue(this.datetime.getMinutes())}`;
-  }
-
-  private padTimeValue(num: number) {
-    return num < 10 ? `0${num}` : num;
-  }
-
-  /* Creates a valid date parameter, or undefined if unable to create a valid date */
-  private getDateFromParam(param) {
-    if (param == null) {
-      return param;
+  /** The date could be YYYY-MM-DD hh:mm without the timezone, this adds it back before formatting */
+  private formatSearchDate(date: string | Date, options?: DateFormatOptions): string {
+    let utcDate = date;
+    if (typeof date === 'string') {
+      if (!this.includeTime && !date.match(/( |T)\d{2}:\d{2}/g)) {
+        utcDate = `${utcDate}T00:00`;
+      }
+      if (!date.includes('Z')) {
+        utcDate = `${utcDate}Z`;
+      }
     }
-
-    const date = new Date(param);
-    return date.toString() === 'Invalid Date' ? undefined : date;
+    return formatDateToString(utcDate, options);
   }
 }

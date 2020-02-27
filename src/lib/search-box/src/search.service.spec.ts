@@ -155,7 +155,7 @@ describe('SearchService', () => {
   });
 
   it('should add date and hours range with values', () => {
-    const dateValue = '2018-01-31T00:00';
+    const dateValue = '2018-01-31T00:00Z';
     const hoursValue = { hh_before: 1, hh_after: 2 };
 
     searchService.addSuggestedParameter(sParams.hoursRangeDate, [dateValue]);
@@ -174,7 +174,7 @@ describe('SearchService', () => {
   });
 
   it('should limit size on submit', () => {
-    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-01-03T12:00']);
+    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-01-03T12:00Z']);
     searchService.addSuggestedParameter(sParams.sizeParam);
     searchService.setSelectedRangeType('hoursRange');
     sParams.sizeParam.selected = ['2000'];
@@ -184,24 +184,24 @@ describe('SearchService', () => {
   });
 
   it('should adjust datetime in model if given hours range', () => {
-    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-01-03T12:00']);
+    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-01-03T12:00Z']);
     searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: '12', hh_after: '36' }]);
     searchService.setSelectedRangeType('hoursRange');
 
     const model = searchService.buildSearchModel();
-    expect(model.from).toEqual(new Date('2018-01-03T00:00'));
-    expect(model.to).toEqual(new Date('2018-01-05T00:00'));
+    expect(model.from).toEqual(new Date('2018-01-03T00:00Z'));
+    expect(model.to).toEqual(new Date('2018-01-05T00:00Z'));
   });
 
   it('should use default hours if specified', () => {
     sParams.hoursParam.setDefaultHours(5, 6);
-    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-01-07T05:30']);
+    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-01-07T05:30Z']);
     searchService.addSuggestedParameter(sParams.hoursParam);
     searchService.setSelectedRangeType('hoursRange');
 
     const model = searchService.buildSearchModel();
-    expect(model.from).toEqual(new Date('2018-01-07T00:30'));
-    expect(model.to).toEqual(new Date('2018-01-07T11:30'));
+    expect(model.from).toEqual(new Date('2018-01-07T00:30Z'));
+    expect(model.to).toEqual(new Date('2018-01-07T11:30Z'));
   });
 
   it('should update url on submit', () => {
@@ -216,7 +216,7 @@ describe('SearchService', () => {
   it('should populate search box from url parameters', () => {
     // should be formatted differently, but for testing purposes urlService will return this back
     const params = [
-      paramValueObj(sParams.hoursRangeDate, ['2018-01-31T00:00']),
+      paramValueObj(sParams.hoursRangeDate, ['2018-01-31T00:00Z']),
       paramValueObj(sParams.hoursParam, [{ hh_before: '12', hh_after: '21' }]),
       paramValueObj(sParams.networkParam, ['dnd awos']),
       paramValueObj(sParams.stationIdParam, ['123', 'abc']),
@@ -235,7 +235,7 @@ describe('SearchService', () => {
       sParams.stationIdParam,
       sParams.sizeParam,
     ]);
-    expect(sParams.hoursRangeDate.datetime).toEqual(new Date('2018-01-31T00:00'));
+    expect(sParams.hoursRangeDate.datetime).toEqual('2018-01-31 00:00');
     expect(sParams.hoursParam.hoursBefore).toEqual(12);
     expect(sParams.hoursParam.hoursAfter).toEqual(21);
     expect(sParams.networkParam.selected).toEqual(['dnd awos']);
@@ -246,8 +246,8 @@ describe('SearchService', () => {
   it('should create search model on submit', () => {
     searchService.addSuggestedParameter(sParams.networkParam, ['ca', 'dnd awos']);
     searchService.addSuggestedParameter(sParams.stationNameParam, ['station name']);
-    searchService.addSuggestedParameter(sParams.startDateParam, ['2018-01-01T00:00']);
-    searchService.addSuggestedParameter(sParams.endDateParam, ['2018-02-01T00:00']);
+    searchService.addSuggestedParameter(sParams.startDateParam, ['2018-01-01T00:00Z']);
+    searchService.addSuggestedParameter(sParams.endDateParam, ['2018-02-01T00:00Z']);
     searchService.addSuggestedParameter(sParams.provinceParam, ['AB']);
 
     const expectedHttpParams: HttpParams = new HttpParams({
@@ -265,8 +265,8 @@ describe('SearchService', () => {
         new SearchElement(SearchableElement.STATION_NAME.id, 'metadataElements', 'value', 'station name'),
         new SearchElement(SearchableElement.PROVINCE.id, 'metadataElements', 'value', 'AB'),
       ],
-      from: new Date('2018-01-01T00:00'),
-      to: new Date('2018-02-01T00:00'),
+      from: new Date('2018-01-01T00:00Z'),
+      to: new Date('2018-02-01T00:00Z'),
       size: 300,
       operator: ESOperator.And,
       httpParams: expectedHttpParams,
@@ -324,26 +324,26 @@ describe('SearchService', () => {
   it('should populate bar values to form', () => {
     searchService.readOnlyBar = true;
     searchService.addSuggestedParameter(sParams.provinceParam, ['BC']);
-    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-01-01T00:10']);
+    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-01-01 00:10']);
     searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: 1, hh_after: 2 }]);
     searchService.openForm();
 
     expect(sParams.provinceParam.formSelected).toEqual(['BC']);
-    expect(sParams.hoursRangeDate.formDatetime).toEqual(new Date('2018-01-01T00:10'));
+    expect(sParams.hoursRangeDate.formDatetime).toEqual('2018-01-01 00:10');
     expect(sParams.hoursParam.formHoursBefore).toEqual(1);
     expect(sParams.hoursParam.formHoursAfter).toEqual(2);
   });
 
   it('should populate form values to bar', () => {
     sParams.sizeParam.formSelected = ['10'];
-    sParams.hoursRangeDate.formDatetime = new Date('2018-01-30T05:00');
+    sParams.hoursRangeDate.formDatetime = '2018-01-30 05:00';
     sParams.hoursParam.formHoursBefore = 10;
     sParams.hoursParam.formHoursAfter = 20;
     searchService.setSelectedRangeType('hoursRange');
 
     searchService.submitSearchForm();
     expect(sParams.sizeParam.getSelected()).toEqual(['10']);
-    expect(sParams.hoursRangeDate.datetime).toEqual(new Date('2018-01-30T05:00'));
+    expect(sParams.hoursRangeDate.datetime).toEqual('2018-01-30 05:00');
     expect(sParams.hoursParam.hoursBefore).toEqual(10);
     expect(sParams.hoursParam.hoursAfter).toEqual(20);
   });
@@ -391,26 +391,26 @@ describe('SearchService', () => {
   });
 
   it('should use datetime on submit', () => {
-    searchService.addSuggestedParameter(sParams.startDateParam, ['2018-01-01T00:00']);
-    searchService.addSuggestedParameter(sParams.endDateParam, ['2018-02-01T00:00']);
+    searchService.addSuggestedParameter(sParams.startDateParam, ['2018-01-01T00:00Z']);
+    searchService.addSuggestedParameter(sParams.endDateParam, ['2018-02-01T00:00Z']);
     searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: 1, hh_after: 1 }]);
-    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-03-01T03:00']);
+    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-03-01T03:00Z']);
     searchService.setSelectedRangeType('dateRange');
 
     const model = searchService.buildSearchModel();
-    expect(model.from).toEqual(new Date('2018-01-01T00:00'));
-    expect(model.to).toEqual(new Date('2018-02-01T00:00'));
+    expect(model.from).toEqual(new Date('2018-01-01T00:00Z'));
+    expect(model.to).toEqual(new Date('2018-02-01T00:00Z'));
   });
 
   it('should use hour ranges on submit', () => {
-    searchService.addSuggestedParameter(sParams.startDateParam, ['2018-01-01T00:00']);
-    searchService.addSuggestedParameter(sParams.endDateParam, ['2018-02-01T00:00']);
+    searchService.addSuggestedParameter(sParams.startDateParam, ['2018-01-01T00:00Z']);
+    searchService.addSuggestedParameter(sParams.endDateParam, ['2018-02-01T00:00Z']);
     searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: 1, hh_after: 1 }]);
-    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-03-01T03:00']);
+    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-03-01T03:00Z']);
     searchService.setSelectedRangeType('hoursRange');
 
     const model = searchService.buildSearchModel();
-    expect(model.from).toEqual(new Date('2018-03-01T02:00'));
-    expect(model.to).toEqual(new Date('2018-03-01T04:00'));
+    expect(model.from).toEqual(new Date('2018-03-01T02:00Z'));
+    expect(model.to).toEqual(new Date('2018-03-01T04:00Z'));
   });
 });

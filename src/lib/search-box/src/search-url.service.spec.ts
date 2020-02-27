@@ -53,7 +53,7 @@ describe('SearchURLService', () => {
     const hoursValue = { hh_before: 10, hh_after: 20 };
     const networkValues = ['ca', 'nc awos'];
 
-    dateParam.datetime = new Date(dateValue);
+    dateParam.datetime = dateValue.replace('T', ' ');
     hoursParam.hoursBefore = Number(hoursValue.hh_before);
     hoursParam.hoursAfter = Number(hoursValue.hh_after);
     networkParam.selected = networkValues;

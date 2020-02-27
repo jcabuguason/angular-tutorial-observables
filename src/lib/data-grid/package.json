@@ -4,7 +4,6 @@
       "umdModuleIds": {
         "@angular/material": "@angular/material",
         "@angular/material/dialog": "@angular/material/dialog",
-        "date-fns": "date-fns",
         "msc-dms-commons-angular/core/metadata": "msc-dms-commons-angular/core/metadata",
         "msc-dms-commons-angular/shared/language": "msc-dms-commons-angular/shared/language",
         "@ngx-translate/core": "@ngx-translate/core"
@@ -12,7 +11,6 @@
     }
   },
   "peerDependencies": {
-    "date-fns": "^1.29.0",
     "@ngx-translate/core": "^9.0.0"
   }
 }

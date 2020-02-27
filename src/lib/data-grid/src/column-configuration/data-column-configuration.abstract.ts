@@ -1,5 +1,5 @@
-import { copyToClipboard } from 'msc-dms-commons-angular/shared/util';
-import { compareObsTime, compareRevision, removeLineBreaks } from 'msc-dms-commons-angular/core/obs-util';
+import { copyToClipboard, compareTime } from 'msc-dms-commons-angular/shared/util';
+import { compareRevision, removeLineBreaks } from 'msc-dms-commons-angular/core/obs-util';
 import { DataGridService } from '../data-grid.service';
 
 export abstract class DataColumnConfiguration {
@@ -39,7 +39,7 @@ export abstract class DataColumnConfiguration {
       width: 220,
       pinned: true,
       sort: 'asc',
-      comparator: compareObsTime,
+      comparator: compareTime,
       lockVisible: true,
       type: 'identity',
     };
@@ -52,7 +52,7 @@ export abstract class DataColumnConfiguration {
       colId: 'receivedDateTime',
       width: 220,
       pinned: true,
-      comparator: compareObsTime,
+      comparator: compareTime,
       type: 'identity',
     };
   }
