@@ -180,6 +180,8 @@
                 [defaultDate]="defaultDate"
                 [locale]="calendarLocale"
                 [disabled]="searchService.readOnlyBar"
+                dataType="string"
+                dateFormat="yy-mm-dd"
               >
               </p-calendar>
             </ng-container>
@@ -414,6 +416,8 @@
       placeholder="{{ p.getPlaceholder() | translate }}"
       appendTo="body"
       [locale]="calendarLocale"
+      dataType="string"
+      dateFormat="yy-mm-dd"
     >
     </p-calendar>
   </ng-container>

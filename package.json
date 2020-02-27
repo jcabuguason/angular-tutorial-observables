@@ -39,7 +39,6 @@
     "core-js": "^2.4.1",
     "cors": "^2.8.4",
     "d3": "^4.9.1",
-    "date-fns": "^1.29.0",
     "deepmerge": "^2.1.1",
     "express": "^4.16.2",
     "express-session": "^1.15.6",

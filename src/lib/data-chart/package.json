@@ -3,7 +3,6 @@
     "lib": {
       "umdModuleIds": {
         "highcharts-angular": "highcharts-angular",
-        "date-fns": "date-fns",
         "msc-dms-commons-angular/core/metadata": "msc-dms-commons-angular/core/metadata",
         "msc-dms-commons-angular/shared/language": "msc-dms-commons-angular/shared/language",
         "@ngx-translate/core": "@ngx-translate/core"

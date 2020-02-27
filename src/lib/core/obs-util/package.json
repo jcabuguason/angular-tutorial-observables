@@ -1,9 +1,3 @@
 {
-  "ngPackage": {
-    "lib": {
-      "umdModuleIds": {
-        "date-fns": "date-fns"
-      }
-    }
-  }
+  "ngPackage": {}
 }

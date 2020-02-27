@@ -2,14 +2,12 @@
   "ngPackage": {
     "lib": {
       "umdModuleIds": {
-        "date-fns": "date-fns",
         "@ngx-translate/core": "@ngx-translate/core",
         "rxjs": "rxjs"
       }
     }
   },
   "peerDependencies": {
-    "date-fns": "^1.29.0",
     "@ngx-translate/core": "^9.0.0"
   }
 }

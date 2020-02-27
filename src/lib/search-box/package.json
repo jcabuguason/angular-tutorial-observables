@@ -2,7 +2,6 @@
   "ngPackage": {
     "lib": {
       "umdModuleIds": {
-        "date-fns": "date-fns",
         "primeng/accordion": "primeng/accordion",
         "primeng/autocomplete": "primeng/autocomplete",
         "primeng/button": "primeng/button",

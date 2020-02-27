@@ -34,16 +34,6 @@ describe('ObsUtil', () => {
     obs1.obsDateTime = '2017-01-01T03:00:00.000Z';
     obs2.obsDateTime = '2018-04-22T03:00:00.000Z';
     expect(obsUtil.compareObsTimeFromObs(obs1, obs2)).toBeLessThan(0);
-
-    expect(obsUtil.compareObsTime('2018-04-22T00:00:00.000Z', '2018-04-30T22:00:00.000Z')).toBeLessThan(0);
-    expect(obsUtil.compareObsTime('2018-04-30T22:00:00.000Z', '2018-04-22T00:00:00.000Z')).toBeGreaterThan(0);
-    expect(obsUtil.compareObsTime('2018-04-22T00:00:00.000Z', '2018-04-22T00:00:00.000Z')).toBe(0);
-    expect(obsUtil.compareObsTime(Date.parse('2018-04-22T00:00:00.000Z'), Date.parse('2018-04-22T00:00:00.000Z'))).toBe(
-      0,
-    );
-    expect(obsUtil.compareObsTime('not-real', '2018-04-22T00:00:00.000Z')).toBe(-1);
-    expect(obsUtil.compareObsTime('2018-04-22T00:00:00.000Z', 'not-real')).toBe(1);
-    expect(obsUtil.compareObsTime('not-real', 'also-not-real')).toBe(0);
   });
 
   it('should compare revisions', () => {
@@ -77,12 +67,6 @@ describe('ObsUtil', () => {
   it('should modify element ID format correctly', () => {
     expect(obsUtil.formatElementToColumn('1.2.3.4.5.6.7')).toBe('e_1_2_3_4_5_6_7');
     expect(obsUtil.formatElementID('e_1_2_3_4_5_6_7')).toBe('1.2.3.4.5.6.7');
-  });
-
-  it('should modify date format correctly', () => {
-    expect(obsUtil.formatDateToISO('2018-11-11T02:00')).toBe('2018-11-11T02:00:00.000Z');
-    expect(obsUtil.formatDateRemoveSeconds('2018-11-11T02:00:00.000Z')).toBe('2018-11-11T02:00');
-    expect(obsUtil.formatDateRemoveSecondsAndTimeDelimeter('2018-11-11T02:00:00.000Z')).toBe('2018-11-11 02:00');
   });
 
   describe('converting latitude/longitude values ', () => {

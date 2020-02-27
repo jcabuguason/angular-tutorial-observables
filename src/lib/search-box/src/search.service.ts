@@ -1,7 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { addHours, subHours } from 'date-fns';
 
 import { ESOperator } from 'msc-dms-commons-angular/core/elastic-search';
 
@@ -19,6 +18,7 @@ import { SEARCH_BOX_CONFIG, SearchBoxConfig } from './search-box.config';
 import { SearchURLService } from './search-url.service';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { Subject } from 'rxjs';
+import { subtractHours, addHours } from 'msc-dms-commons-angular/shared/util';
 
 @Injectable()
 export class SearchService {
@@ -250,7 +250,7 @@ export class SearchService {
     if (this.selectedRangeType.value === 'hoursRange' && hoursRangeDate != null) {
       const hoursRange = this.hoursRangeParams.find(p => p.getName() === ParameterName.HOURS_RANGE) as SearchHoursRange;
       if (hoursRange != null) {
-        startDate = subHours(hoursRangeDate, hoursRange.hoursBefore);
+        startDate = subtractHours(hoursRangeDate, hoursRange.hoursBefore);
         endDate = addHours(hoursRangeDate, hoursRange.hoursAfter);
       }
     }

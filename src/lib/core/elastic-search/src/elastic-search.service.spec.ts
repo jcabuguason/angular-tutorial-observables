@@ -129,23 +129,13 @@ describe('ElasticSearchService', () => {
       });
 
       it('should correctly set from', () => {
-        const date = new Date();
-        date.setFullYear(2017);
-        date.setMonth(4);
-        date.setDate(20);
-        date.setHours(11);
-        date.setMinutes(25);
+        const date = new Date('2017-04-20T11:25Z');
         service.getBasicObservations('v1.0', 'testNetwork', { from: date }).subscribe();
-        httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?from=201705201125`);
+        httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?from=201704201125`);
       });
 
       it('should correctly set to', () => {
-        const date = new Date();
-        date.setFullYear(2017);
-        date.setMonth(4);
-        date.setDate(20);
-        date.setHours(11);
-        date.setMinutes(25);
+        const date = new Date('2017-05-20T11:25Z');
         service.getBasicObservations('v1.0', 'testNetwork', { to: date }).subscribe();
         httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?to=201705201125`);
       });
