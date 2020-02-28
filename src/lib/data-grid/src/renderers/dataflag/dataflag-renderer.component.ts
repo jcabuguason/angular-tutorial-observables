@@ -7,7 +7,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
   template: `
     <span title="DataFlag" [ngClass]="{ 'faded df badge': dataFlag !== 'N/A' }">{{ dataFlag }}</span>
   `,
-  styleUrls: ['./general-renderer.component.css'],
+  styleUrls: ['../general-renderer.component.css'],
 })
 export class DataFlagRendererComponent implements ICellRendererAngularComp {
   @Input() dataFlag: string;

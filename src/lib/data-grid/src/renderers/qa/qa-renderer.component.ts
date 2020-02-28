@@ -6,7 +6,7 @@ import { qaTranslationKey } from 'msc-dms-commons-angular/core/obs-util';
 @Component({
   selector: 'commons-qa-renderer',
   templateUrl: './qa-renderer.component.html',
-  styleUrls: ['./qa-renderer.component.scss'],
+  styleUrls: ['../general-renderer.component.css', './qa-renderer.component.scss'],
 })
 export class QaRendererComponent implements ICellRendererAngularComp {
   constructor(public translate: TranslateService) {}

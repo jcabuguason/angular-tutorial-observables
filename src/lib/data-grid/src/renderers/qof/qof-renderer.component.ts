@@ -7,7 +7,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
   template: `
     <span title="Qa Override Flag" [ngClass]="{ 'faded qof badge': qof !== 'N/A' }">{{ qof }}</span>
   `,
-  styleUrls: ['./general-renderer.component.css'],
+  styleUrls: ['../general-renderer.component.css'],
 })
 export class QofRendererComponent implements ICellRendererAngularComp {
   @Input() qof: string;

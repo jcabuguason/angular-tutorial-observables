@@ -7,7 +7,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
   template: `
     <span title="Value Override Flag" [ngClass]="{ 'faded vof badge': vof !== 'N/A' }">{{ vof }}</span>
   `,
-  styleUrls: ['./general-renderer.component.css'],
+  styleUrls: ['../general-renderer.component.css'],
 })
 export class VofRendererComponent implements ICellRendererAngularComp {
   @Input() vof: string;
