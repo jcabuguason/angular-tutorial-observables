@@ -17,42 +17,25 @@ export enum Lang {
 }
 
 export class UserConfig {
-  loadMetaElements: IncludeExclude;
-  loadDataElements: IncludeExclude;
-  visibleDataElements: IncludeExclude;
-  nestingDepth: number;
-  subHeader: SubHeaderConfig;
-  elementGroups: ElementGroup[];
-  elementUnits: ElementUnit[];
+  loadMetaElements: IncludeExclude = new IncludeExclude([], []);
+  loadDataElements: IncludeExclude = new IncludeExclude([], []);
+  visibleDataElements: IncludeExclude = new IncludeExclude([], []);
+  subHeader: SubHeaderConfig = new SubHeaderConfig(true);
+  elementGroups: ElementGroup[] = [];
+  elementUnits: ElementUnit[] = [];
   defaultTag: LanguageLabel;
-  elementConfigs: ElementConfig[];
-  genericNodes: GenericNodeConfig[];
-  qaHideFlags: number[];
-  loadPreferredUnits: boolean;
-  loadRawData: boolean;
-  visibleRawData: boolean;
-  loadRawHeader: boolean;
-  loadPreferredFormats: boolean;
+  elementConfigs: ElementConfig[] = [];
+  genericNodes: GenericNodeConfig[] = [];
+  qaHideFlags: number[] = [];
+  hiddenInstrumentValues: number[] = [];
+  nestingDepth = 4;
+  loadPreferredUnits = false;
+  loadRawData = true;
+  visibleRawData = true;
+  loadRawHeader = true;
+  loadPreferredFormats = false;
 
-  private constructor() {
-    this.loadMetaElements = new IncludeExclude([], []);
-    this.loadDataElements = new IncludeExclude([], []);
-    this.visibleDataElements = new IncludeExclude([], []);
-
-    this.subHeader = new SubHeaderConfig(true);
-    this.nestingDepth = 4;
-
-    this.elementGroups = [];
-    this.elementUnits = [];
-    this.elementConfigs = [];
-    this.genericNodes = [];
-    this.qaHideFlags = [];
-    this.loadPreferredUnits = false;
-    this.loadRawData = true;
-    this.visibleRawData = true;
-    this.loadRawHeader = true;
-    this.loadPreferredFormats = false;
-  }
+  private constructor() {}
 
   public static createConfig(): UserConfig {
     return new UserConfig();
@@ -85,7 +68,7 @@ export class UserConfig {
         config.nestingDepth = Number(element.value);
       }
 
-      // Configuring default tag
+      // Configuring default column tag
       else if (checkElementGroupAndName('default', 'default-tag')) {
         config.defaultTag = LanguageLabel.createLanguageLabel(element);
       }
@@ -95,17 +78,17 @@ export class UserConfig {
         ElementGroup.updateConfig(config.elementGroups, element);
       }
 
-      // Configuring element groups
+      // Configuring element's preferred unit
       else if (checkElementGroupAndName('element-unit', 'element')) {
         ElementUnit.updateConfig(config.elementUnits, element);
       }
 
-      // Configuring sub-headers
+      // Configuring show/hide sub-headers (i.e. qualifiers)
       else if (checkElementGroupAndName('header', 'show-sub-header')) {
         config.subHeader = new SubHeaderConfig(element.value === 'true', element);
       }
 
-      // Configuring renaming
+      // Set preferred name for layers/sensors
       else if (checkElementGroupAndName('node-rename', 'node-index')) {
         GenericNodeConfig.updateConfig(config.genericNodes, element);
       }
@@ -115,12 +98,17 @@ export class UserConfig {
         ElementConfig.updateConfig(config.elementConfigs, element);
       }
 
-      // Configuring renaming
+      // List of hidden QA values
       else if (checkElementGroupAndName('element-display', 'hide-qa-flag')) {
         config.qaHideFlags.push(Number(element.value));
       }
 
-      // Configuring renaming
+      // List of hidden Instrument-summary values
+      else if (checkElementGroupAndName('element-display', 'hidden-instrument-values')) {
+        config.hiddenInstrumentValues.push(Number(element.value));
+      }
+
+      // Set preferred units to be converted on load
       else if (checkElementGroupAndName('element-display', 'load-preferred-units')) {
         config.loadPreferredUnits = 'true' === element.value;
       }
@@ -130,20 +118,20 @@ export class UserConfig {
         ElementConfig.updateConfig(config.elementConfigs, element);
       }
 
-      // Configuring raw data
+      // Configuring raw data being added to the grid
       else if (checkElementGroupAndName('raw-data', 'load-raw-data')) {
         config.loadRawData = 'true' === element.value;
       }
 
-      // Configuring raw data
+      // Configuring raw data being visible on initial load
       else if (checkElementGroupAndName('raw-data', 'visible-raw-data')) {
         config.visibleRawData = 'true' === element.value;
       }
-      // Configuring raw header
+      // Configuring raw header being added to the grid
       else if (checkElementGroupAndName('raw-data', 'load-raw-header')) {
         config.loadRawHeader = 'true' === element.value;
       }
-      // Configuring display format
+      // Configure the grid to use preferred format on initial load
       else if (checkElementGroupAndName('element-display', 'load-preferred-formats')) {
         config.loadPreferredFormats = 'true' === element.value;
       }

@@ -181,6 +181,13 @@
     "NO_QA_TEST": "Le(s) test(s) de Qa non exécuté",
     "NO_OPTIMIZED_RANGE_TEST": "Test d'intervalle optimisée non exécuté"
   },
+  "INSTRUMENT": {
+    "UNEXPECTED": "Format Inattendu",
+    "MISSING": "Manquant",
+    "ALARM": "Alarme - Problème",
+    "WARNING": "Avertissement - Problème Possible",
+    "NORMAL": "Accepté"
+  },
   "OBS": {
     "LAYER": "Couche",
     "DEFAULT": "Défaut",

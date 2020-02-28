@@ -98,36 +98,43 @@ export function formatQAValue(qa: number): string {
 
 export function qaTranslationKey(qa: number | string): string {
   switch (Number(qa)) {
-    case -10: {
+    case -10:
       return 'QA.SUPRESSED';
-    }
-    case -1: {
+    case -1:
       return 'QA.MISSING';
-    }
-    case 0: {
+    case 0:
       return 'QA.ERROR';
-    }
-    case 10: {
+    case 10:
       return 'QA.DOUBTFUL';
-    }
-    case 15: {
+    case 15:
       return 'QA.SUSPECT';
-    }
-    case 20: {
+    case 20:
       return 'QA.INCONSISTENT';
-    }
-    case 100: {
+    case 100:
       return 'QA.ACCEPTED';
-    }
-    case 101: {
+    case 101:
       return 'QA.NO_QA_TEST';
-    }
-    case 110: {
+    case 110:
       return 'QA.NO_OPTIMIZED_RANGE_TEST';
-    }
-    default: {
+    default:
       return 'N/A';
-    }
+  }
+}
+
+export function instrumentTranslationKey(summary: number | string): string {
+  switch (Number(summary)) {
+    case 195:
+      return 'INSTRUMENT.UNEXPECTED';
+    case 199:
+      return 'INSTRUMENT.MISSING';
+    case 200:
+      return 'INSTRUMENT.ALARM';
+    case 210:
+      return 'INSTRUMENT.WARNING';
+    case 300:
+      return 'INSTRUMENT.NORMAL';
+    default:
+      return '';
   }
 }
 

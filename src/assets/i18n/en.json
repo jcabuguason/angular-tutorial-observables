@@ -181,6 +181,13 @@
     "NO_QA_TEST": "Qa test(s) not performed",
     "NO_OPTIMIZED_RANGE_TEST": "Optimized range test not performed"
   },
+  "INSTRUMENT": {
+    "UNEXPECTED": "Unexpected Data Format Type",
+    "MISSING": "Missing - No Value Available",
+    "ALARM": "Alarm - Problem with instrumentation",
+    "WARNING": "Warning - Potential problem with instrumentation",
+    "NORMAL": "Passed all instrument tests"
+  },
   "OBS": {
     "LAYER": "Layer",
     "DEFAULT": "Default",

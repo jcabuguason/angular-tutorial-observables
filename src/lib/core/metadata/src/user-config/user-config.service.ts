@@ -151,6 +151,10 @@ export class UserConfigService {
     return this.userConfig.qaHideFlags;
   }
 
+  getHiddenInstrumentValues(): number[] {
+    return this.userConfig.hiddenInstrumentValues;
+  }
+
   getElementGroup(elementID: string): string[] {
     return (
       this.userConfig.elementGroups
