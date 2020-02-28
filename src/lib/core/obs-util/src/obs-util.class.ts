@@ -142,12 +142,12 @@ export function formatElementToColumn(elementID: string): string {
   return !!elementID ? `e_${elementID.split('.').join('_')}` : '';
 }
 
-export function formatElementID(elementID: string): string {
-  return !!elementID
-    ? elementID
+export function formatColumnToElementID(field: string): string {
+  return !!field
+    ? field
         .replace('e_', '')
-        .split('_')
-        .join('.')
+        .replace(/-L\d+/, '')
+        .replace(/_/g, '.')
     : '';
 }
 

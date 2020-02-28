@@ -66,7 +66,9 @@ describe('ObsUtil', () => {
 
   it('should modify element ID format correctly', () => {
     expect(obsUtil.formatElementToColumn('1.2.3.4.5.6.7')).toBe('e_1_2_3_4_5_6_7');
-    expect(obsUtil.formatElementID('e_1_2_3_4_5_6_7')).toBe('1.2.3.4.5.6.7');
+    expect(obsUtil.formatColumnToElementID('e_1_2_3_4_5_6_7')).toBe('1.2.3.4.5.6.7');
+    expect(obsUtil.formatColumnToElementID('e_5_5_5_5_5_5_5-L0')).toBe('5.5.5.5.5.5.5');
+    expect(obsUtil.formatColumnToElementID('e_7_6_5_4_3_2_1-L12')).toBe('7.6.5.4.3.2.1');
   });
 
   describe('converting latitude/longitude values ', () => {
