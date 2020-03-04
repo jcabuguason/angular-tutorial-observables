@@ -161,7 +161,7 @@ export class DataGridService implements OnDestroy {
       uri: obs.identity,
       taxonomy: obs.taxonomy,
       primaryStationId: obs.identifier,
-      station: obsUtil.findMetadataValue(obs, STATION_NAME_ELEMENT),
+      station: obsUtil.findMetadataValue(obs, STATION_NAME_ELEMENT) || obs.identifier,
       revision: obsUtil.findRevision(obs),
     };
   }
