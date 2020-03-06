@@ -145,7 +145,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
       this.weekdays.map(day => `${day}_SHORT`),
     );
     this.calendarLocale = {
-      firstDayOfWeek: 1,
+      firstDayOfWeek: 0,
       dayNames: this.instantArray('DATES', this.weekdays),
       dayNamesShort: weekdaysShort,
       dayNamesMin: weekdaysShort.map(day => day.substr(0, 2)),
