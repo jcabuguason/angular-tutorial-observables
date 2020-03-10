@@ -7,3 +7,4 @@ export * from './unit-code-conversion/unit-code-conversion.reducer';
 export * from './unit-code-conversion/unit-code-conversion.config';
 export * from './value-formatter/value-formatter.service';
 export * from './value-formatter/value-formatter.reducer';
+export * from './value-formatter/value-formatter.model';
