@@ -3,7 +3,7 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { LanguageService } from 'msc-dms-commons-angular/shared/language';
 import { MDInstanceDefinition } from '../model/MDInstanceDefinition';
 import { MRMappingConfig, MR_MAPPING_CONFIG } from './mr-mapping.config';
-import { ElementVisibility } from './user-config.model';
+import { ElementVisibility, ElementGroup, LanguageLabel } from './user-config.model';
 import { UserConfigService } from './user-config.service';
 
 describe('UserConfigService', () => {
@@ -304,12 +304,22 @@ describe('UserConfigService', () => {
       service.loadConfig(elementGroupConfig);
     });
 
-    it('should return an array containing the group element IDs', () => {
-      expect(service.getElementGroup('1.2.3.4.5.6.7')).toEqual(['1.2.3.4.5.6.7', '1.2.3.4.5.6.75', '1.2.3.4.5.6.70']);
+    it('should return the element group', () => {
+      const group: ElementGroup = service.getElementGroup('1.2.3.4.5.6.7');
+      expect(group.groupID).toEqual('test group id');
+      expect(group.groupName.getName()).toEqual('test group name');
+      expect(group.groupDescription.getName()).toEqual('test group tooltip');
+      expect(group.elementIDs).toEqual(['1.2.3.4.5.6.7', '1.2.3.4.5.6.75', '1.2.3.4.5.6.70']);
     });
 
-    it('should return an empty array when element ID does not have a group', () => {
-      expect(service.getElementGroup('1.2.3.4.5.6.1')).toEqual([]);
+    it('should return undefined element ID does not have a group', () => {
+      expect(service.getElementGroup('1.2.3.4.5.6.1')).toBeUndefined();
+    });
+
+    it('should show the entire element name with group', () => {
+      expect(service.getFullFormattedHeader('1.2.3.4.5.6.7')).toBe(
+        'test group name / Diagnostics / Nitrous Oxide Concentration / Instant Max, -5 min, 20 min, -5 cm',
+      );
     });
   });
 
@@ -320,13 +330,12 @@ describe('UserConfigService', () => {
     });
 
     it('should return a combined element group', () => {
-      expect(service.getElementGroup('1.2.3.4.5.6.7')).toEqual([
-        '1.2.3.4.5.6.7',
-        '1.2.3.4.5.6.75',
-        '1.2.3.4.5.6.70',
-        '1.2.3.4.5.6.8',
-        '1.2.3.4.5.6.9',
-      ]);
+      const groups: ElementGroup[] = service.getAllElementGroups();
+      const combinedElements = ['1.2.3.4.5.6.7', '1.2.3.4.5.6.75', '1.2.3.4.5.6.70', '1.2.3.4.5.6.8', '1.2.3.4.5.6.9'];
+      expect(groups.length).toEqual(1);
+      expect(groups[0].groupID).toEqual('test group id');
+      expect(groups[0].elementIDs).toEqual(combinedElements);
+      expect(service.getElementGroup('1.2.3.4.5.6.7').elementIDs).toEqual(combinedElements);
     });
   });
 
@@ -1245,13 +1254,35 @@ describe('UserConfigService', () => {
       {
         group: 'element-groups',
         name: 'element-group',
-        value: 'wind',
+        value: 'test group id',
         def_id: '',
         id: '',
         index: '',
         uom: '',
         language: { english: '', french: '' },
         instelements: [
+          {
+            group: 'group-display',
+            name: 'group-name',
+            value: '',
+            def_id: '',
+            id: '',
+            index: '',
+            uom: '',
+            language: { english: 'test group name', french: 'test group name' },
+            instelements: [],
+          },
+          {
+            group: 'group-display',
+            name: 'group-description',
+            value: '',
+            def_id: '',
+            id: '',
+            index: '',
+            uom: '',
+            language: { english: 'test group tooltip', french: 'test group tooltip' },
+            instelements: [],
+          },
           {
             group: 'element-groups',
             name: 'element',
@@ -1309,7 +1340,7 @@ describe('UserConfigService', () => {
       {
         group: 'element-groups',
         name: 'element-group',
-        value: 'wind',
+        value: 'test group id',
         def_id: '',
         id: '',
         index: '',
