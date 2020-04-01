@@ -4,7 +4,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { ESOperator } from 'msc-dms-commons-angular/core/elastic-search';
 
-import { SearchParameter, ParameterName, ParameterType } from './parameters/search-parameter';
+import { SearchParameter } from './parameters/search-parameter';
 import { SearchQueryType } from './parameters/search-query-type';
 import { SearchDatetime } from './parameters/search-datetime';
 import { SearchHoursRange } from './parameters/search-hours-range';
@@ -19,6 +19,8 @@ import { SearchURLService } from './search-url.service';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { Subject } from 'rxjs';
 import { subtractHours, addHours } from 'msc-dms-commons-angular/shared/util';
+import { ParameterName } from './enums/parameter-name.enum';
+import { ParameterType } from './enums/parameter-type.enum';
 
 @Injectable()
 export class SearchService {
@@ -392,12 +394,12 @@ export class SearchService {
 
     const getAllSelected = name =>
       taxParameters
-        .filter(p => p.getName() === ParameterName.forTaxonomy[name])
+        .filter(p => p.getName() === name)
         .map(p => p.getSelectedModels())
         .reduce((allSelected, selected) => allSelected.concat(selected), []);
 
-    const organizations = getAllSelected('ORGANIZATION');
-    const networks = getAllSelected('NETWORK');
+    const organizations = getAllSelected(ParameterName.ORGANIZATION);
+    const networks = getAllSelected(ParameterName.NETWORK);
 
     return this.taxonomies
       .filter(tax => organizations.length === 0 || matchingChoice(organizations, tax['organizationCode']))
@@ -407,7 +409,7 @@ export class SearchService {
 
   /** Parameters used to determine taxonomy */
   private isTaxonomyParam(param: SearchParameter): boolean {
-    return Object.keys(ParameterName.forTaxonomy).some(name => ParameterName.forTaxonomy[name] === param.getName());
+    return param.getName() === ParameterName.NETWORK || param.getName() === ParameterName.ORGANIZATION;
   }
 
   /** Populate search box with information from specific URL parameters */

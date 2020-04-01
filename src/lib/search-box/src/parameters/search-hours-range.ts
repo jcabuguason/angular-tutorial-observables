@@ -1,4 +1,7 @@
-import { SearchParameter, ParameterType } from './search-parameter';
+import { SearchParameter } from './search-parameter';
+import { ParameterType } from '../enums/parameter-type.enum';
+import { HoursRangeParameterOptions } from '../model/parameter-options.model';
+import { valueOrDefault } from 'msc-dms-commons-angular/shared/util';
 
 export class SearchHoursRange extends SearchParameter {
   hoursBefore: number;
@@ -7,12 +10,17 @@ export class SearchHoursRange extends SearchParameter {
   formHoursBefore: number;
   formHoursAfter: number;
 
-  private defaultBefore;
-  private defaultAfter;
+  private defaultBefore: number;
+  private defaultAfter: number;
 
-  constructor(name: string, required: boolean) {
-    super(name, [], false, required, 1);
+  private urlNameBefore: string;
+  private urlNameAfter: string;
+
+  constructor(options: HoursRangeParameterOptions) {
+    super({ ...options, choices: [], timesUsable: 1 });
     this.setType(ParameterType.SEARCH_HOURS_RANGE);
+    this.urlNameBefore = valueOrDefault(options.urlNameBefore, 'hoursBefore');
+    this.urlNameAfter = valueOrDefault(options.urlNameAfter, 'hoursAfter');
   }
 
   setDefaultHours(hrsBefore?: number, hrsAfter?: number) {
@@ -61,6 +69,14 @@ export class SearchHoursRange extends SearchParameter {
 
   applyFormValues() {
     this.setHours(this.formHoursBefore, this.formHoursAfter);
+  }
+
+  getUrlNameBefore(): string {
+    return this.urlNameBefore;
+  }
+
+  getUrlNameAfter(): string {
+    return this.urlNameAfter;
   }
 
   private resetValues(resetForm = false) {

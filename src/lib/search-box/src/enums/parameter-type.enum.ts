@@ -1,0 +1,6 @@
+export enum ParameterType {
+  SEARCH_PARAMETER,
+  SEARCH_DATETIME,
+  SEARCH_HOURS_RANGE,
+  SEARCH_QUERY_TYPE,
+}

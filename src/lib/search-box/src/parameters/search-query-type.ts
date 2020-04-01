@@ -1,20 +1,18 @@
-import { SearchParameter, ParameterType } from './search-parameter';
+import { SearchParameter } from './search-parameter';
+import { ParameterType } from '../enums/parameter-type.enum';
+import { QueryTypeParameterOptions } from '../model/parameter-options.model';
 
 export class SearchQueryType extends SearchParameter {
-  uriChecked = '';
+  typeValue = '';
   formChecked = false;
   checked = false;
   requiredParams: SearchParameter[];
 
-  constructor(
-    name: string,
-    uriChecked: string, // uri value to indicate when this should be checked
-    requiredParams: SearchParameter[] // SearchParameters that need to be filled to execute a search
-  ) {
-    super(name, [], true, false, 1);
+  constructor(options: QueryTypeParameterOptions) {
+    super({ ...options, choices: [], timesUsable: 1 });
     this.setType(ParameterType.SEARCH_QUERY_TYPE);
-    this.uriChecked = uriChecked;
-    this.requiredParams = requiredParams;
+    this.typeValue = options.typeValue;
+    this.requiredParams = options.requiredParams;
   }
 
   hasFilledRequirements(): boolean {
@@ -26,7 +24,7 @@ export class SearchQueryType extends SearchParameter {
   }
 
   canAddSelected(value) {
-    return value === this.uriChecked;
+    return value === this.typeValue;
   }
 
   addSelected(value) {

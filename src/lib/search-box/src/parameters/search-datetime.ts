@@ -1,18 +1,22 @@
-import { SearchParameter, ParameterType } from './search-parameter';
-import { formatDateToString, DateFormatOptions, isValidDate } from 'msc-dms-commons-angular/shared/util';
+import { SearchParameter } from './search-parameter';
+import {
+  formatDateToString,
+  DateFormatOptions,
+  isValidDate,
+  valueOrDefault,
+} from 'msc-dms-commons-angular/shared/util';
+import { DatetimeParameterOptions } from '../model/parameter-options.model';
+import { ParameterType } from '../enums/parameter-type.enum';
 
 export class SearchDatetime extends SearchParameter {
   datetime: string; // using formatted string to ignore the time zone (see: https://stackoverflow.com/a/54755073)
   formDatetime: string;
-  includeTime = true;
+  includeTime: boolean;
 
-  constructor(name: string, required: boolean) {
-    super(name, [], true, required, 1);
+  constructor(options: DatetimeParameterOptions) {
+    super({ ...options, choices: [], timesUsable: 1 });
+    this.includeTime = valueOrDefault(options.includeTime, true);
     this.setType(ParameterType.SEARCH_DATETIME);
-  }
-
-  enableTime(value: boolean) {
-    this.includeTime = value;
   }
 
   canAddSelected(value): boolean {

@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { SearchService } from './search.service';
-import { ParameterType, SearchParameter } from './parameters/search-parameter';
+import { SearchParameter } from './parameters/search-parameter';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { NON_SELECTABLE } from './model/choice.model';
+import { ParameterType } from './enums/parameter-type.enum';
 
 @Component({
   selector: 'commons-search',
