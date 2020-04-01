@@ -12,8 +12,8 @@ describe('SearchParameter', () => {
   ];
 
   beforeEach(() => {
-    param = new SearchParameter('param', choices, false, false);
-    paramRestricted = new SearchParameter('param', choices, true, false);
+    param = new SearchParameter({ name: 'param', choices: choices });
+    paramRestricted = new SearchParameter({ name: 'param', choices: choices, restricted: true });
   });
 
   it('should check if can add value', () => {

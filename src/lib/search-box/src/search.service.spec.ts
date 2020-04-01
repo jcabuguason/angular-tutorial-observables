@@ -6,7 +6,7 @@ import { SearchURLService } from './search-url.service';
 
 import { SearchBoxConfig, SEARCH_BOX_CONFIG } from './search-box.config';
 
-import { ParameterName, SearchParameter } from './parameters/search-parameter';
+import { SearchParameter } from './parameters/search-parameter';
 import { ShortcutModel } from './model/shortcut.model';
 import { SearchDatetime } from './parameters/search-datetime';
 import { SearchHoursRange } from './parameters/search-hours-range';
@@ -15,6 +15,7 @@ import { SearchableElement, SearchElement, SearchModel } from './model/search.mo
 import { ChoiceModel } from './model/choice.model';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ESOperator } from 'msc-dms-commons-angular/core/elastic-search';
+import { ParameterName } from './enums/parameter-name.enum';
 
 describe('SearchService', () => {
   let searchService: SearchService;
@@ -61,19 +62,32 @@ describe('SearchService', () => {
     const organization: ChoiceModel[] = choiceModels(['msc', 'dnd'].sort());
     const networks: ChoiceModel[] = choiceModels(['ca', 'ra', 'dnd awos'].sort());
     const provinces: ChoiceModel[] = choiceModels(['AB', 'BC', 'MB']);
-    const required = false;
 
     sParams = {
-      organizationParam: new SearchParameter(ParameterName.forTaxonomy.ORGANIZATION, organization, true, required),
-      networkParam: new SearchParameter(ParameterName.forTaxonomy.NETWORK, networks, true, false),
-      stationIdParam: new SearchParameter(ParameterName.STATION_ID, [], false, required),
-      stationNameParam: new SearchParameter(ParameterName.STATION_NAME, [], false, required),
-      startDateParam: new SearchDatetime(ParameterName.FROM, required),
-      endDateParam: new SearchDatetime(ParameterName.TO, required),
-      hoursParam: new SearchHoursRange(ParameterName.HOURS_RANGE, required),
-      hoursRangeDate: new SearchDatetime(ParameterName.HOURS_RANGE_DATETIME, required),
-      provinceParam: new SearchParameter(ParameterName.PROVINCE, provinces, true, required),
-      sizeParam: new SearchParameter(ParameterName.SIZE, [], false, required, 1),
+      organizationParam: new SearchParameter({
+        name: ParameterName.ORGANIZATION,
+        choices: organization,
+        restricted: true,
+      }),
+      networkParam: new SearchParameter({
+        name: ParameterName.NETWORK,
+        choices: networks,
+        restricted: true,
+      }),
+      stationIdParam: new SearchParameter({ name: ParameterName.STATION_ID }),
+      stationNameParam: new SearchParameter({ name: ParameterName.STATION_NAME }),
+      startDateParam: new SearchDatetime({ name: ParameterName.FROM }),
+      endDateParam: new SearchDatetime({ name: ParameterName.TO }),
+      hoursParam: new SearchHoursRange({ name: ParameterName.HOURS_RANGE }),
+      hoursRangeDate: new SearchDatetime({ name: ParameterName.HOURS_RANGE_DATETIME }),
+      provinceParam: new SearchParameter({ name: ParameterName.PROVINCE, choices: provinces, restricted: true }),
+      sizeParam: new SearchParameter({
+        name: ParameterName.SIZE,
+        choices: [],
+        restricted: false,
+        required: false,
+        timesUsable: 1,
+      }),
     };
 
     const list = Object.keys(sParams).map(key => sParams[key]);
@@ -85,7 +99,7 @@ describe('SearchService', () => {
         new SearchTaxonomy(dndAwosIndex, 'dnd awos', 'dnd'),
       ],
       readOnlyBar: false,
-      shortcuts: [new ShortcutModel('Shortcut1', [{ name: ParameterName.forTaxonomy.NETWORK, values: ['ca', 'ra'] }])],
+      shortcuts: [new ShortcutModel('Shortcut1', [{ name: ParameterName.NETWORK, values: ['ca', 'ra'] }])],
     };
 
     const routes = [{ path: '', component: EmptyComponent }];

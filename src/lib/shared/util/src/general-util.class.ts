@@ -11,3 +11,5 @@ export const copyToClipboard = (text: string) => {
   document.execCommand('copy');
   document.removeEventListener('copy', copyEventListener);
 };
+
+export const valueOrDefault = (value, defaultValue) => (value == null ? defaultValue : value);

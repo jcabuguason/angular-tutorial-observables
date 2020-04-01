@@ -1,29 +1,7 @@
 import { ChoiceModel, LOADING_MODEL } from '../model/choice.model';
-
-export enum ParameterType {
-  SEARCH_PARAMETER,
-  SEARCH_DATETIME,
-  SEARCH_HOURS_RANGE,
-  SEARCH_QUERY_TYPE,
-}
-
-export const ParameterName = {
-  // used to determine taxonomy
-  forTaxonomy: {
-    NETWORK: 'network',
-    ORGANIZATION: 'organization',
-  },
-  // used by search model sent to ES
-  STATION_NAME: 'stationName',
-  STATION_ID: 'stationID',
-  PROVINCE: 'province',
-  SIZE: 'size',
-  HOURS_RANGE: 'hoursRange',
-  HOURS_RANGE_DATETIME: 'obs_datetime',
-  FROM: 'from',
-  TO: 'to',
-  QUERY_TYPE: 'queryType',
-};
+import { ParameterOptions } from '../model/parameter-options.model';
+import { ParameterType } from '../enums/parameter-type.enum';
+import { valueOrDefault } from 'msc-dms-commons-angular/shared/util';
 
 export class SearchParameter {
   selected: string[] = [];
@@ -33,19 +11,28 @@ export class SearchParameter {
   multiSelectChoices = [];
   choicesWithEmpty = [];
 
-  private type: ParameterType;
+  private name: string;
+  private choices: ChoiceModel[];
+  private restricted: boolean;
+  private required: boolean;
+  private timesUsable: number;
+  private placeholder: string;
   private displayName: string;
+  private sortAlpha: boolean;
+  private type: ParameterType = ParameterType.SEARCH_PARAMETER;
+  private urlName: string;
 
-  constructor(
-    private name: string,
-    private choices: ChoiceModel[],
-    private restricted: boolean = false,
-    private required: boolean = false,
-    private timesUsable: number = 500,
-    private placeholder: string = '',
-  ) {
-    this.displayName = name;
-    this.type = ParameterType.SEARCH_PARAMETER;
+  constructor(private options: ParameterOptions) {
+    this.name = options.name;
+    this.choices = valueOrDefault(options.choices, []);
+    this.restricted = valueOrDefault(options.restricted, false);
+    this.required = valueOrDefault(options.required, false);
+    this.timesUsable = valueOrDefault(options.timesUsable, 500);
+    this.placeholder = valueOrDefault(options.placeholder, '');
+    this.displayName = valueOrDefault(options.displayName, '');
+    this.sortAlpha = valueOrDefault(options.sortAlpha, true);
+    this.urlName = valueOrDefault(options.urlName, this.name);
+
     this.updateChoices(this.choices);
   }
 
@@ -57,8 +44,8 @@ export class SearchParameter {
     return this.displayName;
   }
 
-  setDisplayName(displayName: string) {
-    this.displayName = displayName;
+  getUrlName(): string {
+    return this.urlName;
   }
 
   getChoices(): ChoiceModel[] {
@@ -69,12 +56,12 @@ export class SearchParameter {
     return this.findChoice(this.choices, choice) != null;
   }
 
-  updateChoices(choices, sortAlpha: boolean = true) {
+  updateChoices(choices) {
     this.choices = choices;
     this.multiSelectChoices = this.choices
       .map(choice => choice.label)
       .map(choiceLabel => ({ label: choiceLabel, value: choiceLabel }));
-    if (sortAlpha) {
+    if (this.sortAlpha) {
       this.multiSelectChoices = this.multiSelectChoices.sort((a, b) => a.label.localeCompare(b.label));
     }
     this.choicesWithEmpty = [{ label: '-', value: '' }, ...this.multiSelectChoices];
@@ -98,10 +85,6 @@ export class SearchParameter {
 
   getPlaceholder(): string {
     return this.placeholder;
-  }
-
-  setPlaceholder(placeholder: string) {
-    this.placeholder = placeholder;
   }
 
   getTimesUsable(): number {

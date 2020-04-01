@@ -4,7 +4,7 @@ describe('SearchHoursRange', () => {
   let hoursParam: SearchHoursRange;
 
   beforeEach(() => {
-    hoursParam = new SearchHoursRange('hoursParam', false);
+    hoursParam = new SearchHoursRange({ name: 'hoursParam' });
   });
 
   it('should set default hours', () => {
