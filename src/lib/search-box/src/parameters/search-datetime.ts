@@ -25,7 +25,7 @@ export class SearchDatetime extends SearchParameter {
 
   addSelected(value) {
     if (this.canAddSelected(value)) {
-      this.setFullDatetime(this.formatSearchDate(value));
+      this.setFullDatetime(value);
     }
   }
 
@@ -72,14 +72,23 @@ export class SearchDatetime extends SearchParameter {
   /** The date could be YYYY-MM-DD hh:mm without the timezone, this adds it back before formatting */
   private formatSearchDate(date: string | Date, options?: DateFormatOptions): string {
     let utcDate = date;
+
     if (typeof date === 'string') {
-      if (!this.includeTime && !date.match(/( |T)\d{2}:\d{2}/g)) {
+      utcDate = utcDate.toString();
+
+      if (!date.match(/( |T)\d{2}:\d{2}/g)) {
         utcDate = `${utcDate}T00:00`;
       }
+
+      if (!this.includeTime) {
+        utcDate = utcDate.replace(/( |T)\d{2}:\d{2}/g, 'T00:00');
+      }
+
       if (!date.includes('Z')) {
         utcDate = `${utcDate}Z`;
       }
     }
+
     return formatDateToString(utcDate, options);
   }
 }
