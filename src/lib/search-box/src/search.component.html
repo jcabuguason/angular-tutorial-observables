@@ -273,51 +273,70 @@
       </ng-container>
 
       <ng-template #hasChoices>
-        <p-dropdown
-          *ngIf="p.getTimesUsable() === 1"
-          [options]="p.choicesWithEmpty"
-          [autoDisplayFirst]="false"
-          [(ngModel)]="p.formSelected[0]"
-          [filter]="true"
-          [resetFilterOnHide]="true"
-          appendTo="body"
-          (onChange)="onDropdownValueChange(p, $event)"
-        >
-          <ng-template let-choice pTemplate="selectedItem">
-            <span *ngIf="p.hasChoiceIcon(choice)" title="{{ p.getChoiceIconTooltip(choice) | translate }}"
-              ><i class="{{ p.getChoiceFaIcon(choice) }}"></i
-            ></span>
-            <span title="{{ p.getChoiceTooltip(choice.value) | translate }}"> {{ choice.value | translate }}</span>
-          </ng-template>
-          <ng-template let-choice pTemplate="item">
-            <span *ngIf="p.hasChoiceIcon(choice)" title="{{ p.getChoiceIconTooltip(choice) | translate }}"
-              ><i class="{{ p.getChoiceFaIcon(choice) }}"></i
-            ></span>
-            <span *ngIf="!!choice.value; else emptyValue" title="{{ p.getChoiceTooltip(choice.value) | translate }}">
-              {{ choice.value | translate }}
-            </span>
-            <ng-template #emptyValue>-</ng-template>
-          </ng-template>
-        </p-dropdown>
+        <div class="selection-group">
+          <ng-container>
+            <p-dropdown
+              *ngIf="p.getTimesUsable() === 1"
+              [options]="p.multiSelectChoices"
+              [autoDisplayFirst]="false"
+              [(ngModel)]="p.formSelected[0]"
+              [filter]="true"
+              [resetFilterOnHide]="true"
+              appendTo="body"
+              (onChange)="onDropdownValueChange(p, $event)"
+            >
+              <ng-template let-choice pTemplate="selectedItem">
+                <span *ngIf="p.hasChoiceIcon(choice)" title="{{ p.getChoiceIconTooltip(choice) | translate }}"
+                  ><i class="{{ p.getChoiceFaIcon(choice) }}"></i
+                ></span>
+                <span title="{{ p.getChoiceTooltip(choice.value) | translate }}"> {{ choice.value | translate }}</span>
+              </ng-template>
+              <ng-template let-choice pTemplate="item">
+                <span *ngIf="p.hasChoiceIcon(choice)" title="{{ p.getChoiceIconTooltip(choice) | translate }}"
+                  ><i class="{{ p.getChoiceFaIcon(choice) }}"></i
+                ></span>
+                <span
+                  *ngIf="!!choice.value; else emptyValue"
+                  title="{{ p.getChoiceTooltip(choice.value) | translate }}"
+                >
+                  {{ choice.value | translate }}
+                </span>
+                <ng-template #emptyValue>-</ng-template>
+              </ng-template>
+            </p-dropdown>
 
-        <p-multiSelect
-          *ngIf="p.getTimesUsable() > 1"
-          [options]="p.multiSelectChoices"
-          [defaultLabel]="multiSelectDefaultLabel"
-          [resetFilterOnHide]="true"
-          [(ngModel)]="p.formSelected"
-          (onChange)="onMultiSelectChange(p, $event)"
-          maxSelectedLabels="1"
-          selectedItemsLabel="{0} {{ multiSelectSelectedItemsLabel }}"
-          appendTo="body"
-        >
-          <ng-template let-choices pTemplate="item">
-            <span *ngIf="p.hasChoiceIcon(choices.value)" title="{{ p.getChoiceIconTooltip(choices.value) | translate }}"
-              ><i class="{{ p.getChoiceFaIcon(choices.value) }}"></i
-            ></span>
-            <span title="{{ p.getChoiceTooltip(choices.value) | translate }}"> {{ choices.value | translate }}</span>
-          </ng-template>
-        </p-multiSelect>
+            <p-multiSelect
+              *ngIf="p.getTimesUsable() > 1"
+              [options]="p.multiSelectChoices"
+              [defaultLabel]="multiSelectDefaultLabel"
+              [resetFilterOnHide]="true"
+              [(ngModel)]="p.formSelected"
+              (onChange)="onMultiSelectChange(p, $event)"
+              maxSelectedLabels="1"
+              selectedItemsLabel="{0} {{ multiSelectSelectedItemsLabel }}"
+              appendTo="body"
+            >
+              <ng-template let-choices pTemplate="item">
+                <span
+                  *ngIf="p.hasChoiceIcon(choices.value)"
+                  title="{{ p.getChoiceIconTooltip(choices.value) | translate }}"
+                  ><i class="{{ p.getChoiceFaIcon(choices.value) }}"></i
+                ></span>
+                <span title="{{ p.getChoiceTooltip(choices.value) | translate }}">
+                  {{ choices.value | translate }}</span
+                >
+              </ng-template>
+            </p-multiSelect>
+          </ng-container>
+          <button
+            pButton
+            *ngIf="p.formSelected.length"
+            type="button"
+            (click)="p.removeAllFormValues()"
+            icon="pi pi-times"
+            class="clear-btn"
+          ></button>
+        </div>
       </ng-template>
     </ng-container>
 
@@ -336,7 +355,7 @@
       (onChange)="onRangeTypeChange($event)"
     >
       <ng-template let-item>
-        <div style="padding: .5em 1em">
+        <div style="padding: 0.5em 1em;">
           <span>{{ item.label | translate }}</span>
         </div>
       </ng-template>
@@ -384,7 +403,7 @@
   <p-toast key="search-messages" position="center">
     <ng-template let-message pTemplate="message">
       <div>
-        <i class="pi pi-exclamation-triangle" style="font-size: 3em"></i>
+        <i class="pi pi-exclamation-triangle" style="font-size: 3em;"></i>
         <p>{{ message.summary | translate }}</p>
         <ul>
           <li *ngFor="let field of message.data">{{ field | translate }}</li>
