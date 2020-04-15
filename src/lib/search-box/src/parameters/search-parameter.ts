@@ -9,7 +9,6 @@ export class SearchParameter {
   filteredSuggestions: string[] = [];
 
   multiSelectChoices = [];
-  choicesWithEmpty = [];
 
   private name: string;
   private choices: ChoiceModel[];
@@ -59,12 +58,11 @@ export class SearchParameter {
   updateChoices(choices) {
     this.choices = choices;
     this.multiSelectChoices = this.choices
-      .map(choice => choice.label)
-      .map(choiceLabel => ({ label: choiceLabel, value: choiceLabel }));
+      .map((choice) => choice.label)
+      .map((choiceLabel) => ({ label: choiceLabel, value: choiceLabel }));
     if (this.sortAlpha) {
       this.multiSelectChoices = this.multiSelectChoices.sort((a, b) => a.label.localeCompare(b.label));
     }
-    this.choicesWithEmpty = [{ label: '-', value: '' }, ...this.multiSelectChoices];
   }
 
   isRestricted(): boolean {
@@ -104,7 +102,7 @@ export class SearchParameter {
   }
 
   getSelectedModels() {
-    return this.selected.map(val => this.findChoice(this.choices, val) || new ChoiceModel(val));
+    return this.selected.map((val) => this.findChoice(this.choices, val) || new ChoiceModel(val));
   }
 
   setSelectedAt(index: number, value: string) {
@@ -126,7 +124,7 @@ export class SearchParameter {
   addSelected(value: string) {
     value = this.cleanEntries([value]).shift();
     if (this.canAddSelected(value)) {
-      const fixed = this.choices.find(val => val.label.toLowerCase() === value.toLowerCase());
+      const fixed = this.choices.find((val) => val.label.toLowerCase() === value.toLowerCase());
       if (fixed) {
         value = fixed.label;
       }
@@ -168,7 +166,7 @@ export class SearchParameter {
     this.selected = this.cleanEntries(this.selected);
     this.selected = this.removeDuplicates(this.selected);
     if (this.isRestricted()) {
-      this.selected = this.selected.filter(val => this.includesChoice(val));
+      this.selected = this.selected.filter((val) => this.includesChoice(val));
     }
   }
 
@@ -180,7 +178,7 @@ export class SearchParameter {
   }
 
   findChoiceByUri(uri: string) {
-    return this.choices.find(val => val.uri.toLowerCase() === uri.toLowerCase());
+    return this.choices.find((val) => val.uri.toLowerCase() === uri.toLowerCase());
   }
 
   getChoiceFaIcon(value: string): string {
@@ -211,7 +209,7 @@ export class SearchParameter {
 
   private findChoice(list: any[], value: string | ChoiceModel) {
     const updatedValue = this.determineChoiceLabel(value).toLowerCase();
-    return list.find(val => {
+    return list.find((val) => {
       if (this.isChoiceModel(val)) {
         return val.label.toLowerCase() === updatedValue;
       } else {
@@ -225,7 +223,7 @@ export class SearchParameter {
   }
 
   cleanEntries = (arr: string[]): string[] =>
-    arr.map(entry => entry != null && entry.trim()).filter(trimmed => !!trimmed);
+    arr.map((entry) => entry != null && entry.trim()).filter((trimmed) => !!trimmed);
 
   // some values still gets through from manual user input in the form/bar (ngModel binding)
   // ex. '12345 ' and '12345   ' are technically unique

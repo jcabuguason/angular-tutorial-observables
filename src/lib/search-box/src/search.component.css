@@ -79,7 +79,7 @@
 }
 
 ::ng-deep .ui-autocomplete .ui-autocomplete-dropdown {
-  height: 29px
+  height: 29px;
 }
 
 ::ng-deep .selected-parameter .ui-autocomplete-multiple-container .ui-autocomplete-input-token input {
@@ -175,4 +175,23 @@
 /* needed to open search form when clicking disabled parameters in Firefox */
 .disabled-parameter {
   pointer-events: none;
+}
+
+.clear-btn {
+  border: 0;
+  color: black;
+  background: none;
+  border-radius: 10px;
+  margin-left: 5px;
+  transition: 0.1s;
+}
+
+.clear-btn:hover {
+  background: rgba(255, 0, 0, 0.125) !important;
+  border: none !important;
+  color: black !important;
+}
+
+.selection-group {
+  display: flex;
 }
