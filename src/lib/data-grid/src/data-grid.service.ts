@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { ElementVisibility, UserConfigService } from 'msc-dms-commons-angular/core/metadata';
+import { ElementVisibility, UserConfigService, ElementGroup } from 'msc-dms-commons-angular/core/metadata';
 import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
 import {
   DataElements,
@@ -252,42 +252,30 @@ export class DataGridService implements OnDestroy {
   // TODO: This function assumes a flat column config
   private sortColumns() {
     const configOrder = this.userConfigService.getElementOrder();
-
-    const identity = this.columnDefs.find(col => col.groupId === 'identity');
-    const identityChildren = identity.children;
-
-    const inColConfig = field =>
-      this.columnConfiguration.getIdentityHeaders().children.some(col => col.field === field);
-
-    const pinned = identityChildren.filter(col => inColConfig(col.field));
-
     // workaround - parent might not have it's ID set
     const getID = col => col.elementID || col.children[0].elementID;
 
-    const dataCols = [];
-    const identityCols = pinned;
-    const metaCols = this.columnDefs.filter(col => col.headerClass === 'meta');
+    let sortedMetaCols = [];
+    let sortedDataCols = [];
 
-    configOrder.forEach(e => {
-      const inDef = this.columnDefs.filter(col => getID(col) === e && col.headerClass !== 'meta');
-      dataCols.push(...inDef);
+    configOrder.forEach(elementID => {
+      const columns = this.columnDefs.filter(col => getID(col) === elementID);
+      columns.some(col => col.headerClass === 'meta')
+        ? sortedMetaCols.push(...columns)
+        : sortedDataCols.push(...columns);
     });
 
+    const remainingMetaCol = col => col.headerClass === 'meta' && !configOrder.includes(getID(col));
     const remainingDataCol = col =>
       col.groupId !== 'identity' &&
       col.groupId !== 'raw' &&
       col.headerClass !== 'meta' &&
       !configOrder.includes(getID(col));
 
-    const remainingCols = this.columnDefs.filter(remainingDataCol);
-    const remainingIdentityCols = identityChildren.filter(
-      col => !configOrder.includes(col.elementID) && !pinned.includes(col),
-    );
+    sortedMetaCols = this.groupColumns(sortedMetaCols.concat(this.columnDefs.filter(remainingMetaCol)));
+    sortedDataCols = this.groupColumns(sortedDataCols.concat(this.columnDefs.filter(remainingDataCol)));
 
-    dataCols.push(...remainingCols);
-    identity.children = identityCols.concat(remainingIdentityCols);
-
-    this.columnDefs = [identity, ...metaCols, ...dataCols];
+    this.columnDefs = [this.identityHeader, ...sortedMetaCols, ...sortedDataCols];
     if (this.userConfigService.isLoadRawData()) {
       this.columnDefs.push(this.rawGroupHeader);
     }
@@ -317,15 +305,6 @@ export class DataGridService implements OnDestroy {
   private isMetadataElement(elementID: string) {
     const split = elementID.split('.');
     return !!split[1] && (split[1] === '7' || split[1] === '8' || split[1] === '9');
-  }
-
-  // Formats header name, used without providing user config
-  private formatHeaderName(headerName: string): string {
-    const format = (piece: string) => piece.charAt(0).toUpperCase() + piece.slice(1);
-    return headerName
-      .split('_')
-      .map(format)
-      .join(' ');
   }
 
   private resetHeader() {
@@ -589,5 +568,32 @@ export class DataGridService implements OnDestroy {
       element,
       this.userConfigService.getElementDisplayFormat(element.elementID),
     );
+  }
+
+  private groupColumns(columns) {
+    const groupedColumns = [];
+    const createGroup = (configGroup: ElementGroup) => ({
+      headerName: configGroup.groupName.getName(),
+      headerTooltip: configGroup.groupDescription.getName(),
+      groupId: configGroup.groupID,
+      children: [],
+    });
+
+    for (const curCol of columns) {
+      const configGroup: ElementGroup = this.userConfigService.getElementGroup(curCol.elementID);
+      if (configGroup == null) {
+        groupedColumns.push(curCol);
+        continue;
+      }
+
+      let groupDef = groupedColumns.find(col => col.groupId === configGroup.groupID);
+      if (groupDef == null) {
+        groupDef = createGroup(configGroup);
+        groupedColumns.push(groupDef);
+      }
+      groupDef.children.push(curCol);
+    }
+
+    return groupedColumns;
   }
 }

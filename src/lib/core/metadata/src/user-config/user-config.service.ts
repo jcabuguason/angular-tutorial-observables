@@ -7,7 +7,7 @@ import { catchError, first, publishLast, refCount, tap } from 'rxjs/operators';
 import { MDInstanceDefinition } from '../model/MDInstanceDefinition';
 import { MRMappingConfig, MR_MAPPING_CONFIG } from './mr-mapping.config';
 import { NodeLookups } from './node.const';
-import { ElementVisibility, Lang, SubHeaderConfig, UserConfig } from './user-config.model';
+import { ElementVisibility, Lang, SubHeaderConfig, UserConfig, ElementGroup } from './user-config.model';
 
 @Injectable()
 export class UserConfigService {
@@ -155,13 +155,12 @@ export class UserConfigService {
     return this.userConfig.hiddenInstrumentValues;
   }
 
-  getElementGroup(elementID: string): string[] {
-    return (
-      this.userConfig.elementGroups
-        .filter(elemGroup => elemGroup.elementIDs.some(elemID => elemID === elementID))
-        .map(elemGroup => elemGroup.elementIDs)
-        .shift() || []
-    );
+  getElementGroup(elementID: string): ElementGroup {
+    return this.userConfig.elementGroups.find(elemGroup => elemGroup.elementIDs.some(elemID => elemID === elementID));
+  }
+
+  getAllElementGroups(): ElementGroup[] {
+    return this.userConfig.elementGroups;
   }
 
   getElementUnit(elementID: string): string {
@@ -252,13 +251,15 @@ export class UserConfigService {
       .join(' / ');
   }
 
-  getFullFormattedHeader(elementID: string) {
+  getFullFormattedHeader(elementID: string, separator: string = ' / '): string {
+    const group = this.getElementGroup(elementID);
+    const groupName = group == null ? '' : modifiedOrBlank(group.groupName.getName(), s => `${s}${separator}`);
     const main = range(2, this.getNestingDepth(elementID))
       .map(nodeIndex => this.getFormattedNodeName(elementID, nodeIndex))
       .filter(nodeName => nodeName !== '')
-      .join(' / ');
+      .join(separator);
 
-    return main + this.getFormattedSubHeader(elementID);
+    return `${groupName}${main}${this.getFormattedSubHeader(elementID)}`;
   }
 
   getFormattedSubHeader(elementID: string): string {

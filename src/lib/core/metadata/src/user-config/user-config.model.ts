@@ -238,6 +238,9 @@ export class ElementConfig {
 }
 
 export class ElementGroup {
+  groupID: string;
+  groupName: LanguageLabel;
+  groupDescription: LanguageLabel;
   elementIDs: string[] = [];
 
   constructor(element: MDInstanceElement) {
@@ -261,7 +264,13 @@ export class ElementGroup {
   }
 
   private update(element: MDInstanceElement) {
-    element.instelements
+    const findInstelements = (name: string) => element.instelements.filter(instel => instel.name === name);
+
+    this.groupID = element.value;
+    this.groupDescription = LanguageLabel.createLanguageLabel(findInstelements('group-description').shift());
+    this.groupName = LanguageLabel.createLanguageLabel(findInstelements('group-name').shift());
+
+    findInstelements('element')
       .map(elem => elem.value)
       .filter(elementID => !this.elementIDs.some(elemID => elemID === elementID))
       .forEach(elem => this.elementIDs.push(elem));
