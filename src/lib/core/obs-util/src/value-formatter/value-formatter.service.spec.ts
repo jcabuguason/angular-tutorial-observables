@@ -1,5 +1,5 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
-import { DataElements } from '../dms-observation.model';
+import { ObsElement } from '../dms-observation.model';
 import { ValueFormatterService } from './value-formatter.service';
 import { ValueFormats } from './value-formatter.model';
 
@@ -17,7 +17,7 @@ describe('ValueFormatterService', () => {
   });
 
   it('should format element', () => {
-    const latitudeElement: DataElements = {
+    const latitudeElement: ObsElement = {
       name: 'latitude',
       elementID: '1.7.97.0.0.0.0',
       value: originalLatitude,
@@ -28,14 +28,14 @@ describe('ValueFormatterService', () => {
   });
 
   describe('using grid params', () => {
-    const latitudeElement: DataElements = {
+    const latitudeElement: ObsElement = {
       name: 'latitude',
       elementID: '1.7.97.0.0.0.0',
       value: originalLatitude,
       unit: 'unitless',
       formattedValue: formattedLatitude,
     };
-    const longitudeElement: DataElements = {
+    const longitudeElement: ObsElement = {
       name: 'longitude',
       elementID: '1.7.98.0.0.0.0',
       value: '-132',

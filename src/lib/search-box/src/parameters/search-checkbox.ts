@@ -1,22 +1,22 @@
 import { SearchParameter } from './search-parameter';
 import { ParameterType } from '../enums/parameter-type.enum';
-import { QueryTypeParameterOptions } from '../model/parameter-options.model';
+import { CheckboxParameterOptions } from '../model/parameter-options.model';
 
-export class SearchQueryType extends SearchParameter {
+export class SearchCheckbox extends SearchParameter {
   typeValue = '';
   formChecked = false;
   checked = false;
   requiredParams: SearchParameter[];
 
-  constructor(options: QueryTypeParameterOptions) {
+  constructor(options: CheckboxParameterOptions) {
     super({ ...options, choices: [], timesUsable: 1 });
-    this.setType(ParameterType.SEARCH_QUERY_TYPE);
+    this.setType(ParameterType.SEARCH_CHECKBOX);
     this.typeValue = options.typeValue;
     this.requiredParams = options.requiredParams;
   }
 
   hasFilledRequirements(): boolean {
-    return this.hasRequiredParams() && this.requiredParams.some(param => !param.isUnfilled());
+    return this.hasRequiredParams() && this.requiredParams.some((param) => !param.isUnfilled());
   }
 
   hasRequiredParams(): boolean {

@@ -1,13 +1,15 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
+import { formatDateToString } from 'msc-dms-commons-angular/shared/util';
 import { ElasticSearchService } from './elastic-search.service';
 import { ELASTIC_SEARCH_CONFIG, ElasticSearchConfig } from './elastic-search.config';
-import { ESDateTimeType } from './enum/es-date-time-type.enum';
 import { ESSortType } from './enum/es-sort-type.enum';
-import { ESQueryType } from './enum/es-query-type.enum';
+import { ESOperator } from './enum/es-operator.enum';
 
 describe('ElasticSearchService', () => {
+  const VERSION = 'v2.0';
+
   let injector: TestBed;
   let service: ElasticSearchService;
   let httpMock: HttpTestingController;
@@ -30,143 +32,208 @@ describe('ElasticSearchService', () => {
     httpMock.verify();
   });
 
-  describe('#get aliases', () => {
-    it('should return a list of strings', () => {
-      const dummyAliases = {
-        indexes: ['dms_ca_bulkinsert', 'dnd:observation:atmospheric:surface_weather:awos-1.0-binary_11'],
+  describe('#performing search', () => {
+    it('should return basic observations without params', () => {
+      const dummyObs = {
+        hello: 'world',
       };
 
-      service.getAllSearchableAliases().subscribe(response => {
-        expect(response).toEqual(dummyAliases.indexes);
+      service.performSearch(VERSION, 'testNetwork').subscribe((response) => {
+        expect(response).toEqual(dummyObs);
       });
 
-      const req = httpMock.expectOne(`${config.endpoint}/search/`);
+      const req = httpMock.expectOne(`${config.endpoint}/search/${VERSION}/testNetwork/templateSearch`);
       expect(req.request.method).toBe('GET');
-      req.flush(dummyAliases);
+      req.flush(dummyObs);
+    });
+
+    it('should search with non-query parameters', () => {
+      const dummyObs = {
+        hello: 'world',
+      };
+
+      const fromDate = new Date(2019, 1, 28);
+      const toDate = new Date(2020, 1, 29);
+      const dateFormat = { dateSeparator: '', timeSeparator: '', dateAndTimeSeparator: '' };
+
+      service
+        .performSearch(VERSION, 'testNetwork', {
+          size: 10,
+          from: fromDate,
+          to: toDate,
+          sortFields: ESSortType.ObservationDateTimeAsc,
+        })
+        .subscribe((response) => {
+          expect(response).toEqual(dummyObs);
+        });
+
+      const req = httpMock.expectOne(
+        (r) =>
+          r.params.get('size') === '10' &&
+          r.params.get('from') === formatDateToString(fromDate, dateFormat) &&
+          r.params.get('to') === formatDateToString(toDate, dateFormat) &&
+          r.params.get('sortFields') === ESSortType.ObservationDateTimeAsc,
+      );
+      expect(req.request.method).toBe('GET');
+      req.flush(dummyObs);
+    });
+
+    it('should search with query params', () => {
+      const dummyObs = {
+        hello: 'world',
+      };
+
+      service
+        .performSearch(VERSION, 'testNetwork', {
+          size: 1,
+          query: [
+            {
+              operator: ESOperator.And,
+              elements: [
+                {
+                  elementID: '123',
+                  value: 'foo',
+                },
+              ],
+            },
+          ],
+        })
+        .subscribe((response) => {
+          expect(response).toEqual(dummyObs);
+        });
+
+      const req = httpMock.expectOne((r) => r.params.get('size') === '1' && r.params.get('query') === '123.value:foo');
+      expect(req.request.method).toBe('GET');
+      req.flush(dummyObs);
     });
   });
 
-  describe('#observation based endpionts', () => {
-    it('should return basic observations', () => {
-      const dummyObs = {
-        hello: 'world',
-      };
-
-      service.getBasicObservations('v1.0', 'testNetwork').subscribe(response => {
-        expect(response).toEqual(dummyObs);
-      });
-
-      const req = httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork`);
-      expect(req.request.method).toBe('GET');
-      req.flush(dummyObs);
+  describe('#query formatting', () => {
+    it('should format 1-chunk, 1-element queries', () => {
+      expect(
+        service.stringifyQuery([
+          {
+            operator: ESOperator.And,
+            elements: [
+              {
+                elementID: '123',
+                value: 'foo',
+              },
+            ],
+          },
+        ]),
+      ).toEqual('123.value:foo');
     });
 
-    it('should return unique stations', () => {
-      const dummyObs = {
-        hello: 'world',
-      };
-
-      service.getUniqueStations('v1.0', 'testNetwork').subscribe(response => {
-        expect(response).toEqual(dummyObs);
-      });
-
-      const req = httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork/stations`);
-      expect(req.request.method).toBe('GET');
-      req.flush(dummyObs);
+    it('should format 1-chunk, multi-element queries', () => {
+      expect(
+        service.stringifyQuery([
+          {
+            operator: ESOperator.And,
+            elements: [
+              {
+                elementID: '123',
+                value: 'foo',
+              },
+              {
+                elementID: '456',
+                value: 'bar',
+              },
+            ],
+          },
+        ]),
+      ).toEqual('(123.value:foo)AND(456.value:bar)');
     });
 
-    it('should return observations from stations', () => {
-      const dummyObs = {
-        hello: 'world',
-      };
-
-      service.getObservationsFromStations('v1.0', 'testNetwork', ['1', '2']).subscribe(response => {
-        expect(response).toEqual(dummyObs);
-      });
-
-      const req = httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork/stations/1,2`);
-      expect(req.request.method).toBe('GET');
-      req.flush(dummyObs);
+    it('should format multi-chunk, 1-element queries', () => {
+      expect(
+        service.stringifyQuery([
+          {
+            operator: ESOperator.And,
+            elements: [
+              {
+                elementID: '123',
+                value: 'foo',
+              },
+            ],
+          },
+          {
+            operator: ESOperator.And,
+            elements: [
+              {
+                elementID: '456',
+                value: 'bar',
+              },
+            ],
+          },
+        ]),
+      ).toEqual('(123.value:foo)AND(456.value:bar)');
     });
 
-    it('should return unique elements', () => {
-      const dummyObs = {
-        hello: 'world',
-      };
-
-      service.getUniqueElements('v1.0', 'testNetwork').subscribe(response => {
-        expect(response).toEqual(dummyObs);
-      });
-
-      const req = httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork/elements`);
-      expect(req.request.method).toBe('GET');
-      req.flush(dummyObs);
+    it('should format multi-chunk, multi-element queries', () => {
+      expect(
+        service.stringifyQuery([
+          {
+            operator: ESOperator.Or,
+            elements: [
+              {
+                elementID: '123',
+                value: 'foo',
+              },
+              {
+                elementID: '456',
+                value: 'bar',
+              },
+            ],
+          },
+          {
+            operator: ESOperator.And,
+            elements: [
+              {
+                elementID: 'copy1',
+                value: 'paste1',
+              },
+              {
+                elementID: 'copy2',
+                value: 'paste2',
+              },
+            ],
+          },
+        ]),
+      ).toEqual('((123.value:foo)OR(456.value:bar))AND((copy1.value:paste1)AND(copy2.value:paste2))');
     });
 
-    it('should return observations from elements', () => {
-      const dummyObs = {
-        hello: 'world',
-      };
-
-      service.getObservationsFromElements('v1.0', 'testNetwork', ['1', '2']).subscribe(response => {
-        expect(response).toEqual(dummyObs);
-      });
-
-      const req = httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork/elements/1,2`);
-      expect(req.request.method).toBe('GET');
-      req.flush(dummyObs);
+    it('should escape values with spaces', () => {
+      expect(
+        service.stringifyQuery([
+          {
+            operator: ESOperator.And,
+            elements: [
+              {
+                elementID: '123',
+                value: 'foo bar',
+              },
+            ],
+          },
+        ]),
+      ).toEqual('123.value:foo\\ bar');
     });
 
-    describe('#common parameters', () => {
-      it('should correctly set type', () => {
-        service.getBasicObservations('v1.0', 'testNetwork', { type: 'metadata' }).subscribe();
-        httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?type=metadata`);
-      });
-
-      it('should correctly set size', () => {
-        service.getBasicObservations('v1.0', 'testNetwork', { size: 10 }).subscribe();
-        httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?size=10`);
-      });
-
-      it('should correctly set from', () => {
-        const date = new Date('2017-04-20T11:25Z');
-        service.getBasicObservations('v1.0', 'testNetwork', { from: date }).subscribe();
-        httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?from=201704201125`);
-      });
-
-      it('should correctly set to', () => {
-        const date = new Date('2017-05-20T11:25Z');
-        service.getBasicObservations('v1.0', 'testNetwork', { to: date }).subscribe();
-        httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?to=201705201125`);
-      });
-
-      it('should correctly set datetimetype', () => {
-        service
-          .getBasicObservations('v1.0', 'testNetwork', {
-            datetimeType: ESDateTimeType.ObservationDateTime,
-          })
-          .subscribe();
-        httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?datetimeType=obsDateTime`);
-      });
-
-      it('should correctly set sortFields', () => {
-        service
-          .getBasicObservations('v1.0', 'testNetwork', {
-            sortFields: ESSortType.ObservationDateTimeAsc,
-          })
-          .subscribe();
-        httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?sortFields=%2BobsDateTime`);
-      });
-
-      it('should correctly set startIndex', () => {
-        service.getBasicObservations('v1.0', 'testNetwork', { startIndex: '50' }).subscribe();
-        httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?startIndex=50`);
-      });
-
-      it('should correctly set queryType', () => {
-        service.getBasicObservations('v1.0', 'testNetwork', { queryType: ESQueryType.Partial }).subscribe();
-        httpMock.expectOne(`${config.endpoint}/search/v1.0/testNetwork?queryType=partial`);
-      });
+    it('should mark caseless values as lowercase', () => {
+      expect(
+        service.stringifyQuery([
+          {
+            operator: ESOperator.And,
+            elements: [
+              {
+                elementID: '123',
+                value: 'foo',
+                isCaseless: true,
+              },
+            ],
+          },
+        ]),
+      ).toEqual('123.value.lowercase:foo');
     });
   });
 });

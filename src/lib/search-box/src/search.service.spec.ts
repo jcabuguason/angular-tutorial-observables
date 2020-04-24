@@ -11,7 +11,7 @@ import { ShortcutModel } from './model/shortcut.model';
 import { SearchDatetime } from './parameters/search-datetime';
 import { SearchHoursRange } from './parameters/search-hours-range';
 import { SearchTaxonomy } from './search-taxonomy';
-import { SearchableElement, SearchElement, SearchModel } from './model/search.model';
+import { SearchableElement, SearchModel } from './model/search.model';
 import { ChoiceModel } from './model/choice.model';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ESOperator } from 'msc-dms-commons-angular/core/elastic-search';
@@ -22,7 +22,7 @@ describe('SearchService', () => {
 
   const nameValueObj = (name, value) => ({ name: name, value: value });
   const paramValueObj = (param, value) => ({ param: param, value: value });
-  const choiceModels = array => array.map(val => new ChoiceModel(val));
+  const choiceModels = (array) => array.map((val) => new ChoiceModel(val));
 
   const caIndex = 'dms_data+msc+observation+atmospheric+surface_weather+ca-1.1-ascii';
   const raIndex = 'dms_data+msc+observation+atmospheric+surface_weather+ra-1.1-ascii';
@@ -47,7 +47,7 @@ describe('SearchService', () => {
       if (shortcut != null) {
         all.push(nameValueObj('shortcut', ['shortcutLabel']));
       } else {
-        params.forEach(p => all.push(...p.selected.map(() => nameValueObj('paramName', ['param Values']))));
+        params.forEach((p) => all.push(...p.selected.map(() => nameValueObj('paramName', ['param Values']))));
       }
       return all;
     }
@@ -90,7 +90,7 @@ describe('SearchService', () => {
       }),
     };
 
-    const list = Object.keys(sParams).map(key => sParams[key]);
+    const list = Object.keys(sParams).map((key) => sParams[key]);
     const config: SearchBoxConfig = {
       searchList: list,
       taxonomies: [
@@ -275,14 +275,31 @@ describe('SearchService', () => {
     });
     const expectedModel: SearchModel = {
       taxonomy: [caIndex, dndAwosIndex],
-      elements: [
-        new SearchElement(SearchableElement.STATION_NAME.id, 'metadataElements', 'value', 'station name'),
-        new SearchElement(SearchableElement.PROVINCE.id, 'metadataElements', 'value', 'AB'),
+
+      query: [
+        {
+          operator: ESOperator.Or,
+          elements: [
+            {
+              elementID: SearchableElement.STATION_NAME.id,
+              value: 'station name',
+              isCaseless: true,
+            },
+          ],
+        },
+        {
+          operator: ESOperator.Or,
+          elements: [
+            {
+              elementID: SearchableElement.PROVINCE.id,
+              value: 'AB',
+            },
+          ],
+        },
       ],
       from: new Date('2018-01-01T00:00Z'),
       to: new Date('2018-02-01T00:00Z'),
       size: 300,
-      operator: ESOperator.And,
       httpParams: expectedHttpParams,
     };
 
@@ -291,9 +308,10 @@ describe('SearchService', () => {
 
   it('differentiate between station ids', () => {
     const createElement = (value, type) => ({
-      station: value,
-      searchElement: new SearchElement(SearchableElement.STATION_TYPE[type].id, 'metadataElements', 'value', value),
+      value: value,
+      id: SearchableElement.STATION_TYPE[type].id,
     });
+
     const stations = [
       createElement('xyz', 'TC_ID'),
       createElement('12345', 'WMO_ID'),
@@ -301,37 +319,21 @@ describe('SearchService', () => {
       createElement('123abcd', 'MSC_ID'),
       createElement('someId', 'MSC_ID'),
     ];
-    searchService.addSuggestedParameter(
-      sParams.stationIdParam,
-      stations.map(s => s.station),
-    );
-
-    expect(searchService.buildSearchModel().elements).toEqual(stations.map(s => s.searchElement));
-  });
-
-  it('should adjust wildcard in station', () => {
-    const mscId = SearchableElement.STATION_TYPE.MSC_ID.id;
-    const nameId = SearchableElement.STATION_NAME.id;
-    const createElement = (value, id, adjustedValue) => ({
-      station: value,
-      searchElement: new SearchElement(id, 'metadataElements', 'value', adjustedValue),
-    });
-
-    const stations = [
-      createElement('123456', mscId, '123456'),
-      createElement('1234.*', mscId, '1234.*'),
-      createElement('*123*', mscId, '.*123.*'),
-    ];
-    const stationName = createElement('name*', nameId, 'name.*');
 
     searchService.addSuggestedParameter(
       sParams.stationIdParam,
-      stations.map(s => s.station),
+      stations.map((s) => s.value),
     );
-    searchService.addSuggestedParameter(sParams.stationNameParam, [stationName.station]);
 
-    expect(searchService.buildSearchModel().elements).toEqual(
-      stations.map(s => s.searchElement).concat(stationName.searchElement),
+    const model = searchService.buildSearchModel();
+    if (model.query == null || model.query.length !== 1) {
+      fail('Needs query model');
+    }
+
+    stations.forEach((stn) =>
+      expect(
+        model.query[0].elements.some((element) => element.elementID === stn.id && element.value === stn.value),
+      ).toBeTruthy(),
     );
   });
 
@@ -363,20 +365,15 @@ describe('SearchService', () => {
   });
 
   it('should handle spaces for station search', () => {
-    const nameId = SearchableElement.STATION_NAME.id;
-    const wmoId = SearchableElement.STATION_TYPE.WMO_ID.id;
-    const createElement = (value, id, adjustedValue) => ({
-      station: value,
-      searchElement: new SearchElement(id, 'metadataElements', 'value', adjustedValue),
-    });
+    searchService.addSuggestedParameter(sParams.stationNameParam, ['normal', '  spaced out  ']);
 
-    const stationId = createElement(' 123 45 ', wmoId, '12345');
-    const stationName = createElement(' station name ', nameId, 'station name');
+    const model = searchService.buildSearchModel();
 
-    searchService.addSuggestedParameter(sParams.stationIdParam, [stationId.station]);
-    searchService.addSuggestedParameter(sParams.stationNameParam, [stationName.station]);
+    if (model.query == null || model.query.length !== 1) {
+      fail('Unexpected query model');
+    }
 
-    expect(searchService.buildSearchModel().elements).toEqual([stationId.searchElement, stationName.searchElement]);
+    expect(model.query[0].elements.map((e) => e.value)).toEqual(['normal', 'spaced out']);
   });
 
   it('should mark empty searches as invalid', () => {

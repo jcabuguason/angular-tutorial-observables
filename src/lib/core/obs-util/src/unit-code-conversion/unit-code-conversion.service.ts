@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { FromUnits, UnitConversion, CodeSources, CodeResult, UnitConversionResult } from './unit-code-conversion.model';
 import { UNIT_CODE_CONVERSION_CONFIG, UnitCodeConversionConfig } from './unit-code-conversion.config';
 
-import { DataElements, MetadataElements } from '../dms-observation.model';
+import { ObsElement } from '../dms-observation.model';
 
 import { Observable } from 'rxjs';
 
@@ -19,20 +19,20 @@ export class UnitCodeConversionService {
   constructor(
     @Inject(UNIT_CODE_CONVERSION_CONFIG)
     private config: UnitCodeConversionConfig,
-    private http: HttpClient
+    private http: HttpClient,
   ) {
     this.unitConvs = this.http.get<any>(`${this.config.endpoint}/units.json`);
     this.codeSubs = codes['codeSubstitutionResult'];
   }
 
-  setPreferredUnits(element: DataElements | MetadataElements) {
+  setPreferredUnits(element: ObsElement) {
     this.usePreferredUnits
       ? ((element.value = element.preferredValue), (element.unit = element.preferredUnit))
       : ((element.value = element.preciseValue), (element.unit = element.preciseUnit));
   }
 
   codeSubstitution(value: string, codeSrc: string, codeTyp: string): CodeResult {
-    return this.subsList(codeSrc, codeTyp).find(curr => curr['textValue'] === value);
+    return this.subsList(codeSrc, codeTyp).find((curr) => curr['textValue'] === value);
   }
 
   private subsList(codeSrc: string, codeTyp: string): CodeResult[] {
@@ -43,12 +43,7 @@ export class UnitCodeConversionService {
     return this.codeSubs.hasOwnProperty(codeSrc) && this.codeSubs[codeSrc].hasOwnProperty(codeTyp);
   }
 
-  convertElement(
-    element: DataElements | MetadataElements,
-    unitConversions: FromUnits,
-    preferredUnit: string,
-    elementPrecision?: number
-  ) {
+  convertElement(element: ObsElement, unitConversions: FromUnits, preferredUnit: string, elementPrecision?: number) {
     const applyPrecision = (value: number, base: number): number => Math.round(value * base) / base;
 
     const convertUnit = (value: number, conversion: UnitConversion[]): number =>

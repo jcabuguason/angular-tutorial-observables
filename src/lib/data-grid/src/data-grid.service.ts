@@ -1,17 +1,23 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { ElementVisibility, UserConfigService, ElementGroup } from 'msc-dms-commons-angular/core/metadata';
-import * as obsUtil from 'msc-dms-commons-angular/core/obs-util';
+import { ElementGroup, ElementVisibility, UserConfigService } from 'msc-dms-commons-angular/core/metadata';
 import {
-  DataElements,
   DMSObs,
-  MetadataElements,
+  ObsElement,
   RawMessage,
   STATION_NAME_ELEMENT,
   STATION_NAME_FIELD,
   UnitCodeConversionService,
   ValueFormatterService,
+  decodeRawMessage,
+  findFirstValue,
+  findRevision,
+  getFormattedMetadata,
+  getIndexLabelTranslationKey,
+  grabIndexValue,
+  grabDataElements,
+  grabMetadataElements,
 } from 'msc-dms-commons-angular/core/obs-util';
 import { Subject } from 'rxjs';
 import { ColumnConfigurationContainer } from './column-configuration/column-configuration-container.model';
@@ -82,7 +88,7 @@ export class DataGridService implements OnDestroy {
   }
 
   addAllData(obs: object[]) {
-    this.rowData.push(...obs.map(data => this.convertToRowObject(<DMSObs>data)));
+    this.rowData.push(...obs.map((data) => this.convertToRowObject(<DMSObs>data)));
     this.adjustColumns();
     this.reloadGrid();
   }
@@ -134,24 +140,24 @@ export class DataGridService implements OnDestroy {
 
   expandAllColumns(columnApi, expand: boolean) {
     const groupIds = [];
-    const getGroupIds = colGroup => {
+    const getGroupIds = (colGroup) => {
       if (colGroup.children) {
         const allChildrenDisplayed = colGroup.children.length === colGroup.displayedChildren.length;
         // Mark groups who's children don't match the given expand/collapse command
         if (expand ? !allChildrenDisplayed : allChildrenDisplayed) {
           groupIds.push(colGroup.groupId);
         }
-        colGroup.children.forEach(child => getGroupIds(child));
+        colGroup.children.forEach((child) => getGroupIds(child));
       }
       return colGroup;
     };
 
     columnApi
       .getAllDisplayedColumnGroups()
-      .filter(col => col.groupId !== 'identity' && col.groupId !== 'raw' && col.headerClass !== 'meta')
-      .forEach(col => getGroupIds(col));
+      .filter((col) => col.groupId !== 'identity' && col.groupId !== 'raw' && col.headerClass !== 'meta')
+      .forEach((col) => getGroupIds(col));
 
-    groupIds.forEach(id => columnApi.setColumnGroupOpened(id, expand));
+    groupIds.forEach((id) => columnApi.setColumnGroupOpened(id, expand));
   }
 
   flattenObsIdentities(obs: DMSObs) {
@@ -161,15 +167,15 @@ export class DataGridService implements OnDestroy {
       uri: obs.identity,
       taxonomy: obs.taxonomy,
       primaryStationId: obs.identifier,
-      station: obsUtil.findMetadataValue(obs, STATION_NAME_ELEMENT) || obs.identifier,
-      revision: obsUtil.findRevision(obs),
+      station: findFirstValue(obs, STATION_NAME_ELEMENT) || obs.identifier,
+      revision: findRevision(obs),
     };
   }
 
-  flattenMetadataElements(mdElements: MetadataElements[]) {
+  flattenMetadataElements(obs: DMSObs) {
     const result = {};
 
-    const buildColumn = element => {
+    const buildColumn = (element) => {
       if (element.name != null && !this.ignoreElement(element.elementID)) {
         const headerID = ColumnConfigurationContainer.findHeaderID(element);
         result[headerID] = element;
@@ -178,15 +184,17 @@ export class DataGridService implements OnDestroy {
       }
     };
 
-    mdElements.filter(e => e != null && e.elementID != null).forEach(buildColumn);
+    grabMetadataElements(obs)
+      .filter((e) => e != null && e.elementID != null)
+      .forEach(buildColumn);
 
     return result;
   }
 
-  flattenDataElements(dataElements: DataElements[]) {
+  flattenDataElements(obs: DMSObs) {
     const result = {};
 
-    const buildColumn = element => {
+    const buildColumn = (element) => {
       if (!this.ignoreElement(element.elementID)) {
         if (!this.elementsFound.includes(element.elementID)) {
           this.elementsFound.push(element.elementID);
@@ -195,11 +203,13 @@ export class DataGridService implements OnDestroy {
         this.buildElementColumn(element, headerID);
         this.updateElementValue(element);
         const elementData = this.columnConfiguration.createElementData(element, headerID);
-        Object.keys(elementData).forEach(key => (result[key] = elementData[key]));
+        Object.keys(elementData).forEach((key) => (result[key] = elementData[key]));
       }
     };
 
-    dataElements.filter(e => e != null && e.elementID != null).forEach(buildColumn);
+    grabDataElements(obs)
+      .filter((e) => e != null && e.elementID != null)
+      .forEach(buildColumn);
 
     return result;
   }
@@ -211,7 +221,7 @@ export class DataGridService implements OnDestroy {
     }
     this.buildRawColumn(raw.message);
     for (const [key, value] of Object.entries(raw)) {
-      result[`raw_${key}`] = key === 'message' ? obsUtil.decodeRawMessage(value) : value;
+      result[`raw_${key}`] = key === 'message' ? decodeRawMessage(value) : value;
     }
     return result;
   }
@@ -219,8 +229,8 @@ export class DataGridService implements OnDestroy {
   convertToRowObject(obs: DMSObs) {
     return {
       ...this.flattenObsIdentities(obs),
-      ...this.flattenMetadataElements(obs.metadataElements),
-      ...this.flattenDataElements(obs.dataElements),
+      ...this.flattenMetadataElements(obs),
+      ...this.flattenDataElements(obs),
       ...this.flattenRawMessage(obs.rawMessage),
     };
   }
@@ -240,12 +250,12 @@ export class DataGridService implements OnDestroy {
   private addEmptyDataColumns() {
     this.userConfigService
       .getElementOrder()
-      .filter(id => !this.ignoreElement(id) && !this.elementsFound.includes(id))
-      .map(id => ({ elementID: id }))
-      .forEach(elem => {
+      .filter((id) => !this.ignoreElement(id) && !this.elementsFound.includes(id))
+      .map((id) => ({ elementID: id }))
+      .forEach((elem) => {
         this.isMetadataElement(elem.elementID)
-          ? this.buildMetadataColumn(elem as MetadataElements)
-          : this.buildElementColumn(elem as DataElements);
+          ? this.buildMetadataColumn(elem as ObsElement)
+          : this.buildElementColumn(elem as ObsElement);
       });
   }
 
@@ -253,20 +263,20 @@ export class DataGridService implements OnDestroy {
   private sortColumns() {
     const configOrder = this.userConfigService.getElementOrder();
     // workaround - parent might not have it's ID set
-    const getID = col => col.elementID || col.children[0].elementID;
+    const getID = (col) => col.elementID || col.children[0].elementID;
 
     let sortedMetaCols = [];
     let sortedDataCols = [];
 
-    configOrder.forEach(elementID => {
-      const columns = this.columnDefs.filter(col => getID(col) === elementID);
-      columns.some(col => col.headerClass === 'meta')
+    configOrder.forEach((elementID) => {
+      const columns = this.columnDefs.filter((col) => getID(col) === elementID);
+      columns.some((col) => col.headerClass === 'meta')
         ? sortedMetaCols.push(...columns)
         : sortedDataCols.push(...columns);
     });
 
-    const remainingMetaCol = col => col.headerClass === 'meta' && !configOrder.includes(getID(col));
-    const remainingDataCol = col =>
+    const remainingMetaCol = (col) => col.headerClass === 'meta' && !configOrder.includes(getID(col));
+    const remainingDataCol = (col) =>
       col.groupId !== 'identity' &&
       col.groupId !== 'raw' &&
       col.headerClass !== 'meta' &&
@@ -283,15 +293,15 @@ export class DataGridService implements OnDestroy {
 
   getMetadataTableInfo(nodeData) {
     return {
-      name: obsUtil.getFormattedMetadata(nodeData[STATION_NAME_FIELD]),
+      name: getFormattedMetadata(nodeData[STATION_NAME_FIELD]),
       allData: this.columnDefs
-        .filter(group => group.groupId === 'identity' || group.headerClass === 'meta')
-        .map(group => group.children)
+        .filter((group) => group.groupId === 'identity' || group.headerClass === 'meta')
+        .map((group) => group.children)
         .reduce((acc, val) => acc.concat(val))
-        .filter(child => nodeData[child.field] != null)
-        .map(child => ({
+        .filter((child) => nodeData[child.field] != null)
+        .map((child) => ({
           key: !!child.elementID ? this.userConfigService.getFullDefaultHeader(child.elementID, 3) : child.field,
-          value: obsUtil.getFormattedMetadata(nodeData[child.field]),
+          value: getFormattedMetadata(nodeData[child.field]),
         })),
     };
   }
@@ -322,16 +332,16 @@ export class DataGridService implements OnDestroy {
     elementID: string,
     isMaxDepth?: boolean,
   ) {
-    const possibleMatches = currentNodes.filter(node => node.nodeNumber === nodeNumber);
+    const possibleMatches = currentNodes.filter((node) => node.nodeNumber === nodeNumber);
 
     // workaround - we need to re-evaluate the elementID checking here:
-    const elementMatch = possibleMatches.find(node => node.elementID === elementID);
+    const elementMatch = possibleMatches.find((node) => node.elementID === elementID);
     if (elementMatch != null) {
       return elementMatch;
     }
     // requires setting the ID to bottom-level columns to undefined if they become parents
     if (!isMaxDepth) {
-      const parentMatch = possibleMatches.find(node => node.elementID == null);
+      const parentMatch = possibleMatches.find((node) => node.elementID == null);
       if (parentMatch != null) {
         return parentMatch;
       }
@@ -348,13 +358,14 @@ export class DataGridService implements OnDestroy {
     return newNode;
   }
 
-  private columnBoilerplate(node, headerName) {
+  private columnBoilerplate(node, headerName, indexValue = -1) {
     const description = this.userConfigService.getDescription(node.elementID);
     return {
       headerName: headerName,
       headerTooltip: !!description ? `${description}: ${headerName}` : undefined,
       children: [],
       elementID: node.elementID,
+      indexValue: indexValue,
       comparator: this.comparator,
     };
   }
@@ -367,7 +378,7 @@ export class DataGridService implements OnDestroy {
   }
 
   private buildElementColumn(
-    element: DataElements,
+    element: ObsElement,
     headerID: string = ColumnConfigurationContainer.findHeaderID(element),
   ) {
     if (this.columnsGenerated.includes(headerID)) {
@@ -423,15 +434,16 @@ export class DataGridService implements OnDestroy {
 
     // Generate layer children if needed
     let columnToAdd;
-    if (element.indexValue !== undefined) {
-      const headerName = element.indexValue
-        ? `${this.translate.instant(obsUtil.getIndexLabelTranslationKey(element))} ${element.indexValue}`
+    const elementIndexValue = grabIndexValue(element);
+    if (elementIndexValue !== undefined) {
+      const headerName = elementIndexValue
+        ? `${this.translate.instant(getIndexLabelTranslationKey(element))} ${elementIndexValue}`
         : officialTitle;
-      columnToAdd = this.columnBoilerplate(workingNode, headerName);
+      columnToAdd = this.columnBoilerplate(workingNode, headerName, elementIndexValue);
       if (workingNode.children === undefined) {
         workingNode.children = [];
       }
-      if (element.indexValue) {
+      if (!!elementIndexValue) {
         columnToAdd.columnGroupShow = 'open';
         workingNode.openByDefault = this.columnConfiguration.expandNestedDataColumns;
       }
@@ -445,6 +457,9 @@ export class DataGridService implements OnDestroy {
       }
     }
 
+    // Default -> Official -> Index 1 -> ... Index N
+    workingNode.children.sort((a, b) => a.indexValue > b.indexValue);
+
     if (this.hideDataElement(elementID)) {
       columnToAdd.hide = true;
     }
@@ -453,7 +468,10 @@ export class DataGridService implements OnDestroy {
     this.columnsGenerated.push(headerID);
   }
 
-  private buildMetadataColumn(element, headerID: string = ColumnConfigurationContainer.findHeaderID(element)) {
+  private buildMetadataColumn(
+    element: ObsElement,
+    headerID: string = ColumnConfigurationContainer.findHeaderID(element),
+  ) {
     if (this.columnsGenerated.includes(headerID)) {
       return;
     }
@@ -551,7 +569,7 @@ export class DataGridService implements OnDestroy {
 
     if (!!rawMessage) {
       const rawMessageHeader = this.columnConfiguration.getRawMessageHeader();
-      const children = this.rawGroupHeader.children.map(child => child.field);
+      const children = this.rawGroupHeader.children.map((child) => child.field);
       if (!children.includes(rawMessageHeader.field)) {
         this.rawGroupHeader.children.push(rawMessageHeader);
       }
@@ -562,7 +580,7 @@ export class DataGridService implements OnDestroy {
     }
   }
 
-  private updateElementValue(element: MetadataElements | DataElements) {
+  private updateElementValue(element: ObsElement) {
     this.unitService.setPreferredUnits(element);
     this.valueFormatterService.setFormattedValue(
       element,
@@ -586,7 +604,7 @@ export class DataGridService implements OnDestroy {
         continue;
       }
 
-      let groupDef = groupedColumns.find(col => col.groupId === configGroup.groupID);
+      let groupDef = groupedColumns.find((col) => col.groupId === configGroup.groupID);
       if (groupDef == null) {
         groupDef = createGroup(configGroup);
         groupedColumns.push(groupDef);

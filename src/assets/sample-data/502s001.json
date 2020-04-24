@@ -1,0 +1,5796 @@
+{
+  "took": 18,
+  "timed_out": false,
+  "_shards": { "total": 2, "successful": 2, "skipped": 0, "failed": 0 },
+  "hits": {
+    "total": 7782,
+    "max_score": 6.6363316,
+    "hits": [
+      {
+        "_index": "dms_flat_data_idx_msc_observation_atmospheric_surface_weather_ca-1.2-ascii_2019.12",
+        "_type": "dms",
+        "_id": "msc:observation:atmospheric:surface_weather:ca-1.2-ascii:decoded_enhanced-xml-2.0:201912010648:502s001:xwg:61:orig:data_1",
+        "_score": 6.6363316,
+        "_source": {
+          "obsDateTime": "2019-12-01T06:48:00.000Z",
+          "1_5_66_7_1_1_0": [
+            {
+              "elementID": "1.5.66.7.1.1.0",
+              "unit": "%",
+              "valueNum": 87.20119,
+              "name": "max_rel_hum_pst1mt",
+              "elementIndex": "15",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "87.20119",
+              "group": "humidity"
+            }
+          ],
+          "1_2_11_1_1_1_0": [
+            {
+              "elementID": "1.2.11.1.1.1.0",
+              "unit": "%",
+              "valueNum": 100,
+              "name": "data_avail_pst1mt",
+              "elementIndex": "7",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "100",
+              "group": "diagnostics"
+            }
+          ],
+          "1_19_265_2_60_7_0": [
+            {
+              "elementID": "1.19.265.2.60.7.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -7.607726,
+              "name": "avg_air_temp_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "-7.607726",
+              "group": "temperature"
+            }
+          ],
+          "1_37_714_0_0_0_0": [
+            {
+              "elementID": "1.37.714.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 0,
+              "name": "inconsistent_count",
+              "type": "metadata",
+              "value": "0",
+              "group": "qa_summary"
+            }
+          ],
+          "1_19_265_2_1_1_0": [
+            {
+              "elementID": "1.19.265.2.1.1.0",
+              "unit": "°C",
+              "valueNum": -7.971068,
+              "name": "air_temp",
+              "elementIndex": "11",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "-7.971068",
+              "group": "temperature"
+            }
+          ],
+          "taxonomy": "/msc/observation/atmospheric/surface_weather/ca-1.2-ascii/decoded_enhanced-xml-2.0",
+          "1_7_93_0_0_0_0": [
+            {
+              "elementID": "1.7.93.0.0.0.0",
+              "unit": "unitless",
+              "name": "package",
+              "type": "metadata",
+              "value": "/metadata/msc/qa_package/surface_ca1.2/meta_product-xml-1.0/station/all/12010000",
+              "group": "identification"
+            }
+          ],
+          "1_5_66_2_60_7_0": [
+            {
+              "elementID": "1.5.66.2.60.7.0",
+              "unit": "%",
+              "dataType": "derived",
+              "valueNum": 85.4,
+              "name": "avg_rel_hum_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "85.4",
+              "group": "humidity"
+            }
+          ],
+          "1_19_265_8_60_7_0": [
+            {
+              "elementID": "1.19.265.8.60.7.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -7.971068,
+              "name": "min_air_temp_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "-7.971068",
+              "group": "temperature"
+            }
+          ],
+          "1_19_265_7_60_7_0": [
+            {
+              "elementID": "1.19.265.7.60.7.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -7.218111,
+              "name": "max_air_temp_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "-7.218111",
+              "group": "temperature"
+            }
+          ],
+          "1_11_172_2_35_3_0": [
+            {
+              "elementID": "1.11.172.2.35.3.0",
+              "unit": "mm",
+              "valueNum": 223.7,
+              "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts_30mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "223.7",
+              "group": "precipitation"
+            }
+          ],
+          "1_7_105_0_0_0_0": [
+            {
+              "elementID": "1.7.105.0.0.0.0",
+              "unit": "unitless",
+              "name": "cor",
+              "type": "metadata",
+              "value": "orig",
+              "group": "identification"
+            }
+          ],
+          "1_7_87_0_0_0_0": [
+            {
+              "elementID": "1.7.87.0.0.0.0",
+              "unit": "m",
+              "valueNum": 238.7,
+              "name": "stn_elev",
+              "type": "metadata",
+              "value": "238.7",
+              "group": "identification"
+            }
+          ],
+          "identifier": "502s001",
+          "1_7_395_0_0_0_0": [
+            {
+              "elementID": "1.7.395.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 1.050985,
+              "name": "plat_coeff_c",
+              "type": "metadata",
+              "value": "1.050985",
+              "group": "identification"
+            }
+          ],
+          "1_2_8_8_1_1_0": [
+            {
+              "elementID": "1.2.8.8.1.1.0",
+              "unit": "V",
+              "valueNum": 13.37501,
+              "name": "min_batry_volt_pst1mt",
+              "elementIndex": "9",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "13.37501",
+              "group": "diagnostics"
+            }
+          ],
+          "1_19_265_8_1_1_0": [
+            {
+              "elementID": "1.19.265.8.1.1.0",
+              "unit": "°C",
+              "valueNum": -7.971068,
+              "name": "air_temperature",
+              "elementIndex": "13",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "-7.971068",
+              "group": "temperature"
+            }
+          ],
+          "1_24_314_2_60_7_6": [
+            {
+              "elementID": "1.24.314.2.60.7.6",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 4.618,
+              "name": "avg_wnd_spd_10m_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "4.618",
+              "group": "wind"
+            }
+          ],
+          "1_7_84_0_0_0_0": [
+            {
+              "elementID": "1.7.84.0.0.0.0",
+              "unit": "unitless",
+              "name": "tc_id",
+              "type": "metadata",
+              "value": "XWG",
+              "group": "identification"
+            }
+          ],
+          "1_2_8_7_60_7_0": [
+            {
+              "elementID": "1.2.8.7.60.7.0",
+              "unit": "V",
+              "dataType": "derived",
+              "valueNum": 13.38493,
+              "name": "max_batry_volt_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "13.38493",
+              "group": "diagnostics"
+            }
+          ],
+          "location_geo_point": [-97.2491972, 49.915922],
+          "1_11_172_2_20_3_0": [
+            {
+              "elementID": "1.11.172.2.20.3.0",
+              "unit": "mm",
+              "valueNum": 223.7,
+              "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts_15mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "223.7",
+              "group": "precipitation"
+            }
+          ],
+          "receivedDateTime": "2019-12-01T06:49:19.070Z",
+          "1_5_66_8_60_7_0": [
+            {
+              "elementID": "1.5.66.8.60.7.0",
+              "unit": "%",
+              "dataType": "derived",
+              "valueNum": 83.54718,
+              "name": "min_rel_hum_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "83.54718",
+              "group": "humidity"
+            }
+          ],
+          "1_24_319_2_30_5_0": [
+            {
+              "elementID": "1.24.319.2.30.5.0",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 3.533,
+              "name": "avg_wnd_spd_pcpn_gag_pst15mts_15mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "3.533",
+              "group": "wind"
+            }
+          ],
+          "1_24_319_2_60_5_0": [
+            {
+              "elementID": "1.24.319.2.60.5.0",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 2.847,
+              "name": "avg_wnd_spd_pcpn_gag_pst15mts_45mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "2.847",
+              "group": "wind"
+            }
+          ],
+          "1_19_271_2_1_1_0": [
+            {
+              "elementID": "1.19.271.2.1.1.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -8.176,
+              "name": "wetblb_temp",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "-8.176",
+              "group": "temperature"
+            }
+          ],
+          "1_7_80_0_0_0_0": [
+            {
+              "elementID": "1.7.80.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 1849,
+              "name": "stn_id",
+              "type": "metadata",
+              "value": "1849",
+              "group": "identification"
+            }
+          ],
+          "1_7_96_0_0_0_0": [
+            {
+              "elementID": "1.7.96.0.0.0.0",
+              "unit": "m",
+              "valueNum": 238.78664244458614,
+              "name": "geoptl_stn_hgt",
+              "type": "metadata",
+              "value": "238.78664244458614",
+              "group": "identification"
+            }
+          ],
+          "1_11_173_2_5_3_0": [
+            {
+              "elementID": "1.11.173.2.5.3.0",
+              "unit": "mm",
+              "dataType": "official",
+              "valueNum": 223.7927,
+              "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts",
+              "elementIndex": "33",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "223.7927",
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.173.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 223.7927,
+              "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts",
+              "index": { "name": "sensor_index", "value": 1 },
+              "elementIndex": "33.1",
+              "type": "element",
+              "value": "223.7927",
+              "indexValue": 1,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.173.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 231.8634,
+              "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts",
+              "index": { "name": "sensor_index", "value": 2 },
+              "elementIndex": "33.2",
+              "type": "element",
+              "value": "231.8634",
+              "indexValue": 2,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.173.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 228.9523,
+              "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts",
+              "index": { "name": "sensor_index", "value": 3 },
+              "elementIndex": "33.3",
+              "type": "element",
+              "value": "228.9523",
+              "indexValue": 3,
+              "group": "precipitation"
+            }
+          ],
+          "1_11_173_2_35_3_0": [
+            {
+              "elementID": "1.11.173.2.35.3.0",
+              "unit": "mm",
+              "valueNum": 223.8,
+              "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts_30mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "223.8",
+              "group": "precipitation"
+            }
+          ],
+          "1_11_169_1_1_1_0": [
+            {
+              "elementID": "1.11.169.1.1.1.0",
+              "unit": "mm",
+              "valueNum": 0,
+              "name": "rnfl_amt_pst1mt",
+              "elementIndex": "38",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_7_90_0_0_0_0": [
+            {
+              "elementID": "1.7.90.0.0.0.0",
+              "unit": "unitless",
+              "name": "sm_prdct_flg",
+              "type": "metadata",
+              "value": "N",
+              "group": "identification"
+            }
+          ],
+          "1_37_713_0_0_0_0": [
+            {
+              "elementID": "1.37.713.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 38,
+              "name": "accepted_count",
+              "type": "metadata",
+              "value": "38",
+              "group": "qa_summary"
+            }
+          ],
+          "1_5_66_2_1_1_0": [
+            {
+              "elementID": "1.5.66.2.1.1.0",
+              "unit": "%",
+              "valueNum": 87.11399,
+              "name": "rel_hum",
+              "elementIndex": "14",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "87.11399",
+              "group": "humidity"
+            }
+          ],
+          "1_24_327_2_1_1_6": [
+            {
+              "elementID": "1.24.327.2.1.1.6",
+              "unit": "°",
+              "valueNum": 0.096651,
+              "name": "wind_direction_east_vector",
+              "elementIndex": "20",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0.096651",
+              "group": "wind"
+            }
+          ],
+          "1_2_x_0_0_0_0": [
+            {
+              "elementID": "1.2.x.0.0.0.0",
+              "unit": "unitless",
+              "name": "deactivated_sensor_label",
+              "index": { "name": "sensor_index", "value": 1 },
+              "elementIndex": "1",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 1,
+              "group": "diagnostics"
+            },
+            {
+              "elementID": "1.2.x.0.0.0.0",
+              "unit": "unitless",
+              "name": "deactivated_sensor_label",
+              "index": { "name": "sensor_index", "value": 2 },
+              "elementIndex": "2",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 2,
+              "group": "diagnostics"
+            },
+            {
+              "elementID": "1.2.x.0.0.0.0",
+              "unit": "unitless",
+              "name": "deactivated_sensor_label",
+              "index": { "name": "sensor_index", "value": 3 },
+              "elementIndex": "3",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 3,
+              "group": "diagnostics"
+            },
+            {
+              "elementID": "1.2.x.0.0.0.0",
+              "unit": "unitless",
+              "name": "deactivated_sensor_label",
+              "index": { "name": "sensor_index", "value": 4 },
+              "elementIndex": "4",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 4,
+              "group": "diagnostics"
+            },
+            {
+              "elementID": "1.2.x.0.0.0.0",
+              "unit": "unitless",
+              "name": "deactivated_sensor_label",
+              "index": { "name": "sensor_index", "value": 5 },
+              "elementIndex": "5",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 5,
+              "group": "diagnostics"
+            },
+            {
+              "elementID": "1.2.x.0.0.0.0",
+              "unit": "unitless",
+              "name": "deactivated_sensor_label",
+              "index": { "name": "sensor_index", "value": 6 },
+              "elementIndex": "6",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 6,
+              "group": "diagnostics"
+            }
+          ],
+          "1_2_8_7_1_1_0": [
+            {
+              "elementID": "1.2.8.7.1.1.0",
+              "unit": "V",
+              "valueNum": 13.38363,
+              "name": "max_batry_volt_pst1mt",
+              "elementIndex": "8",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "13.38363",
+              "group": "diagnostics"
+            }
+          ],
+          "1_7_147_0_0_0_0": [
+            {
+              "elementID": "1.7.147.0.0.0.0",
+              "unit": "m",
+              "valueNum": 238.7,
+              "name": "barometer_elevation",
+              "type": "metadata",
+              "value": "238.7",
+              "group": "identification"
+            }
+          ],
+          "1_7_117_0_0_0_0": [
+            {
+              "elementID": "1.7.117.0.0.0.0",
+              "unit": "unitless",
+              "name": "prov",
+              "type": "metadata",
+              "value": "MB",
+              "group": "identification"
+            }
+          ],
+          "identity": "/data/msc/observation/atmospheric/surface_weather/ca-1.2-ascii/decoded_enhanced-xml-2.0/201912010648/502s001/xwg/61/orig/data_1",
+          "1_12_210_2_60_7_0": [
+            {
+              "elementID": "1.12.210.2.60.7.0",
+              "unit": "hPa",
+              "dataType": "derived",
+              "valueNum": 2.93,
+              "name": "avg_vpr_pres_pst1hr",
+              "suppInfoDataFlags": ["4"],
+              "type": "element",
+              "value": "2.93",
+              "group": "pressure"
+            }
+          ],
+          "1_14_221_2_1_1_0": [
+            {
+              "elementID": "1.14.221.2.1.1.0",
+              "unit": "W/m²",
+              "dataType": "derived",
+              "name": "avg_globl_solr_radn_pst1mt",
+              "suppInfoDataFlags": ["4"],
+              "type": "element",
+              "value": "MSNG",
+              "group": "radiation"
+            }
+          ],
+          "1_7_577_0_0_0_0": [
+            {
+              "elementID": "1.7.577.0.0.0.0",
+              "unit": "m",
+              "valueNum": 238.7,
+              "name": "site_elevation",
+              "type": "metadata",
+              "value": "238.7",
+              "group": "identification"
+            }
+          ],
+          "1_7_73_0_0_0_0": [
+            {
+              "elementID": "1.7.73.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 61677,
+              "name": "logr_prg_sig",
+              "type": "metadata",
+              "value": "61677",
+              "group": "identification"
+            }
+          ],
+          "1_11_171_1_60_7_0": [
+            {
+              "elementID": "1.11.171.1.60.7.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "pcpn_amt_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_11_173_2_20_3_0": [
+            {
+              "elementID": "1.11.173.2.20.3.0",
+              "unit": "mm",
+              "valueNum": 223.8,
+              "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts_15mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "223.8",
+              "group": "precipitation"
+            }
+          ],
+          "1_24_319_2_1_1_0": [
+            {
+              "elementID": "1.24.319.2.1.1.0",
+              "unit": "m/s",
+              "valueNum": 3.550966,
+              "name": "avg_wnd_spd_pcpn_gag_pst1mt",
+              "elementIndex": "27",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "3.550966",
+              "group": "wind"
+            }
+          ],
+          "1_24_321_0_1_1_6": [
+            {
+              "elementID": "1.24.321.0.1.1.6",
+              "unit": "°",
+              "valueNum": 5.755921,
+              "name": "wind_direction_10minute_maxmean_wind_speed",
+              "elementIndex": "26",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "5.755921",
+              "group": "wind"
+            }
+          ],
+          "1_14_221_1_1_1_0": [
+            {
+              "elementID": "1.14.221.1.1.1.0",
+              "unit": "kJ/m²",
+              "valueNum": -0.180969,
+              "name": "tot_globl_solr_radn_pst1mt",
+              "elementIndex": "39",
+              "overallQASummary": -10,
+              "type": "element",
+              "value": "-0.180969",
+              "group": "radiation"
+            }
+          ],
+          "1_7_85_0_0_0_0": [
+            {
+              "elementID": "1.7.85.0.0.0.0",
+              "unit": "unitless",
+              "name": "clim_id",
+              "type": "metadata",
+              "value": "502S001",
+              "group": "identification"
+            }
+          ],
+          "1_7_97_0_0_0_0": [
+            {
+              "elementID": "1.7.97.0.0.0.0",
+              "unit": "°",
+              "valueNum": 49.915922,
+              "name": "lat",
+              "type": "metadata",
+              "value": "49.915922",
+              "group": "identification"
+            }
+          ],
+          "1_24_320_9_1_1_6": [
+            {
+              "elementID": "1.24.320.9.1.1.6",
+              "unit": "°",
+              "valueNum": 14.55371,
+              "name": "wind_direction",
+              "elementIndex": "19",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "14.55371",
+              "group": "wind"
+            }
+          ],
+          "1_5_66_8_1_1_0": [
+            {
+              "elementID": "1.5.66.8.1.1.0",
+              "unit": "%",
+              "valueNum": 87.09748,
+              "name": "min_rel_hum_pst1mt",
+              "elementIndex": "16",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "87.09748",
+              "group": "humidity"
+            }
+          ],
+          "1_4_65_0_0_0_0": [
+            {
+              "elementID": "1.4.65.0.0.0.0",
+              "unit": "unitless",
+              "dataType": "derived",
+              "name": "dms_message_summary",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "CAMSA XWG 010648Z AUTO 00505KT -8.0/-9.7 RMK SLP188",
+              "group": "generic"
+            }
+          ],
+          "1_24_324_12_10_4_0": [
+            {
+              "elementID": "1.24.324.12.10.4.0",
+              "unit": "°",
+              "dataType": "derived",
+              "valueNum": 359.5,
+              "name": "wind_direction_at_precipitation_gauge",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "359.5",
+              "group": "wind"
+            }
+          ],
+          "1_2_8_8_60_7_0": [
+            {
+              "elementID": "1.2.8.8.60.7.0",
+              "unit": "V",
+              "dataType": "derived",
+              "valueNum": 13.35307,
+              "name": "min_batry_volt_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "13.35307",
+              "group": "diagnostics"
+            }
+          ],
+          "1_14_221_2_60_7_0": [
+            {
+              "elementID": "1.14.221.2.60.7.0",
+              "unit": "W/m²",
+              "dataType": "derived",
+              "name": "avg_globl_solr_radn_pst1hr",
+              "suppInfoDataFlags": ["4"],
+              "type": "element",
+              "value": "MSNG",
+              "group": "radiation"
+            }
+          ],
+          "1_19_264_0_0_0_0": [
+            {
+              "elementID": "1.19.264.0.0.0.0",
+              "unit": "°C",
+              "valueNum": 16.46,
+              "name": "logr_panl_temp",
+              "elementIndex": "10",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "16.46",
+              "group": "temperature"
+            }
+          ],
+          "1_24_314_2_2_2_6": [
+            {
+              "elementID": "1.24.314.2.2.2.6",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 4.352,
+              "name": "avg_wnd_spd_10m_pst2mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "4.352",
+              "group": "wind"
+            }
+          ],
+          "1_11_174_2_5_3_0": [
+            {
+              "elementID": "1.11.174.2.5.3.0",
+              "unit": "cm",
+              "dataType": "official",
+              "valueNum": 0.306778,
+              "name": "avg_snw_dpth_pst5mts",
+              "elementIndex": "37",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0.306778",
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.174.2.5.3.0",
+              "unit": "cm",
+              "valueNum": 0.306778,
+              "name": "avg_snw_dpth_pst5mts",
+              "index": { "name": "sensor_index", "value": 1 },
+              "elementIndex": "37.1",
+              "type": "element",
+              "value": "0.306778",
+              "indexValue": 1,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.174.2.5.3.0",
+              "unit": "cm",
+              "name": "avg_snw_dpth_pst5mts",
+              "index": { "name": "sensor_index", "value": 2 },
+              "elementIndex": "37.2",
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 2,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.174.2.5.3.0",
+              "unit": "cm",
+              "valueNum": 0.738953,
+              "name": "avg_snw_dpth_pst5mts",
+              "index": { "name": "sensor_index", "value": 3 },
+              "elementIndex": "37.3",
+              "type": "element",
+              "value": "0.738953",
+              "indexValue": 3,
+              "group": "precipitation"
+            }
+          ],
+          "1_37_717_0_0_0_0": [
+            {
+              "elementID": "1.37.717.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 39,
+              "name": "elements_quality_assessed_count",
+              "type": "metadata",
+              "value": "39",
+              "group": "qa_summary"
+            }
+          ],
+          "1_5_66_7_60_7_0": [
+            {
+              "elementID": "1.5.66.7.60.7.0",
+              "unit": "%",
+              "dataType": "derived",
+              "valueNum": 87.21086,
+              "name": "max_rel_hum_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "87.21086",
+              "group": "humidity"
+            }
+          ],
+          "1_7_392_0_0_0_0": [
+            {
+              "elementID": "1.7.392.0.0.0.0",
+              "unit": "unitless",
+              "name": "jcx_source",
+              "type": "metadata",
+              "value": "/data/msc/observation/atmospheric/surface_weather/ca-1.2-ascii/job-xml-2.0/201912010648/502s001/orig",
+              "group": "identification"
+            }
+          ],
+          "1_11_173_2_1_1_0": [
+            {
+              "elementID": "1.11.173.2.1.1.0",
+              "unit": "mm",
+              "dataType": "official",
+              "valueNum": 223.7847,
+              "name": "cumulative_precipitation_gauge_weight_unfiltered",
+              "elementIndex": "32",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "223.7847",
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.173.2.1.1.0",
+              "unit": "mm",
+              "valueNum": 223.7847,
+              "name": "cumulative_precipitation_gauge_weight_unfiltered",
+              "index": { "name": "sensor_index", "value": 1 },
+              "elementIndex": "32.1",
+              "type": "element",
+              "value": "223.7847",
+              "indexValue": 1,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.173.2.1.1.0",
+              "unit": "mm",
+              "valueNum": 231.843,
+              "name": "cumulative_precipitation_gauge_weight_unfiltered",
+              "index": { "name": "sensor_index", "value": 2 },
+              "elementIndex": "32.2",
+              "type": "element",
+              "value": "231.843",
+              "indexValue": 2,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.173.2.1.1.0",
+              "unit": "mm",
+              "valueNum": 228.9528,
+              "name": "cumulative_precipitation_gauge_weight_unfiltered",
+              "index": { "name": "sensor_index", "value": 3 },
+              "elementIndex": "32.3",
+              "type": "element",
+              "value": "228.9528",
+              "indexValue": 3,
+              "group": "precipitation"
+            }
+          ],
+          "1_11_171_1_10_4_0": [
+            {
+              "elementID": "1.11.171.1.10.4.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "pcpn_amt_pst10mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_7_81_0_0_0_0": [
+            {
+              "elementID": "1.7.81.0.0.0.0",
+              "unit": "unitless",
+              "name": "data_pvdr",
+              "type": "metadata",
+              "value": "MSC",
+              "group": "identification"
+            }
+          ],
+          "1_24_316_0_60_7_0": [
+            {
+              "elementID": "1.24.316.0.60.7.0",
+              "unit": "hhmm",
+              "dataType": "derived",
+              "name": "max_wnd_spd_pst1hr_tm",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0645",
+              "group": "wind"
+            }
+          ],
+          "1_24_314_7_1_1_6": [
+            {
+              "elementID": "1.24.314.7.1.1.6",
+              "unit": "m/s",
+              "valueNum": 4.9785,
+              "name": "max_wnd_spd_10m_pst1mt",
+              "elementIndex": "22",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "4.9785",
+              "group": "wind"
+            }
+          ],
+          "1_19_271_2_60_7_0": [
+            {
+              "elementID": "1.19.271.2.60.7.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -8.2,
+              "name": "wet_bulb_temperature",
+              "suppInfoDataFlags": ["4"],
+              "type": "element",
+              "value": "-8.2",
+              "group": "temperature"
+            }
+          ],
+          "1_12_207_2_1_1_0": [
+            {
+              "elementID": "1.12.207.2.1.1.0",
+              "unit": "hPa",
+              "dataType": "derived",
+              "valueNum": 1018.8,
+              "name": "mslp",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "1018.8",
+              "group": "pressure"
+            }
+          ],
+          "1_7_91_0_0_0_0": [
+            {
+              "elementID": "1.7.91.0.0.0.0",
+              "unit": "code",
+              "codeSrc": "std_code_src",
+              "codeType": "content_indicator",
+              "name": "content_indicator",
+              "type": "metadata",
+              "value": "data",
+              "group": "identification"
+            }
+          ],
+          "1_24_319_2_10_4_0": [
+            {
+              "elementID": "1.24.319.2.10.4.0",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 3.564,
+              "name": "avg_wnd_spd_pcpn_gag_pst10mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "3.564",
+              "group": "wind"
+            }
+          ],
+          "1_7_89_0_0_0_0": [
+            {
+              "elementID": "1.7.89.0.0.0.0",
+              "unit": "unitless",
+              "name": "hly_prdct_flg",
+              "type": "metadata",
+              "value": "N",
+              "group": "identification"
+            }
+          ],
+          "1_24_328_2_1_1_6": [
+            {
+              "elementID": "1.24.328.2.1.1.6",
+              "unit": "°",
+              "valueNum": 0.96323,
+              "name": "wind_direction_north_vector",
+              "elementIndex": "21",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0.96323",
+              "group": "wind"
+            }
+          ],
+          "1_7_574_0_0_0_0": [
+            {
+              "elementID": "1.7.574.0.0.0.0",
+              "unit": "unitless",
+              "name": "minutely_product_flag",
+              "type": "metadata",
+              "value": "N",
+              "group": "identification"
+            }
+          ],
+          "1_24_330_2_1_1_0": [
+            {
+              "elementID": "1.24.330.2.1.1.0",
+              "unit": "°",
+              "valueNum": 0.986514,
+              "name": "wind_direction_north_vector_at_precipitation_gauge",
+              "elementIndex": "30",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0.986514",
+              "group": "wind"
+            }
+          ],
+          "1_24_318_7_60_7_6": [
+            {
+              "elementID": "1.24.318.7.60.7.6",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 5.2,
+              "name": "max_10mt_avg_wnd_spd_10m_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "5.2",
+              "group": "wind"
+            }
+          ],
+          "1_11_171_1_30_5_0": [
+            {
+              "elementID": "1.11.171.1.30.5.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "pcpn_amt_pst15mts_15mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_24_316_0_1_1_0": [
+            {
+              "elementID": "1.24.316.0.1.1.0",
+              "unit": "hhmmss",
+              "name": "wind_speed_maximum_time",
+              "elementIndex": "23",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "064720",
+              "group": "wind"
+            }
+          ],
+          "1_24_324_12_1_1_0": [
+            {
+              "elementID": "1.24.324.12.1.1.0",
+              "unit": "°",
+              "valueNum": 359.286,
+              "name": "wind_direction_at_precipitation_gauge",
+              "elementIndex": "28",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "359.286",
+              "group": "wind"
+            }
+          ],
+          "1_24_321_0_60_7_6": [
+            {
+              "elementID": "1.24.321.0.60.7.6",
+              "unit": "°",
+              "dataType": "derived",
+              "valueNum": 7.1,
+              "name": "avg_10mt_wnd_dir_10m_pst1hr_max_avg_10mt_wnd_spd",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "7.1",
+              "group": "wind"
+            }
+          ],
+          "jsonVersion": 2,
+          "1_11_173_2_50_3_0": [
+            {
+              "elementID": "1.11.173.2.50.3.0",
+              "unit": "mm",
+              "valueNum": 223.8,
+              "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts_45mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "223.8",
+              "group": "precipitation"
+            }
+          ],
+          "1_24_319_2_15_5_0": [
+            {
+              "elementID": "1.24.319.2.15.5.0",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 3.595,
+              "name": "avg_wnd_spd_pcpn_gag_pst15mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "3.595",
+              "group": "wind"
+            }
+          ],
+          "1_2_11_2_60_7_0": [
+            {
+              "elementID": "1.2.11.2.60.7.0",
+              "unit": "%",
+              "dataType": "derived",
+              "valueNum": 100,
+              "name": "data_avail_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "100.0",
+              "group": "diagnostics"
+            }
+          ],
+          "1_24_320_12_10_4_6": [
+            {
+              "elementID": "1.24.320.12.10.4.6",
+              "unit": "°",
+              "dataType": "derived",
+              "valueNum": 5.3,
+              "name": "avg_wnd_dir_10m_pst10mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "5.3",
+              "group": "wind"
+            }
+          ],
+          "1_37_712_0_0_0_0": [
+            {
+              "elementID": "1.37.712.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 0,
+              "name": "erroneous_count",
+              "type": "metadata",
+              "value": "0",
+              "group": "qa_summary"
+            }
+          ],
+          "1_24_320_12_2_2_6": [
+            {
+              "elementID": "1.24.320.12.2.2.6",
+              "unit": "°",
+              "dataType": "derived",
+              "valueNum": 4.4,
+              "name": "avg_wnd_dir_10m_pst2mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "4.4",
+              "group": "wind"
+            }
+          ],
+          "1_7_578_0_0_0_0": [
+            {
+              "elementID": "1.7.578.0.0.0.0",
+              "unit": "m",
+              "valueNum": 238.78664244458614,
+              "name": "geopotential_site_elevation",
+              "type": "metadata",
+              "value": "238.78664244458614",
+              "group": "identification"
+            }
+          ],
+          "1_7_82_0_0_0_0": [
+            {
+              "elementID": "1.7.82.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 71849,
+              "name": "wmo_synop_id",
+              "type": "metadata",
+              "value": "71849",
+              "group": "identification"
+            }
+          ],
+          "author": { "build": "build.22", "name": "MSC-DMS-Enhanced-Generic", "version": "2.8" },
+          "1_7_393_0_0_0_0": [
+            {
+              "elementID": "1.7.393.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": -0.002646,
+              "name": "plat_coeff_a",
+              "type": "metadata",
+              "value": "-0.002646",
+              "group": "identification"
+            }
+          ],
+          "1_19_265_0_66_0_0": [
+            {
+              "elementID": "1.19.265.0.66.0.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -1.757504,
+              "name": "air_temp_12hrs_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "-1.757504",
+              "group": "temperature"
+            }
+          ],
+          "primaryID": "502s001",
+          "1_14_221_1_60_7_0": [
+            {
+              "elementID": "1.14.221.1.60.7.0",
+              "unit": "kJ/m²",
+              "dataType": "derived",
+              "name": "tot_globl_solr_radn_pst1hr",
+              "suppInfoDataFlags": ["4"],
+              "type": "element",
+              "value": "MSNG",
+              "group": "radiation"
+            },
+            {
+              "elementID": "1.14.221.1.60.7.0",
+              "unit": "MJ/m²",
+              "dataType": "derived",
+              "name": "tot_globl_solr_radn_pst1hr",
+              "suppInfoDataFlags": ["4"],
+              "type": "element",
+              "value": "MSNG",
+              "group": "radiation"
+            }
+          ],
+          "1_7_98_0_0_0_0": [
+            {
+              "elementID": "1.7.98.0.0.0.0",
+              "unit": "°",
+              "valueNum": -97.2491972,
+              "name": "long",
+              "type": "metadata",
+              "value": "-97.2491972",
+              "group": "identification"
+            }
+          ],
+          "1_24_314_2_10_4_6": [
+            {
+              "elementID": "1.24.314.2.10.4.6",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 5.009,
+              "name": "avg_wnd_spd_10m_pst10mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "5.009",
+              "group": "wind"
+            }
+          ],
+          "1_24_320_12_60_7_6": [
+            {
+              "elementID": "1.24.320.12.60.7.6",
+              "unit": "°",
+              "dataType": "derived",
+              "valueNum": 9.1,
+              "name": "avg_wnd_dir_10m_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "9.1",
+              "group": "wind"
+            }
+          ],
+          "1_7_94_0_0_0_0": [
+            {
+              "elementID": "1.7.94.0.0.0.0",
+              "unit": "unitless",
+              "name": "cs_prdct_flg",
+              "type": "metadata",
+              "value": "N",
+              "group": "identification"
+            }
+          ],
+          "1_11_172_2_50_3_0": [
+            {
+              "elementID": "1.11.172.2.50.3.0",
+              "unit": "mm",
+              "valueNum": 223.7,
+              "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts_45mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "223.7",
+              "group": "precipitation"
+            }
+          ],
+          "1_37_716_0_0_0_0": [
+            {
+              "elementID": "1.37.716.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 0,
+              "name": "doubtful_count",
+              "type": "metadata",
+              "value": "0",
+              "group": "qa_summary"
+            }
+          ],
+          "1_11_175_2_5_3_0": [
+            {
+              "elementID": "1.11.175.2.5.3.0",
+              "unit": "mm",
+              "dataType": "official",
+              "valueNum": 223.8494,
+              "name": "precipitation_gauge_reference_value",
+              "elementIndex": "35",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "223.8494",
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.175.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 223.8494,
+              "name": "precipitation_gauge_reference_value",
+              "index": { "name": "sensor_index", "value": 1 },
+              "elementIndex": "35.1",
+              "type": "element",
+              "value": "223.8494",
+              "indexValue": 1,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.175.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 231.809,
+              "name": "precipitation_gauge_reference_value",
+              "index": { "name": "sensor_index", "value": 2 },
+              "elementIndex": "35.2",
+              "type": "element",
+              "value": "231.809",
+              "indexValue": 2,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.175.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 228.915,
+              "name": "precipitation_gauge_reference_value",
+              "index": { "name": "sensor_index", "value": 3 },
+              "elementIndex": "35.3",
+              "type": "element",
+              "value": "228.915",
+              "indexValue": 3,
+              "group": "precipitation"
+            }
+          ],
+          "1_7_573_0_0_0_0": [
+            {
+              "elementID": "1.7.573.0.0.0.0",
+              "unit": "hPa",
+              "valueNum": 0,
+              "name": "barometer_pressure_offset",
+              "type": "metadata",
+              "value": "0.0",
+              "group": "identification"
+            }
+          ],
+          "1_7_79_0_0_0_0": [
+            {
+              "elementID": "1.7.79.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 61,
+              "name": "snsr_tbl_nbr",
+              "type": "metadata",
+              "value": "61",
+              "group": "identification"
+            }
+          ],
+          "1_12_206_2_1_1_0": [
+            {
+              "elementID": "1.12.206.2.1.1.0",
+              "unit": "hPa",
+              "valueNum": 988.7228,
+              "name": "stn_pres",
+              "elementIndex": "31",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "988.7228",
+              "group": "pressure"
+            }
+          ],
+          "1_11_174_2_35_3_0": [
+            {
+              "elementID": "1.11.174.2.35.3.0",
+              "unit": "cm",
+              "dataType": "derived",
+              "valueNum": 0.3,
+              "name": "avg_snw_dpth_pst5mts_30mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0.3",
+              "group": "precipitation"
+            }
+          ],
+          "1_37_711_0_0_0_0": [
+            {
+              "elementID": "1.37.711.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 0,
+              "name": "missing_count",
+              "type": "metadata",
+              "value": "0",
+              "group": "qa_summary"
+            }
+          ],
+          "1_11_174_2_1_1_0": [
+            {
+              "elementID": "1.11.174.2.1.1.0",
+              "unit": "cm",
+              "dataType": "official",
+              "valueNum": 0.314514,
+              "name": "snw_dpth",
+              "elementIndex": "36",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0.314514",
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.174.2.1.1.0",
+              "unit": "cm",
+              "valueNum": 0.314514,
+              "name": "snw_dpth",
+              "index": { "name": "sensor_index", "value": 1 },
+              "elementIndex": "36.1",
+              "type": "element",
+              "value": "0.314514",
+              "indexValue": 1,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.174.2.1.1.0",
+              "unit": "cm",
+              "name": "snw_dpth",
+              "index": { "name": "sensor_index", "value": 2 },
+              "elementIndex": "36.2",
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 2,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.174.2.1.1.0",
+              "unit": "cm",
+              "valueNum": 0.777924,
+              "name": "snw_dpth",
+              "index": { "name": "sensor_index", "value": 3 },
+              "elementIndex": "36.3",
+              "type": "element",
+              "value": "0.777924",
+              "indexValue": 3,
+              "group": "precipitation"
+            }
+          ],
+          "1_7_92_0_0_0_0": [
+            {
+              "elementID": "1.7.92.0.0.0.0",
+              "unit": "min",
+              "valueNum": 1,
+              "name": "reporting_frequency",
+              "type": "metadata",
+              "value": "1",
+              "group": "identification"
+            }
+          ],
+          "1_24_329_2_1_1_0": [
+            {
+              "elementID": "1.24.329.2.1.1.0",
+              "unit": "°",
+              "valueNum": -0.012295,
+              "name": "wind_direction_east_vector_at_precipitation_gauge",
+              "elementIndex": "29",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "-0.012295",
+              "group": "wind"
+            }
+          ],
+          "1_19_265_7_1_1_0": [
+            {
+              "elementID": "1.19.265.7.1.1.0",
+              "unit": "°C",
+              "valueNum": -7.909031,
+              "name": "air_temperature",
+              "elementIndex": "12",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "-7.909031",
+              "group": "temperature"
+            }
+          ],
+          "1_24_314_2_1_1_6": [
+            {
+              "elementID": "1.24.314.2.1.1.6",
+              "unit": "m/s",
+              "valueNum": 4.470533,
+              "name": "avg_wnd_spd_10m_pst1mt",
+              "elementIndex": "17",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "4.470533",
+              "group": "wind"
+            }
+          ],
+          "rawMessage": {
+            "header": "CACN50 CWAO 010648",
+            "message": "XWG 61,2019,335,648,1849,16.46,100,13.38363,13.37501,-7.971068,6998,6998,-7.909031,6998,6998,-7.971068,6998,6998,87.11399,87.20119,87.09748,4.470533,5.72993,14.55371,0.09665142,0.9632304,4.9785,64720,1.595805,5.0667,5.755921,3.550966,359.286,-0.01229509,0.9865145,988.7228,223.7847,231.843,228.9528,223.7927,231.8634,228.9523,223.7376,232.0103,228.9447,223.8494,231.809,228.915,0.3145142,6997,0.7779236,0.306778,6997,0.7389526,0,-0.1809693,61677"
+          },
+          "1_24_314_7_10_4_6": [
+            {
+              "elementID": "1.24.314.7.10.4.6",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 6.664,
+              "name": "max_wnd_spd_10m_pst10mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "6.664",
+              "group": "wind"
+            }
+          ],
+          "1_7_543_0_0_0_0": [
+            {
+              "elementID": "1.7.543.0.0.0.0",
+              "unit": "m",
+              "valueNum": 238.78664244458614,
+              "name": "geopotential_barometer_elevation",
+              "type": "metadata",
+              "value": "238.78664244458614",
+              "group": "identification"
+            }
+          ],
+          "1_37_715_0_0_0_0": [
+            {
+              "elementID": "1.37.715.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 1,
+              "name": "suppressed_count",
+              "type": "metadata",
+              "value": "1",
+              "group": "qa_summary"
+            }
+          ],
+          "1_7_408_0_0_0_0": [
+            {
+              "elementID": "1.7.408.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 0,
+              "name": "ver",
+              "type": "metadata",
+              "value": "0",
+              "group": "identification"
+            }
+          ],
+          "1_7_575_0_0_0_0": [
+            {
+              "elementID": "1.7.575.0.0.0.0",
+              "unit": "unitless",
+              "name": "sensor_table_status",
+              "type": "metadata",
+              "value": "Active",
+              "group": "identification"
+            }
+          ],
+          "1_12_210_2_1_1_0": [
+            {
+              "elementID": "1.12.210.2.1.1.0",
+              "unit": "hPa",
+              "dataType": "derived",
+              "valueNum": 2.933,
+              "name": "vpr_pres",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "2.933",
+              "group": "pressure"
+            }
+          ],
+          "1_11_171_1_60_5_0": [
+            {
+              "elementID": "1.11.171.1.60.5.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "pcpn_amt_pst15mts_45mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_24_319_2_45_5_0": [
+            {
+              "elementID": "1.24.319.2.45.5.0",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 3.351,
+              "name": "avg_wnd_spd_pcpn_gag_pst15mts_30mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "3.351",
+              "group": "wind"
+            }
+          ],
+          "1_7_86_0_0_0_0": [
+            {
+              "elementID": "1.7.86.0.0.0.0",
+              "unit": "unitless",
+              "name": "msc_id",
+              "type": "metadata",
+              "value": "502S001",
+              "group": "identification"
+            }
+          ],
+          "parentIdentity": "/data/msc/observation/atmospheric/surface_weather/ca-1.2-ascii/decoded_qa-xml-2.0/201912010648/502s001/xwg/61/orig/data_1/level_1",
+          "1_24_323_0_1_1_6": [
+            {
+              "elementID": "1.24.323.0.1.1.6",
+              "unit": "°",
+              "valueNum": 1.595805,
+              "name": "wnd_dir_10m_pst1mt_max_spd",
+              "elementIndex": "24",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "1.595805",
+              "group": "wind"
+            }
+          ],
+          "1_24_323_0_10_4_6": [
+            {
+              "elementID": "1.24.323.0.10.4.6",
+              "unit": "°",
+              "dataType": "derived",
+              "valueNum": 8.381,
+              "name": "wnd_dir_10m_pst10mts_max_spd",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "8.381",
+              "group": "wind"
+            }
+          ],
+          "1_7_83_0_0_0_0": [
+            {
+              "elementID": "1.7.83.0.0.0.0",
+              "unit": "unitless",
+              "name": "stn_nam",
+              "type": "metadata",
+              "value": "WINNIPEG",
+              "group": "identification"
+            }
+          ],
+          "1_24_314_7_60_7_6": [
+            {
+              "elementID": "1.24.314.7.60.7.6",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 6.664,
+              "name": "max_wnd_spd_10m_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "6.664",
+              "group": "wind"
+            }
+          ],
+          "1_11_174_2_20_3_0": [
+            {
+              "elementID": "1.11.174.2.20.3.0",
+              "unit": "cm",
+              "dataType": "derived",
+              "valueNum": 0.3,
+              "name": "avg_snw_dpth_pst5mts_15mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0.3",
+              "group": "precipitation"
+            }
+          ],
+          "1_19_267_2_60_7_0": [
+            {
+              "elementID": "1.19.267.2.60.7.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -9.7,
+              "name": "avg_dwpt_temp_pst1hr",
+              "suppInfoDataFlags": ["4"],
+              "type": "element",
+              "value": "-9.7",
+              "group": "temperature"
+            }
+          ],
+          "1_24_320_12_1_1_6": [
+            {
+              "elementID": "1.24.320.12.1.1.6",
+              "unit": "°",
+              "valueNum": 5.72993,
+              "name": "avg_wnd_dir_10m_pst1mt",
+              "elementIndex": "18",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "5.72993",
+              "group": "wind"
+            }
+          ],
+          "1_7_394_0_0_0_0": [
+            {
+              "elementID": "1.7.394.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": -0.454465,
+              "name": "plat_coeff_b",
+              "type": "metadata",
+              "value": "-0.454465",
+              "group": "identification"
+            }
+          ],
+          "1_11_177_0_0_0_0": [
+            {
+              "elementID": "1.11.177.0.0.0.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "pcpn_amt_snc_top_of_hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_19_267_2_1_1_0": [
+            {
+              "elementID": "1.19.267.2.1.1.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -9.7,
+              "name": "dwpt_temp",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "-9.7",
+              "group": "temperature"
+            }
+          ],
+          "1_11_171_1_45_5_0": [
+            {
+              "elementID": "1.11.171.1.45.5.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "pcpn_amt_pst15mts_30mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_24_323_0_60_7_6": [
+            {
+              "elementID": "1.24.323.0.60.7.6",
+              "unit": "°",
+              "dataType": "derived",
+              "valueNum": 8.381,
+              "name": "wnd_dir_10m_pst1hr_max_spd",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "8.381",
+              "group": "wind"
+            }
+          ],
+          "1_24_318_7_1_1_6": [
+            {
+              "elementID": "1.24.318.7.1.1.6",
+              "unit": "m/s",
+              "valueNum": 5.0667,
+              "name": "wind_speed_10minute_mean",
+              "elementIndex": "25",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "5.0667",
+              "group": "wind"
+            }
+          ],
+          "1_11_171_1_15_5_0": [
+            {
+              "elementID": "1.11.171.1.15.5.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "pcpn_amt_pst15mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_11_172_2_5_3_0": [
+            {
+              "elementID": "1.11.172.2.5.3.0",
+              "unit": "mm",
+              "dataType": "official",
+              "valueNum": 223.7376,
+              "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts",
+              "elementIndex": "34",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "223.7376",
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.172.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 223.7376,
+              "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts",
+              "index": { "name": "sensor_index", "value": 1 },
+              "elementIndex": "34.1",
+              "type": "element",
+              "value": "223.7376",
+              "indexValue": 1,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.172.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 232.0103,
+              "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts",
+              "index": { "name": "sensor_index", "value": 2 },
+              "elementIndex": "34.2",
+              "type": "element",
+              "value": "232.0103",
+              "indexValue": 2,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.172.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 228.9447,
+              "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts",
+              "index": { "name": "sensor_index", "value": 3 },
+              "elementIndex": "34.3",
+              "type": "element",
+              "value": "228.9447",
+              "indexValue": 3,
+              "group": "precipitation"
+            }
+          ],
+          "1_11_174_2_50_3_0": [
+            {
+              "elementID": "1.11.174.2.50.3.0",
+              "unit": "cm",
+              "dataType": "derived",
+              "valueNum": 0.3,
+              "name": "avg_snw_dpth_pst5mts_45mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0.3",
+              "group": "precipitation"
+            }
+          ],
+          "1_11_169_1_60_7_0": [
+            {
+              "elementID": "1.11.169.1.60.7.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "rnfl_amt_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_7_78_0_0_0_0": [
+            {
+              "elementID": "1.7.78.0.0.0.0",
+              "unit": "datetime",
+              "name": "date_tm",
+              "type": "metadata",
+              "value": "2019-12-01T06:48:00.000Z",
+              "group": "identification"
+            }
+          ],
+          "location": { "coordinates": [-97.2491972, 49.915922, 238.7], "type": "point" },
+          "1_7_95_0_0_0_0": [
+            {
+              "elementID": "1.7.95.0.0.0.0",
+              "unit": "unitless",
+              "name": "sx_prdct_flg",
+              "type": "metadata",
+              "value": "N",
+              "group": "identification"
+            }
+          ]
+        }
+      },
+      {
+        "_index": "dms_flat_data_idx_msc_observation_atmospheric_surface_weather_ca-1.2-ascii_2019.12",
+        "_type": "dms",
+        "_id": "msc:observation:atmospheric:surface_weather:ca-1.2-ascii:decoded_enhanced-xml-2.0:201912010701:502s001:xwg:61:orig:data_1",
+        "_score": 6.6363316,
+        "_source": {
+          "obsDateTime": "2019-12-01T07:01:00.000Z",
+          "1_5_66_7_1_1_0": [
+            {
+              "elementID": "1.5.66.7.1.1.0",
+              "unit": "%",
+              "valueNum": 88.76871,
+              "name": "max_rel_hum_pst1mt",
+              "elementIndex": "15",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "88.76871",
+              "group": "humidity"
+            }
+          ],
+          "1_2_11_1_1_1_0": [
+            {
+              "elementID": "1.2.11.1.1.1.0",
+              "unit": "%",
+              "valueNum": 100,
+              "name": "data_avail_pst1mt",
+              "elementIndex": "7",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "100",
+              "group": "diagnostics"
+            }
+          ],
+          "1_19_265_2_60_7_0": [
+            {
+              "elementID": "1.19.265.2.60.7.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -7.72447,
+              "name": "avg_air_temp_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "-7.72447",
+              "group": "temperature"
+            }
+          ],
+          "1_37_714_0_0_0_0": [
+            {
+              "elementID": "1.37.714.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 0,
+              "name": "inconsistent_count",
+              "type": "metadata",
+              "value": "0",
+              "group": "qa_summary"
+            }
+          ],
+          "1_19_265_2_1_1_0": [
+            {
+              "elementID": "1.19.265.2.1.1.0",
+              "unit": "°C",
+              "valueNum": -7.901484,
+              "name": "air_temp",
+              "elementIndex": "11",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "-7.901484",
+              "group": "temperature"
+            }
+          ],
+          "taxonomy": "/msc/observation/atmospheric/surface_weather/ca-1.2-ascii/decoded_enhanced-xml-2.0",
+          "1_7_93_0_0_0_0": [
+            {
+              "elementID": "1.7.93.0.0.0.0",
+              "unit": "unitless",
+              "name": "package",
+              "type": "metadata",
+              "value": "/metadata/msc/qa_package/surface_ca1.2/meta_product-xml-1.0/station/all/12010000",
+              "group": "identification"
+            }
+          ],
+          "1_5_66_2_60_7_0": [
+            {
+              "elementID": "1.5.66.2.60.7.0",
+              "unit": "%",
+              "dataType": "derived",
+              "valueNum": 86.3,
+              "name": "avg_rel_hum_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "86.3",
+              "group": "humidity"
+            }
+          ],
+          "1_19_265_8_60_7_0": [
+            {
+              "elementID": "1.19.265.8.60.7.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -8.083723,
+              "name": "min_air_temp_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "-8.083723",
+              "group": "temperature"
+            }
+          ],
+          "1_19_265_7_60_7_0": [
+            {
+              "elementID": "1.19.265.7.60.7.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -7.434477,
+              "name": "max_air_temp_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "-7.434477",
+              "group": "temperature"
+            }
+          ],
+          "1_11_172_2_35_3_0": [
+            {
+              "elementID": "1.11.172.2.35.3.0",
+              "unit": "mm",
+              "valueNum": 223.7,
+              "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts_30mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "223.7",
+              "group": "precipitation"
+            }
+          ],
+          "1_7_371_0_0_0_0": [
+            {
+              "elementID": "1.7.371.0.0.0.0",
+              "unit": "unitless",
+              "name": "rev",
+              "type": "metadata",
+              "value": "orig_v2",
+              "group": "identification"
+            }
+          ],
+          "1_7_87_0_0_0_0": [
+            {
+              "elementID": "1.7.87.0.0.0.0",
+              "unit": "m",
+              "valueNum": 238.7,
+              "name": "stn_elev",
+              "type": "metadata",
+              "value": "238.7",
+              "group": "identification"
+            }
+          ],
+          "identifier": "502s001",
+          "1_7_395_0_0_0_0": [
+            {
+              "elementID": "1.7.395.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 1.050985,
+              "name": "plat_coeff_c",
+              "type": "metadata",
+              "value": "1.050985",
+              "group": "identification"
+            }
+          ],
+          "1_2_8_8_1_1_0": [
+            {
+              "elementID": "1.2.8.8.1.1.0",
+              "unit": "V",
+              "valueNum": 13.35962,
+              "name": "min_batry_volt_pst1mt",
+              "elementIndex": "9",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "13.35962",
+              "group": "diagnostics"
+            }
+          ],
+          "1_19_265_8_1_1_0": [
+            {
+              "elementID": "1.19.265.8.1.1.0",
+              "unit": "°C",
+              "valueNum": -7.901484,
+              "name": "air_temperature",
+              "elementIndex": "13",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "-7.901484",
+              "group": "temperature"
+            }
+          ],
+          "1_24_314_2_60_7_6": [
+            {
+              "elementID": "1.24.314.2.60.7.6",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 4.871,
+              "name": "avg_wnd_spd_10m_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "4.871",
+              "group": "wind"
+            }
+          ],
+          "1_7_84_0_0_0_0": [
+            {
+              "elementID": "1.7.84.0.0.0.0",
+              "unit": "unitless",
+              "name": "tc_id",
+              "type": "metadata",
+              "value": "XWG",
+              "group": "identification"
+            }
+          ],
+          "1_2_8_7_60_7_0": [
+            {
+              "elementID": "1.2.8.7.60.7.0",
+              "unit": "V",
+              "dataType": "derived",
+              "valueNum": 13.38493,
+              "name": "max_batry_volt_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "13.38493",
+              "group": "diagnostics"
+            }
+          ],
+          "location_geo_point": [-97.2491972, 49.915922],
+          "1_11_172_2_20_3_0": [
+            {
+              "elementID": "1.11.172.2.20.3.0",
+              "unit": "mm",
+              "valueNum": 223.7,
+              "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts_15mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "223.7",
+              "group": "precipitation"
+            }
+          ],
+          "receivedDateTime": "2019-12-01T07:01:45.614Z",
+          "1_24_319_2_30_5_0": [
+            {
+              "elementID": "1.24.319.2.30.5.0",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 3.636,
+              "name": "avg_wnd_spd_pcpn_gag_pst15mts_15mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "3.636",
+              "group": "wind"
+            }
+          ],
+          "1_5_66_8_60_7_0": [
+            {
+              "elementID": "1.5.66.8.60.7.0",
+              "unit": "%",
+              "dataType": "derived",
+              "valueNum": 84.61364,
+              "name": "min_rel_hum_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "84.61364",
+              "group": "humidity"
+            }
+          ],
+          "1_24_319_2_60_5_0": [
+            {
+              "elementID": "1.24.319.2.60.5.0",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 3.243,
+              "name": "avg_wnd_spd_pcpn_gag_pst15mts_45mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "3.243",
+              "group": "wind"
+            }
+          ],
+          "1_19_271_2_1_1_0": [
+            {
+              "elementID": "1.19.271.2.1.1.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -8.079,
+              "name": "wetblb_temp",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "-8.079",
+              "group": "temperature"
+            }
+          ],
+          "1_7_80_0_0_0_0": [
+            {
+              "elementID": "1.7.80.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 1849,
+              "name": "stn_id",
+              "type": "metadata",
+              "value": "1849",
+              "group": "identification"
+            }
+          ],
+          "1_7_96_0_0_0_0": [
+            {
+              "elementID": "1.7.96.0.0.0.0",
+              "unit": "m",
+              "valueNum": 238.78664244458614,
+              "name": "geoptl_stn_hgt",
+              "type": "metadata",
+              "value": "238.78664244458614",
+              "group": "identification"
+            }
+          ],
+          "1_11_173_2_5_3_0": [
+            {
+              "elementID": "1.11.173.2.5.3.0",
+              "unit": "mm",
+              "dataType": "official",
+              "valueNum": 223.8125,
+              "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts",
+              "elementIndex": "33",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "223.8125",
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.173.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 223.8125,
+              "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts",
+              "index": { "name": "sensor_index", "value": 1 },
+              "elementIndex": "33.1",
+              "type": "element",
+              "value": "223.8125",
+              "indexValue": 1,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.173.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 231.8629,
+              "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts",
+              "index": { "name": "sensor_index", "value": 2 },
+              "elementIndex": "33.2",
+              "type": "element",
+              "value": "231.8629",
+              "indexValue": 2,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.173.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 228.9621,
+              "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts",
+              "index": { "name": "sensor_index", "value": 3 },
+              "elementIndex": "33.3",
+              "type": "element",
+              "value": "228.9621",
+              "indexValue": 3,
+              "group": "precipitation"
+            }
+          ],
+          "1_11_173_2_35_3_0": [
+            {
+              "elementID": "1.11.173.2.35.3.0",
+              "unit": "mm",
+              "valueNum": 223.8,
+              "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts_30mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "223.8",
+              "group": "precipitation"
+            }
+          ],
+          "1_11_169_1_1_1_0": [
+            {
+              "elementID": "1.11.169.1.1.1.0",
+              "unit": "mm",
+              "valueNum": 0,
+              "name": "rnfl_amt_pst1mt",
+              "elementIndex": "38",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_7_90_0_0_0_0": [
+            {
+              "elementID": "1.7.90.0.0.0.0",
+              "unit": "unitless",
+              "name": "sm_prdct_flg",
+              "type": "metadata",
+              "value": "N",
+              "group": "identification"
+            }
+          ],
+          "1_37_713_0_0_0_0": [
+            {
+              "elementID": "1.37.713.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 38,
+              "name": "accepted_count",
+              "type": "metadata",
+              "value": "38",
+              "group": "qa_summary"
+            }
+          ],
+          "1_5_66_2_1_1_0": [
+            {
+              "elementID": "1.5.66.2.1.1.0",
+              "unit": "%",
+              "valueNum": 88.53509,
+              "name": "rel_hum",
+              "elementIndex": "14",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "88.53509",
+              "group": "humidity"
+            }
+          ],
+          "1_24_327_2_1_1_6": [
+            {
+              "elementID": "1.24.327.2.1.1.6",
+              "unit": "°",
+              "valueNum": 0.160481,
+              "name": "wind_direction_east_vector",
+              "elementIndex": "20",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0.160481",
+              "group": "wind"
+            }
+          ],
+          "1_2_x_0_0_0_0": [
+            {
+              "elementID": "1.2.x.0.0.0.0",
+              "unit": "unitless",
+              "name": "deactivated_sensor_label",
+              "index": { "name": "sensor_index", "value": 1 },
+              "elementIndex": "1",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 1,
+              "group": "diagnostics"
+            },
+            {
+              "elementID": "1.2.x.0.0.0.0",
+              "unit": "unitless",
+              "name": "deactivated_sensor_label",
+              "index": { "name": "sensor_index", "value": 2 },
+              "elementIndex": "2",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 2,
+              "group": "diagnostics"
+            },
+            {
+              "elementID": "1.2.x.0.0.0.0",
+              "unit": "unitless",
+              "name": "deactivated_sensor_label",
+              "index": { "name": "sensor_index", "value": 3 },
+              "elementIndex": "3",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 3,
+              "group": "diagnostics"
+            },
+            {
+              "elementID": "1.2.x.0.0.0.0",
+              "unit": "unitless",
+              "name": "deactivated_sensor_label",
+              "index": { "name": "sensor_index", "value": 4 },
+              "elementIndex": "4",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 4,
+              "group": "diagnostics"
+            },
+            {
+              "elementID": "1.2.x.0.0.0.0",
+              "unit": "unitless",
+              "name": "deactivated_sensor_label",
+              "index": { "name": "sensor_index", "value": 5 },
+              "elementIndex": "5",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 5,
+              "group": "diagnostics"
+            },
+            {
+              "elementID": "1.2.x.0.0.0.0",
+              "unit": "unitless",
+              "name": "deactivated_sensor_label",
+              "index": { "name": "sensor_index", "value": 6 },
+              "elementIndex": "6",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 6,
+              "group": "diagnostics"
+            }
+          ],
+          "1_2_8_7_1_1_0": [
+            {
+              "elementID": "1.2.8.7.1.1.0",
+              "unit": "V",
+              "valueNum": 13.38417,
+              "name": "max_batry_volt_pst1mt",
+              "elementIndex": "8",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "13.38417",
+              "group": "diagnostics"
+            }
+          ],
+          "1_7_147_0_0_0_0": [
+            {
+              "elementID": "1.7.147.0.0.0.0",
+              "unit": "m",
+              "valueNum": 238.7,
+              "name": "barometer_elevation",
+              "type": "metadata",
+              "value": "238.7",
+              "group": "identification"
+            }
+          ],
+          "1_7_117_0_0_0_0": [
+            {
+              "elementID": "1.7.117.0.0.0.0",
+              "unit": "unitless",
+              "name": "prov",
+              "type": "metadata",
+              "value": "MB",
+              "group": "identification"
+            }
+          ],
+          "identity": "/data/msc/observation/atmospheric/surface_weather/ca-1.2-ascii/decoded_enhanced-xml-2.0/201912010701/502s001/xwg/61/orig/data_1",
+          "1_12_210_2_60_7_0": [
+            {
+              "elementID": "1.12.210.2.60.7.0",
+              "unit": "hPa",
+              "dataType": "derived",
+              "valueNum": 2.98,
+              "name": "avg_vpr_pres_pst1hr",
+              "suppInfoDataFlags": ["4"],
+              "type": "element",
+              "value": "2.98",
+              "group": "pressure"
+            }
+          ],
+          "1_14_221_2_1_1_0": [
+            {
+              "elementID": "1.14.221.2.1.1.0",
+              "unit": "W/m²",
+              "dataType": "derived",
+              "name": "avg_globl_solr_radn_pst1mt",
+              "suppInfoDataFlags": ["4"],
+              "type": "element",
+              "value": "MSNG",
+              "group": "radiation"
+            }
+          ],
+          "1_7_577_0_0_0_0": [
+            {
+              "elementID": "1.7.577.0.0.0.0",
+              "unit": "m",
+              "valueNum": 238.7,
+              "name": "site_elevation",
+              "type": "metadata",
+              "value": "238.7",
+              "group": "identification"
+            }
+          ],
+          "1_7_73_0_0_0_0": [
+            {
+              "elementID": "1.7.73.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 61677,
+              "name": "logr_prg_sig",
+              "type": "metadata",
+              "value": "61677",
+              "group": "identification"
+            }
+          ],
+          "1_11_171_1_60_7_0": [
+            {
+              "elementID": "1.11.171.1.60.7.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "pcpn_amt_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_11_173_2_20_3_0": [
+            {
+              "elementID": "1.11.173.2.20.3.0",
+              "unit": "mm",
+              "valueNum": 223.8,
+              "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts_15mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "223.8",
+              "group": "precipitation"
+            }
+          ],
+          "1_24_319_2_1_1_0": [
+            {
+              "elementID": "1.24.319.2.1.1.0",
+              "unit": "m/s",
+              "valueNum": 3.809033,
+              "name": "avg_wnd_spd_pcpn_gag_pst1mt",
+              "elementIndex": "27",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "3.809033",
+              "group": "wind"
+            }
+          ],
+          "1_24_321_0_1_1_6": [
+            {
+              "elementID": "1.24.321.0.1.1.6",
+              "unit": "°",
+              "valueNum": 5.398797,
+              "name": "wind_direction_10minute_maxmean_wind_speed",
+              "elementIndex": "26",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "5.398797",
+              "group": "wind"
+            }
+          ],
+          "1_14_221_1_1_1_0": [
+            {
+              "elementID": "1.14.221.1.1.1.0",
+              "unit": "kJ/m²",
+              "valueNum": -0.180967,
+              "name": "tot_globl_solr_radn_pst1mt",
+              "elementIndex": "39",
+              "overallQASummary": -10,
+              "type": "element",
+              "value": "-0.180967",
+              "group": "radiation"
+            }
+          ],
+          "1_7_85_0_0_0_0": [
+            {
+              "elementID": "1.7.85.0.0.0.0",
+              "unit": "unitless",
+              "name": "clim_id",
+              "type": "metadata",
+              "value": "502S001",
+              "group": "identification"
+            }
+          ],
+          "1_7_97_0_0_0_0": [
+            {
+              "elementID": "1.7.97.0.0.0.0",
+              "unit": "°",
+              "valueNum": 49.915922,
+              "name": "lat",
+              "type": "metadata",
+              "value": "49.915922",
+              "group": "identification"
+            }
+          ],
+          "1_24_320_9_1_1_6": [
+            {
+              "elementID": "1.24.320.9.1.1.6",
+              "unit": "°",
+              "valueNum": 18.46885,
+              "name": "wind_direction",
+              "elementIndex": "19",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "18.46885",
+              "group": "wind"
+            }
+          ],
+          "1_5_66_8_1_1_0": [
+            {
+              "elementID": "1.5.66.8.1.1.0",
+              "unit": "%",
+              "valueNum": 88.53509,
+              "name": "min_rel_hum_pst1mt",
+              "elementIndex": "16",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "88.53509",
+              "group": "humidity"
+            }
+          ],
+          "1_4_65_0_0_0_0": [
+            {
+              "elementID": "1.4.65.0.0.0.0",
+              "unit": "unitless",
+              "dataType": "derived",
+              "name": "dms_message_summary",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "CAMSA XWG 010701Z AUTO 00605KT -7.9/-9.5 RMK SLP187",
+              "group": "generic"
+            }
+          ],
+          "1_24_324_12_10_4_0": [
+            {
+              "elementID": "1.24.324.12.10.4.0",
+              "unit": "°",
+              "dataType": "derived",
+              "valueNum": 0.1,
+              "name": "wind_direction_at_precipitation_gauge",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0.1",
+              "group": "wind"
+            }
+          ],
+          "1_2_8_8_60_7_0": [
+            {
+              "elementID": "1.2.8.8.60.7.0",
+              "unit": "V",
+              "dataType": "derived",
+              "valueNum": 13.35175,
+              "name": "min_batry_volt_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "13.35175",
+              "group": "diagnostics"
+            }
+          ],
+          "1_14_221_2_60_7_0": [
+            {
+              "elementID": "1.14.221.2.60.7.0",
+              "unit": "W/m²",
+              "dataType": "derived",
+              "name": "avg_globl_solr_radn_pst1hr",
+              "suppInfoDataFlags": ["4"],
+              "type": "element",
+              "value": "MSNG",
+              "group": "radiation"
+            }
+          ],
+          "1_19_264_0_0_0_0": [
+            {
+              "elementID": "1.19.264.0.0.0.0",
+              "unit": "°C",
+              "valueNum": 16.49,
+              "name": "logr_panl_temp",
+              "elementIndex": "10",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "16.49",
+              "group": "temperature"
+            }
+          ],
+          "1_24_314_2_2_2_6": [
+            {
+              "elementID": "1.24.314.2.2.2.6",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 5.221,
+              "name": "avg_wnd_spd_10m_pst2mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "5.221",
+              "group": "wind"
+            }
+          ],
+          "1_11_174_2_5_3_0": [
+            {
+              "elementID": "1.11.174.2.5.3.0",
+              "unit": "cm",
+              "dataType": "official",
+              "valueNum": 0.293366,
+              "name": "avg_snw_dpth_pst5mts",
+              "elementIndex": "37",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0.293366",
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.174.2.5.3.0",
+              "unit": "cm",
+              "valueNum": 0.293366,
+              "name": "avg_snw_dpth_pst5mts",
+              "index": { "name": "sensor_index", "value": 1 },
+              "elementIndex": "37.1",
+              "type": "element",
+              "value": "0.293366",
+              "indexValue": 1,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.174.2.5.3.0",
+              "unit": "cm",
+              "name": "avg_snw_dpth_pst5mts",
+              "index": { "name": "sensor_index", "value": 2 },
+              "elementIndex": "37.2",
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 2,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.174.2.5.3.0",
+              "unit": "cm",
+              "valueNum": 0.771027,
+              "name": "avg_snw_dpth_pst5mts",
+              "index": { "name": "sensor_index", "value": 3 },
+              "elementIndex": "37.3",
+              "type": "element",
+              "value": "0.771027",
+              "indexValue": 3,
+              "group": "precipitation"
+            }
+          ],
+          "1_37_717_0_0_0_0": [
+            {
+              "elementID": "1.37.717.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 39,
+              "name": "elements_quality_assessed_count",
+              "type": "metadata",
+              "value": "39",
+              "group": "qa_summary"
+            }
+          ],
+          "1_5_66_7_60_7_0": [
+            {
+              "elementID": "1.5.66.7.60.7.0",
+              "unit": "%",
+              "dataType": "derived",
+              "valueNum": 88.88337,
+              "name": "max_rel_hum_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "88.88337",
+              "group": "humidity"
+            }
+          ],
+          "1_7_392_0_0_0_0": [
+            {
+              "elementID": "1.7.392.0.0.0.0",
+              "unit": "unitless",
+              "name": "jcx_source",
+              "type": "metadata",
+              "value": "/data/msc/observation/atmospheric/surface_weather/ca-1.2-ascii/job-xml-2.0/201912010701/502s001/orig",
+              "group": "identification"
+            }
+          ],
+          "1_11_173_2_1_1_0": [
+            {
+              "elementID": "1.11.173.2.1.1.0",
+              "unit": "mm",
+              "dataType": "official",
+              "valueNum": 223.7839,
+              "name": "cumulative_precipitation_gauge_weight_unfiltered",
+              "elementIndex": "32",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "223.7839",
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.173.2.1.1.0",
+              "unit": "mm",
+              "valueNum": 223.7839,
+              "name": "cumulative_precipitation_gauge_weight_unfiltered",
+              "index": { "name": "sensor_index", "value": 1 },
+              "elementIndex": "32.1",
+              "type": "element",
+              "value": "223.7839",
+              "indexValue": 1,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.173.2.1.1.0",
+              "unit": "mm",
+              "valueNum": 231.8674,
+              "name": "cumulative_precipitation_gauge_weight_unfiltered",
+              "index": { "name": "sensor_index", "value": 2 },
+              "elementIndex": "32.2",
+              "type": "element",
+              "value": "231.8674",
+              "indexValue": 2,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.173.2.1.1.0",
+              "unit": "mm",
+              "valueNum": 228.9448,
+              "name": "cumulative_precipitation_gauge_weight_unfiltered",
+              "index": { "name": "sensor_index", "value": 3 },
+              "elementIndex": "32.3",
+              "type": "element",
+              "value": "228.9448",
+              "indexValue": 3,
+              "group": "precipitation"
+            }
+          ],
+          "1_11_171_1_10_4_0": [
+            {
+              "elementID": "1.11.171.1.10.4.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "pcpn_amt_pst10mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_7_81_0_0_0_0": [
+            {
+              "elementID": "1.7.81.0.0.0.0",
+              "unit": "unitless",
+              "name": "data_pvdr",
+              "type": "metadata",
+              "value": "MSC",
+              "group": "identification"
+            }
+          ],
+          "1_24_316_0_60_7_0": [
+            {
+              "elementID": "1.24.316.0.60.7.0",
+              "unit": "hhmm",
+              "dataType": "derived",
+              "name": "max_wnd_spd_pst1hr_tm",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0645",
+              "group": "wind"
+            }
+          ],
+          "1_24_314_7_1_1_6": [
+            {
+              "elementID": "1.24.314.7.1.1.6",
+              "unit": "m/s",
+              "valueNum": 6.2917,
+              "name": "max_wnd_spd_10m_pst1mt",
+              "elementIndex": "22",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "6.2917",
+              "group": "wind"
+            }
+          ],
+          "1_19_271_2_60_7_0": [
+            {
+              "elementID": "1.19.271.2.60.7.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -8.1,
+              "name": "wet_bulb_temperature",
+              "suppInfoDataFlags": ["4"],
+              "type": "element",
+              "value": "-8.1",
+              "group": "temperature"
+            }
+          ],
+          "1_12_207_2_1_1_0": [
+            {
+              "elementID": "1.12.207.2.1.1.0",
+              "unit": "hPa",
+              "dataType": "derived",
+              "valueNum": 1018.7,
+              "name": "mslp",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "1018.7",
+              "group": "pressure"
+            }
+          ],
+          "1_7_91_0_0_0_0": [
+            {
+              "elementID": "1.7.91.0.0.0.0",
+              "unit": "code",
+              "codeSrc": "std_code_src",
+              "codeType": "content_indicator",
+              "name": "content_indicator",
+              "type": "metadata",
+              "value": "data",
+              "group": "identification"
+            }
+          ],
+          "1_24_319_2_10_4_0": [
+            {
+              "elementID": "1.24.319.2.10.4.0",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 3.731,
+              "name": "avg_wnd_spd_pcpn_gag_pst10mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "3.731",
+              "group": "wind"
+            }
+          ],
+          "1_7_89_0_0_0_0": [
+            {
+              "elementID": "1.7.89.0.0.0.0",
+              "unit": "unitless",
+              "name": "hly_prdct_flg",
+              "type": "metadata",
+              "value": "N",
+              "group": "identification"
+            }
+          ],
+          "1_24_328_2_1_1_6": [
+            {
+              "elementID": "1.24.328.2.1.1.6",
+              "unit": "°",
+              "valueNum": 0.93532,
+              "name": "wind_direction_north_vector",
+              "elementIndex": "21",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0.93532",
+              "group": "wind"
+            }
+          ],
+          "1_7_574_0_0_0_0": [
+            {
+              "elementID": "1.7.574.0.0.0.0",
+              "unit": "unitless",
+              "name": "minutely_product_flag",
+              "type": "metadata",
+              "value": "N",
+              "group": "identification"
+            }
+          ],
+          "1_24_330_2_1_1_0": [
+            {
+              "elementID": "1.24.330.2.1.1.0",
+              "unit": "°",
+              "valueNum": 0.976613,
+              "name": "wind_direction_north_vector_at_precipitation_gauge",
+              "elementIndex": "30",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0.976613",
+              "group": "wind"
+            }
+          ],
+          "1_24_318_7_60_7_6": [
+            {
+              "elementID": "1.24.318.7.60.7.6",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 5.2,
+              "name": "max_10mt_avg_wnd_spd_10m_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "5.2",
+              "group": "wind"
+            }
+          ],
+          "1_11_171_1_30_5_0": [
+            {
+              "elementID": "1.11.171.1.30.5.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "pcpn_amt_pst15mts_15mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_24_316_0_1_1_0": [
+            {
+              "elementID": "1.24.316.0.1.1.0",
+              "unit": "hhmmss",
+              "name": "wind_speed_maximum_time",
+              "elementIndex": "23",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "070055",
+              "group": "wind"
+            }
+          ],
+          "1_24_324_12_1_1_0": [
+            {
+              "elementID": "1.24.324.12.1.1.0",
+              "unit": "°",
+              "valueNum": 3.957626,
+              "name": "wind_direction_at_precipitation_gauge",
+              "elementIndex": "28",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "3.957626",
+              "group": "wind"
+            }
+          ],
+          "1_24_321_0_60_7_6": [
+            {
+              "elementID": "1.24.321.0.60.7.6",
+              "unit": "°",
+              "dataType": "derived",
+              "valueNum": 7.1,
+              "name": "avg_10mt_wnd_dir_10m_pst1hr_max_avg_10mt_wnd_spd",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "7.1",
+              "group": "wind"
+            }
+          ],
+          "jsonVersion": 2,
+          "1_11_173_2_50_3_0": [
+            {
+              "elementID": "1.11.173.2.50.3.0",
+              "unit": "mm",
+              "valueNum": 223.8,
+              "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts_45mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "223.8",
+              "group": "precipitation"
+            }
+          ],
+          "1_2_11_2_60_7_0": [
+            {
+              "elementID": "1.2.11.2.60.7.0",
+              "unit": "%",
+              "dataType": "derived",
+              "valueNum": 100,
+              "name": "data_avail_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "100.0",
+              "group": "diagnostics"
+            }
+          ],
+          "1_24_319_2_15_5_0": [
+            {
+              "elementID": "1.24.319.2.15.5.0",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 3.596,
+              "name": "avg_wnd_spd_pcpn_gag_pst15mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "3.596",
+              "group": "wind"
+            }
+          ],
+          "1_24_320_12_10_4_6": [
+            {
+              "elementID": "1.24.320.12.10.4.6",
+              "unit": "°",
+              "dataType": "derived",
+              "valueNum": 6,
+              "name": "avg_wnd_dir_10m_pst10mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "6",
+              "group": "wind"
+            }
+          ],
+          "1_37_712_0_0_0_0": [
+            {
+              "elementID": "1.37.712.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 0,
+              "name": "erroneous_count",
+              "type": "metadata",
+              "value": "0",
+              "group": "qa_summary"
+            }
+          ],
+          "1_24_320_12_2_2_6": [
+            {
+              "elementID": "1.24.320.12.2.2.6",
+              "unit": "°",
+              "dataType": "derived",
+              "valueNum": 9.9,
+              "name": "avg_wnd_dir_10m_pst2mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "9.9",
+              "group": "wind"
+            }
+          ],
+          "1_7_578_0_0_0_0": [
+            {
+              "elementID": "1.7.578.0.0.0.0",
+              "unit": "m",
+              "valueNum": 238.78664244458614,
+              "name": "geopotential_site_elevation",
+              "type": "metadata",
+              "value": "238.78664244458614",
+              "group": "identification"
+            }
+          ],
+          "1_7_82_0_0_0_0": [
+            {
+              "elementID": "1.7.82.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 71849,
+              "name": "wmo_synop_id",
+              "type": "metadata",
+              "value": "71849",
+              "group": "identification"
+            }
+          ],
+          "author": { "build": "build.22", "name": "MSC-DMS-Enhanced-Generic", "version": "2.8" },
+          "1_7_393_0_0_0_0": [
+            {
+              "elementID": "1.7.393.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": -0.002646,
+              "name": "plat_coeff_a",
+              "type": "metadata",
+              "value": "-0.002646",
+              "group": "identification"
+            }
+          ],
+          "1_19_265_0_66_0_0": [
+            {
+              "elementID": "1.19.265.0.66.0.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -1.863926,
+              "name": "air_temp_12hrs_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "-1.863926",
+              "group": "temperature"
+            }
+          ],
+          "primaryID": "502s001",
+          "1_14_221_1_60_7_0": [
+            {
+              "elementID": "1.14.221.1.60.7.0",
+              "unit": "kJ/m²",
+              "dataType": "derived",
+              "name": "tot_globl_solr_radn_pst1hr",
+              "suppInfoDataFlags": ["4"],
+              "type": "element",
+              "value": "MSNG",
+              "group": "radiation"
+            },
+            {
+              "elementID": "1.14.221.1.60.7.0",
+              "unit": "MJ/m²",
+              "dataType": "derived",
+              "name": "tot_globl_solr_radn_pst1hr",
+              "suppInfoDataFlags": ["4"],
+              "type": "element",
+              "value": "MSNG",
+              "group": "radiation"
+            }
+          ],
+          "1_7_98_0_0_0_0": [
+            {
+              "elementID": "1.7.98.0.0.0.0",
+              "unit": "°",
+              "valueNum": -97.2491972,
+              "name": "long",
+              "type": "metadata",
+              "value": "-97.2491972",
+              "group": "identification"
+            }
+          ],
+          "1_24_314_2_10_4_6": [
+            {
+              "elementID": "1.24.314.2.10.4.6",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 5.124,
+              "name": "avg_wnd_spd_10m_pst10mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "5.124",
+              "group": "wind"
+            }
+          ],
+          "1_24_320_12_60_7_6": [
+            {
+              "elementID": "1.24.320.12.60.7.6",
+              "unit": "°",
+              "dataType": "derived",
+              "valueNum": 7.8,
+              "name": "avg_wnd_dir_10m_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "7.8",
+              "group": "wind"
+            }
+          ],
+          "1_7_94_0_0_0_0": [
+            {
+              "elementID": "1.7.94.0.0.0.0",
+              "unit": "unitless",
+              "name": "cs_prdct_flg",
+              "type": "metadata",
+              "value": "N",
+              "group": "identification"
+            }
+          ],
+          "1_11_172_2_50_3_0": [
+            {
+              "elementID": "1.11.172.2.50.3.0",
+              "unit": "mm",
+              "valueNum": 223.7,
+              "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts_45mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "223.7",
+              "group": "precipitation"
+            }
+          ],
+          "1_37_716_0_0_0_0": [
+            {
+              "elementID": "1.37.716.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 0,
+              "name": "doubtful_count",
+              "type": "metadata",
+              "value": "0",
+              "group": "qa_summary"
+            }
+          ],
+          "1_11_175_2_5_3_0": [
+            {
+              "elementID": "1.11.175.2.5.3.0",
+              "unit": "mm",
+              "dataType": "official",
+              "valueNum": 223.8494,
+              "name": "precipitation_gauge_reference_value",
+              "elementIndex": "35",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "223.8494",
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.175.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 223.8494,
+              "name": "precipitation_gauge_reference_value",
+              "index": { "name": "sensor_index", "value": 1 },
+              "elementIndex": "35.1",
+              "type": "element",
+              "value": "223.8494",
+              "indexValue": 1,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.175.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 231.809,
+              "name": "precipitation_gauge_reference_value",
+              "index": { "name": "sensor_index", "value": 2 },
+              "elementIndex": "35.2",
+              "type": "element",
+              "value": "231.809",
+              "indexValue": 2,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.175.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 228.915,
+              "name": "precipitation_gauge_reference_value",
+              "index": { "name": "sensor_index", "value": 3 },
+              "elementIndex": "35.3",
+              "type": "element",
+              "value": "228.915",
+              "indexValue": 3,
+              "group": "precipitation"
+            }
+          ],
+          "1_7_573_0_0_0_0": [
+            {
+              "elementID": "1.7.573.0.0.0.0",
+              "unit": "hPa",
+              "valueNum": 0,
+              "name": "barometer_pressure_offset",
+              "type": "metadata",
+              "value": "0.0",
+              "group": "identification"
+            }
+          ],
+          "1_7_79_0_0_0_0": [
+            {
+              "elementID": "1.7.79.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 61,
+              "name": "snsr_tbl_nbr",
+              "type": "metadata",
+              "value": "61",
+              "group": "identification"
+            }
+          ],
+          "1_12_206_2_1_1_0": [
+            {
+              "elementID": "1.12.206.2.1.1.0",
+              "unit": "hPa",
+              "valueNum": 988.6984,
+              "name": "stn_pres",
+              "elementIndex": "31",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "988.6984",
+              "group": "pressure"
+            }
+          ],
+          "1_11_174_2_35_3_0": [
+            {
+              "elementID": "1.11.174.2.35.3.0",
+              "unit": "cm",
+              "dataType": "derived",
+              "valueNum": 0.3,
+              "name": "avg_snw_dpth_pst5mts_30mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0.3",
+              "group": "precipitation"
+            }
+          ],
+          "1_37_711_0_0_0_0": [
+            {
+              "elementID": "1.37.711.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 0,
+              "name": "missing_count",
+              "type": "metadata",
+              "value": "0",
+              "group": "qa_summary"
+            }
+          ],
+          "1_11_174_2_1_1_0": [
+            {
+              "elementID": "1.11.174.2.1.1.0",
+              "unit": "cm",
+              "dataType": "official",
+              "valueNum": 0.261078,
+              "name": "snw_dpth",
+              "elementIndex": "36",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0.261078",
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.174.2.1.1.0",
+              "unit": "cm",
+              "valueNum": 0.261078,
+              "name": "snw_dpth",
+              "index": { "name": "sensor_index", "value": 1 },
+              "elementIndex": "36.1",
+              "type": "element",
+              "value": "0.261078",
+              "indexValue": 1,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.174.2.1.1.0",
+              "unit": "cm",
+              "name": "snw_dpth",
+              "index": { "name": "sensor_index", "value": 2 },
+              "elementIndex": "36.2",
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 2,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.174.2.1.1.0",
+              "unit": "cm",
+              "valueNum": 0.75145,
+              "name": "snw_dpth",
+              "index": { "name": "sensor_index", "value": 3 },
+              "elementIndex": "36.3",
+              "type": "element",
+              "value": "0.75145",
+              "indexValue": 3,
+              "group": "precipitation"
+            }
+          ],
+          "1_7_92_0_0_0_0": [
+            {
+              "elementID": "1.7.92.0.0.0.0",
+              "unit": "min",
+              "valueNum": 1,
+              "name": "reporting_frequency",
+              "type": "metadata",
+              "value": "1",
+              "group": "identification"
+            }
+          ],
+          "1_24_329_2_1_1_0": [
+            {
+              "elementID": "1.24.329.2.1.1.0",
+              "unit": "°",
+              "valueNum": 0.067566,
+              "name": "wind_direction_east_vector_at_precipitation_gauge",
+              "elementIndex": "29",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0.067566",
+              "group": "wind"
+            }
+          ],
+          "1_19_265_7_1_1_0": [
+            {
+              "elementID": "1.19.265.7.1.1.0",
+              "unit": "°C",
+              "valueNum": -7.881932,
+              "name": "air_temperature",
+              "elementIndex": "12",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "-7.881932",
+              "group": "temperature"
+            }
+          ],
+          "1_24_314_2_1_1_6": [
+            {
+              "elementID": "1.24.314.2.1.1.6",
+              "unit": "m/s",
+              "valueNum": 5.401534,
+              "name": "avg_wnd_spd_10m_pst1mt",
+              "elementIndex": "17",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "5.401534",
+              "group": "wind"
+            }
+          ],
+          "rawMessage": {
+            "header": "CACN50 CWAO 010701",
+            "message": "XWG 61,2019,335,701,1849,16.49,100,13.38417,13.35962,-7.901484,6998,6998,-7.881932,6998,6998,-7.901484,6998,6998,88.53509,88.76871,88.53509,5.401534,9.735909,18.46885,0.1604806,0.9353202,6.2917,70055,0.2600555,5.126153,5.398797,3.809033,3.957626,0.06756566,0.9766127,988.6984,223.7839,231.8674,228.9448,223.8125,231.8629,228.9621,223.7376,232.0103,228.9447,223.8494,231.809,228.915,0.2610779,6997,0.7514496,0.2933655,6997,0.7710266,0,-0.1809669,61677"
+          },
+          "1_24_314_7_10_4_6": [
+            {
+              "elementID": "1.24.314.7.10.4.6",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 6.292,
+              "name": "max_wnd_spd_10m_pst10mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "6.292",
+              "group": "wind"
+            }
+          ],
+          "1_7_543_0_0_0_0": [
+            {
+              "elementID": "1.7.543.0.0.0.0",
+              "unit": "m",
+              "valueNum": 238.78664244458614,
+              "name": "geopotential_barometer_elevation",
+              "type": "metadata",
+              "value": "238.78664244458614",
+              "group": "identification"
+            }
+          ],
+          "1_37_715_0_0_0_0": [
+            {
+              "elementID": "1.37.715.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 1,
+              "name": "suppressed_count",
+              "type": "metadata",
+              "value": "1",
+              "group": "qa_summary"
+            }
+          ],
+          "1_7_575_0_0_0_0": [
+            {
+              "elementID": "1.7.575.0.0.0.0",
+              "unit": "unitless",
+              "name": "sensor_table_status",
+              "type": "metadata",
+              "value": "Active",
+              "group": "identification"
+            }
+          ],
+          "1_12_210_2_1_1_0": [
+            {
+              "elementID": "1.12.210.2.1.1.0",
+              "unit": "hPa",
+              "dataType": "derived",
+              "valueNum": 2.979,
+              "name": "vpr_pres",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "2.979",
+              "group": "pressure"
+            }
+          ],
+          "1_11_171_1_60_5_0": [
+            {
+              "elementID": "1.11.171.1.60.5.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "pcpn_amt_pst15mts_45mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_24_319_2_45_5_0": [
+            {
+              "elementID": "1.24.319.2.45.5.0",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 3.558,
+              "name": "avg_wnd_spd_pcpn_gag_pst15mts_30mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "3.558",
+              "group": "wind"
+            }
+          ],
+          "1_7_86_0_0_0_0": [
+            {
+              "elementID": "1.7.86.0.0.0.0",
+              "unit": "unitless",
+              "name": "msc_id",
+              "type": "metadata",
+              "value": "502S001",
+              "group": "identification"
+            }
+          ],
+          "parentIdentity": "/data/msc/observation/atmospheric/surface_weather/ca-1.2-ascii/decoded_qa-xml-2.0/201912010701/502s001/xwg/61/orig/data_1/level_1",
+          "1_24_323_0_1_1_6": [
+            {
+              "elementID": "1.24.323.0.1.1.6",
+              "unit": "°",
+              "valueNum": 0.260055,
+              "name": "wnd_dir_10m_pst1mt_max_spd",
+              "elementIndex": "24",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0.260055",
+              "group": "wind"
+            }
+          ],
+          "1_24_323_0_10_4_6": [
+            {
+              "elementID": "1.24.323.0.10.4.6",
+              "unit": "°",
+              "dataType": "derived",
+              "valueNum": 0.26,
+              "name": "wnd_dir_10m_pst10mts_max_spd",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0.26",
+              "group": "wind"
+            }
+          ],
+          "1_7_83_0_0_0_0": [
+            {
+              "elementID": "1.7.83.0.0.0.0",
+              "unit": "unitless",
+              "name": "stn_nam",
+              "type": "metadata",
+              "value": "WINNIPEG",
+              "group": "identification"
+            }
+          ],
+          "1_24_314_7_60_7_6": [
+            {
+              "elementID": "1.24.314.7.60.7.6",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 6.664,
+              "name": "max_wnd_spd_10m_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "6.664",
+              "group": "wind"
+            }
+          ],
+          "1_11_174_2_20_3_0": [
+            {
+              "elementID": "1.11.174.2.20.3.0",
+              "unit": "cm",
+              "dataType": "derived",
+              "valueNum": 0.3,
+              "name": "avg_snw_dpth_pst5mts_15mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0.3",
+              "group": "precipitation"
+            }
+          ],
+          "1_19_267_2_60_7_0": [
+            {
+              "elementID": "1.19.267.2.60.7.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -9.5,
+              "name": "avg_dwpt_temp_pst1hr",
+              "suppInfoDataFlags": ["4"],
+              "type": "element",
+              "value": "-9.5",
+              "group": "temperature"
+            }
+          ],
+          "1_24_320_12_1_1_6": [
+            {
+              "elementID": "1.24.320.12.1.1.6",
+              "unit": "°",
+              "valueNum": 9.735909,
+              "name": "avg_wnd_dir_10m_pst1mt",
+              "elementIndex": "18",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "9.735909",
+              "group": "wind"
+            }
+          ],
+          "1_7_394_0_0_0_0": [
+            {
+              "elementID": "1.7.394.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": -0.454465,
+              "name": "plat_coeff_b",
+              "type": "metadata",
+              "value": "-0.454465",
+              "group": "identification"
+            }
+          ],
+          "1_11_177_0_0_0_0": [
+            {
+              "elementID": "1.11.177.0.0.0.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "pcpn_amt_snc_top_of_hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_19_267_2_1_1_0": [
+            {
+              "elementID": "1.19.267.2.1.1.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -9.5,
+              "name": "dwpt_temp",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "-9.5",
+              "group": "temperature"
+            }
+          ],
+          "1_11_171_1_45_5_0": [
+            {
+              "elementID": "1.11.171.1.45.5.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "pcpn_amt_pst15mts_30mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_24_323_0_60_7_6": [
+            {
+              "elementID": "1.24.323.0.60.7.6",
+              "unit": "°",
+              "dataType": "derived",
+              "valueNum": 8.381,
+              "name": "wnd_dir_10m_pst1hr_max_spd",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "8.381",
+              "group": "wind"
+            }
+          ],
+          "1_24_318_7_1_1_6": [
+            {
+              "elementID": "1.24.318.7.1.1.6",
+              "unit": "m/s",
+              "valueNum": 5.126153,
+              "name": "wind_speed_10minute_mean",
+              "elementIndex": "25",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "5.126153",
+              "group": "wind"
+            }
+          ],
+          "1_11_171_1_15_5_0": [
+            {
+              "elementID": "1.11.171.1.15.5.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "pcpn_amt_pst15mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_11_172_2_5_3_0": [
+            {
+              "elementID": "1.11.172.2.5.3.0",
+              "unit": "mm",
+              "dataType": "official",
+              "valueNum": 223.7376,
+              "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts",
+              "elementIndex": "34",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "223.7376",
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.172.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 223.7376,
+              "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts",
+              "index": { "name": "sensor_index", "value": 1 },
+              "elementIndex": "34.1",
+              "type": "element",
+              "value": "223.7376",
+              "indexValue": 1,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.172.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 232.0103,
+              "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts",
+              "index": { "name": "sensor_index", "value": 2 },
+              "elementIndex": "34.2",
+              "type": "element",
+              "value": "232.0103",
+              "indexValue": 2,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.172.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 228.9447,
+              "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts",
+              "index": { "name": "sensor_index", "value": 3 },
+              "elementIndex": "34.3",
+              "type": "element",
+              "value": "228.9447",
+              "indexValue": 3,
+              "group": "precipitation"
+            }
+          ],
+          "1_11_174_2_50_3_0": [
+            {
+              "elementID": "1.11.174.2.50.3.0",
+              "unit": "cm",
+              "dataType": "derived",
+              "valueNum": 0.3,
+              "name": "avg_snw_dpth_pst5mts_45mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0.3",
+              "group": "precipitation"
+            }
+          ],
+          "1_11_169_1_60_7_0": [
+            {
+              "elementID": "1.11.169.1.60.7.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "rnfl_amt_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_7_78_0_0_0_0": [
+            {
+              "elementID": "1.7.78.0.0.0.0",
+              "unit": "datetime",
+              "name": "date_tm",
+              "type": "metadata",
+              "value": "2019-12-01T07:01:00.000Z",
+              "group": "identification"
+            }
+          ],
+          "location": { "coordinates": [-97.2491972, 49.915922, 238.7], "type": "point" },
+          "1_7_95_0_0_0_0": [
+            {
+              "elementID": "1.7.95.0.0.0.0",
+              "unit": "unitless",
+              "name": "sx_prdct_flg",
+              "type": "metadata",
+              "value": "N",
+              "group": "identification"
+            }
+          ]
+        }
+      },
+      {
+        "_index": "dms_flat_data_idx_msc_observation_atmospheric_surface_weather_ca-1.2-ascii_2019.12",
+        "_type": "dms",
+        "_id": "msc:observation:atmospheric:surface_weather:ca-1.2-ascii:decoded_enhanced-xml-2.0:201912010645:502s001:xwg:61:orig:data_1",
+        "_score": 6.6363316,
+        "_source": {
+          "obsDateTime": "2019-12-01T06:45:00.000Z",
+          "1_5_66_7_1_1_0": [
+            {
+              "elementID": "1.5.66.7.1.1.0",
+              "unit": "%",
+              "valueNum": 86.8003,
+              "name": "max_rel_hum_pst1mt",
+              "elementIndex": "15",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "86.8003",
+              "group": "humidity"
+            }
+          ],
+          "1_2_11_1_1_1_0": [
+            {
+              "elementID": "1.2.11.1.1.1.0",
+              "unit": "%",
+              "valueNum": 100,
+              "name": "data_avail_pst1mt",
+              "elementIndex": "7",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "100",
+              "group": "diagnostics"
+            }
+          ],
+          "1_19_265_2_60_7_0": [
+            {
+              "elementID": "1.19.265.2.60.7.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -7.575125,
+              "name": "avg_air_temp_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "-7.575125",
+              "group": "temperature"
+            }
+          ],
+          "1_37_714_0_0_0_0": [
+            {
+              "elementID": "1.37.714.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 0,
+              "name": "inconsistent_count",
+              "type": "metadata",
+              "value": "0",
+              "group": "qa_summary"
+            }
+          ],
+          "1_19_265_2_1_1_0": [
+            {
+              "elementID": "1.19.265.2.1.1.0",
+              "unit": "°C",
+              "valueNum": -7.918955,
+              "name": "air_temp",
+              "elementIndex": "11",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "-7.918955",
+              "group": "temperature"
+            }
+          ],
+          "taxonomy": "/msc/observation/atmospheric/surface_weather/ca-1.2-ascii/decoded_enhanced-xml-2.0",
+          "1_7_93_0_0_0_0": [
+            {
+              "elementID": "1.7.93.0.0.0.0",
+              "unit": "unitless",
+              "name": "package",
+              "type": "metadata",
+              "value": "/metadata/msc/qa_package/surface_ca1.2/meta_product-xml-1.0/station/all/12010000",
+              "group": "identification"
+            }
+          ],
+          "1_5_66_2_60_7_0": [
+            {
+              "elementID": "1.5.66.2.60.7.0",
+              "unit": "%",
+              "dataType": "derived",
+              "valueNum": 85.3,
+              "name": "avg_rel_hum_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "85.3",
+              "group": "humidity"
+            }
+          ],
+          "1_19_265_8_60_7_0": [
+            {
+              "elementID": "1.19.265.8.60.7.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -7.918955,
+              "name": "min_air_temp_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "-7.918955",
+              "group": "temperature"
+            }
+          ],
+          "1_19_265_7_60_7_0": [
+            {
+              "elementID": "1.19.265.7.60.7.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -7.18589,
+              "name": "max_air_temp_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "-7.18589",
+              "group": "temperature"
+            }
+          ],
+          "1_11_172_2_35_3_0": [
+            {
+              "elementID": "1.11.172.2.35.3.0",
+              "unit": "mm",
+              "valueNum": 223.7,
+              "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts_30mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "223.7",
+              "group": "precipitation"
+            }
+          ],
+          "1_7_105_0_0_0_0": [
+            {
+              "elementID": "1.7.105.0.0.0.0",
+              "unit": "unitless",
+              "name": "cor",
+              "type": "metadata",
+              "value": "orig",
+              "group": "identification"
+            }
+          ],
+          "1_7_87_0_0_0_0": [
+            {
+              "elementID": "1.7.87.0.0.0.0",
+              "unit": "m",
+              "valueNum": 238.7,
+              "name": "stn_elev",
+              "type": "metadata",
+              "value": "238.7",
+              "group": "identification"
+            }
+          ],
+          "identifier": "502s001",
+          "1_7_395_0_0_0_0": [
+            {
+              "elementID": "1.7.395.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 1.050985,
+              "name": "plat_coeff_c",
+              "type": "metadata",
+              "value": "1.050985",
+              "group": "identification"
+            }
+          ],
+          "1_2_8_8_1_1_0": [
+            {
+              "elementID": "1.2.8.8.1.1.0",
+              "unit": "V",
+              "valueNum": 13.37761,
+              "name": "min_batry_volt_pst1mt",
+              "elementIndex": "9",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "13.37761",
+              "group": "diagnostics"
+            }
+          ],
+          "1_19_265_8_1_1_0": [
+            {
+              "elementID": "1.19.265.8.1.1.0",
+              "unit": "°C",
+              "valueNum": -7.918955,
+              "name": "air_temperature",
+              "elementIndex": "13",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "-7.918955",
+              "group": "temperature"
+            }
+          ],
+          "1_24_314_2_60_7_6": [
+            {
+              "elementID": "1.24.314.2.60.7.6",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 4.574,
+              "name": "avg_wnd_spd_10m_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "4.574",
+              "group": "wind"
+            }
+          ],
+          "1_7_84_0_0_0_0": [
+            {
+              "elementID": "1.7.84.0.0.0.0",
+              "unit": "unitless",
+              "name": "tc_id",
+              "type": "metadata",
+              "value": "XWG",
+              "group": "identification"
+            }
+          ],
+          "1_2_8_7_60_7_0": [
+            {
+              "elementID": "1.2.8.7.60.7.0",
+              "unit": "V",
+              "dataType": "derived",
+              "valueNum": 13.38492,
+              "name": "max_batry_volt_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "13.38492",
+              "group": "diagnostics"
+            }
+          ],
+          "location_geo_point": [-97.2491972, 49.915922],
+          "1_11_172_2_20_3_0": [
+            {
+              "elementID": "1.11.172.2.20.3.0",
+              "unit": "mm",
+              "valueNum": 223.7,
+              "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts_15mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "223.7",
+              "group": "precipitation"
+            }
+          ],
+          "receivedDateTime": "2019-12-01T06:45:30.388Z",
+          "1_24_319_2_30_5_0": [
+            {
+              "elementID": "1.24.319.2.30.5.0",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 3.56,
+              "name": "avg_wnd_spd_pcpn_gag_pst15mts_15mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "3.56",
+              "group": "wind"
+            }
+          ],
+          "1_5_66_8_60_7_0": [
+            {
+              "elementID": "1.5.66.8.60.7.0",
+              "unit": "%",
+              "dataType": "derived",
+              "valueNum": 83.54718,
+              "name": "min_rel_hum_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "83.54718",
+              "group": "humidity"
+            }
+          ],
+          "1_24_319_2_60_5_0": [
+            {
+              "elementID": "1.24.319.2.60.5.0",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 2.782,
+              "name": "avg_wnd_spd_pcpn_gag_pst15mts_45mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "2.782",
+              "group": "wind"
+            }
+          ],
+          "1_19_271_2_1_1_0": [
+            {
+              "elementID": "1.19.271.2.1.1.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -8.136,
+              "name": "wetblb_temp",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "-8.136",
+              "group": "temperature"
+            }
+          ],
+          "1_7_80_0_0_0_0": [
+            {
+              "elementID": "1.7.80.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 1849,
+              "name": "stn_id",
+              "type": "metadata",
+              "value": "1849",
+              "group": "identification"
+            }
+          ],
+          "1_7_96_0_0_0_0": [
+            {
+              "elementID": "1.7.96.0.0.0.0",
+              "unit": "m",
+              "valueNum": 238.78664244458614,
+              "name": "geoptl_stn_hgt",
+              "type": "metadata",
+              "value": "238.78664244458614",
+              "group": "identification"
+            }
+          ],
+          "1_11_173_2_5_3_0": [
+            {
+              "elementID": "1.11.173.2.5.3.0",
+              "unit": "mm",
+              "dataType": "official",
+              "valueNum": 223.7905,
+              "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts",
+              "elementIndex": "33",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "223.7905",
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.173.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 223.7905,
+              "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts",
+              "index": { "name": "sensor_index", "value": 1 },
+              "elementIndex": "33.1",
+              "type": "element",
+              "value": "223.7905",
+              "indexValue": 1,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.173.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 231.8763,
+              "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts",
+              "index": { "name": "sensor_index", "value": 2 },
+              "elementIndex": "33.2",
+              "type": "element",
+              "value": "231.8763",
+              "indexValue": 2,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.173.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 228.9512,
+              "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts",
+              "index": { "name": "sensor_index", "value": 3 },
+              "elementIndex": "33.3",
+              "type": "element",
+              "value": "228.9512",
+              "indexValue": 3,
+              "group": "precipitation"
+            }
+          ],
+          "1_11_173_2_35_3_0": [
+            {
+              "elementID": "1.11.173.2.35.3.0",
+              "unit": "mm",
+              "valueNum": 223.8,
+              "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts_30mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "223.8",
+              "group": "precipitation"
+            }
+          ],
+          "1_11_169_1_1_1_0": [
+            {
+              "elementID": "1.11.169.1.1.1.0",
+              "unit": "mm",
+              "valueNum": 0,
+              "name": "rnfl_amt_pst1mt",
+              "elementIndex": "38",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_7_90_0_0_0_0": [
+            {
+              "elementID": "1.7.90.0.0.0.0",
+              "unit": "unitless",
+              "name": "sm_prdct_flg",
+              "type": "metadata",
+              "value": "N",
+              "group": "identification"
+            }
+          ],
+          "1_37_713_0_0_0_0": [
+            {
+              "elementID": "1.37.713.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 38,
+              "name": "accepted_count",
+              "type": "metadata",
+              "value": "38",
+              "group": "qa_summary"
+            }
+          ],
+          "1_5_66_2_1_1_0": [
+            {
+              "elementID": "1.5.66.2.1.1.0",
+              "unit": "%",
+              "valueNum": 86.74374,
+              "name": "rel_hum",
+              "elementIndex": "14",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "86.74374",
+              "group": "humidity"
+            }
+          ],
+          "1_24_327_2_1_1_6": [
+            {
+              "elementID": "1.24.327.2.1.1.6",
+              "unit": "°",
+              "valueNum": 0.016597,
+              "name": "wind_direction_east_vector",
+              "elementIndex": "20",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0.016597",
+              "group": "wind"
+            }
+          ],
+          "1_2_x_0_0_0_0": [
+            {
+              "elementID": "1.2.x.0.0.0.0",
+              "unit": "unitless",
+              "name": "deactivated_sensor_label",
+              "index": { "name": "sensor_index", "value": 1 },
+              "elementIndex": "1",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 1,
+              "group": "diagnostics"
+            },
+            {
+              "elementID": "1.2.x.0.0.0.0",
+              "unit": "unitless",
+              "name": "deactivated_sensor_label",
+              "index": { "name": "sensor_index", "value": 2 },
+              "elementIndex": "2",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 2,
+              "group": "diagnostics"
+            },
+            {
+              "elementID": "1.2.x.0.0.0.0",
+              "unit": "unitless",
+              "name": "deactivated_sensor_label",
+              "index": { "name": "sensor_index", "value": 3 },
+              "elementIndex": "3",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 3,
+              "group": "diagnostics"
+            },
+            {
+              "elementID": "1.2.x.0.0.0.0",
+              "unit": "unitless",
+              "name": "deactivated_sensor_label",
+              "index": { "name": "sensor_index", "value": 4 },
+              "elementIndex": "4",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 4,
+              "group": "diagnostics"
+            },
+            {
+              "elementID": "1.2.x.0.0.0.0",
+              "unit": "unitless",
+              "name": "deactivated_sensor_label",
+              "index": { "name": "sensor_index", "value": 5 },
+              "elementIndex": "5",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 5,
+              "group": "diagnostics"
+            },
+            {
+              "elementID": "1.2.x.0.0.0.0",
+              "unit": "unitless",
+              "name": "deactivated_sensor_label",
+              "index": { "name": "sensor_index", "value": 6 },
+              "elementIndex": "6",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 6,
+              "group": "diagnostics"
+            }
+          ],
+          "1_2_8_7_1_1_0": [
+            {
+              "elementID": "1.2.8.7.1.1.0",
+              "unit": "V",
+              "valueNum": 13.38225,
+              "name": "max_batry_volt_pst1mt",
+              "elementIndex": "8",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "13.38225",
+              "group": "diagnostics"
+            }
+          ],
+          "1_7_147_0_0_0_0": [
+            {
+              "elementID": "1.7.147.0.0.0.0",
+              "unit": "m",
+              "valueNum": 238.7,
+              "name": "barometer_elevation",
+              "type": "metadata",
+              "value": "238.7",
+              "group": "identification"
+            }
+          ],
+          "1_7_117_0_0_0_0": [
+            {
+              "elementID": "1.7.117.0.0.0.0",
+              "unit": "unitless",
+              "name": "prov",
+              "type": "metadata",
+              "value": "MB",
+              "group": "identification"
+            }
+          ],
+          "identity": "/data/msc/observation/atmospheric/surface_weather/ca-1.2-ascii/decoded_enhanced-xml-2.0/201912010645/502s001/xwg/61/orig/data_1",
+          "1_12_210_2_60_7_0": [
+            {
+              "elementID": "1.12.210.2.60.7.0",
+              "unit": "hPa",
+              "dataType": "derived",
+              "valueNum": 2.93,
+              "name": "avg_vpr_pres_pst1hr",
+              "suppInfoDataFlags": ["4"],
+              "type": "element",
+              "value": "2.93",
+              "group": "pressure"
+            }
+          ],
+          "1_14_221_2_1_1_0": [
+            {
+              "elementID": "1.14.221.2.1.1.0",
+              "unit": "W/m²",
+              "dataType": "derived",
+              "name": "avg_globl_solr_radn_pst1mt",
+              "suppInfoDataFlags": ["4"],
+              "type": "element",
+              "value": "MSNG",
+              "group": "radiation"
+            }
+          ],
+          "1_7_577_0_0_0_0": [
+            {
+              "elementID": "1.7.577.0.0.0.0",
+              "unit": "m",
+              "valueNum": 238.7,
+              "name": "site_elevation",
+              "type": "metadata",
+              "value": "238.7",
+              "group": "identification"
+            }
+          ],
+          "1_7_73_0_0_0_0": [
+            {
+              "elementID": "1.7.73.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 61677,
+              "name": "logr_prg_sig",
+              "type": "metadata",
+              "value": "61677",
+              "group": "identification"
+            }
+          ],
+          "1_11_171_1_60_7_0": [
+            {
+              "elementID": "1.11.171.1.60.7.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "pcpn_amt_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_11_173_2_20_3_0": [
+            {
+              "elementID": "1.11.173.2.20.3.0",
+              "unit": "mm",
+              "valueNum": 223.8,
+              "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts_15mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "223.8",
+              "group": "precipitation"
+            }
+          ],
+          "1_24_319_2_1_1_0": [
+            {
+              "elementID": "1.24.319.2.1.1.0",
+              "unit": "m/s",
+              "valueNum": 3.036466,
+              "name": "avg_wnd_spd_pcpn_gag_pst1mt",
+              "elementIndex": "27",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "3.036466",
+              "group": "wind"
+            }
+          ],
+          "1_24_321_0_1_1_6": [
+            {
+              "elementID": "1.24.321.0.1.1.6",
+              "unit": "°",
+              "valueNum": 5.991444,
+              "name": "wind_direction_10minute_maxmean_wind_speed",
+              "elementIndex": "26",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "5.991444",
+              "group": "wind"
+            }
+          ],
+          "1_14_221_1_1_1_0": [
+            {
+              "elementID": "1.14.221.1.1.1.0",
+              "unit": "kJ/m²",
+              "valueNum": -0.183985,
+              "name": "tot_globl_solr_radn_pst1mt",
+              "elementIndex": "39",
+              "overallQASummary": -10,
+              "type": "element",
+              "value": "-0.183985",
+              "group": "radiation"
+            }
+          ],
+          "1_7_85_0_0_0_0": [
+            {
+              "elementID": "1.7.85.0.0.0.0",
+              "unit": "unitless",
+              "name": "clim_id",
+              "type": "metadata",
+              "value": "502S001",
+              "group": "identification"
+            }
+          ],
+          "1_7_97_0_0_0_0": [
+            {
+              "elementID": "1.7.97.0.0.0.0",
+              "unit": "°",
+              "valueNum": 49.915922,
+              "name": "lat",
+              "type": "metadata",
+              "value": "49.915922",
+              "group": "identification"
+            }
+          ],
+          "1_24_320_9_1_1_6": [
+            {
+              "elementID": "1.24.320.9.1.1.6",
+              "unit": "°",
+              "valueNum": 4.513731,
+              "name": "wind_direction",
+              "elementIndex": "19",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "4.513731",
+              "group": "wind"
+            }
+          ],
+          "1_5_66_8_1_1_0": [
+            {
+              "elementID": "1.5.66.8.1.1.0",
+              "unit": "%",
+              "valueNum": 86.74374,
+              "name": "min_rel_hum_pst1mt",
+              "elementIndex": "16",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "86.74374",
+              "group": "humidity"
+            }
+          ],
+          "1_4_65_0_0_0_0": [
+            {
+              "elementID": "1.4.65.0.0.0.0",
+              "unit": "unitless",
+              "dataType": "derived",
+              "name": "dms_message_summary",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "CAMSA XWG 010645Z AUTO 00605KT -7.9/-9.7 RMK SLP187",
+              "group": "generic"
+            }
+          ],
+          "1_24_324_12_10_4_0": [
+            {
+              "elementID": "1.24.324.12.10.4.0",
+              "unit": "°",
+              "dataType": "derived",
+              "valueNum": 0.4,
+              "name": "wind_direction_at_precipitation_gauge",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0.4",
+              "group": "wind"
+            }
+          ],
+          "1_2_8_8_60_7_0": [
+            {
+              "elementID": "1.2.8.8.60.7.0",
+              "unit": "V",
+              "dataType": "derived",
+              "valueNum": 13.35307,
+              "name": "min_batry_volt_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "13.35307",
+              "group": "diagnostics"
+            }
+          ],
+          "1_14_221_2_60_7_0": [
+            {
+              "elementID": "1.14.221.2.60.7.0",
+              "unit": "W/m²",
+              "dataType": "derived",
+              "name": "avg_globl_solr_radn_pst1hr",
+              "suppInfoDataFlags": ["4"],
+              "type": "element",
+              "value": "MSNG",
+              "group": "radiation"
+            }
+          ],
+          "1_19_264_0_0_0_0": [
+            {
+              "elementID": "1.19.264.0.0.0.0",
+              "unit": "°C",
+              "valueNum": 16.46,
+              "name": "logr_panl_temp",
+              "elementIndex": "10",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "16.46",
+              "group": "temperature"
+            }
+          ],
+          "1_24_314_2_2_2_6": [
+            {
+              "elementID": "1.24.314.2.2.2.6",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 4.56,
+              "name": "avg_wnd_spd_10m_pst2mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "4.56",
+              "group": "wind"
+            }
+          ],
+          "1_11_174_2_5_3_0": [
+            {
+              "elementID": "1.11.174.2.5.3.0",
+              "unit": "cm",
+              "dataType": "official",
+              "valueNum": 0.304688,
+              "name": "avg_snw_dpth_pst5mts",
+              "elementIndex": "37",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0.304688",
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.174.2.5.3.0",
+              "unit": "cm",
+              "valueNum": 0.304688,
+              "name": "avg_snw_dpth_pst5mts",
+              "index": { "name": "sensor_index", "value": 1 },
+              "elementIndex": "37.1",
+              "type": "element",
+              "value": "0.304688",
+              "indexValue": 1,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.174.2.5.3.0",
+              "unit": "cm",
+              "name": "avg_snw_dpth_pst5mts",
+              "index": { "name": "sensor_index", "value": 2 },
+              "elementIndex": "37.2",
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 2,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.174.2.5.3.0",
+              "unit": "cm",
+              "valueNum": 0.747299,
+              "name": "avg_snw_dpth_pst5mts",
+              "index": { "name": "sensor_index", "value": 3 },
+              "elementIndex": "37.3",
+              "type": "element",
+              "value": "0.747299",
+              "indexValue": 3,
+              "group": "precipitation"
+            }
+          ],
+          "1_37_717_0_0_0_0": [
+            {
+              "elementID": "1.37.717.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 39,
+              "name": "elements_quality_assessed_count",
+              "type": "metadata",
+              "value": "39",
+              "group": "qa_summary"
+            }
+          ],
+          "1_5_66_7_60_7_0": [
+            {
+              "elementID": "1.5.66.7.60.7.0",
+              "unit": "%",
+              "dataType": "derived",
+              "valueNum": 86.8003,
+              "name": "max_rel_hum_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "86.8003",
+              "group": "humidity"
+            }
+          ],
+          "1_7_392_0_0_0_0": [
+            {
+              "elementID": "1.7.392.0.0.0.0",
+              "unit": "unitless",
+              "name": "jcx_source",
+              "type": "metadata",
+              "value": "/data/msc/observation/atmospheric/surface_weather/ca-1.2-ascii/job-xml-2.0/201912010645/502s001/orig",
+              "group": "identification"
+            }
+          ],
+          "1_11_173_2_1_1_0": [
+            {
+              "elementID": "1.11.173.2.1.1.0",
+              "unit": "mm",
+              "dataType": "official",
+              "valueNum": 223.7808,
+              "name": "cumulative_precipitation_gauge_weight_unfiltered",
+              "elementIndex": "32",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "223.7808",
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.173.2.1.1.0",
+              "unit": "mm",
+              "valueNum": 223.7808,
+              "name": "cumulative_precipitation_gauge_weight_unfiltered",
+              "index": { "name": "sensor_index", "value": 1 },
+              "elementIndex": "32.1",
+              "type": "element",
+              "value": "223.7808",
+              "indexValue": 1,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.173.2.1.1.0",
+              "unit": "mm",
+              "valueNum": 231.8607,
+              "name": "cumulative_precipitation_gauge_weight_unfiltered",
+              "index": { "name": "sensor_index", "value": 2 },
+              "elementIndex": "32.2",
+              "type": "element",
+              "value": "231.8607",
+              "indexValue": 2,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.173.2.1.1.0",
+              "unit": "mm",
+              "valueNum": 228.9178,
+              "name": "cumulative_precipitation_gauge_weight_unfiltered",
+              "index": { "name": "sensor_index", "value": 3 },
+              "elementIndex": "32.3",
+              "type": "element",
+              "value": "228.9178",
+              "indexValue": 3,
+              "group": "precipitation"
+            }
+          ],
+          "1_11_171_1_10_4_0": [
+            {
+              "elementID": "1.11.171.1.10.4.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "pcpn_amt_pst10mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_7_81_0_0_0_0": [
+            {
+              "elementID": "1.7.81.0.0.0.0",
+              "unit": "unitless",
+              "name": "data_pvdr",
+              "type": "metadata",
+              "value": "MSC",
+              "group": "identification"
+            }
+          ],
+          "1_24_316_0_60_7_0": [
+            {
+              "elementID": "1.24.316.0.60.7.0",
+              "unit": "hhmm",
+              "dataType": "derived",
+              "name": "max_wnd_spd_pst1hr_tm",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0640",
+              "group": "wind"
+            }
+          ],
+          "1_24_314_7_1_1_6": [
+            {
+              "elementID": "1.24.314.7.1.1.6",
+              "unit": "m/s",
+              "valueNum": 5.1157,
+              "name": "max_wnd_spd_10m_pst1mt",
+              "elementIndex": "22",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "5.1157",
+              "group": "wind"
+            }
+          ],
+          "1_19_271_2_60_7_0": [
+            {
+              "elementID": "1.19.271.2.60.7.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -8.1,
+              "name": "wet_bulb_temperature",
+              "suppInfoDataFlags": ["4"],
+              "type": "element",
+              "value": "-8.1",
+              "group": "temperature"
+            }
+          ],
+          "1_12_207_2_1_1_0": [
+            {
+              "elementID": "1.12.207.2.1.1.0",
+              "unit": "hPa",
+              "dataType": "derived",
+              "valueNum": 1018.7,
+              "name": "mslp",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "1018.7",
+              "group": "pressure"
+            }
+          ],
+          "1_7_91_0_0_0_0": [
+            {
+              "elementID": "1.7.91.0.0.0.0",
+              "unit": "code",
+              "codeSrc": "std_code_src",
+              "codeType": "content_indicator",
+              "name": "content_indicator",
+              "type": "metadata",
+              "value": "data",
+              "group": "identification"
+            }
+          ],
+          "1_24_319_2_10_4_0": [
+            {
+              "elementID": "1.24.319.2.10.4.0",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 3.576,
+              "name": "avg_wnd_spd_pcpn_gag_pst10mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "3.576",
+              "group": "wind"
+            }
+          ],
+          "1_7_89_0_0_0_0": [
+            {
+              "elementID": "1.7.89.0.0.0.0",
+              "unit": "unitless",
+              "name": "hly_prdct_flg",
+              "type": "metadata",
+              "value": "N",
+              "group": "identification"
+            }
+          ],
+          "1_24_328_2_1_1_6": [
+            {
+              "elementID": "1.24.328.2.1.1.6",
+              "unit": "°",
+              "valueNum": 0.996761,
+              "name": "wind_direction_north_vector",
+              "elementIndex": "21",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0.996761",
+              "group": "wind"
+            }
+          ],
+          "1_7_574_0_0_0_0": [
+            {
+              "elementID": "1.7.574.0.0.0.0",
+              "unit": "unitless",
+              "name": "minutely_product_flag",
+              "type": "metadata",
+              "value": "N",
+              "group": "identification"
+            }
+          ],
+          "1_24_330_2_1_1_0": [
+            {
+              "elementID": "1.24.330.2.1.1.0",
+              "unit": "°",
+              "valueNum": 0.989246,
+              "name": "wind_direction_north_vector_at_precipitation_gauge",
+              "elementIndex": "30",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0.989246",
+              "group": "wind"
+            }
+          ],
+          "1_24_318_7_60_7_6": [
+            {
+              "elementID": "1.24.318.7.60.7.6",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 5.2,
+              "name": "max_10mt_avg_wnd_spd_10m_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "5.2",
+              "group": "wind"
+            }
+          ],
+          "1_11_171_1_30_5_0": [
+            {
+              "elementID": "1.11.171.1.30.5.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "pcpn_amt_pst15mts_15mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_24_316_0_1_1_0": [
+            {
+              "elementID": "1.24.316.0.1.1.0",
+              "unit": "hhmmss",
+              "name": "wind_speed_maximum_time",
+              "elementIndex": "23",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "064445",
+              "group": "wind"
+            }
+          ],
+          "1_24_324_12_1_1_0": [
+            {
+              "elementID": "1.24.324.12.1.1.0",
+              "unit": "°",
+              "valueNum": 0.254934,
+              "name": "wind_direction_at_precipitation_gauge",
+              "elementIndex": "28",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0.254934",
+              "group": "wind"
+            }
+          ],
+          "1_24_321_0_60_7_6": [
+            {
+              "elementID": "1.24.321.0.60.7.6",
+              "unit": "°",
+              "dataType": "derived",
+              "valueNum": 7.1,
+              "name": "avg_10mt_wnd_dir_10m_pst1hr_max_avg_10mt_wnd_spd",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "7.1",
+              "group": "wind"
+            }
+          ],
+          "jsonVersion": 2,
+          "1_11_173_2_50_3_0": [
+            {
+              "elementID": "1.11.173.2.50.3.0",
+              "unit": "mm",
+              "valueNum": 223.8,
+              "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts_45mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "223.8",
+              "group": "precipitation"
+            }
+          ],
+          "1_24_319_2_15_5_0": [
+            {
+              "elementID": "1.24.319.2.15.5.0",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 3.589,
+              "name": "avg_wnd_spd_pcpn_gag_pst15mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "3.589",
+              "group": "wind"
+            }
+          ],
+          "1_2_11_2_60_7_0": [
+            {
+              "elementID": "1.2.11.2.60.7.0",
+              "unit": "%",
+              "dataType": "derived",
+              "valueNum": 100,
+              "name": "data_avail_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "100.0",
+              "group": "diagnostics"
+            }
+          ],
+          "1_24_320_12_10_4_6": [
+            {
+              "elementID": "1.24.320.12.10.4.6",
+              "unit": "°",
+              "dataType": "derived",
+              "valueNum": 5.8,
+              "name": "avg_wnd_dir_10m_pst10mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "5.8",
+              "group": "wind"
+            }
+          ],
+          "1_37_712_0_0_0_0": [
+            {
+              "elementID": "1.37.712.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 0,
+              "name": "erroneous_count",
+              "type": "metadata",
+              "value": "0",
+              "group": "qa_summary"
+            }
+          ],
+          "1_24_320_12_2_2_6": [
+            {
+              "elementID": "1.24.320.12.2.2.6",
+              "unit": "°",
+              "dataType": "derived",
+              "valueNum": 3.1,
+              "name": "avg_wnd_dir_10m_pst2mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "3.1",
+              "group": "wind"
+            }
+          ],
+          "1_7_578_0_0_0_0": [
+            {
+              "elementID": "1.7.578.0.0.0.0",
+              "unit": "m",
+              "valueNum": 238.78664244458614,
+              "name": "geopotential_site_elevation",
+              "type": "metadata",
+              "value": "238.78664244458614",
+              "group": "identification"
+            }
+          ],
+          "1_7_82_0_0_0_0": [
+            {
+              "elementID": "1.7.82.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 71849,
+              "name": "wmo_synop_id",
+              "type": "metadata",
+              "value": "71849",
+              "group": "identification"
+            }
+          ],
+          "author": { "build": "build.22", "name": "MSC-DMS-Enhanced-Generic", "version": "2.8" },
+          "1_7_393_0_0_0_0": [
+            {
+              "elementID": "1.7.393.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": -0.002646,
+              "name": "plat_coeff_a",
+              "type": "metadata",
+              "value": "-0.002646",
+              "group": "identification"
+            }
+          ],
+          "1_19_265_0_66_0_0": [
+            {
+              "elementID": "1.19.265.0.66.0.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -1.713915,
+              "name": "air_temp_12hrs_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "-1.713915",
+              "group": "temperature"
+            }
+          ],
+          "primaryID": "502s001",
+          "1_14_221_1_60_7_0": [
+            {
+              "elementID": "1.14.221.1.60.7.0",
+              "unit": "kJ/m²",
+              "dataType": "derived",
+              "name": "tot_globl_solr_radn_pst1hr",
+              "suppInfoDataFlags": ["4"],
+              "type": "element",
+              "value": "MSNG",
+              "group": "radiation"
+            },
+            {
+              "elementID": "1.14.221.1.60.7.0",
+              "unit": "MJ/m²",
+              "dataType": "derived",
+              "name": "tot_globl_solr_radn_pst1hr",
+              "suppInfoDataFlags": ["4"],
+              "type": "element",
+              "value": "MSNG",
+              "group": "radiation"
+            }
+          ],
+          "1_7_98_0_0_0_0": [
+            {
+              "elementID": "1.7.98.0.0.0.0",
+              "unit": "°",
+              "valueNum": -97.2491972,
+              "name": "long",
+              "type": "metadata",
+              "value": "-97.2491972",
+              "group": "identification"
+            }
+          ],
+          "1_24_314_2_10_4_6": [
+            {
+              "elementID": "1.24.314.2.10.4.6",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 5.093,
+              "name": "avg_wnd_spd_10m_pst10mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "5.093",
+              "group": "wind"
+            }
+          ],
+          "1_24_320_12_60_7_6": [
+            {
+              "elementID": "1.24.320.12.60.7.6",
+              "unit": "°",
+              "dataType": "derived",
+              "valueNum": 9.7,
+              "name": "avg_wnd_dir_10m_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "9.7",
+              "group": "wind"
+            }
+          ],
+          "1_7_94_0_0_0_0": [
+            {
+              "elementID": "1.7.94.0.0.0.0",
+              "unit": "unitless",
+              "name": "cs_prdct_flg",
+              "type": "metadata",
+              "value": "N",
+              "group": "identification"
+            }
+          ],
+          "1_11_172_2_50_3_0": [
+            {
+              "elementID": "1.11.172.2.50.3.0",
+              "unit": "mm",
+              "valueNum": 223.7,
+              "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts_45mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "223.7",
+              "group": "precipitation"
+            }
+          ],
+          "1_37_716_0_0_0_0": [
+            {
+              "elementID": "1.37.716.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 0,
+              "name": "doubtful_count",
+              "type": "metadata",
+              "value": "0",
+              "group": "qa_summary"
+            }
+          ],
+          "1_11_175_2_5_3_0": [
+            {
+              "elementID": "1.11.175.2.5.3.0",
+              "unit": "mm",
+              "dataType": "official",
+              "valueNum": 223.8494,
+              "name": "precipitation_gauge_reference_value",
+              "elementIndex": "35",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "223.8494",
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.175.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 223.8494,
+              "name": "precipitation_gauge_reference_value",
+              "index": { "name": "sensor_index", "value": 1 },
+              "elementIndex": "35.1",
+              "type": "element",
+              "value": "223.8494",
+              "indexValue": 1,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.175.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 231.809,
+              "name": "precipitation_gauge_reference_value",
+              "index": { "name": "sensor_index", "value": 2 },
+              "elementIndex": "35.2",
+              "type": "element",
+              "value": "231.809",
+              "indexValue": 2,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.175.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 228.915,
+              "name": "precipitation_gauge_reference_value",
+              "index": { "name": "sensor_index", "value": 3 },
+              "elementIndex": "35.3",
+              "type": "element",
+              "value": "228.915",
+              "indexValue": 3,
+              "group": "precipitation"
+            }
+          ],
+          "1_7_573_0_0_0_0": [
+            {
+              "elementID": "1.7.573.0.0.0.0",
+              "unit": "hPa",
+              "valueNum": 0,
+              "name": "barometer_pressure_offset",
+              "type": "metadata",
+              "value": "0.0",
+              "group": "identification"
+            }
+          ],
+          "1_7_79_0_0_0_0": [
+            {
+              "elementID": "1.7.79.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 61,
+              "name": "snsr_tbl_nbr",
+              "type": "metadata",
+              "value": "61",
+              "group": "identification"
+            }
+          ],
+          "1_12_206_2_1_1_0": [
+            {
+              "elementID": "1.12.206.2.1.1.0",
+              "unit": "hPa",
+              "valueNum": 988.6646,
+              "name": "stn_pres",
+              "elementIndex": "31",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "988.6646",
+              "group": "pressure"
+            }
+          ],
+          "1_11_174_2_35_3_0": [
+            {
+              "elementID": "1.11.174.2.35.3.0",
+              "unit": "cm",
+              "dataType": "derived",
+              "valueNum": 0.3,
+              "name": "avg_snw_dpth_pst5mts_30mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0.3",
+              "group": "precipitation"
+            }
+          ],
+          "1_37_711_0_0_0_0": [
+            {
+              "elementID": "1.37.711.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 0,
+              "name": "missing_count",
+              "type": "metadata",
+              "value": "0",
+              "group": "qa_summary"
+            }
+          ],
+          "1_11_174_2_1_1_0": [
+            {
+              "elementID": "1.11.174.2.1.1.0",
+              "unit": "cm",
+              "dataType": "official",
+              "valueNum": 0.303192,
+              "name": "snw_dpth",
+              "elementIndex": "36",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0.303192",
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.174.2.1.1.0",
+              "unit": "cm",
+              "valueNum": 0.303192,
+              "name": "snw_dpth",
+              "index": { "name": "sensor_index", "value": 1 },
+              "elementIndex": "36.1",
+              "type": "element",
+              "value": "0.303192",
+              "indexValue": 1,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.174.2.1.1.0",
+              "unit": "cm",
+              "name": "snw_dpth",
+              "index": { "name": "sensor_index", "value": 2 },
+              "elementIndex": "36.2",
+              "type": "element",
+              "value": "MSNG",
+              "indexValue": 2,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.174.2.1.1.0",
+              "unit": "cm",
+              "valueNum": 0.72551,
+              "name": "snw_dpth",
+              "index": { "name": "sensor_index", "value": 3 },
+              "elementIndex": "36.3",
+              "type": "element",
+              "value": "0.72551",
+              "indexValue": 3,
+              "group": "precipitation"
+            }
+          ],
+          "1_7_92_0_0_0_0": [
+            {
+              "elementID": "1.7.92.0.0.0.0",
+              "unit": "min",
+              "valueNum": 1,
+              "name": "reporting_frequency",
+              "type": "metadata",
+              "value": "1",
+              "group": "identification"
+            }
+          ],
+          "1_24_329_2_1_1_0": [
+            {
+              "elementID": "1.24.329.2.1.1.0",
+              "unit": "°",
+              "valueNum": 0.004402,
+              "name": "wind_direction_east_vector_at_precipitation_gauge",
+              "elementIndex": "29",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0.004402",
+              "group": "wind"
+            }
+          ],
+          "1_19_265_7_1_1_0": [
+            {
+              "elementID": "1.19.265.7.1.1.0",
+              "unit": "°C",
+              "valueNum": -7.840542,
+              "name": "air_temperature",
+              "elementIndex": "12",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "-7.840542",
+              "group": "temperature"
+            }
+          ],
+          "1_24_314_2_1_1_6": [
+            {
+              "elementID": "1.24.314.2.1.1.6",
+              "unit": "m/s",
+              "valueNum": 4.687766,
+              "name": "avg_wnd_spd_10m_pst1mt",
+              "elementIndex": "17",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "4.687766",
+              "group": "wind"
+            }
+          ],
+          "rawMessage": {
+            "header": "CACN50 CWAO 010645",
+            "message": "XWG 61,2019,335,645,1849,16.46,100,13.38225,13.37761,-7.918955,6998,6998,-7.840542,6998,6998,-7.918955,6998,6998,86.74374,86.8003,86.74374,4.687766,0.9539672,4.513731,0.01659747,0.9967608,5.1157,64445,3.227072,5.10394,5.991444,3.036466,0.2549341,0.00440162,0.9892462,988.6646,223.7808,231.8607,228.9178,223.7905,231.8763,228.9512,223.7376,232.0103,228.9447,223.8494,231.809,228.915,0.3031921,6997,0.7255097,0.3046875,6997,0.7472992,0,-0.1839853,61677"
+          },
+          "1_24_314_7_10_4_6": [
+            {
+              "elementID": "1.24.314.7.10.4.6",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 6.468,
+              "name": "max_wnd_spd_10m_pst10mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "6.468",
+              "group": "wind"
+            }
+          ],
+          "1_7_543_0_0_0_0": [
+            {
+              "elementID": "1.7.543.0.0.0.0",
+              "unit": "m",
+              "valueNum": 238.78664244458614,
+              "name": "geopotential_barometer_elevation",
+              "type": "metadata",
+              "value": "238.78664244458614",
+              "group": "identification"
+            }
+          ],
+          "1_37_715_0_0_0_0": [
+            {
+              "elementID": "1.37.715.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 1,
+              "name": "suppressed_count",
+              "type": "metadata",
+              "value": "1",
+              "group": "qa_summary"
+            }
+          ],
+          "1_7_408_0_0_0_0": [
+            {
+              "elementID": "1.7.408.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 0,
+              "name": "ver",
+              "type": "metadata",
+              "value": "0",
+              "group": "identification"
+            }
+          ],
+          "1_7_575_0_0_0_0": [
+            {
+              "elementID": "1.7.575.0.0.0.0",
+              "unit": "unitless",
+              "name": "sensor_table_status",
+              "type": "metadata",
+              "value": "Active",
+              "group": "identification"
+            }
+          ],
+          "1_12_210_2_1_1_0": [
+            {
+              "elementID": "1.12.210.2.1.1.0",
+              "unit": "hPa",
+              "dataType": "derived",
+              "valueNum": 2.933,
+              "name": "vpr_pres",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "2.933",
+              "group": "pressure"
+            }
+          ],
+          "1_11_171_1_60_5_0": [
+            {
+              "elementID": "1.11.171.1.60.5.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "pcpn_amt_pst15mts_45mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_24_319_2_45_5_0": [
+            {
+              "elementID": "1.24.319.2.45.5.0",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 3.229,
+              "name": "avg_wnd_spd_pcpn_gag_pst15mts_30mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "3.229",
+              "group": "wind"
+            }
+          ],
+          "1_7_86_0_0_0_0": [
+            {
+              "elementID": "1.7.86.0.0.0.0",
+              "unit": "unitless",
+              "name": "msc_id",
+              "type": "metadata",
+              "value": "502S001",
+              "group": "identification"
+            }
+          ],
+          "parentIdentity": "/data/msc/observation/atmospheric/surface_weather/ca-1.2-ascii/decoded_qa-xml-2.0/201912010645/502s001/xwg/61/orig/data_1/level_1",
+          "1_24_323_0_1_1_6": [
+            {
+              "elementID": "1.24.323.0.1.1.6",
+              "unit": "°",
+              "valueNum": 3.227072,
+              "name": "wnd_dir_10m_pst1mt_max_spd",
+              "elementIndex": "24",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "3.227072",
+              "group": "wind"
+            }
+          ],
+          "1_24_323_0_10_4_6": [
+            {
+              "elementID": "1.24.323.0.10.4.6",
+              "unit": "°",
+              "dataType": "derived",
+              "valueNum": 4.941,
+              "name": "wnd_dir_10m_pst10mts_max_spd",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "4.941",
+              "group": "wind"
+            }
+          ],
+          "1_7_83_0_0_0_0": [
+            {
+              "elementID": "1.7.83.0.0.0.0",
+              "unit": "unitless",
+              "name": "stn_nam",
+              "type": "metadata",
+              "value": "WINNIPEG",
+              "group": "identification"
+            }
+          ],
+          "1_24_314_7_60_7_6": [
+            {
+              "elementID": "1.24.314.7.60.7.6",
+              "unit": "m/s",
+              "dataType": "derived",
+              "valueNum": 6.468,
+              "name": "max_wnd_spd_10m_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "6.468",
+              "group": "wind"
+            }
+          ],
+          "1_11_174_2_20_3_0": [
+            {
+              "elementID": "1.11.174.2.20.3.0",
+              "unit": "cm",
+              "dataType": "derived",
+              "valueNum": 0.3,
+              "name": "avg_snw_dpth_pst5mts_15mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0.3",
+              "group": "precipitation"
+            }
+          ],
+          "1_19_267_2_60_7_0": [
+            {
+              "elementID": "1.19.267.2.60.7.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -9.7,
+              "name": "avg_dwpt_temp_pst1hr",
+              "suppInfoDataFlags": ["4"],
+              "type": "element",
+              "value": "-9.7",
+              "group": "temperature"
+            }
+          ],
+          "1_24_320_12_1_1_6": [
+            {
+              "elementID": "1.24.320.12.1.1.6",
+              "unit": "°",
+              "valueNum": 0.953967,
+              "name": "avg_wnd_dir_10m_pst1mt",
+              "elementIndex": "18",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "0.953967",
+              "group": "wind"
+            }
+          ],
+          "1_7_394_0_0_0_0": [
+            {
+              "elementID": "1.7.394.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": -0.454465,
+              "name": "plat_coeff_b",
+              "type": "metadata",
+              "value": "-0.454465",
+              "group": "identification"
+            }
+          ],
+          "1_11_177_0_0_0_0": [
+            {
+              "elementID": "1.11.177.0.0.0.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "pcpn_amt_snc_top_of_hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_19_267_2_1_1_0": [
+            {
+              "elementID": "1.19.267.2.1.1.0",
+              "unit": "°C",
+              "dataType": "derived",
+              "valueNum": -9.7,
+              "name": "dwpt_temp",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "-9.7",
+              "group": "temperature"
+            }
+          ],
+          "1_11_171_1_45_5_0": [
+            {
+              "elementID": "1.11.171.1.45.5.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "pcpn_amt_pst15mts_30mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_24_323_0_60_7_6": [
+            {
+              "elementID": "1.24.323.0.60.7.6",
+              "unit": "°",
+              "dataType": "derived",
+              "valueNum": 4.941,
+              "name": "wnd_dir_10m_pst1hr_max_spd",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "4.941",
+              "group": "wind"
+            }
+          ],
+          "1_24_318_7_1_1_6": [
+            {
+              "elementID": "1.24.318.7.1.1.6",
+              "unit": "m/s",
+              "valueNum": 5.10394,
+              "name": "wind_speed_10minute_mean",
+              "elementIndex": "25",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "5.10394",
+              "group": "wind"
+            }
+          ],
+          "1_11_171_1_15_5_0": [
+            {
+              "elementID": "1.11.171.1.15.5.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "pcpn_amt_pst15mts",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_11_172_2_5_3_0": [
+            {
+              "elementID": "1.11.172.2.5.3.0",
+              "unit": "mm",
+              "dataType": "official",
+              "valueNum": 223.7376,
+              "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts",
+              "elementIndex": "34",
+              "overallQASummary": 100,
+              "type": "element",
+              "value": "223.7376",
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.172.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 223.7376,
+              "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts",
+              "index": { "name": "sensor_index", "value": 1 },
+              "elementIndex": "34.1",
+              "type": "element",
+              "value": "223.7376",
+              "indexValue": 1,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.172.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 232.0103,
+              "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts",
+              "index": { "name": "sensor_index", "value": 2 },
+              "elementIndex": "34.2",
+              "type": "element",
+              "value": "232.0103",
+              "indexValue": 2,
+              "group": "precipitation"
+            },
+            {
+              "elementID": "1.11.172.2.5.3.0",
+              "unit": "mm",
+              "valueNum": 228.9447,
+              "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts",
+              "index": { "name": "sensor_index", "value": 3 },
+              "elementIndex": "34.3",
+              "type": "element",
+              "value": "228.9447",
+              "indexValue": 3,
+              "group": "precipitation"
+            }
+          ],
+          "1_11_174_2_50_3_0": [
+            {
+              "elementID": "1.11.174.2.50.3.0",
+              "unit": "cm",
+              "dataType": "derived",
+              "valueNum": 0.3,
+              "name": "avg_snw_dpth_pst5mts_45mts_ago",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0.3",
+              "group": "precipitation"
+            }
+          ],
+          "1_11_169_1_60_7_0": [
+            {
+              "elementID": "1.11.169.1.60.7.0",
+              "unit": "mm",
+              "dataType": "derived",
+              "valueNum": 0,
+              "name": "rnfl_amt_pst1hr",
+              "suppInfoDataFlags": ["1"],
+              "type": "element",
+              "value": "0",
+              "group": "precipitation"
+            }
+          ],
+          "1_7_78_0_0_0_0": [
+            {
+              "elementID": "1.7.78.0.0.0.0",
+              "unit": "datetime",
+              "name": "date_tm",
+              "type": "metadata",
+              "value": "2019-12-01T06:45:00.000Z",
+              "group": "identification"
+            }
+          ],
+          "location": { "coordinates": [-97.2491972, 49.915922, 238.7], "type": "point" },
+          "1_7_95_0_0_0_0": [
+            {
+              "elementID": "1.7.95.0.0.0.0",
+              "unit": "unitless",
+              "name": "sx_prdct_flg",
+              "type": "metadata",
+              "value": "N",
+              "group": "identification"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

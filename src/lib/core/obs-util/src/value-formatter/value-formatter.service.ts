@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DataElements, MetadataElements } from '../dms-observation.model';
+import { ObsElement } from '../dms-observation.model';
 import { convertDDToDMS } from '../obs-util.class';
 import { ValueFormats } from './value-formatter.model';
 
@@ -10,7 +10,7 @@ export class ValueFormatterService {
   constructor() {}
 
   // should be called after unit conversion
-  setFormattedValue(element: DataElements | MetadataElements, displayFormat: string) {
+  setFormattedValue(element: ObsElement, displayFormat: string) {
     element.displayFormat = displayFormat;
 
     const numericValue = Number(element.value);

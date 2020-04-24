@@ -2,15 +2,17 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import { ESOperator } from 'msc-dms-commons-angular/core/elastic-search';
+import { ESOperator, ESQueryElement } from 'msc-dms-commons-angular/core/elastic-search';
 
+import { ParameterName } from './enums/parameter-name.enum';
+import { ParameterType } from './enums/parameter-type.enum';
 import { SearchParameter } from './parameters/search-parameter';
-import { SearchQueryType } from './parameters/search-query-type';
+import { SearchCheckbox } from './parameters/search-checkbox';
 import { SearchDatetime } from './parameters/search-datetime';
 import { SearchHoursRange } from './parameters/search-hours-range';
 import { SearchTaxonomy } from './search-taxonomy';
 
-import { SearchModel, SearchElement, SearchableElement } from './model/search.model';
+import { SearchModel, SearchableElement } from './model/search.model';
 import { ShortcutModel } from './model/shortcut.model';
 
 import { SEARCH_BOX_CONFIG, SearchBoxConfig } from './search-box.config';
@@ -19,8 +21,6 @@ import { SearchURLService } from './search-url.service';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { Subject } from 'rxjs';
 import { subtractHours, addHours } from 'msc-dms-commons-angular/shared/util';
-import { ParameterName } from './enums/parameter-name.enum';
-import { ParameterType } from './enums/parameter-type.enum';
 
 @Injectable()
 export class SearchService {
@@ -84,10 +84,10 @@ export class SearchService {
     this.createShortcutButtons();
 
     this.hoursRangeParams = this.availableParams.filter(
-      p => p.getName() === ParameterName.HOURS_RANGE || p.getName() === ParameterName.HOURS_RANGE_DATETIME,
+      (p) => p.getName() === ParameterName.HOURS_RANGE || p.getName() === ParameterName.HOURS_RANGE_DATETIME,
     );
     this.dateRangeParams = this.availableParams.filter(
-      p => p.getName() === ParameterName.FROM || p.getName() === ParameterName.TO,
+      (p) => p.getName() === ParameterName.FROM || p.getName() === ParameterName.TO,
     );
     this.useDateAndHoursRange = !!this.hoursRangeParams.length && !!this.dateRangeParams.length;
     this.setSelectedRangeType('hoursRange');
@@ -132,8 +132,8 @@ export class SearchService {
 
     if (values != null) {
       values
-        .filter(val => val != null && val !== '')
-        .forEach(val => {
+        .filter((val) => val != null && val !== '')
+        .forEach((val) => {
           if (parameter.getName() === ParameterName.SIZE) {
             val = this.fixNumObs(val).toString();
           }
@@ -144,7 +144,7 @@ export class SearchService {
 
   /** Add and display parameter (by name) with value if it exists */
   addParameterByName(name: string, values?: any[]) {
-    const parameter = this.availableParams.find(p => p.getName() === name);
+    const parameter = this.availableParams.find((p) => p.getName() === name);
     if (parameter != null) {
       this.addSuggestedParameter(parameter, values);
     }
@@ -157,7 +157,7 @@ export class SearchService {
 
   /** Suggest parameters that are not already selected */
   updateSuggestedParameters() {
-    this.suggestedParams = this.availableParams.filter(p => !this.displayParams.includes(p));
+    this.suggestedParams = this.availableParams.filter((p) => !this.displayParams.includes(p));
   }
 
   removeDisplayParameter(displayParam: SearchParameter) {
@@ -170,7 +170,7 @@ export class SearchService {
   }
 
   removeAllDisplayParameters() {
-    this.displayParams.forEach(p => p.removeAllSelected());
+    this.displayParams.forEach((p) => p.removeAllSelected());
     this.displayParams = [];
     this.updateSuggestedParameters();
   }
@@ -191,23 +191,23 @@ export class SearchService {
 
   /** Gets the search model used for ES and updates any values outside of its limits (ex. size and hours range) */
   buildSearchModel(): SearchModel {
-    const elements: SearchElement[] = [];
+    const queryChunks = {
+      station: {
+        operator: ESOperator.Or,
+        elements: [],
+      },
+      province: {
+        operator: ESOperator.Or,
+        elements: [],
+      },
+    };
     let startDate: Date;
     let endDate: Date;
     let numObs: number = this.defaultNumObs;
-    let operator: ESOperator;
     let hoursRangeDate: Date;
 
-    const addToElements = (elementID, value) =>
-      elements.push(new SearchElement(elementID, 'metadataElements', 'value', value));
-
-    this.displayParams.forEach(p => {
-      const selected = p.getSelectedModels().map(model => model.value);
-      const addStationToElements = (station, elementID = null) => {
-        const adjusted = this.adjustWildcard(station);
-        const id = elementID || this.determineStationElementID(adjusted);
-        addToElements(id, adjusted);
-      };
+    this.displayParams.forEach((p) => {
+      const selected = p.getSelectedModels().map((model) => model.value);
       const updateValue = (value, index, newValue) => {
         if (newValue !== value) {
           p.setSelectedAt(index, newValue);
@@ -216,20 +216,30 @@ export class SearchService {
 
       switch (p.getName()) {
         case ParameterName.STATION_ID:
-          selected.forEach((value, index) => {
-            const stationID = value.replace(/\s+/g, '');
-            updateValue(value, index, stationID);
-            addStationToElements(stationID);
-          });
-          operator = ESOperator.And;
+          queryChunks.station.elements.push(
+            ...selected.map((value) => ({
+              elementID: this.determineStationElementID(value.replace(/\s+/g, '')),
+              value: value,
+              isCaseless: isNaN(value),
+            })),
+          );
           break;
         case ParameterName.STATION_NAME:
-          selected.forEach(value => addStationToElements(value, SearchableElement.STATION_NAME.id));
-          operator = ESOperator.And;
+          queryChunks.station.elements.push(
+            ...selected.map((value) => ({
+              elementID: SearchableElement.STATION_NAME.id,
+              value: value,
+              isCaseless: isNaN(value),
+            })),
+          );
           break;
         case ParameterName.PROVINCE:
-          selected.forEach(s => addToElements(SearchableElement.PROVINCE.id, s));
-          operator = ESOperator.And;
+          queryChunks.province.elements.push(
+            ...selected.map((value) => ({
+              elementID: SearchableElement.PROVINCE.id,
+              value: value,
+            })),
+          );
           break;
         case ParameterName.SIZE:
           selected.forEach((s, index) => {
@@ -250,7 +260,9 @@ export class SearchService {
     });
 
     if (this.selectedRangeType.value === 'hoursRange' && hoursRangeDate != null) {
-      const hoursRange = this.hoursRangeParams.find(p => p.getName() === ParameterName.HOURS_RANGE) as SearchHoursRange;
+      const hoursRange = this.hoursRangeParams.find(
+        (p) => p.getName() === ParameterName.HOURS_RANGE,
+      ) as SearchHoursRange;
       if (hoursRange != null) {
         startDate = subtractHours(hoursRangeDate, hoursRange.hoursBefore);
         endDate = addHours(hoursRangeDate, hoursRange.hoursAfter);
@@ -258,34 +270,33 @@ export class SearchService {
     }
     return {
       taxonomy: this.determineTaxonomies(),
-      elements: elements,
       from: startDate,
       to: endDate,
       size: numObs,
-      operator: operator,
+      query: Object.values(queryChunks).filter((chunk) => chunk.elements.length > 0),
       httpParams: new HttpParams({ fromObject: this.buildUrlParameters() }),
     };
   }
 
   findMissingRequiredParameters(): SearchParameter[] {
-    return this.availableParams.filter(p => p.isRequired()).filter(p => !this.displayParams.includes(p));
+    return this.availableParams.filter((p) => p.isRequired()).filter((p) => !this.displayParams.includes(p));
   }
 
   openForm() {
     if (this.readOnlyBar) {
       this.resetForm();
-      this.displayParams.forEach(p => p.populateFormValues());
+      this.displayParams.forEach((p) => p.populateFormValues());
       this.displayForm = true;
     }
   }
 
   resetForm() {
-    this.availableParams.forEach(p => p.removeAllFormValues());
+    this.availableParams.forEach((p) => p.removeAllFormValues());
   }
 
   submitSearchForm() {
     this.removeAllDisplayParameters();
-    this.availableParams.forEach(p => {
+    this.availableParams.forEach((p) => {
       p.applyFormValues();
       if (!p.isUnfilledForm()) {
         this.addSuggestedParameter(p);
@@ -306,39 +317,34 @@ export class SearchService {
     const stationType = SearchableElement.STATION_TYPE;
     const defaultID = stationType.MSC_ID.id;
 
-    const result = Object.keys(stationType).find(key => stationID.match(stationType[key].regex) != null);
+    const result = Object.keys(stationType).find((key) => stationID.match(stationType[key].regex) != null);
 
     return result != null ? stationType[result].id : defaultID;
   }
 
-  /** Ensures station id/name is formatted as `.*` if `*` is found */
-  private adjustWildcard(station: string) {
-    return station.replace(/[.]?[*]/g, '.*');
-  }
-
   /** Find added parameters but are not filled in */
   findEmptyDisplayParameters(): SearchParameter[] {
-    this.displayParams.forEach(p => p.removeInvalidValues());
-    return this.displayParams.filter(p => p.isUnfilled());
+    this.displayParams.forEach((p) => p.removeInvalidValues());
+    return this.displayParams.filter((p) => p.isUnfilled());
   }
 
   /** Determines if all the search parameters are empty */
   private isEmptySearch() {
-    return this.availableParams.every(param => param.isUnfilled());
+    return this.availableParams.every((param) => param.isUnfilled());
   }
 
   /** Checks for any missing parameters and displays a message */
   hasValidParameters(): boolean {
     if (this.useDateAndHoursRange) {
       const removeParams = this.selectedRangeType.value === 'dateRange' ? this.hoursRangeParams : this.dateRangeParams;
-      removeParams.forEach(p => this.removeDisplayParameter(p));
+      removeParams.forEach((p) => this.removeDisplayParameter(p));
     }
 
-    const emptyParams = this.findEmptyDisplayParameters().map(p => p.getDisplayName());
-    const missingParams = this.findMissingRequiredParameters().map(p => p.getDisplayName());
-    const queryParams = this.availableParams.filter(
-      param => param.getType() === ParameterType.SEARCH_QUERY_TYPE && !param.isUnfilled(),
-    ) as SearchQueryType[];
+    const emptyParams = this.findEmptyDisplayParameters().map((p) => p.getDisplayName());
+    const missingParams = this.findMissingRequiredParameters().map((p) => p.getDisplayName());
+    const checkboxes = this.availableParams.filter(
+      (param) => param.getType() === ParameterType.SEARCH_CHECKBOX && !param.isUnfilled(),
+    ) as SearchCheckbox[];
     let valid = true;
 
     this.messageService.clear();
@@ -351,13 +357,13 @@ export class SearchService {
         sticky: true,
       });
       valid = false;
-    } else if (queryParams.length > 0) {
-      for (let param of queryParams) {
-        if (!param.hasFilledRequirements()) {
+    } else if (checkboxes.length > 0) {
+      for (const checkbox of checkboxes) {
+        if (!checkbox.hasFilledRequirements()) {
           this.messageService.add({
             key: 'search-messages',
             summary: 'SEARCH_BAR.QUERY_MISSING',
-            data: param.requiredParams.map(p => p.getDisplayName()),
+            data: checkbox.requiredParams.map((box) => box.getDisplayName()),
             sticky: true,
           });
           valid = false;
@@ -384,27 +390,27 @@ export class SearchService {
   }
 
   private determineTaxonomies() {
-    const taxParameters = this.displayParams.filter(p => this.isTaxonomyParam(p) && p.getSelectedModels().length);
+    const taxParameters = this.displayParams.filter((p) => this.isTaxonomyParam(p) && p.getSelectedModels().length);
 
     if (!taxParameters.length) {
-      return this.taxonomies.map(current => current.taxonomy);
+      return this.taxonomies.map((current) => current.taxonomy);
     }
 
-    const matchingChoice = (choices, code) => choices.some(choice => choice.uri.toLowerCase() === code.toLowerCase());
+    const matchingChoice = (choices, code) => choices.some((choice) => choice.uri.toLowerCase() === code.toLowerCase());
 
-    const getAllSelected = name =>
+    const getAllSelected = (name) =>
       taxParameters
-        .filter(p => p.getName() === name)
-        .map(p => p.getSelectedModels())
+        .filter((p) => p.getName() === name)
+        .map((p) => p.getSelectedModels())
         .reduce((allSelected, selected) => allSelected.concat(selected), []);
 
     const organizations = getAllSelected(ParameterName.ORGANIZATION);
     const networks = getAllSelected(ParameterName.NETWORK);
 
     return this.taxonomies
-      .filter(tax => organizations.length === 0 || matchingChoice(organizations, tax['organizationCode']))
-      .filter(tax => networks.length === 0 || matchingChoice(networks, tax['networkCode']))
-      .map(current => current.taxonomy);
+      .filter((tax) => organizations.length === 0 || matchingChoice(organizations, tax['organizationCode']))
+      .filter((tax) => networks.length === 0 || matchingChoice(networks, tax['networkCode']))
+      .map((current) => current.taxonomy);
   }
 
   /** Parameters used to determine taxonomy */
@@ -416,17 +422,17 @@ export class SearchService {
   private addRequestParams(qParams) {
     const matchingName = (param: SearchParameter, name: string) => param.getName() === name;
     const allRequestParams = this.urlService.getAllRequestParams(qParams, this.availableParams, this.shortcuts);
-    const useHoursRange = allRequestParams.some(obj => matchingName(obj.param, ParameterName.HOURS_RANGE_DATETIME));
-    const paramsFilter = param =>
+    const useHoursRange = allRequestParams.some((obj) => matchingName(obj.param, ParameterName.HOURS_RANGE_DATETIME));
+    const paramsFilter = (param) =>
       useHoursRange
         ? !matchingName(param, ParameterName.FROM) && !matchingName(param, ParameterName.TO)
         : !matchingName(param, ParameterName.HOURS_RANGE) && !matchingName(param, ParameterName.HOURS_RANGE_DATETIME);
 
     allRequestParams
-      .filter(obj => paramsFilter(obj.param))
-      .forEach(obj => this.addSuggestedParameter(obj.param, obj.value));
+      .filter((obj) => paramsFilter(obj.param))
+      .forEach((obj) => this.addSuggestedParameter(obj.param, obj.value));
 
-    if (useHoursRange && this.displayParams.find(p => p.getName() === ParameterName.HOURS_RANGE) == null) {
+    if (useHoursRange && this.displayParams.find((p) => p.getName() === ParameterName.HOURS_RANGE) == null) {
       this.addParameterByName(ParameterName.HOURS_RANGE);
     }
 
@@ -455,7 +461,7 @@ export class SearchService {
         label: shortcut.label,
         command: () => {
           this.removeAllDisplayParameters();
-          shortcut.addParameters.forEach(p => this.addParameterByName(p.name, p.values));
+          shortcut.addParameters.forEach((p) => this.addParameterByName(p.name, p.values));
           this.submitSearch(true, shortcut);
         },
       });

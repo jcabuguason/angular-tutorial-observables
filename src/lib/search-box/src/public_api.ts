@@ -12,7 +12,7 @@ export * from './model/shortcut.model';
 export * from './model/choice.model';
 export * from './model/parameter-options.model';
 
-export * from './parameters/search-query-type';
+export * from './parameters/search-checkbox';
 export * from './parameters/search-datetime';
 export * from './parameters/search-hours-range';
 export * from './parameters/search-parameter';

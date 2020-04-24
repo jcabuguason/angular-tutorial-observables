@@ -1,38 +1,31 @@
 import * as obsUtil from './obs-util.class';
 
 describe('ObsUtil', () => {
-  const obsList = require('../../../data-chart/src/sample-data-1032731.json').hits.hits;
+  const obsList = require('../../../../assets/sample-data/502s001.json').hits.hits;
   const obs1 = obsList[0]._source;
   const obs2 = obsList[1]._source;
-  it('should find metadata', () => {
-    expect(obsUtil.findMetadataValue(obs1, obsUtil.PROVINCE_ELEMENT)).toBe('BC');
+  it('should find matching elements', () => {
+    expect(obsUtil.findFirstValue(obs1, obsUtil.PROVINCE_ELEMENT)).toBe('MB');
 
-    expect(obsUtil.findMetadataValue(obs1, 'nonexistant')).toBeUndefined();
+    expect(obsUtil.findFirstValue(obs1, 'nonexistant')).toBe('');
   });
 
   it('should find revision', () => {
-    expect(obsUtil.findMetadataValue(obs1, obsUtil.CORRECTION_ELEMENT)).toBe('orig');
-    expect(obsUtil.findMetadataValue(obs1, obsUtil.VERSION_ELEMENT)).toBe('0');
+    expect(obsUtil.findFirstValue(obs1, obsUtil.CORRECTION_ELEMENT)).toBe('orig');
+    expect(obsUtil.findFirstValue(obs1, obsUtil.VERSION_ELEMENT)).toBe('0');
     expect(obsUtil.findRevision(obs1)).toBe('orig');
 
-    const setMeta = (n, v) => (obs1.metadataElements.find(md => md.name === n).value = v);
-    setMeta('ver', 5);
+    const tweakValue = (id, v) => (obs1[obsUtil.formatElementToEsKey(id)][0].value = v);
+    tweakValue(obsUtil.VERSION_ELEMENT, 5);
     expect(obsUtil.findRevision(obs1)).toBe('orig_v5');
-    setMeta('cor', 'CCA');
+    tweakValue(obsUtil.CORRECTION_ELEMENT, 'CCA');
     expect(obsUtil.findRevision(obs1)).toBe('CCA_v5');
 
-    // obs2 only 'rev' instead of 'cor'
+    // obs2 was tweaked to use 'rev' instead of 'cor'+'ver'
     expect(obsUtil.findRevision(obs2)).toBe('orig_v2');
-
-    const revIndex = obs2.metadataElements.findIndex(md => md.name === 'rev');
-    const revObj = obs2.metadataElements.splice(revIndex, 1)[0];
-    expect(obsUtil.findRevision(obs2)).toBe('');
-    obs2.metadataElements.push(revObj);
   });
 
   it('should compare datetimes', () => {
-    obs1.obsDateTime = '2017-01-01T03:00:00.000Z';
-    obs2.obsDateTime = '2018-04-22T03:00:00.000Z';
     expect(obsUtil.compareObsTimeFromObs(obs1, obs2)).toBeLessThan(0);
   });
 

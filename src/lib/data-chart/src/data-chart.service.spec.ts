@@ -3,7 +3,12 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { UserConfigService } from 'msc-dms-commons-angular/core/metadata';
-import { DataElements, UnitCodeConversionService, updateNodeValue } from 'msc-dms-commons-angular/core/obs-util';
+import {
+  ObsElement,
+  UnitCodeConversionService,
+  updateNodeValue,
+  findFirstValue,
+} from 'msc-dms-commons-angular/core/obs-util';
 import { CombinedHttpLoader } from 'msc-dms-commons-angular/shared/language';
 import { DataChartService } from './data-chart.service';
 import { Element, Station, Chart, SeriesType, QualifierType } from './model/chart.model';
@@ -14,12 +19,12 @@ class MockConfigService {
   }
   getElementOfficialIndexTitle = (elementID: string) => 'Official';
   getDefaultTag = () => 'Layer';
-  getFormattedNodeName = elementID => `mock ${elementID}`;
-  buildFullNodeName = elementID => `mock ${elementID}`;
+  getFormattedNodeName = (elementID) => `mock ${elementID}`;
+  buildFullNodeName = (elementID) => `mock ${elementID}`;
 }
 
 class MockUnitService {
-  setPreferredUnits(element: DataElements, usePreferredUnits: boolean) {}
+  setPreferredUnits(element: ObsElement, usePreferredUnits: boolean) {}
 
   usePreferredUnits(): boolean {
     return false;
@@ -28,16 +33,13 @@ class MockUnitService {
 
 describe('DataChartService', () => {
   let service: DataChartService;
-  const hits = [
-    ...require('./sample-data-1037090.json').hits.hits.map(json => json._source),
-    ...require('./sample-data-1032731.json').hits.hits.map(json => json._source),
-    ...require('./sample-data-1021831.json').hits.hits.map(json => json._source),
-  ];
+
+  const hits = require('../../../assets/sample-data/502s001.json').hits.hits.map((h) => h._source);
   const defaultStation = new Station({
-    label: 'COMOX, 1021831, CYQQ',
-    value: '1021831',
+    label: 'WINNIPEG, 502S001',
+    value: '502S001',
   });
-  const defaultElement = new Element({ id: '1.12.206.0.0.0.0' });
+  const defaultElement = new Element({ id: '1.5.66.2.60.7.0' });
   const defaultChart = new Chart({
     elements: [defaultElement],
     stations: [defaultStation],
@@ -50,7 +52,7 @@ describe('DataChartService', () => {
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: httpClient =>
+            useFactory: (httpClient) =>
               new CombinedHttpLoader(httpClient, [{ prefix: '../../../assets/i18n/', suffix: '.json' }]),
             deps: [HttpClient],
           },
@@ -69,9 +71,9 @@ describe('DataChartService', () => {
 
   it('should create chart object', () => {
     const options = service.buildOptions(defaultChart, hits, {});
-    expect(options.title.text).toBe('COMOX, 1021831, CYQQ');
+    expect(options.title.text).toBe('WINNIPEG, 502S001');
     expect(options.xAxis['type']).toBe('datetime');
-    expect(options.series[0].data.length).toBe(7);
+    expect(options.series[0].data.length).toBe(3);
   });
 
   it('should build charts with a given element type', () => {
@@ -80,7 +82,7 @@ describe('DataChartService', () => {
         stations: [defaultStation],
         elements: [
           new Element({
-            id: '1.12.206.0.0.0.0',
+            id: '1.11.174.2.20.3.0',
             seriesType: SeriesType.AREA,
           }),
         ],
@@ -107,7 +109,7 @@ describe('DataChartService', () => {
       stations: [new Station({ label: 'TEST, 1, A', value: '1' }), new Station({ label: 'OTHER, 2, B', value: '2' })],
     });
     const options = service.buildOptions(multiStations, hits, {});
-    expect(options.title.text).toBe('mock 1.12.206.0.0.0.0');
+    expect(options.title.text).toBe('mock 1.5.66.2.60.7.0');
   });
 
   it('should make station the title with single station', () => {
@@ -117,18 +119,18 @@ describe('DataChartService', () => {
     });
     const defaultOptions = service.buildOptions(defaultChart, hits, {});
     const multiElementOptions = service.buildOptions(multiElementChart, hits, {});
-    expect(defaultOptions.title.text).toBe('COMOX, 1021831, CYQQ');
-    expect(multiElementOptions.title.text).toBe('COMOX, 1021831, CYQQ');
+    expect(defaultOptions.title.text).toBe('WINNIPEG, 502S001');
+    expect(multiElementOptions.title.text).toBe('WINNIPEG, 502S001');
   });
 
   it('should create a yAxis with the element as the title', () => {
     const options = service.buildOptions(defaultChart, hits, {});
-    expect(options.yAxis[0].title['text']).toBe('mock 1.12.206.0.0.0.0 (Pa)');
+    expect(options.yAxis[0].title['text']).toBe('mock 1.5.66.2.60.7.0 (%)');
   });
 
   it('should create two yAxis with two different elements of different values', () => {
     const multiElemDiffGroup = new Chart({
-      elements: [defaultElement, new Element({ id: '1.19.265.8.67.14.0' })],
+      elements: [defaultElement, new Element({ id: '1.19.267.2.60.7.0' })],
       stations: [defaultStation],
     });
     const options = service.buildOptions(multiElemDiffGroup, hits, {});
@@ -138,7 +140,7 @@ describe('DataChartService', () => {
 
   it('should create one yAxis with two different elements of the same value', () => {
     const multiElemSameGroupUnit = new Chart({
-      elements: [defaultElement, new Element({ id: '1.12.208.3.62.9.0' })],
+      elements: [defaultElement, new Element({ id: '1.2.11.1.1.1.0' })],
       stations: [defaultStation],
     });
     const options = service.buildOptions(multiElemSameGroupUnit, hits, {});
@@ -177,7 +179,7 @@ describe('DataChartService', () => {
         stations: [defaultStation],
         elements: [
           new Element({
-            id: '1.12.206.0.0.0.0',
+            id: '1.2.11.1.1.1.0',
             seriesType: SeriesType.BAR,
           }),
         ],
@@ -188,10 +190,14 @@ describe('DataChartService', () => {
         customOptions: { showQAColors: true },
       },
     );
+
     expect(options.series[0].data[0].color).toBeFalsy();
   });
 
+  // TODO: Needs flat-json sample report
   it('should create a longitudinal chart for hourly qualifiers', () => {
+    fail('Requires sample flat-json data for report data');
+
     const placeholderID = '8.7.98.0.0.0.0';
     const hourlyChart = new Chart({
       elements: [new Element({ id: placeholderID })],
@@ -204,17 +210,17 @@ describe('DataChartService', () => {
       ],
       qualifierType: QualifierType.HOURLY,
     });
-    const reportHits = [require('./sample-report-46131.json')];
+    const reportHits = []; // [require('./sample-report-46131.json')];
     const options = service.buildOptions(hourlyChart, reportHits, {});
 
-    const actualIDs = service.qualifierHourlyValues.map(nodeValue => updateNodeValue(placeholderID, nodeValue, 4));
-    const findMatchingElem = id => reportHits[0]['dataElements'].find(element => element.elementID === id);
+    const actualIDs = service.qualifierHourlyValues.map((nodeValue) => updateNodeValue(placeholderID, nodeValue, 4));
+    const hasMatchingElem = (id) => !!findFirstValue(reportHits[0], id);
 
     expect(reportHits.length).toBe(1);
-    expect(findMatchingElem(placeholderID)).toBeFalsy();
-    actualIDs.forEach(id => expect(findMatchingElem(id)).toBeTruthy());
+    expect(hasMatchingElem(placeholderID)).toBeFalsy();
+    actualIDs.forEach((id) => expect(hasMatchingElem(id)).toBeTruthy());
     expect(options.series.length).toBe(1);
-    // 14Z and 21Z elements are being reported, but with non-numeric values, so they're ignored.
-    expect(options.series[0].data.length).toBe(22);
+
+    expect(options.series[0].data.length).toBe(24);
   });
 });

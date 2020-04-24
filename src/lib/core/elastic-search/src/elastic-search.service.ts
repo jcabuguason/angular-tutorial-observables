@@ -1,19 +1,17 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-
-import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { formatDateToString, DateFormatOptions } from 'msc-dms-commons-angular/shared/util';
+import { formatElementToEsKey } from 'msc-dms-commons-angular/core/obs-util';
 
 import { ELASTIC_SEARCH_CONFIG, ElasticSearchConfig } from './elastic-search.config';
-import { BasicObservationsParams } from './model/basic-observations-params.model';
-import { UniqueStationsParams } from './model/unique-stations-params.model';
-import { ObservationsFromStationsParams } from './model/observations-from-stations-params.model';
-import { UniqueElementsParams } from './model/unique-elements-params.model';
-import { CommonESParams } from './model/common-es-params.model';
-import { ObservationsFromElementsParams } from './model/observations-from-elements-params.model';
+import { ESParams } from './model/es-params.model';
+import { ESQueryChunk } from './model/es-query-chunk.model';
+import { ESOperator } from './enum/es-operator.enum';
 import { URIComponentEncoder } from './uri-component-encoder';
-import { formatDateToString, DateFormatOptions } from 'msc-dms-commons-angular/shared/util';
 
+// List of available indicies availble at <server>:9200/_cat/indices
+// http://dw-dev1-host01.cmc.ec.gc.ca:9200/_cat/indices
 @Injectable()
 export class ElasticSearchService {
   private commonHeaders: HttpHeaders;
@@ -27,71 +25,25 @@ export class ElasticSearchService {
     this.commonHeaders.append('Accept-Encoding', 'gzip');
   }
 
-  getAllSearchableAliases() {
-    return this.http
-      .get<{ indexes: string[] }>(`${this.config.endpoint}/search/`)
-      .pipe(map(response => response.indexes));
-  }
-
-  getBasicObservations(version: string, index: string, parameters: BasicObservationsParams = {}): Observable<any> {
+  performSearch(version: string, index: string, parameters: ESParams = {}): Observable<any> {
     const params = this.getCommonParams(parameters);
     const options = { params, headers: this.commonHeaders };
-    return this.http.get<any>(`${this.config.endpoint}/search/${version}/${index}`, options);
+
+    return this.http.get<any>(`${this.config.endpoint}/search/${version}/${index}/templateSearch`, options);
   }
 
-  getUniqueStations(version: string, index: string, parameters: UniqueStationsParams = {}): Observable<any> {
-    const params = this.getCommonParams(parameters);
-    const options = { params, headers: this.commonHeaders };
-    return this.http.get<any>(`${this.config.endpoint}/search/${version}/${index}/stations`, options);
+  stringifyQuery(queryChunks: ESQueryChunk[]): string {
+    return queryChunks
+      .map(this.chunkToString)
+      .map((str) => this.wrapString(str, queryChunks.length > 1, '(', ')'))
+      .join(ESOperator.And);
   }
 
-  getObservationsFromStations(
-    version: string,
-    index: string,
-    stationList: string[],
-    parameters: ObservationsFromStationsParams = {},
-  ): Observable<any> {
-    const params = this.getCommonParams(parameters);
-    const stationListString = stationList.join(',');
-    const options = { params, headers: this.commonHeaders };
-    return this.http.get<any>(
-      `${this.config.endpoint}/search/${version}/${index}/stations/${stationListString}`,
-      options,
-    );
-  }
-
-  getUniqueElements(version: string, index: string, parameters: UniqueElementsParams = {}): Observable<any> {
-    const params = this.getCommonParams(parameters);
-    const options = { params, headers: this.commonHeaders };
-    return this.http.get<any>(`${this.config.endpoint}/search/${version}/${index}/elements`, options);
-  }
-
-  getObservationsFromElements(
-    version: string,
-    index: string,
-    elementList: string[],
-    parameters: ObservationsFromElementsParams = {},
-  ): Observable<any> {
-    let params = this.getCommonParams(parameters);
-    if (parameters.operator != null) {
-      params = params.set('operator', parameters.operator);
-    }
-    const elementListString = elementList.join(',');
-    const options = { params, headers: this.commonHeaders };
-    return this.http.get<any>(
-      `${this.config.endpoint}/search/${version}/${index}/elements/${elementListString}`,
-      options,
-    );
-  }
-
-  private getCommonParams(parameters: CommonESParams): HttpParams {
+  private getCommonParams(parameters: ESParams): HttpParams {
     let params = new HttpParams({ encoder: new URIComponentEncoder() });
     // format as YYYYMMDDHHmm
     const dateFormat: DateFormatOptions = { dateSeparator: '', timeSeparator: '', dateAndTimeSeparator: '' };
     // these if statements are needed to restrict which HttpParams get added or ignored even though it expects CommonESParams
-    if (parameters.type != null) {
-      params = params.set('type', parameters.type);
-    }
     if (parameters.size != null) {
       params = params.set('size', String(parameters.size));
     }
@@ -101,18 +53,37 @@ export class ElasticSearchService {
     if (parameters.to != null) {
       params = params.set('to', formatDateToString(parameters.to, dateFormat));
     }
-    if (parameters.datetimeType != null) {
-      params = params.set('datetimeType', parameters.datetimeType);
-    }
     if (parameters.sortFields != null) {
       params = params.set('sortFields', parameters.sortFields);
     }
-    if (parameters.startIndex != null) {
-      params = params.set('startIndex', parameters.startIndex);
-    }
-    if (parameters.queryType != null) {
-      params = params.set('queryType', parameters.queryType);
+    if (parameters.query != null && this.queryHasOptions(parameters.query)) {
+      params = params.set('query', this.stringifyQuery(parameters.query));
     }
     return params;
   }
+
+  private queryHasOptions(queryChunks: ESQueryChunk[]): boolean {
+    return queryChunks.length > 0 && queryChunks.every((chunk) => chunk.elements.length > 0);
+  }
+
+  private wrapString = (str: string, shouldWrap: boolean, left: string = '\\"', right: string = '\\"') =>
+    shouldWrap ? `${left}${str}${right}` : str;
+
+  private formatValue = (given: string, toLowerCase: boolean): string => {
+    const wrappedString = given.replace(/\s/g, '\\ ');
+    return toLowerCase ? wrappedString.toLowerCase() : wrappedString;
+  };
+
+  private chunkToString = (chunk: ESQueryChunk): string => {
+    return chunk.elements
+      .map(
+        (elem) =>
+          `${formatElementToEsKey(elem.elementID)}.value${elem.isCaseless ? '.lowercase' : ''}:${this.formatValue(
+            elem.value,
+            elem.isCaseless,
+          )}`,
+      )
+      .map((str) => this.wrapString(str, chunk.elements.length > 1, '(', ')'))
+      .join(chunk.operator);
+  };
 }
