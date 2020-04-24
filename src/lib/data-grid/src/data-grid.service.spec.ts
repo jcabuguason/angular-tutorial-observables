@@ -9,12 +9,7 @@ import { VUColumnConfiguration } from './column-configuration/vu-column-configur
 import { UserConfigService, ElementVisibility, MR_MAPPING_CONFIG } from 'msc-dms-commons-angular/core/metadata';
 import { MatDialog } from '@angular/material';
 import { StationInfoComponent } from './station-info/station-info.component';
-import {
-  UnitCodeConversionService,
-  DataElements,
-  MetadataElements,
-  ValueFormatterService,
-} from 'msc-dms-commons-angular/core/obs-util';
+import { UnitCodeConversionService, ObsElement, ValueFormatterService } from 'msc-dms-commons-angular/core/obs-util';
 
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CombinedHttpLoader } from 'msc-dms-commons-angular/shared/language';
@@ -22,7 +17,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 class MockUnitService {
-  setPreferredUnits(element: DataElements, usePreferredUnits: boolean) {}
+  setPreferredUnits(element: ObsElement, usePreferredUnits: boolean) {}
 
   usePreferredUnits(): boolean {
     return false;
@@ -30,14 +25,14 @@ class MockUnitService {
 }
 
 class MockValueFormatterService {
-  setFormattedValue(element: DataElements | MetadataElements) {}
+  setFormattedValue(element: ObsElement) {}
 }
 
 describe('DataGridService', () => {
   let service: DataGridService;
-  const hits = require('./sample-hits.json').map(row => row._source);
-  const noLoadElement = '1.12.210.0.0.0.0';
-  const hiddenElement = '1.13.215.0.0.0.0';
+  const hits = require('../../../assets/sample-data/502s001.json').hits.hits.map((row) => row._source);
+  const noLoadElement = '1.19.265.2.60.7.0';
+  const hiddenElement = '1.5.66.7.1.1.0';
   const blankElement = '1.x.0.0.0.0.0';
 
   class MockConfigService extends UserConfigService {
@@ -85,7 +80,7 @@ describe('DataGridService', () => {
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: httpClient =>
+            useFactory: (httpClient) =>
               new CombinedHttpLoader(httpClient, [{ prefix: '../../../assets/i18n/', suffix: '.json' }]),
             deps: [HttpClient],
           },
@@ -123,20 +118,20 @@ describe('DataGridService', () => {
 
     service.addRowData(hits[0]);
     expect(service.rowData.length).toBe(1);
-    expect(service.columnDefs.length).toBe(16);
+    expect(service.columnDefs.length).toBe(12);
     expect(service.columnDefs[service.columnDefs.length - 1].groupId).toBe('raw');
 
     const row = service.rowData[0];
-    expect(row['e_1_7_85_0_0_0_0'].value).toBe('1021270'); // Climate ID
-    expect(row['e_1_7_83_0_0_0_0'].value).toBe('Campbell River'); // Station Name
-    expect(row['e_1_24_340_0_10_4_6']).toBe('48');
+    expect(row['e_1_7_85_0_0_0_0'].value).toBe('502S001'); // Climate ID
+    expect(row['e_1_7_83_0_0_0_0'].value).toBe('WINNIPEG'); // Station Name
+    expect(row['e_1_24_320_12_1_1_6']).toBe('5.72993');
     expect(row['e_7_7_7_7_7_7_7']).toBeUndefined();
 
     expect(
       service.columnDefs
-        .filter(col => !(col.groupId === 'identity' || col.groupId === 'raw' || col.headerClass === 'meta'))
-        .map(col => Number(col.nodeNumber)),
-    ).toEqual([11, 19, 12, 5, 20, 17, 23, 6, 24, 13, 2]);
+        .filter((col) => !(col.groupId === 'identity' || col.groupId === 'raw' || col.headerClass === 'meta'))
+        .map((col) => Number(col.nodeNumber)),
+    ).toEqual([5, 2, 19, 11, 24, 12, 14, 4]);
   });
 
   it('should add a list of obs', () => {
@@ -147,8 +142,8 @@ describe('DataGridService', () => {
     expect(service.rowData.length).toBe(hits.length);
 
     const rows = service.rowData;
-    expect(rows[0]['obsDateTime']).toBe('2018-03-05T01:00:00Z');
-    expect(rows[1]['obsDateTime']).toBe('2018-03-05T02:00:00Z');
+    expect(rows[0]['obsDateTime']).toBe('2019-12-01T06:48:00.000Z');
+    expect(rows[1]['obsDateTime']).toBe('2019-12-01T07:01:00.000Z');
   });
 
   it('should clear the data', () => {
@@ -164,31 +159,28 @@ describe('DataGridService', () => {
     service.addRowData(hits[0]);
 
     const row = service.rowData[0];
-    expect(row['e_1_24_340_0_10_4_6_v']).toBe('48');
-    expect(row['e_1_24_340_0_10_4_6_u']).toBe('°');
+    expect(row['e_1_24_320_12_1_1_6_v']).toBe('5.72993');
+    expect(row['e_1_24_320_12_1_1_6_u']).toBe('°');
   });
 
   it('should avoid generating specific rows if configured', () => {
-    const someDisplayCols = ['1.11.171.1.62.9.0', '1.12.212.0.0.0.0'];
     service.addRowData(hits[0]);
 
     const row = service.rowData[0];
     const getKey = (eti: string) => row[`e_${eti.replace(/\./g, '_')}`];
-    expect(getKey(someDisplayCols[0])).toBe('MSNG');
-    expect(getKey(someDisplayCols[1])).toBe('100900.0');
-    expect(getKey(noLoadElement)).toBeUndefined();
-    expect(service.columnDefs.length).toBe(16);
+    expect(getKey(noLoadElement)).toBeUndefined(); // Avoided
+    expect(service.columnDefs.length).toBe(12);
   });
 
   it('should hide non-displayed rows if configured', () => {
     service.addRowData(hits[0]);
 
     // only for one-layer of children headers
-    const isHidden = eti =>
-      service.columnDefs.find(n => n.headerName === `node ${eti}`).children.find(n => n.elementID === eti).hide;
+    const isHidden = (eti) =>
+      service.columnDefs.find((n) => n.headerName === `node ${eti}`).children.find((n) => n.elementID === eti).hide;
 
     expect(isHidden(hiddenElement)).toBeTruthy();
-    expect(service.columnDefs.length).toBe(16);
+    expect(service.columnDefs.length).toBe(12);
   });
 
   it('allow blank columns', () => {
@@ -198,7 +190,7 @@ describe('DataGridService', () => {
     const row = service.rowData[0];
     const getKey = (eti: string) => row[`e_${eti.replace(/\./g, '_')}`];
     expect(getKey(blankElement)).toBeUndefined();
-    expect(service.columnDefs.length).toBe(17);
+    expect(service.columnDefs.length).toBe(13);
   });
 
   it('should open filtered station info', () => {

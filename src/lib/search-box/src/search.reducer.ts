@@ -9,7 +9,6 @@ export enum SearchActionType {
 
 export const initialState: SearchModel = {
   taxonomy: [],
-  elements: [],
   from: new Date(),
   to: new Date(),
   size: 300,

@@ -11,5 +11,5 @@ export enum ParameterName {
   HOURS_RANGE_DATETIME = 'hoursRangeDate',
   FROM = 'from',
   TO = 'to',
-  QUERY_TYPE = 'queryType',
+  CHECKBOX = 'checkbox',
 }

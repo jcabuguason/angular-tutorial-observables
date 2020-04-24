@@ -4,9 +4,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 
 @Component({
   selector: 'commons-df-renderer',
-  template: `
-    <span title="DataFlag" [ngClass]="{ 'faded df badge': dataFlag !== 'N/A' }">{{ dataFlag }}</span>
-  `,
+  template: ` <span title="DataFlag" [ngClass]="{ 'faded df badge': dataFlag !== 'N/A' }">{{ dataFlag }}</span> `,
   styleUrls: ['../general-renderer.component.css'],
 })
 export class DataFlagRendererComponent implements ICellRendererAngularComp {
@@ -15,11 +13,10 @@ export class DataFlagRendererComponent implements ICellRendererAngularComp {
   agInit(params: any): void {
     if (params.data[params.taxonomy] && params.data[params.taxonomy]['supplementaryInfo']) {
       console.log('agInit used for DataFlagRenderer, only the first DataFlag will populate!');
-      for (const element of params.data[params.taxonomy]['supplementaryInfo']) {
-        if (element.dataFlag) {
-          this.dataFlag = element.dataFlag;
-          break;
-        }
+
+      const flags = params.data[params.taxonomy]['suppInfoDataFlags'];
+      if (flags != null && flags.length > 0) {
+        this.dataFlag = flags[0];
       }
     }
   }

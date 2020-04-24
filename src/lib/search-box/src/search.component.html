@@ -239,7 +239,7 @@
     tabindex="0"
     (keyup.enter)="searchService.submitSearchForm()"
   >
-    <ng-container *ngIf="p.getType() === paramType.SEARCH_QUERY_TYPE">
+    <ng-container *ngIf="p.getType() === paramType.SEARCH_CHECKBOX">
       <!-- for checkbox, use the label property so it's displayed right next to the checkbox -->
       <div>
         <p-checkbox [(ngModel)]="p.formChecked" binary="true" label="{{ p.getDisplayName() | translate }}"></p-checkbox>

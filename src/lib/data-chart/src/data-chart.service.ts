@@ -11,11 +11,16 @@ import {
   ICAO_ID_ELEMENT,
   STATION_NAME_ELEMENT,
   TC_ID_ELEMENT,
+  DMSObs,
+  ObsElement,
   UnitCodeConversionService,
   compareObsTimeFromObs,
+  findAllElements,
+  findFirstValue,
   findObsIdentifier,
   formatQAValue,
   getIndexLabelTranslationKey,
+  grabIndexValue,
   latestFromArray,
   updateNodeValue,
 } from 'msc-dms-commons-angular/core/obs-util';
@@ -55,7 +60,7 @@ export class DataChartService {
       'NOVEMBER',
       'DECEMBER',
     ];
-    translate.onLangChange.subscribe(evt =>
+    translate.onLangChange.subscribe((evt) =>
       Highcharts.setOptions({
         lang: {
           contextButtonTitle: this.instantSingle('CHART_DEFAULTS', 'contextButtonTitle'),
@@ -69,7 +74,7 @@ export class DataChartService {
           resetZoomTitle: this.instantSingle('CHART_DEFAULTS', 'resetZoomTitle'),
           shortMonths: this.instantArray(
             'DATES',
-            months.map(month => `${month}_SHORT`),
+            months.map((month) => `${month}_SHORT`),
           ),
           months: this.instantArray('DATES', months),
           weekdays: this.instantArray('DATES', weekdays),
@@ -79,7 +84,7 @@ export class DataChartService {
   }
 
   // Assuming just basic chart for now
-  buildOptions(chartObj: Chart, observations, options: DataChartOptions) {
+  buildOptions(chartObj: Chart, observations: DMSObs[], options: DataChartOptions) {
     return Object.assign(
       {
         chart: {
@@ -137,7 +142,7 @@ export class DataChartService {
     }
   }
 
-  private createSeries(chartObj: Chart, observations, options: DataChartOptions) {
+  private createSeries(chartObj: Chart, observations: DMSObs[], options: DataChartOptions) {
     const series = [];
     const yTypes = [];
     const stations = chartObj.stations;
@@ -149,7 +154,9 @@ export class DataChartService {
       for (const station of stations) {
         const sensor = {};
         let stationName = '';
-        for (const obs of sortedObs.filter(ob => findObsIdentifier(ob, station.identifierID) === station.value)) {
+        for (const obs of sortedObs.filter(
+          (ob) => findObsIdentifier(ob, station.identifierID).toLowerCase() === station.value.toLowerCase(),
+        )) {
           const foundElems = this.grabElementsFromObs(obs, element.id, chartObj.qualifierType);
           this.buildSensor(
             foundElems,
@@ -162,7 +169,7 @@ export class DataChartService {
           );
           if (!isSingleStation && !stationName) {
             // Workaround for report-based pages. Re-use the label from their dropdown.
-            stationName = this.createStationLabel(obs.metadataElements) || station.label;
+            stationName = this.createStationLabel(obs) || station.label;
           }
         }
         const seriesType = element.seriesType || this.getSeriesType(element.id);
@@ -230,7 +237,7 @@ export class DataChartService {
   }
 
   private buildSensor(
-    foundElems,
+    foundElems: ObsElement[],
     sensor,
     obsDateTime,
     yTypes,
@@ -238,31 +245,29 @@ export class DataChartService {
     qualifierType: QualifierType,
     seriesType: SeriesType,
   ) {
-    for (const e of foundElems) {
-      const sensorType = this.getSensorType(e);
-      const isSensor = !!e.index && e.index.name === 'sensor_index';
-      if (!!e) {
-        const value = Number(this.parseElementValue(e, options, 'value'));
-        const qa = this.parseElementValue(e, options, 'overallQASummary');
+    for (const elem of foundElems) {
+      if (!!elem) {
+        const value = Number(this.parseElementValue(elem, options, 'value'));
+        const qa = this.parseElementValue(elem, options, 'overallQASummary');
         if (value == null || isNaN(value)) {
           continue;
         }
-        if (!yTypes.includes(e.unit)) {
-          yTypes.push(e.unit);
+        if (!yTypes.includes(elem.unit)) {
+          yTypes.push(elem.unit);
         }
-        this.unitService.setPreferredUnits(e);
-        const key = e.indexValue;
+        this.unitService.setPreferredUnits(elem);
+        const key = grabIndexValue(elem);
         if (!sensor[key]) {
           sensor[key] = [];
         }
-        sensor[key]['sensorType'] = sensorType;
-        sensor[key]['isSensor'] = isSensor;
-        sensor[key]['isOfficial'] = e.indexValue === 0;
+        sensor[key]['sensorType'] = this.getSensorType(elem);
+        sensor[key]['isSensor'] = elem.indexName === 'sensor_index';
+        sensor[key]['isOfficial'] = elem.dataType === 'official';
         sensor[key].push({
-          x: this.buildDateValue(obsDateTime, e.elementID, qualifierType),
+          x: this.buildDateValue(obsDateTime, elem.elementID, qualifierType),
           y: value,
           // custom fields
-          unit: e.unit || '',
+          unit: elem.unit || '',
           qa: formatQAValue(qa),
           // optional color fields
           ...(this.shouldAddQA(options, seriesType) && {
@@ -276,14 +281,14 @@ export class DataChartService {
       }
     }
 
-    Object.values(sensor).forEach(s => this.sortByX(s));
+    Object.values(sensor).forEach((s) => this.sortByX(s));
   }
 
   private shouldAddQA(options: DataChartOptions, seriesType: SeriesType) {
     return !!options.customOptions && options.customOptions.showQAColors && seriesType !== SeriesType.BAR;
   }
 
-  private sortByX = s => s.sort((a, b) => (a.x === b.x ? 0 : a.x < b.x ? -1 : 1));
+  private sortByX = (s) => s.sort((a, b) => (a.x === b.x ? 0 : a.x < b.x ? -1 : 1));
 
   private parseElementValue(element, options: DataChartOptions, property: 'value' | 'overallQASummary') {
     const custom = options.customOptions;
@@ -292,26 +297,21 @@ export class DataChartService {
       : element[property];
   }
 
-  private duplicateElemFilter(foundElems) {
-    const isProblemElem = foundElems.length > 1 && foundElems.every(e => !e.index || e.index.name !== 'sensor_index');
-    return isProblemElem ? foundElems.filter(e => !e.dataType) : foundElems;
-  }
-
-  private grabElementsFromObs(obs, givenID: string, qualifierType: QualifierType): any[] {
+  private grabElementsFromObs(obs: DMSObs, givenID: string, qualifierType: QualifierType): ObsElement[] {
     let ids = [];
     switch (qualifierType) {
       case QualifierType.NONE:
         ids = [givenID];
         break;
       case QualifierType.HOURLY:
-        ids = this.qualifierHourlyValues.map(nodeValue => updateNodeValue(givenID, nodeValue, 4));
+        ids = this.qualifierHourlyValues.map((nodeValue) => updateNodeValue(givenID, nodeValue, 4));
         break;
     }
 
-    return this.duplicateElemFilter(obs.dataElements.filter(elem => ids.includes(elem.elementID)));
+    return ids.map((id) => findAllElements(obs, id)).reduce((acc, val) => acc.concat(val), []);
   }
 
-  private buildYAxes(chartObj: Chart, observations) {
+  private buildYAxes(chartObj: Chart, observations: DMSObs[]) {
     const elements: Element[] = chartObj.elements;
     const stations: Station[] = chartObj.stations;
     const names = [];
@@ -319,7 +319,9 @@ export class DataChartService {
 
     for (const station of stations) {
       for (const elem of elements) {
-        for (const obs of observations.filter(ob => findObsIdentifier(ob, station.identifierID) === station.value)) {
+        for (const obs of observations.filter(
+          (ob) => findObsIdentifier(ob, station.identifierID).toLowerCase() === station.value.toLowerCase(),
+        )) {
           const foundElems = this.grabElementsFromObs(obs, elem.id, chartObj.qualifierType);
           if (foundElems.length > 0) {
             // NOTE: This behaviour is a bit odd when working with flat-tables with renamed elements
@@ -355,47 +357,39 @@ export class DataChartService {
     }));
   }
 
-  getSensorType(e) {
-    if (e.indexValue === 0) {
+  getSensorType(elem: ObsElement) {
+    if (elem.dataType === 'official') {
       return this.translate.instant('OBS.OFFICIAL');
-    } else if (e.indexValue > 0) {
-      return `${this.translate.instant(getIndexLabelTranslationKey(e))} ${e.indexValue}`;
+    } else if (elem.indexValue > 0) {
+      return `${this.translate.instant(getIndexLabelTranslationKey(elem))} ${elem.indexValue}`;
     } else {
       return '';
     }
   }
 
   // get the chart type for an element
-  getSeriesType(elem): SeriesType {
-    if (elem === '1.17.253.0.0.0.0' || elem === '1.17.438.0.0.0.0') {
+  getSeriesType(id: string): SeriesType {
+    if (id === '1.17.253.0.0.0.0' || id === '1.17.438.0.0.0.0') {
       return SeriesType.AREA;
-    } else if (elem.split('.')[1] === '11') {
+    } else if (id.split('.')[1] === '11') {
       return SeriesType.BAR;
     } else {
       return SeriesType.LINE;
     }
   }
 
-  private createStationLabel(metadataElements) {
-    const getObjValue = elementID => {
-      const obj = metadataElements.find(elem => elem.elementID === elementID);
-      return obj ? obj.value : '';
-    };
-    const formatId = elementID => {
-      const id = getObjValue(elementID);
-      return !!id ? ` - ${id}` : '';
-    };
-    return (
-      `${getObjValue(STATION_NAME_ELEMENT)}${formatId(CLIMATE_ID_ELEMENT)}` +
-      `${formatId(TC_ID_ELEMENT) || formatId(ICAO_ID_ELEMENT)}`
-    );
+  private createStationLabel(obs: DMSObs) {
+    const shortID = findFirstValue(obs, TC_ID_ELEMENT) || findFirstValue(obs, ICAO_ID_ELEMENT);
+    return [findFirstValue(obs, STATION_NAME_ELEMENT), findFirstValue(obs, CLIMATE_ID_ELEMENT), shortID]
+      .filter((label) => !!label)
+      .join(' - ');
   }
 
   private buildNoDataString(chartObj) {
-    const elems = chartObj.elements.map(elem => `<li>${this.configService.buildFullNodeName(elem.id)}</li>`).join('');
+    const elems = chartObj.elements.map((elem) => `<li>${this.configService.buildFullNodeName(elem.id)}</li>`).join('');
     return `${this.instantSingle('CHART', 'NO_DATA')}: ${elems}`;
   }
 
   private instantSingle = (header, key) => this.translate.instant(`${header}.${key}`);
-  private instantArray = (header, keys) => keys.map(key => this.instantSingle(header, key));
+  private instantArray = (header, keys) => keys.map((key) => this.instantSingle(header, key));
 }

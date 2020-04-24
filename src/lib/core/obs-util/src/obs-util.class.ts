@@ -1,6 +1,10 @@
-import { DataElements } from './dms-observation.model';
 import { compareTime } from 'msc-dms-commons-angular/shared/util';
 import { LanguageService } from 'msc-dms-commons-angular/shared/language';
+import { DMSObs, ObsElement } from './dms-observation.model';
+
+// Allows 'bad' element IDs like `1.2.x.0.0.0.0`.
+// If 'x' is the only placeholder allowed, this regex should only allow digits or x's
+export const esKeyRegex = new RegExp(/^(\w+_){6}\w+$/);
 
 // observation identification elements
 export const WMO_ID_ELEMENT = '1.7.82.0.0.0.0';
@@ -14,23 +18,57 @@ export const CORRECTION_ELEMENT = '1.7.105.0.0.0.0';
 export const VERSION_ELEMENT = '1.7.408.0.0.0.0';
 export const REVISION_ELEMENT = '1.7.371.0.0.0.0';
 
-function findValue(elems, id) {
-  return elems.filter(elem => elem.elementID === id).map(elem => elem.value)[0];
+function removeBadDuplicates(elements: ObsElement[]): ObsElement[] {
+  const elementSet = {};
+
+  for (const elem of elements) {
+    const key = elem.indexValue || 'N/A';
+    if (elementSet[key] == null || elementSet[key].dataType !== 'derived') {
+      elementSet[key] = elem;
+    }
+  }
+
+  return Object.values(elementSet);
 }
 
-export function findMetadataValue(obs, elementID) {
-  return findValue(obs.metadataElements, elementID);
+export function isEsElementKey(key: string): boolean {
+  return esKeyRegex.test(key);
 }
 
-export function findDataValue(obs, elementID) {
-  return findValue(obs.dataElements, elementID);
+export function grabElementList(obs: DMSObs): ObsElement[] {
+  return Object.entries(obs)
+    .filter(([key, elements]) => isEsElementKey(key))
+    .map(([key, elements]) => removeBadDuplicates(elements))
+    .reduce((acc, val) => acc.concat(val), []); // Flatten
+}
+
+export function grabDataElements(obs: DMSObs): ObsElement[] {
+  return grabElementList(obs).filter((element) => element.type === 'element');
+}
+
+export function grabMetadataElements(obs: DMSObs): ObsElement[] {
+  return grabElementList(obs).filter((element) => element.type === 'metadata');
+}
+
+export function formatElementToEsKey(elementID: string): string {
+  return elementID.replace(/\./g, '_');
+}
+
+export function findAllElements(obs: DMSObs, elementID: string): ObsElement[] {
+  const key = formatElementToEsKey(elementID);
+  return !!obs[key] ? removeBadDuplicates(obs[key]) : [];
+}
+
+export function findFirstValue(obs: DMSObs, elementID: string): string {
+  const elems = findAllElements(obs, elementID);
+  return !!elems.length ? elems[0].value : '';
 }
 
 /** Most observations come in with a cor and ver in their metadata, but some come with a rev */
-export function findRevision(obs) {
-  const find = elementID => findMetadataValue(obs, elementID);
+export function findRevision(obs: DMSObs) {
+  const find = (elementID) => findFirstValue(obs, elementID);
   const correction = find(CORRECTION_ELEMENT);
-  if (correction !== undefined) {
+  if (!!correction) {
     const version = find(VERSION_ELEMENT);
     return Number(version) > 0 ? `${correction}_v${version}` : correction;
   } else {
@@ -39,7 +77,7 @@ export function findRevision(obs) {
   }
 }
 
-export function compareObsTimeFromObs(obs1, obs2) {
+export function compareObsTimeFromObs(obs1: DMSObs, obs2: DMSObs) {
   return compareTime(obs1.obsDateTime, obs2.obsDateTime);
 }
 
@@ -76,17 +114,17 @@ export function compareRevisionBoolean(rev1, rev2): boolean {
 }
 
 /** Returns true when obs1 has a higher or equal revision to obs2 */
-export function compareRevisionFromObs(obs1, obs2) {
+export function compareRevisionFromObs(obs1: DMSObs, obs2: DMSObs) {
   return compareRevision(findRevision(obs1), findRevision(obs2)) >= 0;
 }
 
 /** To be used when array-filtering for the latest revision per date */
-export function latestFromArray(obs, index, arr) {
+export function latestFromArray(obs: DMSObs, index, arr) {
   const compareObs = (current, property) => obs[property] === current[property];
-  const sameObs = current =>
+  const sameObs = (current) =>
     compareObs(current, 'obsDateTime') && compareObs(current, 'identifier') && compareObs(current, 'taxonomy');
 
-  return arr.filter(sameObs).every(curr => compareRevisionFromObs(obs, curr));
+  return arr.filter(sameObs).every((curr) => compareRevisionFromObs(obs, curr));
 }
 
 export function formatQAValue(qa: number): string {
@@ -143,21 +181,16 @@ export function formatElementToColumn(elementID: string): string {
 }
 
 export function formatColumnToElementID(field: string): string {
-  return !!field
-    ? field
-        .replace('e_', '')
-        .replace(/-L\d+/, '')
-        .replace(/_/g, '.')
-    : '';
+  return !!field ? field.replace('e_', '').replace(/-L\d+/, '').replace(/_/g, '.') : '';
 }
 
-export function getIndexLabelTranslationKey(element: DataElements): string {
+export function getIndexLabelTranslationKey(element: ObsElement): string {
   let label: string;
-  switch (element.index.name) {
+  switch (element.indexName) {
     case 'sensor_index': /* falls through */
     case 'cloud_layer_index': /* falls through */
     case 'observed_weather_index': {
-      label = `${element.index.name.toUpperCase()}_LABEL`;
+      label = `${element.indexName.toUpperCase()}_LABEL`;
       break;
     }
     default: {
@@ -181,8 +214,8 @@ export function convertDDToDMS(elementValue: number, isLatitude: boolean): strin
     return String(elementValue);
   }
 
-  const directionLabel = key => LanguageService.translator.instant(`DIRECTION.${key}_SHORT`);
-  const padZero = value => String(value).padStart(2, '0');
+  const directionLabel = (key) => LanguageService.translator.instant(`DIRECTION.${key}_SHORT`);
+  const padZero = (value) => String(value).padStart(2, '0');
 
   const absDecimalDegrees = Math.abs(elementValue);
   const degrees = Math.floor(absDecimalDegrees);
@@ -199,8 +232,8 @@ export function convertDDToDMS(elementValue: number, isLatitude: boolean): strin
   return `${degrees}\xB0 ${padZero(minutes)}' ${padZero(seconds)}" ${direction}`;
 }
 
-export function findObsIdentifier(obs, elementID?: string): string {
-  return elementID == null ? obs.identifier : findMetadataValue(obs, elementID) || obs.identifier;
+export function findObsIdentifier(obs: DMSObs, elementID?: string): string {
+  return elementID == null ? obs.identifier : findFirstValue(obs, elementID) || obs.identifier;
 }
 
 export function updateNodeValue(
@@ -213,4 +246,8 @@ export function updateNodeValue(
   const prefix = rejoinElement(0, nodePosition);
   const suffix = rejoinElement(nodePosition + 1);
   return `${prefix}.${newValue}.${suffix}`;
+}
+
+export function grabIndexValue(element: ObsElement): number {
+  return element.dataType === 'official' ? 0 : element.indexValue;
 }

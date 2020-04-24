@@ -3,7 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { UnitCodeConversionService } from './unit-code-conversion.service';
 import { UNIT_CODE_CONVERSION_CONFIG, UnitCodeConversionConfig } from './unit-code-conversion.config';
-import { DataElements } from '../dms-observation.model';
+import { ObsElement } from '../dms-observation.model';
 import { FromUnits } from './unit-code-conversion.model';
 
 const units = require('assets/units.json');
@@ -29,7 +29,7 @@ describe('UnitCodeConversionService', () => {
   });
 
   it('should return same value due to non-number element value', () => {
-    const element: DataElements = {
+    const element: ObsElement = {
       name: 'temp',
       elementID: '1.2.3.4.5.6.7',
       value: 'Marlowe',
@@ -40,7 +40,7 @@ describe('UnitCodeConversionService', () => {
   });
 
   it('should return converted value', () => {
-    const element: DataElements = {
+    const element: ObsElement = {
       name: 'temp',
       elementID: '1.2.3.4.5.6.7',
       value: '42',
@@ -51,7 +51,7 @@ describe('UnitCodeConversionService', () => {
   });
 
   it('should return same value as no conversion exists', () => {
-    const element: DataElements = {
+    const element: ObsElement = {
       name: 'temp',
       elementID: '1.2.3.4.5.6.7',
       value: '42',
@@ -62,7 +62,7 @@ describe('UnitCodeConversionService', () => {
   });
 
   it('should return a rounded value', () => {
-    const element: DataElements = {
+    const element: ObsElement = {
       name: 'temp',
       elementID: '1.2.3.4.5.6.7',
       value: '42.123',

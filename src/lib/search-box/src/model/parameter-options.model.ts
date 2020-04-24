@@ -22,7 +22,7 @@ export interface DatetimeParameterOptions extends ParameterOptions {
   includeTime?: boolean;
 }
 
-export interface QueryTypeParameterOptions extends ParameterOptions {
+export interface CheckboxParameterOptions extends ParameterOptions {
   typeValue: string; // value to indicate when this should be checked
   requiredParams: SearchParameter[]; // SearchParameters that need to be filled to execute a search
 }

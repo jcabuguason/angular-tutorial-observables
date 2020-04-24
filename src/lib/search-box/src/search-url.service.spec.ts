@@ -6,7 +6,7 @@ import { SearchHoursRange } from './parameters/search-hours-range';
 import { SearchParameter } from './parameters/search-parameter';
 import { ShortcutModel } from './model/shortcut.model';
 import { ChoiceModel } from './model/choice.model';
-import { SearchQueryType } from './parameters/search-query-type';
+import { SearchCheckbox } from './parameters/search-checkbox';
 import { ParameterName } from './enums/parameter-name.enum';
 
 describe('SearchURLService', () => {
@@ -19,13 +19,13 @@ describe('SearchURLService', () => {
     urlNameAfter: 'hh_after',
   });
   const networkParam = new SearchParameter({ name: ParameterName.NETWORK });
-  const independentQueryParam = new SearchQueryType({
-    name: ParameterName.QUERY_TYPE,
+  const independentCheckbox = new SearchCheckbox({
+    name: ParameterName.CHECKBOX,
     typeValue: 'exact',
     requiredParams: [],
   });
   const stationParam = new SearchParameter({ name: ParameterName.STATION_ID, urlName: 'climid' });
-  const displayParams = [dateParam, hoursParam, networkParam, independentQueryParam, stationParam];
+  const displayParams = [dateParam, hoursParam, networkParam, independentCheckbox, stationParam];
 
   const shortcuts = [
     new ShortcutModel('Shortcut1', [{ name: ParameterName.NETWORK, values: ['value1'] }]),
@@ -38,7 +38,7 @@ describe('SearchURLService', () => {
     hh_after: '2',
     network: 'nc awos',
     shortcut: 'Shortcut1',
-    queryType: 'exact',
+    checkbox: 'exact',
     climid: '123456',
   };
 
@@ -49,7 +49,7 @@ describe('SearchURLService', () => {
   };
   const networkToSearch = { param: networkParam, value: [query.network] };
   const shortcutToSearch = { param: networkParam, value: ['value1'] };
-  const queryTypeToSearch = { param: independentQueryParam, value: ['exact'] };
+  const checkboxToSearch = { param: independentCheckbox, value: ['exact'] };
   const stationToSearch = { param: stationParam, value: ['123456'] };
 
   beforeEach(() => {
@@ -70,7 +70,7 @@ describe('SearchURLService', () => {
     hoursParam.hoursBefore = Number(hoursValue.hh_before);
     hoursParam.hoursAfter = Number(hoursValue.hh_after);
     networkParam.selected = networkValues;
-    independentQueryParam.checked = true;
+    independentCheckbox.checked = true;
     stationParam.selected = stationValues;
 
     const urlParams = [
@@ -79,7 +79,7 @@ describe('SearchURLService', () => {
       { name: 'hh_after', value: hoursValue.hh_after },
       { name: ParameterName.NETWORK, value: networkValues[0] },
       { name: ParameterName.NETWORK, value: networkValues[1] },
-      { name: ParameterName.QUERY_TYPE, value: 'exact' },
+      { name: ParameterName.CHECKBOX, value: 'exact' },
       { name: 'climid', value: stationValues[0] },
     ];
 
@@ -104,12 +104,12 @@ describe('SearchURLService', () => {
     const newNetworkValues = ['ca', 'nc awos'];
     networkParam.selected = newNetworkValues;
 
-    const dependentQueryParam = new SearchQueryType({
-      name: ParameterName.QUERY_TYPE,
+    const dependentCheckbox = new SearchCheckbox({
+      name: ParameterName.CHECKBOX,
       typeValue: 'exact',
       requiredParams: [networkParam],
     });
-    dependentQueryParam.checked = true;
+    dependentCheckbox.checked = true;
 
     const urlParams = [
       { name: ParameterName.NETWORK, value: newNetworkValues[0] },
@@ -123,12 +123,12 @@ describe('SearchURLService', () => {
     // Equivalent to the networkParam being unfilled
     networkParam.selected.length = 0;
 
-    const dependentQueryParam = new SearchQueryType({
-      name: ParameterName.QUERY_TYPE,
+    const dependentCheckbox = new SearchCheckbox({
+      name: ParameterName.CHECKBOX,
       typeValue: 'exact',
       requiredParams: [networkParam],
     });
-    dependentQueryParam.checked = true;
+    dependentCheckbox.checked = true;
 
     const urlParams = [];
 
@@ -144,7 +144,7 @@ describe('SearchURLService', () => {
     expect(urlService.isSpecialUrlParam(ParameterName.FROM, displayParams)).toBeTruthy();
     expect(urlService.isSpecialUrlParam(ParameterName.HOURS_RANGE, displayParams)).toBeTruthy();
     expect(urlService.isSpecialUrlParam(ParameterName.NETWORK, displayParams)).toBeFalsy();
-    expect(urlService.isSpecialUrlParam(ParameterName.QUERY_TYPE, displayParams)).toBeTruthy();
+    expect(urlService.isSpecialUrlParam(ParameterName.CHECKBOX, displayParams)).toBeTruthy();
   });
 
   it('get shortcut parameter', () => {
@@ -159,8 +159,8 @@ describe('SearchURLService', () => {
     expect(urlService.getHourRangeRequestParams(query, displayParams)).toEqual([hourRangeToSearch]);
   });
 
-  it('get query type parameter', () => {
-    expect(urlService.getQueryTypeRequestParams(query, displayParams)).toEqual([queryTypeToSearch]);
+  it('get checkbox parameter', () => {
+    expect(urlService.getCheckboxRequestParams(query, displayParams)).toEqual([checkboxToSearch]);
   });
 
   it('get all parameters', () => {
@@ -169,14 +169,14 @@ describe('SearchURLService', () => {
       hourRangeToSearch,
       networkToSearch,
       shortcutToSearch,
-      queryTypeToSearch,
+      checkboxToSearch,
       stationToSearch,
     ];
     const allParams = urlService.getAllRequestParams(query, displayParams, shortcuts);
 
     expect(allParams.length).toEqual(allExpected.length);
 
-    allExpected.forEach(expected => expect(allParams).toContain(expected));
+    allExpected.forEach((expected) => expect(allParams).toContain(expected));
 
     // this would return false because not same order, even with .sort()
     // expect(allParams).toEqual(allExpected);

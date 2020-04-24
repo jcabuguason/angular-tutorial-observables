@@ -24,7 +24,9 @@ export interface Index {
   value: number;
 }
 
-export interface DMSObs {
+// Odd format requrired to support *both* dynamic and static keys in a defined type
+// See https://stackoverflow.com/a/48422383
+export type DMSObs = {
   identity: string; // URI
   identifier: string; // Primary station identifier
   taxonomy: string;
@@ -35,9 +37,9 @@ export interface DMSObs {
   author: Author;
   jsonVersion: string;
   rawMessage: RawMessage;
-  metadataElements: MetadataElements[];
-  dataElements: DataElements[];
-}
+} & {
+  [obsElements: string]: ObsElement[];
+};
 
 export interface Author {
   build: string;
@@ -45,20 +47,35 @@ export interface Author {
   version: number;
 }
 
-export interface DataElements {
+export interface ObsElement {
   name: string;
   value: string;
   unit: string;
   elementID: string;
+  type?: 'metadata' | 'element';
+  dataType?: 'official' | 'derived';
   overallQASummary?: number;
+  overallInstrumentSummary?: number;
+  suppInfoDataFlags?: string[];
+  statusIndicators?: StatusIndicators;
+  indexName?: string;
   indexValue?: number;
-  index?: IndexDetails;
+  // These unit/value fields are getting a little out-of-hand IMO
+  // Should these be put into a sub-type? i.e. `valueModifications?: ElemenModifications`?
   preciseValue?: string;
   preciseUnit?: string;
   preferredValue?: string;
   preferredUnit?: string;
   displayFormat?: string;
   formattedValue?: string;
+}
+
+export interface StatusIndicators {
+  qcRemarkEffectiveDate: string;
+  qcRemark: string;
+  qcRemarkAccount: string;
+  qaFlagOverride?: number;
+  valueOverride?: number;
 }
 
 export interface Location {
@@ -66,25 +83,7 @@ export interface Location {
   coordinates: string;
 }
 
-export interface MetadataElements {
-  name: string;
-  value: string;
-  unit: string;
-  elementID: string;
-  preciseValue?: string;
-  preciseUnit?: string;
-  preferredValue?: string;
-  preferredUnit?: string;
-  displayFormat?: string;
-  formattedValue?: string;
-}
-
 export interface RawMessage {
   header: string;
   message: string;
-}
-
-export interface IndexDetails {
-  name: string;
-  value: number;
 }
