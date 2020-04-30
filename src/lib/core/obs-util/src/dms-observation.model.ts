@@ -36,7 +36,8 @@ export type DMSObs = {
   parentIdentity: string;
   author: Author;
   jsonVersion: string;
-  rawMessage: RawMessage;
+  rawHeader: string;
+  rawMessage: string;
 } & {
   [obsElements: string]: ObsElement[];
 };
@@ -81,9 +82,4 @@ export interface StatusIndicators {
 export interface Location {
   type: string;
   coordinates: string;
-}
-
-export interface RawMessage {
-  header: string;
-  message: string;
 }
