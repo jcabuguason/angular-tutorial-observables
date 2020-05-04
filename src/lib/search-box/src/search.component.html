@@ -6,7 +6,17 @@
         type="button"
         class="bar-button"
         icon="fa fa-refresh"
+        title="{{ 'SEARCH_BAR.SEARCH' | translate }}"
         (click)="searchService.submitSearch()"
+      ></button>
+      <button
+        *ngIf="searchService.resetBarButton"
+        pButton
+        type="button"
+        class="bar-button"
+        icon="fa fa-times"
+        title="{{ 'SEARCH_BAR.RESET' | translate }}"
+        (click)="searchService.resetSearch()"
       ></button>
       <button
         #expandButton
@@ -15,6 +25,7 @@
         type="button"
         class="bar-button"
         icon="{{ expandButtonIcon }}"
+        title="{{ 'SEARCH_BAR.EXPAND' | translate }}"
         *ngIf="showExpandButton"
       ></button>
     </div>
