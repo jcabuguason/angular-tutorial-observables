@@ -43,6 +43,7 @@ export class SearchService {
 
   displayForm = false;
   readOnlyBar: boolean;
+  resetBarButton: boolean;
 
   shortcuts: ShortcutModel[] = [];
   shortcutSelected: ShortcutModel;
@@ -79,6 +80,7 @@ export class SearchService {
     this.suggestedParams = this.availableParams;
 
     this.readOnlyBar = this.config.readOnlyBar;
+    this.resetBarButton = this.config.resetBarButton;
 
     this.shortcuts = this.config.shortcuts;
     this.createShortcutButtons();
@@ -173,6 +175,11 @@ export class SearchService {
     this.displayParams.forEach((p) => p.removeAllSelected());
     this.displayParams = [];
     this.updateSuggestedParameters();
+  }
+
+  resetSearch() {
+    this.removeAllDisplayParameters();
+    this.addDefaultParameters();
   }
 
   /** Emits the search model used for ES and updates the url */

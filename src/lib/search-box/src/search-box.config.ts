@@ -7,6 +7,7 @@ export interface SearchBoxConfig {
   searchList: SearchParameter[];
   taxonomies: SearchTaxonomy[];
   readOnlyBar?: boolean;
+  resetBarButton?: boolean;
   shortcuts?: ShortcutModel[];
 }
 
