@@ -5,7 +5,6 @@ import { ElementGroup, ElementVisibility, UserConfigService } from 'msc-dms-comm
 import {
   DMSObs,
   ObsElement,
-  RawMessage,
   STATION_NAME_ELEMENT,
   STATION_NAME_FIELD,
   UnitCodeConversionService,
@@ -214,15 +213,14 @@ export class DataGridService implements OnDestroy {
     return result;
   }
 
-  flattenRawMessage(raw: RawMessage) {
+  flattenRawMessage(obs: DMSObs) {
     const result = {};
     if (!this.userConfigService.isLoadRawData()) {
       return result;
     }
-    this.buildRawColumn(raw.message);
-    for (const [key, value] of Object.entries(raw)) {
-      result[`raw_${key}`] = key === 'message' ? decodeRawMessage(value) : value;
-    }
+    this.buildRawColumn(obs.rawMessage);
+    result['raw_header'] = obs.rawHeader;
+    result['raw_message'] = decodeRawMessage(obs.rawMessage);
     return result;
   }
 
@@ -231,7 +229,7 @@ export class DataGridService implements OnDestroy {
       ...this.flattenObsIdentities(obs),
       ...this.flattenMetadataElements(obs),
       ...this.flattenDataElements(obs),
-      ...this.flattenRawMessage(obs.rawMessage),
+      ...this.flattenRawMessage(obs),
     };
   }
 
