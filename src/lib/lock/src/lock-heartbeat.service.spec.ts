@@ -1,6 +1,6 @@
 import { TestBed, getTestBed, fakeAsync, tick, flush } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatDialog, MatDialogModule } from '@angular/material';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -12,20 +12,31 @@ import { LockHeartbeatService } from './lock-heartbeat.service';
 import { LockConfig, LOCK_CONFIG } from './lock.config';
 import { LockService } from './lock.service';
 import { TextDialogModule, TextDialogComponent } from 'msc-dms-commons-angular/core/text-dialog';
-import { AcquireLockResponse } from './model/acquire-lock-response.model';
-import { ReleaseLockResponse } from './model/release-lock-response.model';
-import { LockInfoResponse } from './model/lock-info-response.model';
 
 describe('LockHeartbeatService', () => {
   let service: LockHeartbeatService;
   let lockService: LockService;
-  let lockServiceStub: LockServiceStub;
 
-  interface LockServiceStub {
-    acquireLock: Observable<AcquireLockResponse>;
-    releaseLock: Observable<ReleaseLockResponse>;
-    lockInfo: Observable<LockInfoResponse>;
-  }
+  const responses = {
+    acquireLock: Observable.of({
+      locked_resources: ['1'],
+      timeout: '',
+      type: '',
+      user: 'dsa',
+    }),
+    releaseLock: Observable.of({
+      unlocked_resources: ['1'],
+      failed_unlocks: [],
+    }),
+    lockInfo: Observable.of({
+      resource_id: 'string',
+      type: 'string',
+      user: 'string',
+      user_first_name: 'string',
+      user_last_name: 'string',
+      timeout: 'string',
+    }),
+  };
 
   beforeEach(() => {
     const config: LockConfig = {
@@ -35,33 +46,19 @@ describe('LockHeartbeatService', () => {
       warning: 5,
     };
 
-    lockServiceStub = {
-      acquireLock: Observable.of({
-        locked_resources: ['1'],
-        timeout: '',
-        type: '',
-        user: 'dsa',
-      }),
-      releaseLock: Observable.of({
-        unlocked_resources: ['1'],
-        failed_unlocks: [],
-      }),
-      lockInfo: Observable.of({
-        resource_id: 'string',
-        type: 'string',
-        user: 'string',
-        user_first_name: 'string',
-        user_last_name: 'string',
-        timeout: 'string',
-      }),
-    };
-
     TestBed.configureTestingModule({
       imports: [MatDialogModule, TextDialogModule, NoopAnimationsModule],
       providers: [
         MatDialog,
         LockHeartbeatService,
-        { provide: LockService, useValue: lockServiceStub },
+        {
+          provide: LockService,
+          useValue: {
+            acquireLock: (body) => responses.acquireLock,
+            releaseLock: (body) => responses.releaseLock,
+            lockInfo: (param) => responses.lockInfo,
+          },
+        },
         { provide: LOCK_CONFIG, useValue: config },
       ],
     }).overrideModule(BrowserDynamicTestingModule, {
@@ -70,8 +67,9 @@ describe('LockHeartbeatService', () => {
       },
     });
 
-    service = getTestBed().get(LockHeartbeatService);
-    lockService = getTestBed().get(LockService);
+    const injector = getTestBed();
+    service = injector.inject(LockHeartbeatService);
+    lockService = injector.inject(LockService);
   });
 
   it('should lock after 60 ms of idle time', fakeAsync(() => {
@@ -79,10 +77,15 @@ describe('LockHeartbeatService', () => {
       unsuccessful: 0,
       unauthorized: 0,
     };
-    spyOn(lockService, 'acquireLock').and.returnValue(lockServiceStub.acquireLock);
-    spyOn(lockService, 'releaseLock').and.returnValue(lockServiceStub.releaseLock);
+    spyOn(lockService, 'acquireLock').and.returnValue(responses.acquireLock);
+    spyOn(lockService, 'releaseLock').and.returnValue(responses.releaseLock);
 
-    service.startLockHeartbeat(['1'], 'metadata', () => results.unsuccessful++, () => results.unauthorized++);
+    service.startLockHeartbeat(
+      ['1'],
+      'metadata',
+      () => results.unsuccessful++,
+      () => results.unauthorized++,
+    );
 
     tick(29);
     expect(lockService.acquireLock).toHaveBeenCalledTimes(6);
@@ -110,10 +113,15 @@ describe('LockHeartbeatService', () => {
       unauthorized: 0,
     };
 
-    spyOn(lockService, 'acquireLock').and.returnValue(lockServiceStub.acquireLock);
-    spyOn(lockService, 'releaseLock').and.returnValue(lockServiceStub.releaseLock);
+    spyOn(lockService, 'acquireLock').and.returnValue(responses.acquireLock);
+    spyOn(lockService, 'releaseLock').and.returnValue(responses.releaseLock);
 
-    service.startLockHeartbeat(['1'], 'metadata', () => results.unsuccessful++, () => results.unauthorized++);
+    service.startLockHeartbeat(
+      ['1'],
+      'metadata',
+      () => results.unsuccessful++,
+      () => results.unauthorized++,
+    );
 
     tick(30);
     expect(lockService.acquireLock).toHaveBeenCalledTimes(7);
@@ -142,11 +150,16 @@ describe('LockHeartbeatService', () => {
       unauthorized: 0,
     };
 
-    const acquireLock = spyOn(lockService, 'acquireLock').and.returnValue(lockServiceStub.acquireLock);
-    spyOn(lockService, 'releaseLock').and.returnValue(lockServiceStub.releaseLock);
-    spyOn(lockService, 'lockInfo').and.returnValue(lockServiceStub.lockInfo);
+    const acquireLock = spyOn(lockService, 'acquireLock').and.returnValue(responses.acquireLock);
+    spyOn(lockService, 'releaseLock').and.returnValue(responses.releaseLock);
+    spyOn(lockService, 'lockInfo').and.returnValue(responses.lockInfo);
 
-    service.startLockHeartbeat(['1'], 'metadata', () => results.unsuccessful++, () => results.unauthorized++);
+    service.startLockHeartbeat(
+      ['1'],
+      'metadata',
+      () => results.unsuccessful++,
+      () => results.unauthorized++,
+    );
 
     tick(30);
     expect(lockService.acquireLock).toHaveBeenCalledTimes(7);
@@ -169,9 +182,14 @@ describe('LockHeartbeatService', () => {
       unauthorized: 0,
     };
 
-    const acquireLock = spyOn(lockService, 'acquireLock').and.returnValue(lockServiceStub.acquireLock);
-    spyOn(lockService, 'releaseLock').and.returnValue(lockServiceStub.releaseLock);
-    service.startLockHeartbeat(['1'], 'metadata', () => results.unsuccessful++, () => results.unauthorized++);
+    const acquireLock = spyOn(lockService, 'acquireLock').and.returnValue(responses.acquireLock);
+    spyOn(lockService, 'releaseLock').and.returnValue(responses.releaseLock);
+    service.startLockHeartbeat(
+      ['1'],
+      'metadata',
+      () => results.unsuccessful++,
+      () => results.unauthorized++,
+    );
     tick(30);
     expect(lockService.acquireLock).toHaveBeenCalledTimes(7);
     expect(results.unsuccessful).toBe(0);

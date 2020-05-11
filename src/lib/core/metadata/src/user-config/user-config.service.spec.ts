@@ -7,7 +7,6 @@ import { ElementVisibility, ElementGroup, LanguageLabel } from './user-config.mo
 import { UserConfigService } from './user-config.service';
 
 describe('UserConfigService', () => {
-  let injector: TestBed;
   let service: UserConfigService;
   let config: MRMappingConfig;
 
@@ -19,11 +18,10 @@ describe('UserConfigService', () => {
       imports: [HttpClientTestingModule],
       providers: [UserConfigService, { provide: MR_MAPPING_CONFIG, useValue: config }],
     });
-    injector = getTestBed();
-    service = injector.get(UserConfigService);
+    service = getTestBed().inject(UserConfigService);
     LanguageService.translator = <any>{
       currentLang: 'en',
-      instant: key => key,
+      instant: (key) => key,
     };
   });
 

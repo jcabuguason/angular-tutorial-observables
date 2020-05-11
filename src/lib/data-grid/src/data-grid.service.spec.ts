@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { TestBed, getTestBed } from '@angular/core/testing';
 
 import 'rxjs/add/observable/of';
@@ -7,7 +8,7 @@ import 'rxjs/add/operator/map';
 import { DataGridService } from './data-grid.service';
 import { VUColumnConfiguration } from './column-configuration/vu-column-configuration.class';
 import { UserConfigService, ElementVisibility, MR_MAPPING_CONFIG } from 'msc-dms-commons-angular/core/metadata';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { StationInfoComponent } from './station-info/station-info.component';
 import { UnitCodeConversionService, ObsElement, ValueFormatterService } from 'msc-dms-commons-angular/core/obs-util';
 
@@ -16,62 +17,47 @@ import { CombinedHttpLoader } from 'msc-dms-commons-angular/shared/language';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
+const noLoadElement = '1.19.265.7.1.1.0';
+const hiddenElement = '1.24.314.7.10.4.6';
+const blankElement = '1.x.0.0.0.0.0';
+
 class MockUnitService {
   setPreferredUnits(element: ObsElement, usePreferredUnits: boolean) {}
 
-  usePreferredUnits(): boolean {
-    return false;
-  }
+  usePreferredUnits = (): boolean => false;
 }
 
 class MockValueFormatterService {
   setFormattedValue(element: ObsElement) {}
 }
 
+// Needs to be Injectable because it's extending the actual service. Can the needed functions be mocked instead?
+@Injectable()
+class MockConfigService extends UserConfigService {
+  getElementOrder = () => [blankElement]; // forces a blank column
+  getNestingDepth = () => 3;
+  getFormattedNodeName = (elementID, index) => `node ${elementID}`;
+  getFormattedSubHeader = (elementID) => '';
+  getByElementName = (element) => '';
+  getElementVisibility(elementID) {
+    switch (elementID) {
+      case noLoadElement:
+        return ElementVisibility.NO_LOAD;
+      case hiddenElement:
+        return ElementVisibility.HIDDEN;
+      default:
+        return ElementVisibility.DEFAULT;
+    }
+  }
+  getMetaElementVisibility(elementID) {}
+  getDescription = (elementID: string, nodeIndex: number): string => '';
+  getElementOfficialIndexTitle = (elementID: string) => 'Official';
+  getDefaultTag = () => 'Layer';
+}
+
 describe('DataGridService', () => {
   let service: DataGridService;
   const hits = require('../../../assets/sample-data/502s001.json').hits.hits.map((row) => row._source);
-  const noLoadElement = '1.19.265.2.60.7.0';
-  const hiddenElement = '1.5.66.7.1.1.0';
-  const blankElement = '1.x.0.0.0.0.0';
-
-  class MockConfigService extends UserConfigService {
-    getElementOrder() {
-      return [blankElement];
-    } // forces a blank column
-    getNestingDepth() {
-      return 3;
-    }
-    getFormattedNodeName(elementID, index) {
-      return `node ${elementID}`;
-    }
-    getFormattedSubHeader(elementID) {
-      return `,sub header ${elementID}`;
-    }
-    getByElementName(element) {
-      return '';
-    }
-    getElementVisibility(elementID) {
-      switch (elementID) {
-        case noLoadElement:
-          return ElementVisibility.NO_LOAD;
-        case hiddenElement:
-          return ElementVisibility.HIDDEN;
-        default:
-          return ElementVisibility.DEFAULT;
-      }
-    }
-    getMetaElementVisibility(elementID) {}
-    getDescription(elementID: string, nodeIndex: number): string {
-      return '';
-    }
-    getElementOfficialIndexTitle(elementID: string) {
-      return 'Official';
-    }
-    getDefaultTag() {
-      return 'Layer';
-    }
-  }
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -97,7 +83,7 @@ describe('DataGridService', () => {
       ],
     });
 
-    service = getTestBed().get(DataGridService);
+    service = getTestBed().inject(DataGridService);
   });
 
   it('should set column configurations', () => {
@@ -177,7 +163,9 @@ describe('DataGridService', () => {
 
     // only for one-layer of children headers
     const isHidden = (eti) =>
-      service.columnDefs.find((n) => n.headerName === `node ${eti}`).children.find((n) => n.elementID === eti).hide;
+      service.columnDefs
+        .find((col) => col.nodeNumber === eti.split('.')[1])
+        .children.find((col) => col.headerName === `node ${eti}`).hide;
 
     expect(isHidden(hiddenElement)).toBeTruthy();
     expect(service.columnDefs.length).toBe(12);

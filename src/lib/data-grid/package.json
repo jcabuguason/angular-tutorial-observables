@@ -2,8 +2,9 @@
   "ngPackage": {
     "lib": {
       "umdModuleIds": {
-        "@angular/material": "@angular/material",
         "@angular/material/dialog": "@angular/material/dialog",
+        "@angular/material/table": "@angular/material/table",
+        "@angular/material/sort": "@angular/material/sort",
         "msc-dms-commons-angular/core/metadata": "msc-dms-commons-angular/core/metadata",
         "msc-dms-commons-angular/shared/language": "msc-dms-commons-angular/shared/language",
         "@ngx-translate/core": "@ngx-translate/core"

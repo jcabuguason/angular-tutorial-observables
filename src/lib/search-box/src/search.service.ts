@@ -18,7 +18,7 @@ import { ShortcutModel } from './model/shortcut.model';
 import { SEARCH_BOX_CONFIG, SearchBoxConfig } from './search-box.config';
 
 import { SearchURLService } from './search-url.service';
-import { MessageService } from 'primeng/components/common/messageservice';
+import { MessageService } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { subtractHours, addHours } from 'msc-dms-commons-angular/shared/util';
 
@@ -266,7 +266,7 @@ export class SearchService {
       }
     });
 
-    if (this.selectedRangeType.value === 'hoursRange' && hoursRangeDate != null) {
+    if (this.selectedRangeType === 'hoursRange' && hoursRangeDate != null) {
       const hoursRange = this.hoursRangeParams.find(
         (p) => p.getName() === ParameterName.HOURS_RANGE,
       ) as SearchHoursRange;
@@ -313,7 +313,7 @@ export class SearchService {
   }
 
   setSelectedRangeType(type: 'dateRange' | 'hoursRange') {
-    this.selectedRangeType = type === 'hoursRange' ? this.rangeTypes[0] : this.rangeTypes[1];
+    this.selectedRangeType = type === 'hoursRange' ? this.rangeTypes[0].value : this.rangeTypes[1].value;
     this.formRangeParams = type === 'hoursRange' ? this.hoursRangeParams : this.dateRangeParams;
   }
 
@@ -343,7 +343,7 @@ export class SearchService {
   /** Checks for any missing parameters and displays a message */
   hasValidParameters(): boolean {
     if (this.useDateAndHoursRange) {
-      const removeParams = this.selectedRangeType.value === 'dateRange' ? this.hoursRangeParams : this.dateRangeParams;
+      const removeParams = this.selectedRangeType === 'dateRange' ? this.hoursRangeParams : this.dateRangeParams;
       removeParams.forEach((p) => this.removeDisplayParameter(p));
     }
 

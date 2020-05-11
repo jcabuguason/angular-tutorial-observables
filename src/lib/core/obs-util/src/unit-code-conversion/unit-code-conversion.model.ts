@@ -22,7 +22,7 @@ export interface FromUnits {
 }
 
 export interface ToUnits {
-  [toUnits: string]: UnitConversion[];
+  [toUnits: string]: UnitConversion;
 }
 
 export interface UnitConversion {

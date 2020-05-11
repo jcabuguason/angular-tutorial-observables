@@ -13,7 +13,7 @@ describe('ValueFormatterService', () => {
     TestBed.configureTestingModule({
       providers: [ValueFormatterService],
     });
-    service = getTestBed().get(ValueFormatterService);
+    service = getTestBed().inject(ValueFormatterService);
   });
 
   it('should format element', () => {
