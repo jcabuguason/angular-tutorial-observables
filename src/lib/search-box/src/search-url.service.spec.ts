@@ -57,7 +57,7 @@ describe('SearchURLService', () => {
       providers: [SearchURLService],
     });
 
-    urlService = TestBed.get(SearchURLService);
+    urlService = TestBed.inject(SearchURLService);
   });
 
   it('create url parameters (no shortcut)', () => {

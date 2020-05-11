@@ -6,8 +6,6 @@ import { UNIT_CODE_CONVERSION_CONFIG, UnitCodeConversionConfig } from './unit-co
 import { ObsElement } from '../dms-observation.model';
 import { FromUnits } from './unit-code-conversion.model';
 
-const units = require('assets/units.json');
-
 describe('UnitCodeConversionService', () => {
   let service: UnitCodeConversionService;
   let config: UnitCodeConversionConfig;
@@ -18,14 +16,31 @@ describe('UnitCodeConversionService', () => {
       endpoint: 'http://www.test.com',
     };
 
-    unitConversions = units['unitConversionResult'];
+    unitConversions = {
+      Pa: {
+        daPa: {
+          multiplier: 0.1,
+          offset: 0.0,
+        },
+      },
+      m: {
+        mm: {
+          multiplier: 1000.0,
+          offset: 0.0,
+        },
+        ft: {
+          multiplier: 3.2808399,
+          offset: 0.0,
+        },
+      },
+    };
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [UnitCodeConversionService, { provide: UNIT_CODE_CONVERSION_CONFIG, useValue: config }],
     });
 
-    service = getTestBed().get(UnitCodeConversionService);
+    service = getTestBed().inject(UnitCodeConversionService);
   });
 
   it('should return same value due to non-number element value', () => {

@@ -8,7 +8,7 @@ import { ObsElement } from '../dms-observation.model';
 
 import { Observable } from 'rxjs';
 
-const codes = require('assets/codes.json');
+import CodeSubstitution from './codes';
 
 @Injectable()
 export class UnitCodeConversionService {
@@ -22,7 +22,7 @@ export class UnitCodeConversionService {
     private http: HttpClient,
   ) {
     this.unitConvs = this.http.get<any>(`${this.config.endpoint}/units.json`);
-    this.codeSubs = codes['codeSubstitutionResult'];
+    this.codeSubs = CodeSubstitution.codeSubstitutionResult;
   }
 
   setPreferredUnits(element: ObsElement) {
@@ -46,7 +46,7 @@ export class UnitCodeConversionService {
   convertElement(element: ObsElement, unitConversions: FromUnits, preferredUnit: string, elementPrecision?: number) {
     const applyPrecision = (value: number, base: number): number => Math.round(value * base) / base;
 
-    const convertUnit = (value: number, conversion: UnitConversion[]): number =>
+    const convertUnit = (value: number, conversion: UnitConversion): number =>
       value * conversion['multiplier'] + conversion['offset'];
 
     const validUnitConversion = (fromUnit: string, toUnit: string): boolean =>
@@ -72,7 +72,7 @@ export class UnitCodeConversionService {
     }
 
     if (validUnitConversion(element.unit, preferredUnit)) {
-      const conversion: UnitConversion[] = unitConversions[element.unit][preferredUnit];
+      const conversion: UnitConversion = unitConversions[element.unit][preferredUnit];
 
       preferredNumericValue = convertUnit(elementNumericValue, conversion);
       element.preferredUnit = preferredUnit;

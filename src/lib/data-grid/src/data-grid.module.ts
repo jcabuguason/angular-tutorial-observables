@@ -8,8 +8,8 @@ import { QofRendererComponent } from './renderers/qof/qof-renderer.component';
 import { VofRendererComponent } from './renderers/vof/vof-renderer.component';
 import { StationInfoComponent } from './station-info/station-info.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatTableModule } from '@angular/material';
-import { MatSortModule } from '@angular/material';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
 import { LanguageModule } from 'msc-dms-commons-angular/shared/language';
 
 @NgModule({
@@ -29,6 +29,5 @@ import { LanguageModule } from 'msc-dms-commons-angular/shared/language';
     QofRendererComponent,
     VofRendererComponent,
   ],
-  entryComponents: [StationInfoComponent],
 })
 export class DataGridModule {}

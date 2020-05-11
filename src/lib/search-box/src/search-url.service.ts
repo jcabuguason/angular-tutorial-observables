@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { SearchParameter } from './parameters/search-parameter';
 import { SearchDatetime } from './parameters/search-datetime';
 import { SearchHoursRange } from './parameters/search-hours-range';
@@ -5,6 +6,7 @@ import { ShortcutModel } from './model/shortcut.model';
 import { SearchCheckbox } from './parameters/search-checkbox';
 import { ParameterType } from './enums/parameter-type.enum';
 
+@Injectable()
 export class SearchURLService {
   constructor() {}
 

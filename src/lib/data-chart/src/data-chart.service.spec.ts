@@ -66,7 +66,7 @@ describe('DataChartService', () => {
       ],
     });
 
-    service = getTestBed().get(DataChartService);
+    service = getTestBed().inject(DataChartService);
   });
 
   it('should create chart object', () => {

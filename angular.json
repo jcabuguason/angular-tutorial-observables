@@ -11,6 +11,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -20,7 +21,7 @@
             "styles": [
               "src/styles.css",
               "node_modules/font-awesome/css/font-awesome.css",
-              "node_modules/primeng/resources/themes/omega/theme.css",
+              "node_modules/primeng/resources/themes/nova-light/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/primeicons/primeicons.css"
             ],
@@ -28,6 +29,12 @@
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -71,13 +78,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [],
-            "styles": [
-              "src/styles.css",
-              "node_modules/font-awesome/css/font-awesome.css",
-              "node_modules/primeng/resources/themes/omega/theme.css",
-              "node_modules/primeng/resources/primeng.min.css",
-              "node_modules/primeicons/primeicons.css"
-            ],
+            "styles": [],
             "assets": ["src/assets", "src/favicon.ico"]
           }
         },
@@ -116,7 +117,7 @@
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "commons",
-      "styleext": "css"
+      "style": "css"
     },
     "@schematics/angular:directive": {
       "prefix": "commons"

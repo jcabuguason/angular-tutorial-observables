@@ -26,7 +26,7 @@ import { SpinnerModule } from 'primeng/spinner';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { SearchURLService } from './search-url.service';
 import { MockUrlService } from './mock-services';
-import { MessageService } from 'primeng/components/common/messageservice';
+import { MessageService } from 'primeng/api';
 
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CombinedHttpLoader } from 'msc-dms-commons-angular/shared/language';
@@ -64,7 +64,7 @@ describe('SearchComponent', () => {
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: httpClient =>
+            useFactory: (httpClient) =>
               new CombinedHttpLoader(httpClient, [{ prefix: '../../../assets/i18n/', suffix: '.json' }]),
             deps: [HttpClient],
           },

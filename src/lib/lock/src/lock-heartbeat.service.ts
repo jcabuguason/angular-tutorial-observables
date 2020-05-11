@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { Observable, Subject, Subscription, timer, fromEvent, merge, forkJoin, of } from 'rxjs';
@@ -207,7 +207,7 @@ export class LockHeartbeatService {
     });
 
     dialogRef
-      .afterOpen()
+      .afterOpened()
       .pipe(take(1))
       .subscribe(() => {
         this.warningDialogRef.close();

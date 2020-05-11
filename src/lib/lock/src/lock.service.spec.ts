@@ -23,8 +23,8 @@ describe('LockService', () => {
     });
 
     const injector = getTestBed();
-    service = injector.get(LockService);
-    httpMock = injector.get(HttpTestingController);
+    service = injector.inject(LockService);
+    httpMock = injector.inject(HttpTestingController);
   });
 
   afterEach(() => {
@@ -45,7 +45,7 @@ describe('LockService', () => {
         type: 'number',
         reset_enabled: true,
       })
-      .subscribe(response => {
+      .subscribe((response) => {
         expect(response).toBe(result);
       });
 
@@ -64,7 +64,7 @@ describe('LockService', () => {
       failed_unlocks: [],
     };
 
-    service.releaseLock({ resource_id: ['1'], type: 'number' }).subscribe(response => {
+    service.releaseLock({ resource_id: ['1'], type: 'number' }).subscribe((response) => {
       expect(response).toEqual(result);
     });
 
@@ -83,11 +83,11 @@ describe('LockService', () => {
       timeout: '',
     };
 
-    service.lockInfo({ resource_id: '1', type: 'number' }).subscribe(response => {
+    service.lockInfo({ resource_id: '1', type: 'number' }).subscribe((response) => {
       expect(response).toEqual(result);
     });
     const req = httpMock.expectOne(
-      request => request.method === 'GET' && request.url === `${config.endpoint}?url=/lock/lock_info`
+      (request) => request.method === 'GET' && request.url === `${config.endpoint}?url=/lock/lock_info`,
     );
     expect(req.request.params.get('resource_id')).toEqual('1');
     expect(req.request.params.get('type')).toEqual('number');

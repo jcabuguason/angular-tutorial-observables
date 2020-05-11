@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, AfterViewC
 import { TranslateService } from '@ngx-translate/core';
 import { SearchService } from './search.service';
 import { SearchParameter } from './parameters/search-parameter';
-import { MessageService } from 'primeng/components/common/messageservice';
+import { MessageService } from 'primeng/api';
 import { NON_SELECTABLE } from './model/choice.model';
 import { ParameterType } from './enums/parameter-type.enum';
 
@@ -13,7 +13,7 @@ import { ParameterType } from './enums/parameter-type.enum';
 })
 export class SearchComponent implements OnInit, AfterViewChecked {
   // expanding container for entered search fields
-  @ViewChild('paramsContainer') containerElement: ElementRef;
+  @ViewChild('paramsContainer', { static: true }) containerElement: ElementRef;
   readonly expandIcon = 'fa fa-caret-down';
   readonly collapseIcon = 'fa fa-caret-up';
   readonly defaultHeight: number = 41;
@@ -103,29 +103,29 @@ export class SearchComponent implements OnInit, AfterViewChecked {
 
     parameter.filteredSuggestions = parameter
       .getChoices()
-      .map(choice => choice.label)
-      .filter(label => matchSubstring(this.translate.instant(label)))
+      .map((choice) => choice.label)
+      .filter((label) => matchSubstring(this.translate.instant(label)))
       .sort((a, b) => sortSuggestions(this.translate.instant(a), this.translate.instant(b)));
   }
 
   // Used for multiselect filtering w/ i18n
   // choice.label can be translated string, only need to keep choice.value to match original (before translation)
   adjustMultiSelectChoices() {
-    this.searchService.availableParams.forEach(param =>
-      param.multiSelectChoices.forEach(choice => (choice.label = this.translate.instant(choice.value))),
+    this.searchService.availableParams.forEach((param) =>
+      param.multiSelectChoices.forEach((choice) => (choice.label = this.translate.instant(choice.value))),
     );
   }
 
   onRangeTypeChange(event) {
-    this.searchService.setSelectedRangeType(event.value.value);
+    this.searchService.setSelectedRangeType(event.value);
   }
 
   onMultiSelectChange(searchParam: SearchParameter, event) {
     // prevents values like "Loading" from being selected
     const nonSelectableLabels = searchParam
       .getChoices()
-      .filter(choice => choice.value === NON_SELECTABLE)
-      .map(choice => choice.label);
+      .filter((choice) => choice.value === NON_SELECTABLE)
+      .map((choice) => choice.label);
 
     if (nonSelectableLabels.includes(event.itemValue)) {
       event.value.pop();
@@ -143,17 +143,17 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   private adjustCalendar() {
     const weekdaysShort = this.instantArray(
       'DATES',
-      this.weekdays.map(day => `${day}_SHORT`),
+      this.weekdays.map((day) => `${day}_SHORT`),
     );
     this.calendarLocale = {
       firstDayOfWeek: 0,
       dayNames: this.instantArray('DATES', this.weekdays),
       dayNamesShort: weekdaysShort,
-      dayNamesMin: weekdaysShort.map(day => day.substr(0, 2)),
+      dayNamesMin: weekdaysShort.map((day) => day.substr(0, 2)),
       monthNames: this.instantArray('DATES', this.months),
       monthNamesShort: this.instantArray(
         'DATES',
-        this.months.map(month => `${month}_SHORT`),
+        this.months.map((month) => `${month}_SHORT`),
       ),
       today: this.translate.instant('SEARCH_BAR.TODAY'),
       clear: this.translate.instant('SEARCH_BAR.CLEAR'),
@@ -165,7 +165,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
     this.multiSelectSelectedItemsLabel = this.translate.instant('SEARCH_BAR.SELECTED_ITEMS');
   }
 
-  private instantArray = (header, keys) => keys.map(key => this.translate.instant(`${header}.${key}`));
+  private instantArray = (header, keys) => keys.map((key) => this.translate.instant(`${header}.${key}`));
 
   // Need to reload for multiSelectSelectedItemsLabel to update properly
   private reload(): void {

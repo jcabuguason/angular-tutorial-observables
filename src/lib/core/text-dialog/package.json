@@ -2,7 +2,7 @@
   "ngPackage": {
     "lib": {
       "umdModuleIds": {
-        "@angular/material": "@angular/material"
+        "@angular/material/dialog": "@angular/material/dialog"
       }
     }
   }

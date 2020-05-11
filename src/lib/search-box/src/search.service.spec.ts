@@ -13,7 +13,7 @@ import { SearchHoursRange } from './parameters/search-hours-range';
 import { SearchTaxonomy } from './search-taxonomy';
 import { SearchableElement, SearchModel } from './model/search.model';
 import { ChoiceModel } from './model/choice.model';
-import { MessageService } from 'primeng/components/common/messageservice';
+import { MessageService } from 'primeng/api';
 import { ESOperator } from 'msc-dms-commons-angular/core/elastic-search';
 import { ParameterName } from './enums/parameter-name.enum';
 
@@ -114,7 +114,7 @@ describe('SearchService', () => {
       ],
     });
 
-    searchService = TestBed.get(SearchService);
+    searchService = TestBed.inject(SearchService);
   });
 
   it('should check if parameter was already added', () => {
