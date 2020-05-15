@@ -12,11 +12,18 @@ export class SearchDatetime extends SearchParameter {
   datetime: string; // using formatted string to ignore the time zone (see: https://stackoverflow.com/a/54755073)
   formDatetime: string;
   includeTime: boolean;
+  private defaultDatetime: string;
 
   constructor(options: DatetimeParameterOptions) {
     super({ ...options, choices: [], timesUsable: 1 });
-    this.includeTime = valueOrDefault(options.includeTime, true);
     this.setType(ParameterType.SEARCH_DATETIME);
+    this.includeTime = valueOrDefault(options.includeTime, true);
+    this.setDefaultDatetime(options.defaultDatetime);
+  }
+
+  private setDefaultDatetime(date) {
+    this.defaultDatetime = this.canAddSelected(date) ? this.formatSearchDate(date, { dateAndTimeSeparator: ' ' }) : '';
+    this.datetime = this.defaultDatetime;
   }
 
   canAddSelected(value): boolean {
@@ -29,12 +36,12 @@ export class SearchDatetime extends SearchParameter {
     }
   }
 
-  removeAllSelected() {
-    this.datetime = null;
+  resetAllSelected(useDefault: boolean = false) {
+    this.datetime = useDefault ? this.defaultDatetime : null;
   }
 
-  removeAllFormValues() {
-    this.formDatetime = null;
+  resetAllFormValues(useDefault: boolean = false) {
+    this.formDatetime = useDefault ? this.defaultDatetime : null;
   }
 
   populateFormValues() {
@@ -42,11 +49,11 @@ export class SearchDatetime extends SearchParameter {
   }
 
   isUnfilled() {
-    return this.datetime == null;
+    return this.isEmpty(this.datetime);
   }
 
   isUnfilledForm() {
-    return this.formDatetime == null;
+    return this.isEmpty(this.formDatetime);
   }
 
   getFullDatetime(): Date {

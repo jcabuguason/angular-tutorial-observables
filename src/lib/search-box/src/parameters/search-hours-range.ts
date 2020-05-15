@@ -21,12 +21,14 @@ export class SearchHoursRange extends SearchParameter {
     this.setType(ParameterType.SEARCH_HOURS_RANGE);
     this.urlNameBefore = valueOrDefault(options.urlNameBefore, 'hoursBefore');
     this.urlNameAfter = valueOrDefault(options.urlNameAfter, 'hoursAfter');
+    this.setDefaultHours(options.defaultHoursBefore, options.defaultHoursAfter);
   }
 
-  setDefaultHours(hrsBefore?: number, hrsAfter?: number) {
-    this.defaultBefore = hrsBefore;
-    this.defaultAfter = hrsAfter;
-    this.resetValues();
+  private setDefaultHours(hrsBefore: number, hrsAfter: number) {
+    this.defaultBefore = isNaN(hrsBefore) ? null : hrsBefore;
+    this.defaultAfter = isNaN(hrsAfter) ? null : hrsAfter;
+    this.hoursBefore = this.defaultBefore;
+    this.hoursAfter = this.defaultAfter;
   }
 
   // at least 1 field needs to be filled, the other will be set to a default or 0 if undefined/null
@@ -40,12 +42,14 @@ export class SearchHoursRange extends SearchParameter {
     }
   }
 
-  removeAllSelected() {
-    this.resetValues();
+  resetAllSelected(useDefault: boolean = false) {
+    this.hoursBefore = useDefault ? this.defaultBefore : null;
+    this.hoursAfter = useDefault ? this.defaultAfter : null;
   }
 
-  removeAllFormValues() {
-    this.resetValues(true);
+  resetAllFormValues(useDefault: boolean = false) {
+    this.formHoursBefore = useDefault ? this.defaultBefore : null;
+    this.formHoursAfter = useDefault ? this.defaultAfter : null;
   }
 
   populateFormValues() {
@@ -77,16 +81,6 @@ export class SearchHoursRange extends SearchParameter {
 
   getUrlNameAfter(): string {
     return this.urlNameAfter;
-  }
-
-  private resetValues(resetForm = false) {
-    if (resetForm) {
-      this.formHoursBefore = this.defaultBefore;
-      this.formHoursAfter = this.defaultAfter;
-    } else {
-      this.hoursBefore = this.defaultBefore;
-      this.hoursAfter = this.defaultAfter;
-    }
   }
 
   private checkUnfilled(checkForm = false): boolean {

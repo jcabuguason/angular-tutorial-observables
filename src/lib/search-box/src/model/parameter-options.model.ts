@@ -11,18 +11,23 @@ export interface ParameterOptions {
   timesUsable?: number;
   placeholder?: string;
   sortAlpha?: boolean;
+  defaultSelectedLabels?: string[];
 }
 
 export interface HoursRangeParameterOptions extends ParameterOptions {
   urlNameBefore?: string;
   urlNameAfter?: string;
+  defaultHoursBefore?: number;
+  defaultHoursAfter?: number;
 }
 
 export interface DatetimeParameterOptions extends ParameterOptions {
   includeTime?: boolean;
+  defaultDatetime?: string | Date;
 }
 
 export interface CheckboxParameterOptions extends ParameterOptions {
   typeValue: string; // value to indicate when this should be checked
   requiredParams: SearchParameter[]; // SearchParameters that need to be filled to execute a search
+  defaultChecked?: boolean;
 }

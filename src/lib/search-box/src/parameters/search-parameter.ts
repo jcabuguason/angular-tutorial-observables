@@ -20,6 +20,7 @@ export class SearchParameter {
   private sortAlpha: boolean;
   private type: ParameterType = ParameterType.SEARCH_PARAMETER;
   private urlName: string;
+  private defaultSelected: string[];
 
   constructor(private options: ParameterOptions) {
     this.name = options.name;
@@ -33,6 +34,18 @@ export class SearchParameter {
     this.urlName = valueOrDefault(options.urlName, this.name);
 
     this.updateChoices(this.choices);
+
+    this.setDefaultSelected(valueOrDefault(options.defaultSelectedLabels, []));
+  }
+
+  private setDefaultSelected(defaultValues: string[]) {
+    this.defaultSelected = defaultValues
+      .filter((value) => this.canAddSelected(value))
+      .map((value) => {
+        const fixed = this.choices.find((val) => val.label.toLowerCase() === value.toLowerCase());
+        return fixed ? fixed.label : value;
+      });
+    this.selected = [...this.defaultSelected];
   }
 
   getName(): string {
@@ -136,16 +149,16 @@ export class SearchParameter {
     return this.selected.includes(value);
   }
 
-  removeAllSelected() {
-    this.selected = [];
+  resetAllSelected(useDefault: boolean = false) {
+    this.selected = useDefault ? [...this.defaultSelected] : [];
   }
 
-  removeAllFormValues() {
-    this.formSelected = [];
+  resetAllFormValues(useDefault: boolean = false) {
+    this.formSelected = useDefault ? [...this.defaultSelected] : [];
   }
 
   populateFormValues() {
-    this.formSelected = JSON.parse(JSON.stringify(this.selected));
+    this.formSelected = [...this.selected];
   }
 
   isUnfilledForm(): boolean {
@@ -159,7 +172,7 @@ export class SearchParameter {
   }
 
   applyFormValues() {
-    this.selected = JSON.parse(JSON.stringify(this.formSelected));
+    this.selected = [...this.formSelected];
   }
 
   removeInvalidValues() {

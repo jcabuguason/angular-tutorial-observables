@@ -1,18 +1,26 @@
 import { SearchParameter } from './search-parameter';
 import { ParameterType } from '../enums/parameter-type.enum';
 import { CheckboxParameterOptions } from '../model/parameter-options.model';
+import { valueOrDefault } from 'msc-dms-commons-angular/shared/util';
 
 export class SearchCheckbox extends SearchParameter {
   typeValue = '';
   formChecked = false;
   checked = false;
   requiredParams: SearchParameter[];
+  private defaultChecked: boolean;
 
   constructor(options: CheckboxParameterOptions) {
     super({ ...options, choices: [], timesUsable: 1 });
     this.setType(ParameterType.SEARCH_CHECKBOX);
     this.typeValue = options.typeValue;
     this.requiredParams = options.requiredParams;
+    this.setDefaultChecked(valueOrDefault(options.defaultChecked, false));
+  }
+
+  private setDefaultChecked(checked: boolean) {
+    this.defaultChecked = checked;
+    this.checked = this.defaultChecked;
   }
 
   hasFilledRequirements(): boolean {
@@ -33,12 +41,12 @@ export class SearchCheckbox extends SearchParameter {
     }
   }
 
-  removeAllSelected() {
-    this.checked = false;
+  resetAllSelected(useDefault: boolean = false) {
+    this.checked = useDefault ? this.defaultChecked : false;
   }
 
-  removeAllFormValues() {
-    this.formChecked = false;
+  resetAllFormValues(useDefault: boolean = false) {
+    this.formChecked = useDefault ? this.defaultChecked : false;
   }
 
   populateFormValues() {
