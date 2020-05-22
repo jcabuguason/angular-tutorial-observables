@@ -5,7 +5,7 @@ import { ShortcutModel } from './model/shortcut.model';
 
 export interface SearchBoxConfig {
   searchList: SearchParameter[];
-  taxonomies: SearchTaxonomy[];
+  taxonomies?: SearchTaxonomy[];
   readOnlyBar?: boolean;
   resetBarButton?: boolean;
   shortcuts?: ShortcutModel[];

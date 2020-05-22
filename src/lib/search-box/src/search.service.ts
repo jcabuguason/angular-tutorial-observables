@@ -396,7 +396,11 @@ export class SearchService {
     return valid;
   }
 
-  private determineTaxonomies() {
+  /**
+   * Determines the applicable taxonomies based on the networks or organizations selected.
+   * If nothing was selected, it reutrns all configured taxonomies.
+   */
+  determineTaxonomies(): string[] {
     const taxParameters = this.displayParams.filter((p) => this.isTaxonomyParam(p) && p.getSelectedModels().length);
 
     if (!taxParameters.length) {
