@@ -194,23 +194,20 @@ describe('DataChartService', () => {
     expect(options.series[0].data[0].color).toBeFalsy();
   });
 
-  // TODO: Needs flat-json sample report
   it('should create a longitudinal chart for hourly qualifiers', () => {
-    fail('Requires sample flat-json data for report data');
-
     const placeholderID = '8.7.98.0.0.0.0';
     const hourlyChart = new Chart({
       elements: [new Element({ id: placeholderID })],
       stations: [
         new Station({
           label: 'Data from report',
-          value: '46131',
+          value: '46251',
           identifierID: '8.7.80.0.0.0.0',
         }),
       ],
       qualifierType: QualifierType.HOURLY,
     });
-    const reportHits = []; // [require('./sample-report-46131.json')];
+    const reportHits = [require('../../../assets/sample-data/flat_report_fake.json')];
     const options = service.buildOptions(hourlyChart, reportHits, {});
 
     const actualIDs = service.qualifierHourlyValues.map((nodeValue) => updateNodeValue(placeholderID, nodeValue, 4));
