@@ -70,7 +70,7 @@ describe('SearchDatetime', () => {
       dateParam.addSelected(new Date(date));
       expect(dateParam.getDatetimeUrlFormat()).toEqual(formatted);
 
-      dateParam.removeAllSelected();
+      dateParam.resetAllSelected();
       dateParam.addSelected(date);
       expect(dateParam.getDatetimeUrlFormat()).toEqual(formatted);
     });
@@ -79,6 +79,36 @@ describe('SearchDatetime', () => {
       const formatted = '2020-01-01T00:00';
       dateParam.addSelected(date);
       expect(dateParam.getDatetimeUrlFormat()).toEqual(formatted);
+    });
+  });
+
+  describe('should use default date', () => {
+    const date = '2020-01-01T00:00Z';
+    beforeEach(() => {
+      dateParam = new SearchDatetime({ name: 'dateParam', defaultDatetime: date });
+    });
+    it('use default date', () => {
+      expect(dateParam.datetime).toEqual('2020-01-01 00:00');
+    });
+    it('use default date on reset', () => {
+      dateParam.addSelected(new Date('2020-02-02T00:00Z'));
+      expect(dateParam.datetime).toEqual('2020-02-02 00:00');
+      dateParam.resetAllSelected(true);
+      expect(dateParam.datetime).toEqual('2020-01-01 00:00');
+    });
+    it('use default date on form reset', () => {
+      dateParam.addSelected(new Date('2020-02-02T00:00Z'));
+      dateParam.populateFormValues();
+      expect(dateParam.formDatetime).toEqual('2020-02-02 00:00');
+      dateParam.resetAllFormValues(true);
+      expect(dateParam.formDatetime).toEqual('2020-01-01 00:00');
+      expect(dateParam.datetime).toEqual('2020-02-02 00:00');
+    });
+    it('remove date', () => {
+      dateParam.addSelected(new Date('2020-02-02T00:00Z'));
+      expect(dateParam.datetime).toEqual('2020-02-02 00:00');
+      dateParam.resetAllSelected();
+      expect(dateParam.datetime).toBeNull();
     });
   });
 });

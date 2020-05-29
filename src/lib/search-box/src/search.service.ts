@@ -165,14 +165,14 @@ export class SearchService {
   removeDisplayParameter(displayParam: SearchParameter) {
     const index = this.displayParams.indexOf(displayParam);
     if (this.displayParams[index] != null) {
-      this.displayParams[index].removeAllSelected();
+      this.displayParams[index].resetAllSelected(true);
       this.displayParams.splice(index, 1);
       this.updateSuggestedParameters();
     }
   }
 
   removeAllDisplayParameters() {
-    this.displayParams.forEach((p) => p.removeAllSelected());
+    this.displayParams.forEach((p) => p.resetAllSelected(true));
     this.displayParams = [];
     this.updateSuggestedParameters();
   }
@@ -298,7 +298,7 @@ export class SearchService {
   }
 
   resetForm() {
-    this.availableParams.forEach((p) => p.removeAllFormValues());
+    this.availableParams.forEach((p) => p.resetAllFormValues(true));
   }
 
   submitSearchForm() {
