@@ -1,0 +1,18 @@
+.wrapper {
+  font-family: Roboto, Helvetica Neue, sans-serif;
+  display: grid;
+  grid-template-columns: 2em auto;
+  margin: 5px 15px;
+}
+
+.dev-item {
+  grid-column: span 2;
+  font-size: smaller;
+  color: #777;
+  padding-top: 0.5em;
+}
+
+.text-item {
+  display: grid;
+  align-items: center;
+}

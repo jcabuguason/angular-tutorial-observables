@@ -30,10 +30,10 @@ export class LockHeartbeatService {
     @Inject(LOCK_CONFIG)
     private config: LockConfig,
     private lockService: LockService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
   ) {
     this.heartbeat$ = timer(0, this.config.coreTTL);
-    const events$ = LockHeartbeatService.INTERRUPTS.map(event => fromEvent(document, event));
+    const events$ = LockHeartbeatService.INTERRUPTS.map((event) => fromEvent(document, event));
     this.userActivity$ = merge(...events$);
     this.unsubscribe = new Subject<void>();
     this.hasLock = false;
@@ -43,7 +43,7 @@ export class LockHeartbeatService {
     resourceIDs: string[],
     type: string,
     handleUnsuccessfulLock: () => void,
-    handleUnauthorizedLock: () => void
+    handleUnauthorizedLock: () => void,
   ) {
     this.hasLock = false;
     this.resourceIDs = resourceIDs;
@@ -57,14 +57,14 @@ export class LockHeartbeatService {
 
   removeLockHeartbeat() {
     this.lockService.releaseLock({ resource_id: this.resourceIDs, type: this.type }).subscribe(
-      value => {},
-      error => {
+      (value) => {},
+      (error) => {
         if (error.status === 401) {
           this.handleUnauthorizedLock();
         } else {
           this.handleUnsuccessfulLock();
         }
-      }
+      },
     );
     this.unsubscribe.next();
   }
@@ -78,28 +78,28 @@ export class LockHeartbeatService {
             resource_id: this.resourceIDs,
             type: this.type,
             reset_enabled: true,
-          })
-        )
+          }),
+        ),
       )
       .subscribe(
-        response => {
+        (response) => {
           this.hasLock = true;
         },
         (error: HttpErrorResponse) => {
           this.hasLock = false;
 
           if (error.status === 423) {
-            const lockInfos = this.resourceIDs.map(resourceID => {
+            const lockInfos = this.resourceIDs.map((resourceID) => {
               return this.lockService.lockInfo({ resource_id: resourceID, type: this.type }).pipe(
-                catchError(lockInfoError => {
+                catchError((lockInfoError) => {
                   this.handleUnknownError(lockInfoError);
                   return of(null as LockInfoResponse);
-                })
+                }),
               );
             });
 
-            forkJoin(lockInfos).subscribe(lockInfoResponses => {
-              lockInfoResponses = lockInfoResponses.filter(info => info != null);
+            forkJoin(lockInfos).subscribe((lockInfoResponses) => {
+              lockInfoResponses = lockInfoResponses.filter((info) => info != null);
 
               if (lockInfoResponses.length > 0) {
                 const lockMessage: string[] = [];
@@ -128,19 +128,16 @@ export class LockHeartbeatService {
           } else {
             this.handleUnsuccessfulLock();
           }
-        }
+        },
       );
   }
 
   private startWarningTimeout() {
     this.userActivity$
-      .pipe(
-        takeUntil(this.unsubscribe),
-        timeout(this.config.applicationTTL - this.config.warning)
-      )
+      .pipe(takeUntil(this.unsubscribe), timeout(this.config.applicationTTL - this.config.warning))
       .subscribe(
-        value => {},
-        err => {
+        (value) => {},
+        (err) => {
           const appMinutes = this.config.applicationTTL / LockHeartbeatService.ONE_MINUTE;
           const warningMinutes = this.config.warning / LockHeartbeatService.ONE_MINUTE;
           this.warningDialogRef = this.dialog.open(TextDialogComponent, {
@@ -160,36 +157,31 @@ export class LockHeartbeatService {
                 this.startWarningTimeout();
               }
             });
-        }
+        },
       );
   }
 
   private startApplicationTimeout() {
-    this.userActivity$
-      .pipe(
-        takeUntil(this.unsubscribe),
-        timeout(this.config.applicationTTL)
-      )
-      .subscribe(
-        value => {},
-        err => {
-          this.heartbeatSubscription.unsubscribe();
-          this.hasLock = false;
+    this.userActivity$.pipe(takeUntil(this.unsubscribe), timeout(this.config.applicationTTL)).subscribe(
+      (value) => {},
+      (err) => {
+        this.heartbeatSubscription.unsubscribe();
+        this.hasLock = false;
 
-          this.lockService.releaseLock({ resource_id: this.resourceIDs, type: this.type }).subscribe(
-            response => {
-              this.handleSuccessfulRelease();
-            },
-            (error: HttpErrorResponse) => {
-              if (error.status === 401) {
-                this.handleUnauthorizedLock();
-              } else {
-                this.handleUnsuccessfulLock();
-              }
+        this.lockService.releaseLock({ resource_id: this.resourceIDs, type: this.type }).subscribe(
+          (response) => {
+            this.handleSuccessfulRelease();
+          },
+          (error: HttpErrorResponse) => {
+            if (error.status === 401) {
+              this.handleUnauthorizedLock();
+            } else {
+              this.handleUnsuccessfulLock();
             }
-          );
-        }
-      );
+          },
+        );
+      },
+    );
   }
 
   private handleUnknownError(error) {

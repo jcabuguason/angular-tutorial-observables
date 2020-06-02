@@ -203,5 +203,15 @@
     "SOUTH_SHORT": "S",
     "WEST_SHORT": "O",
     "EAST_SHORT": "E"
+  },
+  "HELP_MENU": {
+    "TOOLTIP": "Aide",
+    "CONTACT": "Contactez-nous",
+    "DOCUMENTATION": "Lien vers la documentation",
+    "RELEASE_NOTES": "Notes de release",
+    "VERSION": "Version",
+    "DATE_MODIFIED": "Date de modification",
+    "BUILD": "Construire",
+    "COMMONS_VERSION": "Version de Commons"
   }
 }
