@@ -424,4 +424,21 @@ describe('SearchService', () => {
     expect(model.from).toEqual(new Date('2018-03-01T02:00Z'));
     expect(model.to).toEqual(new Date('2018-03-01T04:00Z'));
   });
+
+  it('should adjust date range on submit', () => {
+    searchService.addSuggestedParameter(sParams.startDateParam, ['2018-02-03T00:00Z']);
+    searchService.addSuggestedParameter(sParams.endDateParam, ['2018-02-02T00:00Z']);
+    searchService.setSelectedRangeType('dateRange');
+    searchService.submitSearch();
+
+    const fromDate = searchService.availableParams.find(
+      (param) => param.getName() === ParameterName.FROM,
+    ) as SearchDatetime;
+    const toDate = searchService.availableParams.find(
+      (param) => param.getName() === ParameterName.TO,
+    ) as SearchDatetime;
+
+    expect(fromDate.getFullDatetime()).toEqual(new Date('2018-02-02T00:00Z'));
+    expect(toDate.getFullDatetime()).toEqual(new Date('2018-02-03T00:00Z'));
+  });
 });

@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import { ESOperator, ESQueryElement } from 'msc-dms-commons-angular/core/elastic-search';
+import { ESOperator } from 'msc-dms-commons-angular/core/elastic-search';
 
 import { ParameterName } from './enums/parameter-name.enum';
 import { ParameterType } from './enums/parameter-type.enum';
@@ -20,7 +20,7 @@ import { SEARCH_BOX_CONFIG, SearchBoxConfig } from './search-box.config';
 import { SearchURLService } from './search-url.service';
 import { MessageService } from 'primeng/api';
 import { Subject } from 'rxjs';
-import { subtractHours, addHours } from 'msc-dms-commons-angular/shared/util';
+import { subtractHours, addHours, isTimeBefore } from 'msc-dms-commons-angular/shared/util';
 
 @Injectable()
 export class SearchService {
@@ -187,8 +187,9 @@ export class SearchService {
     this.shortcutSelected = shortcut;
 
     if (this.hasValidParameters()) {
+      const datesChanged = this.adjustDates();
       const model = this.buildSearchModel();
-      if (updateUrlParams) {
+      if (updateUrlParams || datesChanged) {
         this.updateUrl();
       }
       this.searchRequested.next(model);
@@ -396,10 +397,18 @@ export class SearchService {
     return valid;
   }
 
-  /**
-   * Determines the applicable taxonomies based on the networks or organizations selected.
-   * If nothing was selected, it reutrns all configured taxonomies.
-   */
+  private adjustDates(): boolean {
+    const fromDate = this.availableParams.find((param) => param.getName() === ParameterName.FROM) as SearchDatetime;
+    const toDate = this.availableParams.find((param) => param.getName() === ParameterName.TO) as SearchDatetime;
+    if (fromDate && toDate && isTimeBefore(toDate.getFullDatetime(), fromDate.getFullDatetime())) {
+      const temp = fromDate.getFullDatetime();
+      fromDate.setFullDatetime(toDate.getFullDatetime());
+      toDate.setFullDatetime(temp);
+      return true;
+    }
+    return false;
+  }
+
   determineTaxonomies(): string[] {
     const taxParameters = this.displayParams.filter((p) => this.isTaxonomyParam(p) && p.getSelectedModels().length);
 
