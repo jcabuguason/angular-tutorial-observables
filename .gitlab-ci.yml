@@ -1,0 +1,142 @@
+variables:
+  branch_name: ${CI_COMMIT_REF_NAME}
+  build_number: ${CI_PIPELINE_ID}
+  ansible_dir: /apps/mcweb/ansible
+
+stages:
+  - build_commons
+  - test_commons
+  - deploy_commons
+  - build_deploy_apps
+  - stop_review
+
+build_commons:
+  stage: build_commons
+  script:
+    - build_dir=`pwd`
+    - ansible-playbook ${ansible_dir}/build/build_commons.yml --extra-vars "build_dir=$build_dir"
+    - str=`cat package.json`
+    - echo "$(node -pe "JSON.parse(\`$str\`)['version']")" > commons_version.txt
+  artifacts:
+    paths:
+      - msc-dms-commons-angular*.tgz
+      - commons_version.txt
+    expire_in: 2 weeks
+  cache:
+    key: '$CI_COMMIT_REF_NAME'
+    untracked: true
+    paths:
+      - node_modules/
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID'
+
+test_commons:
+  stage: test_commons
+  script:
+    - ng test --watch=false --browsers=ChromeHeadless
+  allow_failure: true
+  cache:
+    key: '$CI_COMMIT_REF_NAME'
+    paths:
+      - node_modules/
+    policy: pull
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID'
+
+deploy_commons:
+  stage: deploy_commons
+  needs: ['build_commons']
+  environment:
+    name: dms-dev-v101/${CI_COMMIT_REF_NAME}
+    url: http://dms-dev-v101.to.on.ec.gc.ca/services/${CI_COMMIT_REF_NAME}
+    on_stop: stop_review
+  script:
+    - build_dir=`pwd`
+    - commons_version=`cat commons_version.txt`
+    - ansible-playbook ${ansible_dir}/deploy/deploy_commons.yml --extra-vars "build_dir=$build_dir branch_name=$branch_name commons_version=$commons_version"
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID'
+
+stop_review:
+  stage: stop_review
+  needs: ['build_commons']
+  variables:
+    GIT_STRATEGY: none # do not check out code after branch is deleted
+  when: manual
+  environment:
+    name: dms-dev-v101/${CI_COMMIT_REF_NAME}
+    action: stop
+  script:
+    - ansible-playbook ${ansible_dir}/remove/force_remove_all.yml --extra-vars "branch_name=$branch_name"
+  only: # stop_review allows 'only' but not 'rules'
+    - merge_requests
+
+.build_deploy_app_template:
+  stage: build_deploy_apps
+  needs: ['build_commons']
+  script:
+    - app_dir=MSC-MCWeb-App-${app_name}
+    - cd $app_dir
+    # Determine which branch to use
+    # Note: grep needs `|| 'true'` so there won't be errors if there is no output
+    - >
+      if [[ $branch_name == "develop" ]]; then
+        echo "Already using develop branch"
+      else
+        branch_name_short=`echo ${branch_name} | grep -i -o '.*dms-[[:digit:]]\+' || 'true'`
+        if [[ $branch_name_short == "" ]]; then
+          branch_name_short=${branch_name}
+        fi
+        origin_matching_branch=`git branch --remote | grep "$branch_name_short" | sed 's/ //g' || 'true'`
+        if [[ $origin_matching_branch != "" ]]; then
+          matching_branch=`echo $origin_matching_branch | sed 's/origin\///'`
+          git checkout -b "${matching_branch}" "${origin_matching_branch}"
+        else
+          echo "No matching $app_name branches found starting with $branch_name_short. Continue using develop branch."
+        fi
+      fi
+    # Check if Commons version matches. If it matches, then build, test, and deploy the app using the appropriate branch. Otherwise, skip the build.
+    - commons_version=`cat ../commons_version.txt`
+    - package_json=`cat package.json`
+    - app_commons_version="$(node -pe "JSON.parse(\`$package_json\`)['dependencies']['msc-dms-commons-angular'].replace('~','')")"
+    - >
+      if [ $app_commons_version == $commons_version ]; then
+        app_build_dir=`pwd`
+        app_orig_url=`echo ${app_name} | awk '{print tolower($0)}'`
+
+        if [[ $matching_branch != "" ]]; then
+          app_new_url=${matching_branch}/${app_orig_url}
+        else
+          app_new_url=${branch_name}/${app_orig_url}
+        fi
+        echo "URL will be $app_new_url"
+
+        cp ../msc-dms-commons-angular-${app_commons_version}.tgz .
+        ansible-playbook ${ansible_dir}/build/build_app.yml --extra-vars "build_dir=$app_build_dir build_number=$build_number orig_url=$app_orig_url new_url=$app_new_url commons_version=$app_commons_version"
+        ansible-playbook ${ansible_dir}/deploy/setup_deploy_app.yml --extra-vars "build_dir=$app_build_dir new_url=$app_new_url"
+        ansible-playbook ${ansible_dir}/deploy/deploy_app.yml --extra-vars "build_dir=$app_build_dir new_url=$app_new_url"
+        ng test --watch=false --browsers=ChromeHeadless
+      else
+        echo "$app_name uses Commons $app_commons_version instead of $commons_version. Skipping."
+      fi
+  allow_failure: true
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID'
+
+build_deploy_midas:
+  extends: .build_deploy_app_template
+  before_script:
+    - git clone https://midas-deploy-token:${MIDAS_TOKEN}@dms-gitlab.cmc.ec.gc.ca/DMS/MSC-MCWeb-App-MIDAS.git -b develop
+    - app_name="MIDAS"
+
+build_deploy_pegasus:
+  extends: .build_deploy_app_template
+  before_script:
+    - git clone https://pegasus-deploy-token:${PEGASUS_TOKEN}@dms-gitlab.cmc.ec.gc.ca/DMS/MSC-MCWeb-App-Pegasus.git -b develop
+    - app_name="Pegasus"
+
+build_deploy_triton:
+  extends: .build_deploy_app_template
+  before_script:
+    - git clone https://triton-deploy-token:${TRITON_TOKEN}@dms-gitlab.cmc.ec.gc.ca/DMS/MSC-MCWeb-App-Triton.git -b develop
+    - app_name="Triton"
