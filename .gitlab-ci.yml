@@ -60,6 +60,7 @@ deploy_commons:
 stop_review:
   stage: stop_review
   needs: ['build_commons']
+  dependencies: [] # artifacts from previous stages not required
   variables:
     GIT_STRATEGY: none # do not check out code after branch is deleted
   when: manual
