@@ -67,6 +67,7 @@
                   [(ngModel)]="p.selected"
                   [allowDuplicate]="false"
                   [addOnTab]="true"
+                  separator=","
                   placeholder="{{ p.getPlaceholder() | translate }}"
                   [max]="p.getTimesUsable()"
                   [addOnBlur]="true"
@@ -279,6 +280,7 @@
           [max]="p.getTimesUsable()"
           [addOnTab]="true"
           [addOnBlur]="true"
+          separator=","
           placeholder="{{ p.getPlaceholder() | translate }}"
         ></p-chips>
       </ng-container>
