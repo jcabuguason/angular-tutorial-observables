@@ -51,6 +51,7 @@ export interface Author {
 export interface ObsElement {
   name: string;
   value: string;
+  valueNum?: number;
   unit: string;
   elementID: string;
   type?: 'metadata' | 'element';

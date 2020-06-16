@@ -64,6 +64,24 @@ describe('ObsUtil', () => {
     expect(obsUtil.formatColumnToElementID('e_7_6_5_4_3_2_1-L12')).toBe('7.6.5.4.3.2.1');
   });
 
+  it('should find string values in an obs', () => {
+    // Multiple valid elements within obs
+    expect(obsUtil.findFirstValue(obs1, '1.11.172.2.5.3.0')).toBe('223.7376');
+    // MSNG value
+    expect(obsUtil.findFirstValue(obs1, '1.14.221.2.1.1.0')).toBe('MSNG');
+    // Element does not exist
+    expect(obsUtil.findFirstValue(obs1, '123.123.123.123.123.123.123')).toBe('');
+  });
+
+  it('should find numeric values in an obs', () => {
+    // Multiple valid elements within obs
+    expect(obsUtil.findFirstValueNum(obs1, '1.11.172.2.5.3.0')).toBe(223.7376);
+    // MSNG value
+    expect(obsUtil.findFirstValueNum(obs1, '1.14.221.2.1.1.0')).toBeUndefined();
+    // Element does not exist
+    expect(obsUtil.findFirstValueNum(obs1, '123.123.123.123.123.123.123')).toBeUndefined();
+  });
+
   describe('converting latitude/longitude values ', () => {
     // values from CA station 1037553
     // confirmed results with: https://www.latlong.net/lat-long-dms.html, https://www.fcc.gov/media/radio/dms-decimal

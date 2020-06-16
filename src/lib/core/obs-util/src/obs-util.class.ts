@@ -64,6 +64,14 @@ export function findFirstValue(obs: DMSObs, elementID: string): string {
   return !!elems.length ? elems[0].value : '';
 }
 
+export function findFirstValueNum(obs: DMSObs, elementID: string): number {
+  const elems = findAllElements(obs, elementID);
+
+  if (!!elems.length) {
+    return elems[0].valueNum;
+  }
+}
+
 /** Most observations come in with a cor and ver in their metadata, but some come with a rev */
 export function findRevision(obs: DMSObs) {
   const find = (elementID) => findFirstValue(obs, elementID);
