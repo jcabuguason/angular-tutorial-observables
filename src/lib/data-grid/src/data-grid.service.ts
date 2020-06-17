@@ -456,7 +456,7 @@ export class DataGridService implements OnDestroy {
     }
 
     // Default -> Official -> Index 1 -> ... Index N
-    workingNode.children.sort((a, b) => a.indexValue > b.indexValue);
+    workingNode.children.sort((a, b) => (a.indexValue === b.indexValue ? 0 : a.indexValue < b.indexValue ? -1 : 1));
 
     if (this.hideDataElement(elementID)) {
       columnToAdd.hide = true;
