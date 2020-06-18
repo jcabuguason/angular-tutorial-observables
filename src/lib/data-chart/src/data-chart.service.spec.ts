@@ -157,43 +157,7 @@ describe('DataChartService', () => {
     expect(options.lang.noData).toBe('CHART.NO_DATA: <li>mock dummy-elem</li>');
   });
 
-  it('should highlight points by QA when showQAColors is set', () => {
-    const options = service.buildOptions(defaultChart, hits, {
-      highchartsOptions: { colors: ['#d5a349'] },
-      customOptions: { showQAColors: true },
-    });
-    expect(options.series[0].data[0].color).not.toBe('#d5a349');
-  });
-
-  it('should be line colour when showQAColors is not set', () => {
-    const options = service.buildOptions(defaultChart, hits, {
-      highchartsOptions: { colors: ['#d5a349'] },
-      customOptions: { showQAColors: false },
-    });
-    expect(options.series[0].data[0].color).toBeFalsy();
-  });
-
-  it('should not be coloured when using bar charts', () => {
-    const options = service.buildOptions(
-      new Chart({
-        stations: [defaultStation],
-        elements: [
-          new Element({
-            id: '1.2.11.1.1.1.0',
-            seriesType: SeriesType.BAR,
-          }),
-        ],
-      }),
-      hits,
-      {
-        highchartsOptions: { colors: ['#d5a349'] },
-        customOptions: { showQAColors: true },
-      },
-    );
-
-    expect(options.series[0].data[0].color).toBeFalsy();
-  });
-
+  // TODO: Needs flat-json sample report
   it('should create a longitudinal chart for hourly qualifiers', () => {
     const placeholderID = '8.7.98.0.0.0.0';
     const hourlyChart = new Chart({

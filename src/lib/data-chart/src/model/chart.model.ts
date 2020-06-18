@@ -34,10 +34,12 @@ export interface ElementOption {
 export class Element {
   id: string;
   seriesType: SeriesType;
+  useQaColor: boolean;
 
-  constructor(given: { id: string; seriesType?: SeriesType }) {
+  constructor(given: { id: string; seriesType?: SeriesType; useQaColor?: boolean }) {
     this.id = given.id;
     this.seriesType = givenOrDefault(given.seriesType, SeriesType.LINE);
+    this.useQaColor = given.useQaColor;
   }
 }
 
@@ -45,10 +47,17 @@ export class Chart {
   stations: Station[];
   elements: Element[];
   qualifierType: QualifierType;
+  useQaColor: boolean;
 
-  constructor(given: { stations: Station[]; elements: Element[]; qualifierType?: QualifierType }) {
+  constructor(given: {
+    stations: Station[];
+    elements: Element[];
+    qualifierType?: QualifierType;
+    useQaColor?: boolean;
+  }) {
     this.stations = given.stations;
     this.elements = given.elements;
     this.qualifierType = givenOrDefault(given.qualifierType, QualifierType.NONE);
+    this.useQaColor = given.useQaColor;
   }
 }

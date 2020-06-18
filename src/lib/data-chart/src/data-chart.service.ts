@@ -166,6 +166,7 @@ export class DataChartService {
             options,
             chartObj.qualifierType,
             element.seriesType,
+            element.useQaColor,
           );
           if (!isSingleStation && !stationName) {
             // Workaround for report-based pages. Re-use the label from their dropdown.
@@ -244,6 +245,7 @@ export class DataChartService {
     options: DataChartOptions,
     qualifierType: QualifierType,
     seriesType: SeriesType,
+    useQaColor: boolean,
   ) {
     for (const elem of foundElems) {
       if (!!elem) {
@@ -270,7 +272,7 @@ export class DataChartService {
           unit: elem.unit || '',
           qa: formatQAValue(qa),
           // optional color fields
-          ...(this.shouldAddQA(options, seriesType) && {
+          ...(this.shouldAddQA(useQaColor, seriesType) && {
             color: this.getQAColor(qa),
             marker: {
               lineColor: 'black',
@@ -284,8 +286,8 @@ export class DataChartService {
     Object.values(sensor).forEach((s) => this.sortByX(s));
   }
 
-  private shouldAddQA(options: DataChartOptions, seriesType: SeriesType) {
-    return !!options.customOptions && options.customOptions.showQAColors && seriesType !== SeriesType.BAR;
+  private shouldAddQA(useQaColor: boolean, seriesType: SeriesType) {
+    return useQaColor && seriesType !== SeriesType.BAR;
   }
 
   private sortByX = (s) => s.sort((a, b) => (a.x === b.x ? 0 : a.x < b.x ? -1 : 1));
