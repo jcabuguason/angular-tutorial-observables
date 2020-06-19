@@ -398,15 +398,20 @@ export class SearchService {
   }
 
   private adjustDates(): boolean {
-    const fromDate = this.availableParams.find((param) => param.getName() === ParameterName.FROM) as SearchDatetime;
-    const toDate = this.availableParams.find((param) => param.getName() === ParameterName.TO) as SearchDatetime;
-    if (fromDate && toDate && isTimeBefore(toDate.getFullDatetime(), fromDate.getFullDatetime())) {
+    const findFilledDate = (name: ParameterName.FROM | ParameterName.TO): SearchDatetime =>
+      this.availableParams.find((param) => param.getName() === name && !param.isUnfilled()) as SearchDatetime;
+
+    const fromDate = findFilledDate(ParameterName.FROM);
+    const toDate = findFilledDate(ParameterName.TO);
+
+    const shouldAdjust = !!fromDate && !!toDate && isTimeBefore(toDate.getFullDatetime(), fromDate.getFullDatetime());
+    if (shouldAdjust) {
       const temp = fromDate.getFullDatetime();
       fromDate.setFullDatetime(toDate.getFullDatetime());
       toDate.setFullDatetime(temp);
-      return true;
     }
-    return false;
+
+    return shouldAdjust;
   }
 
   determineTaxonomies(): string[] {

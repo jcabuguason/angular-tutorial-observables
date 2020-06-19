@@ -425,7 +425,7 @@ describe('SearchService', () => {
     expect(model.to).toEqual(new Date('2018-03-01T04:00Z'));
   });
 
-  it('should adjust date range on submit', () => {
+  it('should adjust the "From" date to be before the "To" date on submit', () => {
     searchService.addSuggestedParameter(sParams.startDateParam, ['2018-02-03T00:00Z']);
     searchService.addSuggestedParameter(sParams.endDateParam, ['2018-02-02T00:00Z']);
     searchService.setSelectedRangeType('dateRange');
@@ -440,5 +440,37 @@ describe('SearchService', () => {
 
     expect(fromDate.getFullDatetime()).toEqual(new Date('2018-02-02T00:00Z'));
     expect(toDate.getFullDatetime()).toEqual(new Date('2018-02-03T00:00Z'));
+  });
+
+  it('should allow searches with just "From" date', () => {
+    searchService.addSuggestedParameter(sParams.startDateParam, ['2020-02-20T20:00Z']);
+    searchService.setSelectedRangeType('dateRange');
+    searchService.submitSearch();
+
+    const fromDate = searchService.availableParams.find(
+      (param) => param.getName() === ParameterName.FROM,
+    ) as SearchDatetime;
+    const toDate = searchService.availableParams.find(
+      (param) => param.getName() === ParameterName.TO,
+    ) as SearchDatetime;
+
+    expect(fromDate.getFullDatetime()).toEqual(new Date('2020-02-20T20:00Z'));
+    expect(toDate.isUnfilled()).toBeTruthy();
+  });
+
+  it('should allow searches with just "To" date', () => {
+    searchService.addSuggestedParameter(sParams.endDateParam, ['2020-02-20T20:00Z']);
+    searchService.setSelectedRangeType('dateRange');
+    searchService.submitSearch();
+
+    const fromDate = searchService.availableParams.find(
+      (param) => param.getName() === ParameterName.FROM,
+    ) as SearchDatetime;
+    const toDate = searchService.availableParams.find(
+      (param) => param.getName() === ParameterName.TO,
+    ) as SearchDatetime;
+
+    expect(fromDate.isUnfilled()).toBeTruthy();
+    expect(toDate.getFullDatetime()).toEqual(new Date('2020-02-20T20:00Z'));
   });
 });
