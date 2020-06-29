@@ -5,7 +5,7 @@
         pButton
         type="button"
         class="bar-button"
-        icon="fa fa-refresh"
+        icon="fas fa-sync-alt"
         title="{{ 'SEARCH_BAR.SEARCH' | translate }}"
         (click)="searchService.submitSearch()"
       ></button>
@@ -14,7 +14,7 @@
         pButton
         type="button"
         class="bar-button"
-        icon="fa fa-times"
+        icon="fas fa-times"
         title="{{ 'SEARCH_BAR.RESET' | translate }}"
         (click)="searchService.resetSearch()"
       ></button>
@@ -36,7 +36,7 @@
       (click)="searchService.openForm()"
       [ngClass]="{ 'hover-color-change': searchService.readOnlyBar }"
     >
-      <i [ngClass]="{ 'bar-icon fa fa-bars': searchService.readOnlyBar }"></i>
+      <i [ngClass]="{ 'bar-icon fas fa-bars': searchService.readOnlyBar }"></i>
       <!-- search parameters in bar -->
       <div class="all-selected-parameters" *ngIf="reloadBarParams">
         <div
@@ -87,7 +87,7 @@
                   *ngIf="!searchService.readOnlyBar && !p.isRequired()"
                   pButton
                   type="button"
-                  icon="pi pi-times"
+                  icon="fas fa-times"
                   class="ui-button-danger"
                   (click)="searchService.removeDisplayParameter(p); checkOverflow()"
                 ></button>
@@ -153,7 +153,7 @@
                   *ngIf="!searchService.readOnlyBar && !p.isRequired()"
                   pButton
                   type="button"
-                  icon="pi pi-times"
+                  icon="fas fa-times"
                   class="ui-button-danger"
                   (click)="searchService.removeDisplayParameter(p); checkOverflow()"
                 ></button>
@@ -202,7 +202,7 @@
               *ngIf="!searchService.readOnlyBar && !p.isRequired()"
               pButton
               type="button"
-              icon="pi pi-times"
+              icon="fas fa-times"
               class="ui-button-danger"
               (click)="searchService.removeDisplayParameter(p); checkOverflow()"
             ></button>
@@ -346,7 +346,7 @@
             *ngIf="p.formSelected.length"
             type="button"
             (click)="p.resetAllFormValues()"
-            icon="pi pi-times"
+            icon="fas fa-times"
             class="clear-btn"
           ></button>
         </div>
@@ -416,7 +416,7 @@
   <p-toast key="search-messages" position="center">
     <ng-template let-message pTemplate="message">
       <div>
-        <i class="pi pi-exclamation-triangle" style="font-size: 3em;"></i>
+        <i class="fas fa-exclamation-triangle message-icon"></i>
         <p>{{ message.summary | translate }}</p>
         <ul>
           <li *ngFor="let field of message.data">{{ field | translate }}</li>
