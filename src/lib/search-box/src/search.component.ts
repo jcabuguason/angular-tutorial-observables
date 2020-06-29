@@ -14,8 +14,8 @@ import { ParameterType } from './enums/parameter-type.enum';
 export class SearchComponent implements OnInit, AfterViewChecked {
   // expanding container for entered search fields
   @ViewChild('paramsContainer', { static: true }) containerElement: ElementRef;
-  readonly expandIcon = 'fa fa-caret-down';
-  readonly collapseIcon = 'fa fa-caret-up';
+  readonly expandIcon = 'fas fa-caret-down';
+  readonly collapseIcon = 'fas fa-caret-up';
   readonly defaultHeight: number = 41;
   readonly defaultContainerHeight: string = '41px';
 
