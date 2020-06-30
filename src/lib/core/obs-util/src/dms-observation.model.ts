@@ -58,9 +58,13 @@ export interface ObsElement {
   overallQASummary?: number;
   overallInstrumentSummary?: number;
   suppInfoDataFlags?: string[];
-  statusIndicators?: StatusIndicators;
   indexName?: string;
   indexValue?: number;
+  statusIndicatorQcRemarkEffectiveDate?: string;
+  statusIndicatorQcRemark?: string;
+  statusIndicatorQcRemarkAccount?: string;
+  statusIndicatorValueOverride?: number;
+  statusIndicatorQaFlagOverride?: number;
   // These unit/value fields are getting a little out-of-hand IMO
   // Should these be put into a sub-type? i.e. `valueModifications?: ElemenModifications`?
   preciseValue?: string;
@@ -69,14 +73,6 @@ export interface ObsElement {
   preferredUnit?: string;
   displayFormat?: string;
   formattedValue?: string;
-}
-
-export interface StatusIndicators {
-  qcRemarkEffectiveDate: string;
-  qcRemark: string;
-  qcRemarkAccount: string;
-  qaFlagOverride?: number;
-  valueOverride?: number;
 }
 
 export interface Location {
