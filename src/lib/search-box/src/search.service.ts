@@ -343,11 +343,13 @@ export class SearchService {
 
   /** Checks for any missing parameters and displays a message */
   hasValidParameters(): boolean {
+    const hoursRange = this.hoursRangeParams.find((p) => p.getName() === ParameterName.HOURS_RANGE) as SearchHoursRange;
+    let negativeHoursRange = false;
     if (this.useDateAndHoursRange) {
       const removeParams = this.selectedRangeType === 'dateRange' ? this.hoursRangeParams : this.dateRangeParams;
       removeParams.forEach((p) => this.removeDisplayParameter(p));
+      negativeHoursRange = hoursRange?.hoursBefore < 0 || hoursRange?.hoursAfter < 0;
     }
-
     const emptyParams = this.findEmptyDisplayParameters().map((p) => p.getDisplayName());
     const missingParams = this.findMissingRequiredParameters().map((p) => p.getDisplayName());
     const checkboxes = this.availableParams.filter(
@@ -389,6 +391,13 @@ export class SearchService {
       this.messageService.add({
         key: 'search-messages',
         summary: 'SEARCH_BAR.NO_PARAMS',
+        sticky: true,
+      });
+      valid = false;
+    } else if (negativeHoursRange) {
+      this.messageService.add({
+        key: 'search-messages',
+        summary: 'SEARCH_BAR.NEGATIVE_HOURS',
         sticky: true,
       });
       valid = false;
