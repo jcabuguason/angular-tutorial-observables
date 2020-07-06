@@ -61,6 +61,7 @@ describe('ElasticSearchService', () => {
           size: 10,
           from: fromDate,
           to: toDate,
+          trackTotalHits: true,
           sortFields: ESSortType.ObservationDateTimeAsc,
         })
         .subscribe((response) => {
@@ -72,6 +73,7 @@ describe('ElasticSearchService', () => {
           r.params.get('size') === '10' &&
           r.params.get('from') === formatDateToString(fromDate, dateFormat) &&
           r.params.get('to') === formatDateToString(toDate, dateFormat) &&
+          r.params.get('trackTotalHits') === 'true' &&
           r.params.get('sortFields') === ESSortType.ObservationDateTimeAsc,
       );
       expect(req.request.method).toBe('GET');

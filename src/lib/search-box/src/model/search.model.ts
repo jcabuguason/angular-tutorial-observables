@@ -18,6 +18,7 @@ export interface SearchModel {
   sortFields?: ESSortType;
   query?: ESQueryChunk[];
   checkboxes?: string[];
+  trackTotalHits?: boolean;
   // HttpParams created from the search parameters
   httpParams?: HttpParams;
 }

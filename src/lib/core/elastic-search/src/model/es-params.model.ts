@@ -6,5 +6,6 @@ export interface ESParams {
   from?: Date;
   to?: Date;
   sortFields?: ESSortType;
+  trackTotalHits?: boolean;
   query?: ESQueryChunk[];
 }

@@ -3,7 +3,7 @@
   "timed_out": false,
   "_shards": { "total": 2, "successful": 2, "skipped": 0, "failed": 0 },
   "hits": {
-    "total": 7782,
+    "total": { "value": 7782, "relation": "eq" },
     "max_score": 6.6363316,
     "hits": [
       {
