@@ -56,6 +56,9 @@ export class ElasticSearchService {
     if (parameters.sortFields != null) {
       params = params.set('sortFields', parameters.sortFields);
     }
+    if (parameters.trackTotalHits != null) {
+      params = params.set('trackTotalHits', String(!!parameters.trackTotalHits));
+    }
     if (parameters.query != null && this.queryHasOptions(parameters.query)) {
       params = params.set('query', this.stringifyQuery(parameters.query));
     }
