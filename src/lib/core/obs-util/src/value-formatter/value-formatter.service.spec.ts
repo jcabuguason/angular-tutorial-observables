@@ -7,7 +7,7 @@ describe('ValueFormatterService', () => {
   let service: ValueFormatterService;
 
   const originalLatitude = '50.11151';
-  const formattedLatitude = `50\xB0 06' 41.436" DIRECTION.NORTH_SHORT`;
+  const formattedLatitude = `50\xB0 06' 41.436" NORTH`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({

@@ -3,18 +3,22 @@ export class IncludeExclude {
   private excludeList: RegExp[] = [];
 
   constructor(includeList: string[], excludeList: string[]) {
-    this.includeList = includeList.map(item => this.asRegex(item));
-    this.excludeList = excludeList.map(item => this.asRegex(item));
+    this.includeList = includeList.map((item) => this.asRegex(item));
+    this.excludeList = excludeList.map((item) => this.asRegex(item));
   }
 
   public checkIncludeExclude(value: string): boolean {
-    const checkList = list => list.some((item: RegExp) => item.test(value));
+    const checkList = (list) => list.some((item: RegExp) => item.test(value));
 
     if (checkList(this.excludeList)) {
       return false;
     }
 
     return this.includeList.length === 0 || checkList(this.includeList);
+  }
+
+  public hasEmptyLists(): boolean {
+    return this.includeList.length === 0 && this.excludeList.length === 0;
   }
 
   asRegex = (element: string) => RegExp(element.replace(/\./g, '\\.').replace(/\*/g, '.*'));
