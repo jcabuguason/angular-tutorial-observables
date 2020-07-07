@@ -7,7 +7,7 @@ import 'rxjs/add/operator/map';
 
 import { DataGridService } from './data-grid.service';
 import { VUColumnConfiguration } from './column-configuration/vu-column-configuration.class';
-import { UserConfigService, ElementVisibility, MR_MAPPING_CONFIG } from 'msc-dms-commons-angular/core/metadata';
+import { UserConfigService, ElementVisibility, MR_MAPPING_CONFIG } from 'msc-dms-commons-angular/core/user-config';
 import { MatDialog } from '@angular/material/dialog';
 import { StationInfoComponent } from './station-info/station-info.component';
 import { UnitCodeConversionService, ObsElement, ValueFormatterService } from 'msc-dms-commons-angular/core/obs-util';

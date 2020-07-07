@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { UserConfigService } from 'msc-dms-commons-angular/core/metadata';
+import { UserConfigService } from 'msc-dms-commons-angular/core/user-config';
 import {
   ObsElement,
   UnitCodeConversionService,

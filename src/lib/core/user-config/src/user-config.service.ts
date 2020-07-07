@@ -4,10 +4,10 @@ import { LanguageService } from 'msc-dms-commons-angular/shared/language';
 import { modifiedOrBlank, range } from 'msc-dms-commons-angular/shared/util';
 import { BehaviorSubject, Observable, throwError as observableThrowError } from 'rxjs';
 import { catchError, first, publishLast, refCount, tap } from 'rxjs/operators';
-import { MDInstanceDefinition } from '../model/MDInstanceDefinition';
 import { MRMappingConfig, MR_MAPPING_CONFIG } from './mr-mapping.config';
 import { NodeLookups } from './node.const';
 import { ElementVisibility, Lang, SubHeaderConfig, UserConfig, ElementGroup } from './user-config.model';
+import { UserConfigOptions } from './user-config-options.model';
 
 @Injectable()
 export class UserConfigService {
@@ -19,10 +19,9 @@ export class UserConfigService {
   // The language used in the config
   private lang: Lang = Lang.ENGLISH;
   // Locally available profiles (might be removed once MR is used)
-  private profiles: MDInstanceDefinition[] = [];
+  private profiles: UserConfigOptions[] = [];
   private nodeValueAt = (elementID, i) => elementID.split('.')[i - 1];
 
-  // constructor(private metadataService: MetadataService) {
   constructor(
     @Inject(MR_MAPPING_CONFIG)
     private config: MRMappingConfig,
@@ -32,11 +31,11 @@ export class UserConfigService {
 
     const infoUrl = `${this.config.endpoint}/metadata/mapping/v1.0/element_taxonomy/commons_element_identification`;
     this.nodeInfo$ = this.http.get<any>(infoUrl).pipe(
-      tap(info => (this.nodeInfo = info)),
+      tap((info) => (this.nodeInfo = info)),
       first(),
       publishLast(),
       refCount(),
-      catchError(e => observableThrowError(e)),
+      catchError((e) => observableThrowError(e)),
     );
   }
 
@@ -44,8 +43,8 @@ export class UserConfigService {
     this.userConfig = UserConfig.createConfig();
   }
 
-  injectProfiles(mdInstances: MDInstanceDefinition[]) {
-    this.profiles = mdInstances;
+  injectProfiles(config: UserConfigOptions[]) {
+    this.profiles = config;
   }
 
   // Sets the given user profile from the configured MR
@@ -56,20 +55,18 @@ export class UserConfigService {
   }
 
   // Loads the given user configuration
-  loadConfig(mdInstance: MDInstanceDefinition) {
+  loadConfig(config: UserConfigOptions) {
     this.profileLoading$.next(true);
 
     this.defaultHeader();
 
-    this.loadInstance(mdInstance);
+    this.loadInstance(config);
 
     this.profileLoading$.next(false);
   }
 
   private loadProfile(configName: string) {
-    const matchesConfig = elem => elem.name === 'profile-name' && elem.value === configName;
-
-    const localProfile = this.profiles.find(profile => profile.elements.some(matchesConfig));
+    const localProfile = this.profiles.find((profile) => profile.profileName.value === configName);
 
     if (!!localProfile) {
       this.loadInstance(localProfile);
@@ -80,12 +77,12 @@ export class UserConfigService {
     //     .subscribe((param) => this.loadInstance(param));
   }
 
-  private loadInstance(mdInstance: MDInstanceDefinition) {
-    mdInstance.elements
-      .filter(elem => elem.group === 'relationship' && elem.name === 'child-configs')
-      .forEach(elem => this.loadProfile(elem.value));
+  private loadInstance(config: UserConfigOptions) {
+    if (!!config?.childConfig) {
+      this.loadProfile(config.childConfig);
+    }
 
-    UserConfig.updateConfig(this.userConfig, mdInstance);
+    UserConfig.updateConfig(this.userConfig, config);
   }
 
   isLoadPreferredUnits(): boolean {
@@ -94,37 +91,43 @@ export class UserConfigService {
 
   hasPreferredUnits(): boolean {
     return (
-      !!this.userConfig.elementUnits.map(config => config.unit).shift() ||
-      !!this.userConfig.elementConfigs.map(config => config.displayUnit).shift()
+      !!this.userConfig.elementUnits.map((config) => config.unit).shift() ||
+      !!this.userConfig.elementConfigs.map((config) => config.displayUnit).shift()
     );
   }
 
-  getElementVisibility(elementID: string): ElementVisibility {
-    if (this.isNoLoad(elementID)) {
+  getElementVisibility(elementID: string, isMetadata?: boolean): ElementVisibility {
+    if (!this.isLoad(elementID, isMetadata)) {
       return ElementVisibility.NO_LOAD;
     }
-    if (this.isHidden(elementID)) {
+    if (!this.isVisible(elementID, isMetadata)) {
       return ElementVisibility.HIDDEN;
     }
+
     return ElementVisibility.DEFAULT;
   }
 
-  isNoLoad(elementID) {
-    return !this.userConfig.loadDataElements.checkIncludeExclude(elementID);
+  isLoad(elementID: string, isMetadata?: boolean): boolean {
+    return isMetadata && !this.userConfig.loadMetadata.hasEmptyLists()
+      ? this.userConfig.loadMetadata.checkIncludeExclude(elementID)
+      : this.userConfig.loadElements.checkIncludeExclude(elementID);
   }
 
-  isHidden(elementID) {
-    return (
-      !this.userConfig.visibleDataElements.checkIncludeExclude(elementID) ||
-      (this.hasElementOrder() && !this.getElementOrder().includes(elementID))
-    );
+  isVisible(elementID: string, isMetadata?: boolean): boolean {
+    return isMetadata && !this.userConfig.visibleMetadata.hasEmptyLists()
+      ? this.userConfig.visibleMetadata.checkIncludeExclude(elementID)
+      : this.userConfig.visibleElements.checkIncludeExclude(elementID);
+  }
+
+  loadAsMetadata(elementID: string): boolean {
+    return !this.userConfig.loadMetadata.hasEmptyLists() && this.userConfig.loadMetadata.checkIncludeExclude(elementID);
   }
 
   getNestingDepth(elementID: string): number {
     return (
       this.userConfig.elementConfigs
-        .filter(elemConf => elemConf.elementID === elementID)
-        .map(elemConfig => elemConfig.nestingDepth)
+        .filter((elemConf) => elemConf.elementID === elementID)
+        .map((elemConfig) => elemConfig.nestingDepth)
         .shift() || this.userConfig.nestingDepth
     );
   }
@@ -137,8 +140,8 @@ export class UserConfigService {
     const elementOrder: string[] = [];
 
     this.userConfig.elementConfigs
-      .filter(config => config.order != null)
-      .forEach(config => (elementOrder[Number(config.order) - 1] = config.elementID));
+      .filter((config) => config.order != null)
+      .forEach((config) => (elementOrder[Number(config.order) - 1] = config.elementID));
 
     return elementOrder;
   }
@@ -147,8 +150,8 @@ export class UserConfigService {
     return !!this.userConfig.defaultTag ? this.userConfig.defaultTag.getName() : this.userConfig.instant('DEFAULT');
   }
 
-  getHideQaFlag(): number[] {
-    return this.userConfig.qaHideFlags;
+  getHiddenQaFlags(): number[] {
+    return this.userConfig.hiddenQaFlags;
   }
 
   getHiddenInstrumentValues(): number[] {
@@ -156,7 +159,9 @@ export class UserConfigService {
   }
 
   getElementGroup(elementID: string): ElementGroup {
-    return this.userConfig.elementGroups.find(elemGroup => elemGroup.elementIDs.some(elemID => elemID === elementID));
+    return this.userConfig.elementGroups.find((elemGroup) =>
+      elemGroup.elementIDs.some((elemID) => elemID === elementID),
+    );
   }
 
   getAllElementGroups(): ElementGroup[] {
@@ -169,13 +174,13 @@ export class UserConfigService {
 
   getSpecificElementUnit(elementID: string): string {
     return this.userConfig.elementConfigs
-      .filter(config => config.elementID === elementID)
-      .map(config => config.displayUnit)
+      .filter((config) => config.elementID === elementID)
+      .map((config) => config.displayUnit)
       .shift();
   }
 
   getGenericElementUnit(elementID: string): string {
-    const configElement = this.userConfig.elementUnits.find(config => config.elementRegex.test(elementID));
+    const configElement = this.userConfig.elementUnits.find((config) => config.elementRegex.test(elementID));
     if (configElement) {
       return configElement.unit;
     }
@@ -183,8 +188,8 @@ export class UserConfigService {
 
   getElementEditableDataFlags(elementID: string): string[] {
     return this.userConfig.elementConfigs
-      .filter(config => config.elementID === elementID)
-      .map(config => config.availableDataFlags)
+      .filter((config) => config.elementID === elementID)
+      .map((config) => config.availableDataFlags)
       .shift();
   }
 
@@ -195,32 +200,32 @@ export class UserConfigService {
   getElementDescription(elementID: string, nodeIndex: number = this.getNestingDepth(elementID)): string {
     if (nodeIndex === this.getNestingDepth(elementID)) {
       return this.userConfig.elementConfigs
-        .filter(config => config.elementID === elementID)
-        .map(config => config.elementDescription)
-        .filter(elemConfig => elemConfig !== undefined)
-        .map(elemConfig => elemConfig.getName())
+        .filter((config) => config.elementID === elementID)
+        .map((config) => config.elementDescription)
+        .filter((elemConfig) => elemConfig !== undefined)
+        .map((elemConfig) => elemConfig.getName())
         .shift();
     }
   }
 
   getNodeDescription(elementID: string, nodeIndex: number): string {
     return this.userConfig.genericNodes
-      .filter(config => config.nodeIndex === nodeIndex)
-      .map(config => config.nodeMap)
+      .filter((config) => config.nodeIndex === nodeIndex)
+      .map((config) => config.nodeMap)
       .reduce((a, b) => a.concat(b), [])
-      .filter(nodeMap => nodeMap.nodeValue === this.nodeValueAt(elementID, nodeIndex))
-      .map(nodeMap => nodeMap.nodeDescription)
-      .map(nodeDescription => nodeDescription.getName())
+      .filter((nodeMap) => nodeMap.nodeValue === this.nodeValueAt(elementID, nodeIndex))
+      .map((nodeMap) => nodeMap.nodeDescription)
+      .map((nodeDescription) => nodeDescription.getName())
       .shift();
   }
 
   getElementOfficialIndexTitle(elementID: string): string {
     return (
       this.userConfig.elementConfigs
-        .filter(config => config.elementID === elementID)
-        .map(config => config.officialTitle)
-        .filter(officialTitle => officialTitle !== undefined)
-        .map(officialTitle => officialTitle.getName())
+        .filter((config) => config.elementID === elementID)
+        .map((config) => config.officialTitle)
+        .filter((officialTitle) => officialTitle !== undefined)
+        .map((officialTitle) => officialTitle.getName())
         .shift() || this.userConfig.instant('OFFICIAL')
     );
   }
@@ -228,35 +233,35 @@ export class UserConfigService {
   getElementIndexTitle(elementID: string): string {
     return (
       this.userConfig.elementConfigs
-        .filter(config => config.elementID === elementID)
-        .map(config => config.indexTitle)
-        .filter(indexTitle => indexTitle !== undefined)
-        .map(indexTitle => indexTitle.getName())
+        .filter((config) => config.elementID === elementID)
+        .map((config) => config.indexTitle)
+        .filter((indexTitle) => indexTitle !== undefined)
+        .map((indexTitle) => indexTitle.getName())
         .shift() || this.userConfig.instant('LAYER')
     );
   }
 
   getElementPrecision(elementID: string): number {
     return this.userConfig.elementConfigs
-      .filter(config => config.elementID === elementID)
-      .map(config => config.precision)
+      .filter((config) => config.elementID === elementID)
+      .map((config) => config.precision)
       .shift();
   }
 
   getFullDefaultHeader(elementID: string, depth: number = this.getNestingDepth(elementID)): string {
     const split = elementID.split('.');
     return range(2, depth)
-      .map(nodeIndex => this.getDefaultNodeName(nodeIndex, split[nodeIndex - 1]))
-      .filter(nodeName => nodeName !== '')
+      .map((nodeIndex) => this.getDefaultNodeName(nodeIndex, split[nodeIndex - 1]))
+      .filter((nodeName) => nodeName !== '')
       .join(' / ');
   }
 
   getFullFormattedHeader(elementID: string, separator: string = ' / '): string {
     const group = this.getElementGroup(elementID);
-    const groupName = group == null ? '' : modifiedOrBlank(group.groupName.getName(), s => `${s}${separator}`);
+    const groupName = group == null ? '' : modifiedOrBlank(group.groupName.getName(), (s) => `${s}${separator}`);
     const main = range(2, this.getNestingDepth(elementID))
-      .map(nodeIndex => this.getFormattedNodeName(elementID, nodeIndex))
-      .filter(nodeName => nodeName !== '')
+      .map((nodeIndex) => this.getFormattedNodeName(elementID, nodeIndex))
+      .filter((nodeName) => nodeName !== '')
       .join(separator);
 
     return `${groupName}${main}${this.getFormattedSubHeader(elementID)}`;
@@ -264,7 +269,7 @@ export class UserConfigService {
 
   getFormattedSubHeader(elementID: string): string {
     const subHeader = this.getSubHeader(elementID);
-    return modifiedOrBlank(subHeader, s => `, ${s}`);
+    return modifiedOrBlank(subHeader, (s) => `, ${s}`);
   }
 
   getSubHeader(elementID: string): string {
@@ -272,8 +277,8 @@ export class UserConfigService {
 
     return headerConfig.displaySubHeader
       ? range(headerConfig.subHeaderStart, headerConfig.subHeaderEnd)
-          .map(nodeIndex => this.getNodeName(elementID, nodeIndex))
-          .filter(nodeValue => nodeValue !== '')
+          .map((nodeIndex) => this.getNodeName(elementID, nodeIndex))
+          .filter((nodeValue) => nodeValue !== '')
           .join(', ')
       : '';
   }
@@ -281,8 +286,8 @@ export class UserConfigService {
   getSubHeaderConfig(elementID: string): SubHeaderConfig {
     return (
       this.userConfig.elementConfigs
-        .filter(elemConf => elemConf.elementID === elementID)
-        .map(elemConfig => elemConfig.subHeader)
+        .filter((elemConf) => elemConf.elementID === elementID)
+        .map((elemConfig) => elemConfig.subHeader)
         .shift() || this.userConfig.subHeader
     );
   }
@@ -290,7 +295,7 @@ export class UserConfigService {
   getFormattedNodeName(elementID: string, nodeIndex: number): string {
     return this.getNodeName(elementID, nodeIndex)
       .split('_')
-      .filter(s => !!s)
+      .filter((s) => !!s)
       .map((piece: string) => piece[0].toUpperCase() + piece.slice(1))
       .join(' ');
   }
@@ -321,36 +326,36 @@ export class UserConfigService {
   getByElementName(elementID: string, nodeIndex: number = this.getNestingDepth(elementID)): string {
     return nodeIndex === this.getNestingDepth(elementID)
       ? this.userConfig.elementConfigs
-          .filter(config => config.elementID === elementID)
-          .map(config => config.elementName)
-          .map(elementName => elementName.getName())
+          .filter((config) => config.elementID === elementID)
+          .map((config) => config.elementName)
+          .map((elementName) => elementName.getName())
           .shift()
       : '';
   }
 
   getByElementNode(elementID: string, nodeIndex: number): string {
     return this.userConfig.elementConfigs
-      .filter(config => config.elementID === elementID)
-      .map(config => config.nodeNames)
+      .filter((config) => config.elementID === elementID)
+      .map((config) => config.nodeNames)
       .reduce((a, b) => a.concat(b), [])
-      .filter(nodeNames => nodeNames.nodeIndex === nodeIndex)
-      .map(nodeMap => nodeMap.getName())
+      .filter((nodeNames) => nodeNames.nodeIndex === nodeIndex)
+      .map((nodeMap) => nodeMap.getName())
       .shift();
   }
 
   getByGenericNode(nodeIndex: number, nodeValue: string): string {
     return this.userConfig.genericNodes
-      .filter(config => config.nodeIndex === nodeIndex)
-      .map(config => config.nodeMap)
+      .filter((config) => config.nodeIndex === nodeIndex)
+      .map((config) => config.nodeMap)
       .reduce((a, b) => a.concat(b), [])
-      .filter(nodeMap => nodeMap.nodeValue === nodeValue)
-      .map(nodeMap => nodeMap.nodeName)
-      .map(nodeName => nodeName.getName())
+      .filter((nodeMap) => nodeMap.nodeValue === nodeValue)
+      .map((nodeMap) => nodeMap.nodeName)
+      .map((nodeName) => nodeName.getName())
       .shift();
   }
 
   getDefaultNodeName(nodeIndex: number | string, nodeValue: string): string {
-    const capitalize = lang => lang.charAt(0).toUpperCase() + lang.slice(1);
+    const capitalize = (lang) => lang.charAt(0).toUpperCase() + lang.slice(1);
     try {
       nodeIndex = String(nodeIndex);
       return !!this.nodeInfo
@@ -362,12 +367,12 @@ export class UserConfigService {
   }
 
   buildFullNodeName(elem) {
-    if (this.isNoLoad(elem)) {
+    if (!this.isLoad(elem)) {
       return elem
         .split('.')
         .slice(1)
         .map((nv, i) => this.getFormattedNodeName(elem, i + 2))
-        .filter(n => n !== '')
+        .filter((n) => n !== '')
         .join(' / ');
     } else {
       return this.getFullFormattedHeader(elem);
@@ -392,8 +397,8 @@ export class UserConfigService {
 
   getElementDisplayFormat(elementID: string): string {
     return this.userConfig.elementConfigs
-      .filter(config => config.elementID === elementID)
-      .map(config => config.displayFormat)
+      .filter((config) => config.elementID === elementID)
+      .map((config) => config.displayFormat)
       .shift();
   }
 }

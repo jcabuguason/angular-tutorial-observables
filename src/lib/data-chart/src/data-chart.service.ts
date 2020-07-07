@@ -5,7 +5,7 @@ import HC_exporting from 'highcharts/modules/exporting';
 import HC_no_data_to_display from 'highcharts/modules/no-data-to-display';
 import HC_offline_exporting from 'highcharts/modules/offline-exporting';
 import { range } from 'msc-dms-commons-angular/shared/util';
-import { UserConfigService } from 'msc-dms-commons-angular/core/metadata';
+import { UserConfigService } from 'msc-dms-commons-angular/core/user-config';
 import {
   CLIMATE_ID_ELEMENT,
   ICAO_ID_ELEMENT,

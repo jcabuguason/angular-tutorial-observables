@@ -222,7 +222,7 @@ export function convertDDToDMS(elementValue: number, isLatitude: boolean): strin
     return String(elementValue);
   }
 
-  const directionLabel = (key) => LanguageService.translator.instant(`DIRECTION.${key}_SHORT`);
+  const directionLabel = (key) => LanguageService.translator?.instant(`DIRECTION.${key}_SHORT`) || key;
   const padZero = (value) => String(value).padStart(2, '0');
 
   const absDecimalDegrees = Math.abs(elementValue);

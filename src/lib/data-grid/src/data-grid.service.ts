@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { ElementGroup, ElementVisibility, UserConfigService } from 'msc-dms-commons-angular/core/metadata';
+import { ElementGroup, ElementVisibility, UserConfigService } from 'msc-dms-commons-angular/core/user-config';
 import {
   DMSObs,
   ObsElement,
@@ -175,7 +175,7 @@ export class DataGridService implements OnDestroy {
     const result = {};
 
     const buildColumn = (element) => {
-      if (element.name != null && !this.ignoreElement(element.elementID)) {
+      if (element.name != null && !this.isIgnoredElement(element.elementID, true)) {
         const headerID = ColumnConfigurationContainer.findHeaderID(element);
         result[headerID] = element;
         this.buildMetadataColumn(element, headerID);
@@ -194,7 +194,7 @@ export class DataGridService implements OnDestroy {
     const result = {};
 
     const buildColumn = (element) => {
-      if (!this.ignoreElement(element.elementID)) {
+      if (!this.isIgnoredElement(element.elementID)) {
         if (!this.elementsFound.includes(element.elementID)) {
           this.elementsFound.push(element.elementID);
         }
@@ -246,12 +246,14 @@ export class DataGridService implements OnDestroy {
   }
 
   private addEmptyDataColumns() {
+    const isMetadata = (id) => this.userConfigService.loadAsMetadata(id);
+
     this.userConfigService
       .getElementOrder()
-      .filter((id) => !this.ignoreElement(id) && !this.elementsFound.includes(id))
+      .filter((id) => !this.isIgnoredElement(id, isMetadata(id)) && !this.elementsFound.includes(id))
       .map((id) => ({ elementID: id }))
       .forEach((elem) => {
-        this.isMetadataElement(elem.elementID)
+        isMetadata(elem.elementID)
           ? this.buildMetadataColumn(elem as ObsElement)
           : this.buildElementColumn(elem as ObsElement);
       });
@@ -308,11 +310,6 @@ export class DataGridService implements OnDestroy {
     this.dialog.open(StationInfoComponent, {
       data: this.getMetadataTableInfo(nodeData),
     });
-  }
-
-  private isMetadataElement(elementID: string) {
-    const split = elementID.split('.');
-    return !!split[1] && (split[1] === '7' || split[1] === '8' || split[1] === '9');
   }
 
   private resetHeader() {
@@ -458,7 +455,7 @@ export class DataGridService implements OnDestroy {
     // Default -> Official -> Index 1 -> ... Index N
     workingNode.children.sort((a, b) => (a.indexValue === b.indexValue ? 0 : a.indexValue < b.indexValue ? -1 : 1));
 
-    if (this.hideDataElement(elementID)) {
+    if (this.isHiddenElement(elementID)) {
       columnToAdd.hide = true;
     }
 
@@ -491,7 +488,7 @@ export class DataGridService implements OnDestroy {
       headerTooltip: this.userConfigService.getDescription(element.elementID),
       field: headerID,
       width: 80,
-      hide: this.hideMetadataElement(element.elementID),
+      hide: this.isHiddenElement(element.elementID, true),
       type: 'identity',
       elementID: element.elementID,
     };
@@ -506,18 +503,16 @@ export class DataGridService implements OnDestroy {
     this.columnsGenerated.push(headerID);
   }
 
-  private ignoreElement(elementID: string): boolean {
-    return elementID == null || this.userConfigService.getElementVisibility(elementID) === ElementVisibility.NO_LOAD;
+  private isIgnoredElement(elementID: string, isMetadata?: boolean): boolean {
+    return (
+      elementID == null ||
+      this.userConfigService.getElementVisibility(elementID, isMetadata) === ElementVisibility.NO_LOAD
+    );
   }
 
-  /** Metadata elements are hidden by default regardless of profile, unless specified by app to use profile settings */
-  hideMetadataElement(elementID: string): boolean {
-    return true;
-  }
-
-  private hideDataElement(elementID: string): boolean {
+  private isHiddenElement(elementID: string, isMetadata?: boolean): boolean {
     // should return default even if use empty user config
-    return this.userConfigService.getElementVisibility(elementID) === ElementVisibility.HIDDEN;
+    return this.userConfigService.getElementVisibility(elementID, isMetadata) === ElementVisibility.HIDDEN;
   }
 
   /** Comparator used for sorting data element columns */
