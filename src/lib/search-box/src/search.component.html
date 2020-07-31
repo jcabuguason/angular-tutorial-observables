@@ -195,8 +195,10 @@
                 dataType="string"
                 dateFormat="yy-mm-dd"
                 selectOtherMonths="true"
+                [showOnFocus]="false"
+                [showIcon]="!searchService.readOnlyBar"
               >
-              </p-calendar>
+              </p-calendar>      
             </ng-container>
 
             <button
@@ -453,6 +455,8 @@
       dataType="string"
       dateFormat="yy-mm-dd"
       selectOtherMonths="true"
+      [showOnFocus]="false"
+      [showIcon]="true"
     >
     </p-calendar>
   </ng-container>
