@@ -16,12 +16,14 @@ export class Station {
   value: string;
   identifierID?: string;
   group?: any;
+  stationInfo?: any;
 
-  constructor(given: { label: string; value: string; identifierID?: string; group?: any }) {
+  constructor(given: { label: string; value: string; identifierID?: string; group?: any; stationInfo?: any }) {
     this.label = given.label;
     this.value = given.value;
     this.identifierID = givenOrDefault(given.identifierID);
     this.group = givenOrDefault(given.group);
+    this.stationInfo = givenOrDefault(given.stationInfo);
   }
 }
 

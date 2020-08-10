@@ -54,13 +54,25 @@ export class ElasticSearchService {
       params = params.set('to', formatDateToString(parameters.to, dateFormat));
     }
     if (parameters.sortFields != null) {
-      params = params.set('sortFields', parameters.sortFields);
+      params = params.set('sortFields', parameters.sortFields.join(','));
     }
     if (parameters.trackTotalHits != null) {
       params = params.set('trackTotalHits', String(!!parameters.trackTotalHits));
     }
     if (parameters.query != null && this.queryHasOptions(parameters.query)) {
       params = params.set('query', this.stringifyQuery(parameters.query));
+    }
+    if (parameters.longitude != null) {
+      params = params.set('longitude', String(parameters.longitude));
+    }
+    if (parameters.latitude != null) {
+      params = params.set('latitude', String(parameters.latitude));
+    }
+    if (parameters.distance != null) {
+      params = params.set('distance', parameters.distance);
+    }
+    if (parameters.fields != null) {
+      params = params.set('fields', parameters.fields.join(','));
     }
     return params;
   }
@@ -79,13 +91,13 @@ export class ElasticSearchService {
 
   private chunkToString = (chunk: ESQueryChunk): string => {
     return chunk.elements
-      .map(
-        (elem) =>
-          `${formatElementToEsKey(elem.elementID)}.value${elem.isCaseless ? '.lowercase' : ''}:${this.formatValue(
-            elem.value,
-            elem.isCaseless,
-          )}`,
-      )
+      .map((elem) => {
+        const formattedString = `${formatElementToEsKey(elem.elementID)}.value${
+          elem.isCaseless ? '.lowercase' : ''
+        }:${this.formatValue(elem.value, elem.isCaseless)}`;
+
+        return this.wrapString(formattedString, elem.isNegation, 'NOT(', ')');
+      })
       .map((str) => this.wrapString(str, chunk.elements.length > 1, '(', ')'))
       .join(chunk.operator);
   };
