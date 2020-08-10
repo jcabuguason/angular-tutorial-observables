@@ -24,13 +24,14 @@ import {
   latestFromArray,
   updateNodeValue,
 } from 'msc-dms-commons-angular/core/obs-util';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 import { Chart, Element, SeriesType, Station, QualifierType } from './model/chart.model';
 import { DataChartOptions } from './model/options.model';
 
 @Injectable()
 export class DataChartService {
   public wipeCharts = new Subject();
+  public chartLoading$ = new BehaviorSubject(undefined);
 
   readonly minQualifierHourly = 86;
   readonly maxQualifierHourly = 109;
@@ -122,6 +123,10 @@ export class DataChartService {
     return `${this.configService.getFormattedNodeName(id, 3)}  (${this.translate.instant(key(qualifierType))})`;
   }
 
+  isMatchingObs(obs: DMSObs, station: Station): boolean {
+    return findObsIdentifier(obs, station.identifierID).toLowerCase() === station.value.toLowerCase();
+  }
+
   private determineChartTitle(chartObj: Chart): string {
     if (chartObj.stations.length === 1) {
       return chartObj.stations[0].label;
@@ -154,9 +159,7 @@ export class DataChartService {
       for (const station of stations) {
         const sensor = {};
         let stationName = '';
-        for (const obs of sortedObs.filter(
-          (ob) => findObsIdentifier(ob, station.identifierID).toLowerCase() === station.value.toLowerCase(),
-        )) {
+        for (const obs of sortedObs.filter((ob) => this.isMatchingObs(ob, station))) {
           const foundElems = this.grabElementsFromObs(obs, element.id, chartObj.qualifierType);
           this.buildSensor(
             foundElems,
@@ -169,8 +172,7 @@ export class DataChartService {
             element.useQaColor,
           );
           if (!isSingleStation && !stationName) {
-            // Workaround for report-based pages. Re-use the label from their dropdown.
-            stationName = this.createStationLabel(obs) || station.label;
+            stationName = this.createStationLabel(obs, station.label);
           }
         }
         const seriesType = element.seriesType || this.getSeriesType(element.id);
@@ -257,7 +259,6 @@ export class DataChartService {
         if (!yTypes.includes(elem.unit)) {
           yTypes.push(elem.unit);
         }
-        this.unitService.setPreferredUnits(elem);
         const key = grabIndexValue(elem);
         if (!sensor[key]) {
           sensor[key] = [];
@@ -321,10 +322,10 @@ export class DataChartService {
 
     for (const station of stations) {
       for (const elem of elements) {
-        for (const obs of observations.filter(
-          (ob) => findObsIdentifier(ob, station.identifierID).toLowerCase() === station.value.toLowerCase(),
-        )) {
+        for (const obs of observations.filter((ob) => this.isMatchingObs(ob, station))) {
           const foundElems = this.grabElementsFromObs(obs, elem.id, chartObj.qualifierType);
+          foundElems.forEach((el) => this.unitService.setPreferredUnits(el));
+
           if (foundElems.length > 0) {
             // NOTE: This behaviour is a bit odd when working with flat-tables with renamed elements
             if (!values.includes(foundElems[0].unit)) {
@@ -380,11 +381,18 @@ export class DataChartService {
     }
   }
 
-  private createStationLabel(obs: DMSObs) {
+  createStationLabel(obs: DMSObs, defaultLabel: string = ''): string {
     const shortID = findFirstValue(obs, TC_ID_ELEMENT) || findFirstValue(obs, ICAO_ID_ELEMENT);
-    return [findFirstValue(obs, STATION_NAME_ELEMENT), findFirstValue(obs, CLIMATE_ID_ELEMENT), shortID]
+    const stationObsLabel = [
+      findFirstValue(obs, STATION_NAME_ELEMENT),
+      findFirstValue(obs, CLIMATE_ID_ELEMENT),
+      shortID,
+    ]
       .filter((label) => !!label)
       .join(' - ');
+
+    // Workaround for report-based pages. Re-use the label from their dropdown.
+    return stationObsLabel || defaultLabel;
   }
 
   private buildNoDataString(chartObj) {

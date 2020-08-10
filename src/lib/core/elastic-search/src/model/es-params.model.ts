@@ -5,7 +5,11 @@ export interface ESParams {
   size?: number;
   from?: Date;
   to?: Date;
-  sortFields?: ESSortType;
+  sortFields?: ESSortType[];
   trackTotalHits?: boolean;
   query?: ESQueryChunk[];
+  longitude?: number;
+  latitude?: number;
+  distance?: string;
+  fields?: string[];
 }

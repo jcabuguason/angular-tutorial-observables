@@ -62,7 +62,7 @@ describe('ElasticSearchService', () => {
           from: fromDate,
           to: toDate,
           trackTotalHits: true,
-          sortFields: ESSortType.ObservationDateTimeAsc,
+          sortFields: [ESSortType.ObservationDateTimeAsc],
         })
         .subscribe((response) => {
           expect(response).toEqual(dummyObs);
@@ -108,6 +108,62 @@ describe('ElasticSearchService', () => {
       expect(req.request.method).toBe('GET');
       req.flush(dummyObs);
     });
+
+    it('should search with geo distance', () => {
+      const dummyObs = {
+        hello: 'world',
+      };
+
+      service
+        .performSearch(VERSION, 'testNetwork', {
+          size: 1,
+          longitude: 0,
+          latitude: 0,
+          sortFields: [ESSortType.GeoDistanceAsc],
+          distance: '200km',
+          fields: ['identifier'],
+        })
+        .subscribe((response) => {
+          expect(response).toEqual(dummyObs);
+        });
+
+      const req = httpMock.expectOne(
+        (r) =>
+          r.params.get('size') === '1' &&
+          r.params.get('longitude') === '0' &&
+          r.params.get('latitude') === '0' &&
+          r.params.get('distance') === '200km' &&
+          r.params.get('fields') === 'identifier' &&
+          r.params.get('sortFields') === ESSortType.GeoDistanceAsc,
+      );
+      expect(req.request.method).toBe('GET');
+      req.flush(dummyObs);
+    });
+
+    it('should search with multiple sort fields and fields', () => {
+      const dummyObs = {
+        hello: 'world',
+      };
+
+      service
+        .performSearch(VERSION, 'testNetwork', {
+          size: 1,
+          sortFields: [ESSortType.GeoDistanceAsc, ESSortType.ObservationDateTimeAsc],
+          fields: ['identifier', '1_7_8_9'],
+        })
+        .subscribe((response) => {
+          expect(response).toEqual(dummyObs);
+        });
+
+      const req = httpMock.expectOne(
+        (r) =>
+          r.params.get('size') === '1' &&
+          r.params.get('fields') === 'identifier,1_7_8_9' &&
+          r.params.get('sortFields') === `${ESSortType.GeoDistanceAsc},${ESSortType.ObservationDateTimeAsc}`,
+      );
+      expect(req.request.method).toBe('GET');
+      req.flush(dummyObs);
+    });
   });
 
   describe('#query formatting', () => {
@@ -125,6 +181,21 @@ describe('ElasticSearchService', () => {
           },
         ]),
       ).toEqual('123.value:foo');
+
+      expect(
+        service.stringifyQuery([
+          {
+            operator: ESOperator.And,
+            elements: [
+              {
+                elementID: '123',
+                value: 'foo',
+                isNegation: true,
+              },
+            ],
+          },
+        ]),
+      ).toEqual('NOT(123.value:foo)');
     });
 
     it('should format 1-chunk, multi-element queries', () => {
@@ -145,6 +216,25 @@ describe('ElasticSearchService', () => {
           },
         ]),
       ).toEqual('(123.value:foo)AND(456.value:bar)');
+
+      expect(
+        service.stringifyQuery([
+          {
+            operator: ESOperator.And,
+            elements: [
+              {
+                elementID: '123',
+                value: 'foo',
+                isNegation: true,
+              },
+              {
+                elementID: '456',
+                value: 'bar',
+              },
+            ],
+          },
+        ]),
+      ).toEqual('(NOT(123.value:foo))AND(456.value:bar)');
     });
 
     it('should format multi-chunk, 1-element queries', () => {

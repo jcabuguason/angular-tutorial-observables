@@ -15,7 +15,7 @@ export interface SearchModel {
   from?: Date;
   to?: Date;
   size?: number;
-  sortFields?: ESSortType;
+  sortFields?: ESSortType[];
   query?: ESQueryChunk[];
   checkboxes?: string[];
   trackTotalHits?: boolean;
