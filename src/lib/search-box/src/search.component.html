@@ -189,7 +189,7 @@
                 [(ngModel)]="p.datetime"
                 [showTime]="p.includeTime"
                 placeholder="{{ p.getPlaceholder() | translate }}"
-                [defaultDate]="defaultDate"
+                [defaultDate]="currentDate"
                 [locale]="calendarLocale"
                 [disabled]="searchService.readOnlyBar"
                 dataType="string"
@@ -197,8 +197,11 @@
                 selectOtherMonths="true"
                 [showOnFocus]="false"
                 [showIcon]="!searchService.readOnlyBar"
+                [monthNavigator]="true"
+                [yearNavigator]="true"
+                yearRange="{{ p.startYear }}:{{ p.endYear }}"
               >
-              </p-calendar>      
+              </p-calendar>
             </ng-container>
 
             <button
@@ -448,7 +451,7 @@
     <p-calendar
       [(ngModel)]="p.formDatetime"
       [showTime]="p.includeTime"
-      [defaultDate]="defaultDate"
+      [defaultDate]="currentDate"
       placeholder="{{ p.getPlaceholder() | translate }}"
       appendTo="body"
       [locale]="calendarLocale"
@@ -457,6 +460,9 @@
       selectOtherMonths="true"
       [showOnFocus]="false"
       [showIcon]="true"
+      [monthNavigator]="true"
+      [yearNavigator]="true"
+      yearRange="{{ p.startYear }}:{{ p.endYear }}"
     >
     </p-calendar>
   </ng-container>
