@@ -24,6 +24,8 @@ export interface HoursRangeParameterOptions extends ParameterOptions {
 export interface DatetimeParameterOptions extends ParameterOptions {
   includeTime?: boolean;
   defaultDatetime?: string | Date;
+  startYear?: number;
+  endYear?: number;
 }
 
 export interface CheckboxParameterOptions extends ParameterOptions {

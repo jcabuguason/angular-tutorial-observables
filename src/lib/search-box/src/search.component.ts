@@ -26,7 +26,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   reloadBarParams = true;
 
   paramType = ParameterType;
-  defaultDate = new Date();
+  currentDate = new Date();
   calendarLocale;
   message;
   multiSelectDefaultLabel = '';
@@ -55,7 +55,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
     private changeDectector: ChangeDetectorRef,
   ) {
     // this is used to set the time to 00:00 when the calendar/time pops up
-    this.defaultDate.setHours(0, 0);
+    this.currentDate.setHours(0, 0);
   }
 
   ngOnInit(): void {

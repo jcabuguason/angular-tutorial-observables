@@ -12,6 +12,9 @@ export class SearchDatetime extends SearchParameter {
   datetime: string; // using formatted string to ignore the time zone (see: https://stackoverflow.com/a/54755073)
   formDatetime: string;
   includeTime: boolean;
+  startYear: number;
+  endYear: number;
+  currentYear: number = new Date().getFullYear();
   private defaultDatetime: string;
 
   constructor(options: DatetimeParameterOptions) {
@@ -19,6 +22,8 @@ export class SearchDatetime extends SearchParameter {
     this.setType(ParameterType.SEARCH_DATETIME);
     this.includeTime = valueOrDefault(options.includeTime, true);
     this.setDefaultDatetime(options.defaultDatetime);
+    this.startYear = valueOrDefault(options.startYear, 2000);
+    this.endYear = valueOrDefault(options.endYear, this.currentYear);
   }
 
   private setDefaultDatetime(date) {
