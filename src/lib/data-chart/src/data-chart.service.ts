@@ -269,10 +269,13 @@ export class DataChartService {
         sensor[key].push({
           x: this.buildDateValue(obsDateTime, elem.elementID, qualifierType),
           y: value,
-          // custom fields
           unit: elem.unit || '',
           qa: formatQAValue(qa),
-          // optional color fields
+          ...(seriesType === SeriesType.BAR && {
+            borderColor: 'white',
+            groupPadding: 0.75,
+            pointWidth: 10,
+          }),
           ...(this.shouldAddQA(useQaColor, seriesType) && {
             color: this.getQAColor(qa),
             marker: {
@@ -287,7 +290,7 @@ export class DataChartService {
     Object.values(sensor).forEach((s) => this.sortByX(s));
   }
 
-  private shouldAddQA(useQaColor: boolean, seriesType: SeriesType) {
+  private shouldAddQA(useQaColor: boolean, seriesType: SeriesType): boolean {
     return useQaColor && seriesType !== SeriesType.BAR;
   }
 
