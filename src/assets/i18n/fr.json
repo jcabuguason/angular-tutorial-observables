@@ -212,7 +212,7 @@
     "RELEASE_NOTES": "Notes de release",
     "VERSION": "Version",
     "DATE_MODIFIED": "Date de modification",
-    "BUILD": "Construire",
+    "BUILD": "Build",
     "COMMONS_VERSION": "Version de Commons"
   }
 }
