@@ -3,7 +3,7 @@
 
 import { HttpClient } from '@angular/common/http';
 import { TranslateLoader } from '@ngx-translate/core';
-import { Observable ,  forkJoin } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import merge from 'deepmerge';
 
@@ -13,12 +13,12 @@ export interface ITranslationResource {
 }
 
 export class CombinedHttpLoader implements TranslateLoader {
-  constructor(private http: HttpClient, private resources: ITranslationResource[]) {}
+  constructor(private http: HttpClient, private buildNumber: string, private resources: ITranslationResource[]) {}
 
   public getTranslation(lang: string): Observable<any> {
-    const requests = this.resources.map(resource => {
-      return this.http.get(resource.prefix + lang + resource.suffix);
+    const requests = this.resources.map((resource) => {
+      return this.http.get(`${resource.prefix}${lang}${resource.suffix}?build=${this.buildNumber}`);
     });
-    return forkJoin(requests).pipe(map(response => merge.all(response)));
+    return forkJoin(requests).pipe(map((response) => merge.all(response)));
   }
 }
