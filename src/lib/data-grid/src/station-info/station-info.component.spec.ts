@@ -13,7 +13,10 @@ describe('StationInfoComponent', () => {
   let fixture: ComponentFixture<StationInfoComponent>;
 
   const data = {
-    allData: [{ key: 'station', value: 'StationA' }, { key: 'msc_id', value: '1234567' }],
+    allData: [
+      { key: 'station', value: 'StationA' },
+      { key: 'msc_id', value: '1234567' },
+    ],
   };
 
   beforeEach(async(() => {
@@ -23,8 +26,8 @@ describe('StationInfoComponent', () => {
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: httpClient =>
-              new CombinedHttpLoader(httpClient, [{ prefix: '../../../../assets/i18n/', suffix: '.json' }]),
+            useFactory: (httpClient) =>
+              new CombinedHttpLoader(httpClient, '0', [{ prefix: '../../../../assets/i18n/', suffix: '.json' }]),
             deps: [HttpClient],
           },
         }),
