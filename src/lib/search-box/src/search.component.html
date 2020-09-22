@@ -45,10 +45,10 @@
           [ngClass]="{ 'disabled-parameter': searchService.readOnlyBar }"
         >
           <!-- editable search parameters -->
-          <div class="ui-inputgroup" *ngIf="p.getType() === paramType.SEARCH_PARAMETER">
+          <div class="ui-inputgroup" *ngIf="p.getType() === paramType.Default">
             <span class="ui-inputgroup-addon">{{ p.getDisplayName() | translate }}</span>
 
-            <ng-container *ngIf="p.getType() === paramType.SEARCH_PARAMETER">
+            <ng-container *ngIf="p.getType() === paramType.Default">
               <ng-container *ngIf="p.getChoices().length === 0 || searchService.readOnlyBar; else hasChoices">
                 <!-- no choice, can enter only one value -->
                 <input
@@ -161,10 +161,10 @@
             </ng-container>
           </div>
 
-          <div class="ui-inputgroup" *ngIf="p.getType() !== paramType.SEARCH_PARAMETER">
+          <div class="ui-inputgroup" *ngIf="p.getType() !== paramType.Default">
             <span class="ui-inputgroup-addon">{{ p.getDisplayName() | translate }}</span>
 
-            <ng-container *ngIf="p.getType() === paramType.SEARCH_HOURS_RANGE">
+            <ng-container *ngIf="p.getType() === paramType.HoursRange">
               <p-spinner
                 size="7"
                 placeholder="hrs before"
@@ -183,7 +183,7 @@
               </p-spinner>
             </ng-container>
 
-            <ng-container *ngIf="p.getType() === paramType.SEARCH_DATETIME">
+            <ng-container *ngIf="p.getType() === paramType.Datetime">
               <p-calendar
                 appendTo="body"
                 [(ngModel)]="p.datetime"
@@ -257,14 +257,14 @@
     tabindex="0"
     (keyup.enter)="searchService.submitSearchForm()"
   >
-    <ng-container *ngIf="p.getType() === paramType.SEARCH_CHECKBOX">
+    <ng-container *ngIf="p.getType() === paramType.Checkbox">
       <!-- for checkbox, use the label property so it's displayed right next to the checkbox -->
       <div>
         <p-checkbox [(ngModel)]="p.formChecked" binary="true" label="{{ p.getDisplayName() | translate }}"></p-checkbox>
       </div>
     </ng-container>
 
-    <ng-container *ngIf="p.getType() === paramType.SEARCH_PARAMETER">
+    <ng-container *ngIf="p.getType() === paramType.Default">
       <div>{{ p.getDisplayName() | translate }}</div>
 
       <ng-container *ngIf="p.getChoices().length === 0; else hasChoices">
@@ -433,7 +433,7 @@
 </ng-template>
 
 <ng-template #hoursRangeParam let-p="param">
-  <ng-container *ngIf="p.getType() === paramType.SEARCH_HOURS_RANGE">
+  <ng-container *ngIf="p.getType() === paramType.HoursRange">
     <div>
       <div>{{ 'SEARCH_BAR.HOURS_BEFORE' | translate }}</div>
       <p-spinner size="7" placeholder="hrs before" [(ngModel)]="p.formHoursBefore" [min]="0"></p-spinner>
@@ -446,7 +446,7 @@
 </ng-template>
 
 <ng-template #datetimeParam let-p="param">
-  <ng-container *ngIf="p.getType() === paramType.SEARCH_DATETIME">
+  <ng-container *ngIf="p.getType() === paramType.Datetime">
     <div>{{ p.getDisplayName() | translate }}</div>
     <p-calendar
       [(ngModel)]="p.formDatetime"

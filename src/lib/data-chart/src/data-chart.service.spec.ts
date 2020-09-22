@@ -83,7 +83,7 @@ describe('DataChartService', () => {
         elements: [
           new Element({
             id: '1.11.174.2.20.3.0',
-            seriesType: SeriesType.AREA,
+            seriesType: SeriesType.Area,
           }),
         ],
       }),
@@ -169,7 +169,7 @@ describe('DataChartService', () => {
           identifierID: '8.7.80.0.0.0.0',
         }),
       ],
-      qualifierType: QualifierType.HOURLY,
+      qualifierType: QualifierType.Hourly,
     });
     const reportHits = [require('../../../assets/sample-data/flat_report_fake.json')];
     const options = service.buildOptions(hourlyChart, reportHits, {});

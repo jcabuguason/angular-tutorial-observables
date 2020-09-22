@@ -38,7 +38,7 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.config.endpoint}`, payload).pipe(
       map(response => {
         this.store.dispatch({
-          type: AuthActionType.LOGIN,
+          type: AuthActionType.Login,
           payload: response,
         });
         return response;
@@ -49,7 +49,7 @@ export class AuthService {
   logout(): Observable<{ logout: boolean }> {
     return this.http
       .post<{ logout: boolean }>(this.config.logoutEndpoint, '')
-      .pipe(tap(() => this.store.dispatch({ type: AuthActionType.LOGOUT })));
+      .pipe(tap(() => this.store.dispatch({ type: AuthActionType.Logout })));
   }
 
   getUserInfo(): Observable<AuthResponse> {

@@ -3,8 +3,8 @@ import { Action } from '@ngrx/store';
 import { SearchBoxConfig } from './search-box.config';
 
 export enum SearchConfigActionType {
-  UPDATE = '[Search Config] Update',
-  RESET = '[Search Config] Reset',
+  Update = '[Search Config] Update',
+  Reset = '[Search Config] Reset',
 }
 
 export const initialConfigState: SearchBoxConfig = {
@@ -13,13 +13,13 @@ export const initialConfigState: SearchBoxConfig = {
 };
 
 export class UpdateSearchConfigAction implements Action {
-  readonly type = SearchConfigActionType.UPDATE;
+  readonly type = SearchConfigActionType.Update;
 
   constructor(public payload: SearchBoxConfig) {}
 }
 
 export class ResetSearchConfigAction implements Action {
-  readonly type = SearchConfigActionType.RESET;
+  readonly type = SearchConfigActionType.Reset;
 
   constructor(public payload: SearchBoxConfig) {}
 }
@@ -29,10 +29,10 @@ export function searchConfigReducer(
   action: UpdateSearchConfigAction | ResetSearchConfigAction,
 ): SearchBoxConfig {
   switch (action.type) {
-    case SearchConfigActionType.UPDATE: {
+    case SearchConfigActionType.Update: {
       return action.payload;
     }
-    case SearchConfigActionType.RESET: {
+    case SearchConfigActionType.Reset: {
       return initialConfigState;
     }
     default: {

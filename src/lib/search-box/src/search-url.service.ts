@@ -28,16 +28,16 @@ export class SearchURLService {
       displayParams.forEach((p) => {
         const name = p.getUrlName();
         switch (p.getType()) {
-          case ParameterType.SEARCH_DATETIME:
+          case ParameterType.Datetime:
             const date = p as SearchDatetime;
             addUrlParam(name, date.getDatetimeUrlFormat());
             break;
-          case ParameterType.SEARCH_HOURS_RANGE:
+          case ParameterType.HoursRange:
             const hrs = p as SearchHoursRange;
             addUrlParam(hrs.getUrlNameBefore(), hrs.hoursBefore);
             addUrlParam(hrs.getUrlNameAfter(), hrs.hoursAfter);
             break;
-          case ParameterType.SEARCH_CHECKBOX:
+          case ParameterType.Checkbox:
             const checkbox = p as SearchCheckbox;
             addUrlParam(name, checkbox.typeValue);
             break;
@@ -84,9 +84,7 @@ export class SearchURLService {
 
   /** Determine if a url param is for date, hour range, query type, or shortcuts */
   isSpecialUrlParam(name: string, availableParams: SearchParameter[]) {
-    return availableParams
-      .filter((p) => p.getType() !== ParameterType.SEARCH_PARAMETER)
-      .some((p) => p.getUrlName() === name);
+    return availableParams.filter((p) => p.getType() !== ParameterType.Default).some((p) => p.getUrlName() === name);
   }
 
   /** Parameters that may use a special format (date, hour range, query type, shortcuts) */
@@ -115,14 +113,14 @@ export class SearchURLService {
   getDateRequestParams(qParams, availableParams: SearchParameter[]) {
     const paramValue = (param) => [this.firstValue(qParams[param.getUrlName()])];
     return availableParams
-      .filter((p) => p.getType() === ParameterType.SEARCH_DATETIME)
+      .filter((p) => p.getType() === ParameterType.Datetime)
       .map((p) => this.paramValueObj(p, paramValue(p)))
       .filter((obj) => obj.value[0] != null);
   }
 
   getHourRangeRequestParams(qParams, availableParams: SearchParameter[]) {
     const hourRange: SearchHoursRange = availableParams.find(
-      (p) => p.getType() === ParameterType.SEARCH_HOURS_RANGE,
+      (p) => p.getType() === ParameterType.HoursRange,
     ) as SearchHoursRange;
 
     if (hourRange == null) {
@@ -147,7 +145,7 @@ export class SearchURLService {
   }
 
   getCheckboxRequestParams(qParams, availableParams: SearchParameter[]) {
-    const checkbox = availableParams.find((p) => p.getType() === ParameterType.SEARCH_CHECKBOX);
+    const checkbox = availableParams.find((p) => p.getType() === ParameterType.Checkbox);
     if (checkbox == null) {
       return [];
     }

@@ -1,20 +1,20 @@
 import { Action } from '@ngrx/store';
 
 export enum PreferredUnitsActionType {
-  UPDATE = '[Units] Update Preferred',
+  Update = '[Units] Update Preferred',
 }
 
 export const initialState = false;
 
 export class UpdatePreferredUnitsAction implements Action {
-  readonly type = PreferredUnitsActionType.UPDATE;
+  readonly type = PreferredUnitsActionType.Update;
 
   constructor(public payload: boolean) {}
 }
 
 export function preferredUnitsReducer(state = initialState, action: UpdatePreferredUnitsAction) {
   switch (action.type) {
-    case PreferredUnitsActionType.UPDATE: {
+    case PreferredUnitsActionType.Update: {
       return action.payload;
     }
     default: {

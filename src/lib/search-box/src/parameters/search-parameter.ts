@@ -18,7 +18,7 @@ export class SearchParameter {
   private placeholder: string;
   private displayName: string;
   private sortAlpha: boolean;
-  private type: ParameterType = ParameterType.SEARCH_PARAMETER;
+  private type: ParameterType = ParameterType.Default;
   private urlName: string;
   private defaultSelected: string[];
 

@@ -19,7 +19,7 @@ export class SearchDatetime extends SearchParameter {
 
   constructor(options: DatetimeParameterOptions) {
     super({ ...options, choices: [], timesUsable: 1 });
-    this.setType(ParameterType.SEARCH_DATETIME);
+    this.setType(ParameterType.Datetime);
     this.includeTime = valueOrDefault(options.includeTime, true);
     this.setDefaultDatetime(options.defaultDatetime);
     this.startYear = valueOrDefault(options.startYear, 2000);

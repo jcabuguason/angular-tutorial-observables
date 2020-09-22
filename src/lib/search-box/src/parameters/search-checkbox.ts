@@ -12,7 +12,7 @@ export class SearchCheckbox extends SearchParameter {
 
   constructor(options: CheckboxParameterOptions) {
     super({ ...options, choices: [], timesUsable: 1 });
-    this.setType(ParameterType.SEARCH_CHECKBOX);
+    this.setType(ParameterType.Checkbox);
     this.typeValue = options.typeValue;
     this.requiredParams = options.requiredParams;
     this.setDefaultChecked(valueOrDefault(options.defaultChecked, false));

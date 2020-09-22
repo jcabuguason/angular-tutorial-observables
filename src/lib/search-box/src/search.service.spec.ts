@@ -36,7 +36,7 @@ describe('SearchService', () => {
     startDateParam: null,
     endDateParam: null,
     hoursParam: null,
-    hoursRangeDate: null,
+    relativeDate: null,
     provinceParam: null,
     sizeParam: null,
   };
@@ -65,24 +65,24 @@ describe('SearchService', () => {
 
     sParams = {
       organizationParam: new SearchParameter({
-        name: ParameterName.ORGANIZATION,
+        name: ParameterName.Organization,
         choices: organization,
         restricted: true,
       }),
       networkParam: new SearchParameter({
-        name: ParameterName.NETWORK,
+        name: ParameterName.Network,
         choices: networks,
         restricted: true,
       }),
-      stationIdParam: new SearchParameter({ name: ParameterName.STATION_ID }),
-      stationNameParam: new SearchParameter({ name: ParameterName.STATION_NAME }),
-      startDateParam: new SearchDatetime({ name: ParameterName.FROM }),
-      endDateParam: new SearchDatetime({ name: ParameterName.TO }),
-      hoursParam: new SearchHoursRange({ name: ParameterName.HOURS_RANGE }),
-      hoursRangeDate: new SearchDatetime({ name: ParameterName.HOURS_RANGE_DATETIME }),
-      provinceParam: new SearchParameter({ name: ParameterName.PROVINCE, choices: provinces, restricted: true }),
+      stationIdParam: new SearchParameter({ name: ParameterName.StationID }),
+      stationNameParam: new SearchParameter({ name: ParameterName.StationName }),
+      startDateParam: new SearchDatetime({ name: ParameterName.From }),
+      endDateParam: new SearchDatetime({ name: ParameterName.To }),
+      hoursParam: new SearchHoursRange({ name: ParameterName.HoursRange }),
+      relativeDate: new SearchDatetime({ name: ParameterName.RelativeDatetime }),
+      provinceParam: new SearchParameter({ name: ParameterName.Province, choices: provinces, restricted: true }),
       sizeParam: new SearchParameter({
-        name: ParameterName.SIZE,
+        name: ParameterName.Size,
         choices: [],
         restricted: false,
         required: false,
@@ -99,7 +99,7 @@ describe('SearchService', () => {
         new SearchTaxonomy(dndAwosIndex, 'dnd awos', 'dnd'),
       ],
       readOnlyBar: false,
-      shortcuts: [new ShortcutModel('Shortcut1', [{ name: ParameterName.NETWORK, values: ['ca', 'ra'] }])],
+      shortcuts: [new ShortcutModel('Shortcut1', [{ name: ParameterName.Network, values: ['ca', 'ra'] }])],
     };
 
     const routes = [{ path: '', component: EmptyComponent }];
@@ -128,7 +128,7 @@ describe('SearchService', () => {
   });
 
   it('should add parameter by name', () => {
-    searchService.addParameterByName(ParameterName.FROM);
+    searchService.addParameterByName(ParameterName.From);
     expect(searchService.displayParams).toEqual([sParams.startDateParam]);
   });
 
@@ -172,11 +172,11 @@ describe('SearchService', () => {
     const dateValue = '2018-01-31T00:00Z';
     const hoursValue = { hh_before: 1, hh_after: 2 };
 
-    searchService.addSuggestedParameter(sParams.hoursRangeDate, [dateValue]);
+    searchService.addSuggestedParameter(sParams.relativeDate, [dateValue]);
     searchService.addSuggestedParameter(sParams.hoursParam, [hoursValue]);
 
-    expect(searchService.displayParams).toEqual([sParams.hoursRangeDate, sParams.hoursParam]);
-    expect(sParams.hoursRangeDate.getFullDatetime()).toEqual(new Date(dateValue));
+    expect(searchService.displayParams).toEqual([sParams.relativeDate, sParams.hoursParam]);
+    expect(sParams.relativeDate.getFullDatetime()).toEqual(new Date(dateValue));
     expect(sParams.hoursParam.hoursBefore).toEqual(1);
     expect(sParams.hoursParam.hoursAfter).toEqual(2);
   });
@@ -188,7 +188,7 @@ describe('SearchService', () => {
   });
 
   it('should limit size on submit', () => {
-    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-01-03T12:00Z']);
+    searchService.addSuggestedParameter(sParams.relativeDate, ['2018-01-03T12:00Z']);
     searchService.addSuggestedParameter(sParams.sizeParam);
     searchService.setSelectedRangeType('hoursRange');
     sParams.sizeParam.selected = ['2000'];
@@ -198,7 +198,7 @@ describe('SearchService', () => {
   });
 
   it('should adjust datetime in model if given hours range', () => {
-    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-01-03T12:00Z']);
+    searchService.addSuggestedParameter(sParams.relativeDate, ['2018-01-03T12:00Z']);
     searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: '12', hh_after: '36' }]);
     searchService.setSelectedRangeType('hoursRange');
 
@@ -209,7 +209,7 @@ describe('SearchService', () => {
 
   it('should use default hours if specified', () => {
     sParams.hoursParam.setDefaultHours(5, 6);
-    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-01-07T05:30Z']);
+    searchService.addSuggestedParameter(sParams.relativeDate, ['2018-01-07T05:30Z']);
     searchService.addSuggestedParameter(sParams.hoursParam);
     searchService.setSelectedRangeType('hoursRange');
 
@@ -230,7 +230,7 @@ describe('SearchService', () => {
   it('should populate search box from url parameters', () => {
     // should be formatted differently, but for testing purposes urlService will return this back
     const params = [
-      paramValueObj(sParams.hoursRangeDate, ['2018-01-31T00:00Z']),
+      paramValueObj(sParams.relativeDate, ['2018-01-31T00:00Z']),
       paramValueObj(sParams.hoursParam, [{ hh_before: '12', hh_after: '21' }]),
       paramValueObj(sParams.networkParam, ['dnd awos']),
       paramValueObj(sParams.stationIdParam, ['123', 'abc']),
@@ -243,13 +243,13 @@ describe('SearchService', () => {
     expect(searchService.updateUrl).toHaveBeenCalledTimes(0);
     expect(searchService.submitSearch).toHaveBeenCalled();
     expect(searchService.displayParams).toEqual([
-      sParams.hoursRangeDate,
+      sParams.relativeDate,
       sParams.hoursParam,
       sParams.networkParam,
       sParams.stationIdParam,
       sParams.sizeParam,
     ]);
-    expect(sParams.hoursRangeDate.datetime).toEqual('2018-01-31 00:00');
+    expect(sParams.relativeDate.datetime).toEqual('2018-01-31 00:00');
     expect(sParams.hoursParam.hoursBefore).toEqual(12);
     expect(sParams.hoursParam.hoursAfter).toEqual(21);
     expect(sParams.networkParam.selected).toEqual(['dnd awos']);
@@ -340,26 +340,26 @@ describe('SearchService', () => {
   it('should populate bar values to form', () => {
     searchService.readOnlyBar = true;
     searchService.addSuggestedParameter(sParams.provinceParam, ['BC']);
-    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-01-01 00:10']);
+    searchService.addSuggestedParameter(sParams.relativeDate, ['2018-01-01 00:10']);
     searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: 1, hh_after: 2 }]);
     searchService.openForm();
 
     expect(sParams.provinceParam.formSelected).toEqual(['BC']);
-    expect(sParams.hoursRangeDate.formDatetime).toEqual('2018-01-01 00:10');
+    expect(sParams.relativeDate.formDatetime).toEqual('2018-01-01 00:10');
     expect(sParams.hoursParam.formHoursBefore).toEqual(1);
     expect(sParams.hoursParam.formHoursAfter).toEqual(2);
   });
 
   it('should populate form values to bar', () => {
     sParams.sizeParam.formSelected = ['10'];
-    sParams.hoursRangeDate.formDatetime = '2018-01-30 05:00';
+    sParams.relativeDate.formDatetime = '2018-01-30 05:00';
     sParams.hoursParam.formHoursBefore = 10;
     sParams.hoursParam.formHoursAfter = 20;
     searchService.setSelectedRangeType('hoursRange');
 
     searchService.submitSearchForm();
     expect(sParams.sizeParam.getSelected()).toEqual(['10']);
-    expect(sParams.hoursRangeDate.datetime).toEqual('2018-01-30 05:00');
+    expect(sParams.relativeDate.datetime).toEqual('2018-01-30 05:00');
     expect(sParams.hoursParam.hoursBefore).toEqual(10);
     expect(sParams.hoursParam.hoursAfter).toEqual(20);
   });
@@ -405,7 +405,7 @@ describe('SearchService', () => {
     searchService.addSuggestedParameter(sParams.startDateParam, ['2018-01-01T00:00Z']);
     searchService.addSuggestedParameter(sParams.endDateParam, ['2018-02-01T00:00Z']);
     searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: 1, hh_after: 1 }]);
-    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-03-01T03:00Z']);
+    searchService.addSuggestedParameter(sParams.relativeDate, ['2018-03-01T03:00Z']);
     searchService.setSelectedRangeType('dateRange');
 
     const model = searchService.buildSearchModel();
@@ -417,7 +417,7 @@ describe('SearchService', () => {
     searchService.addSuggestedParameter(sParams.startDateParam, ['2018-01-01T00:00Z']);
     searchService.addSuggestedParameter(sParams.endDateParam, ['2018-02-01T00:00Z']);
     searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: 1, hh_after: 1 }]);
-    searchService.addSuggestedParameter(sParams.hoursRangeDate, ['2018-03-01T03:00Z']);
+    searchService.addSuggestedParameter(sParams.relativeDate, ['2018-03-01T03:00Z']);
     searchService.setSelectedRangeType('hoursRange');
 
     const model = searchService.buildSearchModel();
@@ -432,10 +432,10 @@ describe('SearchService', () => {
     searchService.submitSearch();
 
     const fromDate = searchService.availableParams.find(
-      (param) => param.getName() === ParameterName.FROM,
+      (param) => param.getName() === ParameterName.From,
     ) as SearchDatetime;
     const toDate = searchService.availableParams.find(
-      (param) => param.getName() === ParameterName.TO,
+      (param) => param.getName() === ParameterName.To,
     ) as SearchDatetime;
 
     expect(fromDate.getFullDatetime()).toEqual(new Date('2018-02-02T00:00Z'));
@@ -448,10 +448,10 @@ describe('SearchService', () => {
     searchService.submitSearch();
 
     const fromDate = searchService.availableParams.find(
-      (param) => param.getName() === ParameterName.FROM,
+      (param) => param.getName() === ParameterName.From,
     ) as SearchDatetime;
     const toDate = searchService.availableParams.find(
-      (param) => param.getName() === ParameterName.TO,
+      (param) => param.getName() === ParameterName.To,
     ) as SearchDatetime;
 
     expect(fromDate.getFullDatetime()).toEqual(new Date('2020-02-20T20:00Z'));
@@ -464,10 +464,10 @@ describe('SearchService', () => {
     searchService.submitSearch();
 
     const fromDate = searchService.availableParams.find(
-      (param) => param.getName() === ParameterName.FROM,
+      (param) => param.getName() === ParameterName.From,
     ) as SearchDatetime;
     const toDate = searchService.availableParams.find(
-      (param) => param.getName() === ParameterName.TO,
+      (param) => param.getName() === ParameterName.To,
     ) as SearchDatetime;
 
     expect(fromDate.isUnfilled()).toBeTruthy();

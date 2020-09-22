@@ -18,7 +18,7 @@ export class SearchHoursRange extends SearchParameter {
 
   constructor(options: HoursRangeParameterOptions) {
     super({ ...options, choices: [], timesUsable: 1 });
-    this.setType(ParameterType.SEARCH_HOURS_RANGE);
+    this.setType(ParameterType.HoursRange);
     this.urlNameBefore = valueOrDefault(options.urlNameBefore, 'hoursBefore');
     this.urlNameAfter = valueOrDefault(options.urlNameAfter, 'hoursAfter');
     this.setDefaultHours(options.defaultHoursBefore, options.defaultHoursAfter);

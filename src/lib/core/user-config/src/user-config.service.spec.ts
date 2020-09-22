@@ -140,8 +140,8 @@ describe('UserConfigService', () => {
       expect(service.isLoad(metadata, true)).toBeTruthy();
       expect(service.isVisible(element)).toBeTruthy();
       expect(service.isVisible(metadata, true)).toBeTruthy();
-      expect(service.getElementVisibility(element)).toBe(ElementVisibility.DEFAULT);
-      expect(service.getElementVisibility(metadata, true)).toBe(ElementVisibility.DEFAULT);
+      expect(service.getElementVisibility(element)).toBe(ElementVisibility.Default);
+      expect(service.getElementVisibility(metadata, true)).toBe(ElementVisibility.Default);
     });
   });
 
@@ -520,15 +520,15 @@ describe('UserConfigService', () => {
     });
 
     it('should not load the element', () => {
-      expect(service.getElementVisibility('1.2.8.0.0.0.0')).toBe(ElementVisibility.NO_LOAD);
+      expect(service.getElementVisibility('1.2.8.0.0.0.0')).toBe(ElementVisibility.NoLoad);
     });
 
     it('should set element visibility to Hidden', () => {
-      expect(service.getElementVisibility('1.2.9.0.0.0.0')).toBe(ElementVisibility.HIDDEN);
+      expect(service.getElementVisibility('1.2.9.0.0.0.0')).toBe(ElementVisibility.Hidden);
     });
 
     it('should set element to the default visibility', () => {
-      expect(service.getElementVisibility('1.2.0.0.0.0.0')).toBe(ElementVisibility.DEFAULT);
+      expect(service.getElementVisibility('1.2.0.0.0.0.0')).toBe(ElementVisibility.Default);
     });
   });
 
@@ -553,8 +553,8 @@ describe('UserConfigService', () => {
     it('should not load the elements', () => {
       expect(service.isLoad('1.2.8.0.0.0.0')).toBeFalsy();
       expect(service.isLoad('1.3.4.0.0.0.0')).toBeFalsy();
-      expect(service.getElementVisibility('1.2.8.0.0.0.0')).toBe(ElementVisibility.NO_LOAD);
-      expect(service.getElementVisibility('1.3.4.0.0.0.0')).toBe(ElementVisibility.NO_LOAD);
+      expect(service.getElementVisibility('1.2.8.0.0.0.0')).toBe(ElementVisibility.NoLoad);
+      expect(service.getElementVisibility('1.3.4.0.0.0.0')).toBe(ElementVisibility.NoLoad);
     });
 
     it('should load the elements', () => {
@@ -574,13 +574,13 @@ describe('UserConfigService', () => {
     it('should set element visibility to Hidden', () => {
       expect(service.isVisible('1.7.0.0.0.0.0', true)).toBeFalsy();
       expect(service.isVisible('1.7.0.0.0.0.0', true)).toBeFalsy();
-      expect(service.getElementVisibility('1.7.0.0.0.0.0', true)).toBe(ElementVisibility.HIDDEN);
-      expect(service.getElementVisibility('1.7.1.0.0.0.0', true)).toBe(ElementVisibility.HIDDEN);
+      expect(service.getElementVisibility('1.7.0.0.0.0.0', true)).toBe(ElementVisibility.Hidden);
+      expect(service.getElementVisibility('1.7.1.0.0.0.0', true)).toBe(ElementVisibility.Hidden);
     });
 
     it('should set metadata to the default visibility', () => {
-      expect(service.getElementVisibility('1.2.0.0.0.0.0')).toBe(ElementVisibility.DEFAULT);
-      expect(service.getElementVisibility('1.7.2.0.0.0.0', true)).toBe(ElementVisibility.DEFAULT);
+      expect(service.getElementVisibility('1.2.0.0.0.0.0')).toBe(ElementVisibility.Default);
+      expect(service.getElementVisibility('1.7.2.0.0.0.0', true)).toBe(ElementVisibility.Default);
     });
   });
 
@@ -611,12 +611,12 @@ describe('UserConfigService', () => {
     it('should set all metadata visibility to Hidden', () => {
       expect(service.isVisible('1.7.0.0.0.0.0', true)).toBeFalsy();
       expect(service.isVisible('1.7.1.0.0.0.0', true)).toBeFalsy();
-      expect(service.getElementVisibility('1.7.0.0.0.0.0', true)).toBe(ElementVisibility.HIDDEN);
-      expect(service.getElementVisibility('1.7.1.0.0.0.0', true)).toBe(ElementVisibility.HIDDEN);
+      expect(service.getElementVisibility('1.7.0.0.0.0.0', true)).toBe(ElementVisibility.Hidden);
+      expect(service.getElementVisibility('1.7.1.0.0.0.0', true)).toBe(ElementVisibility.Hidden);
     });
 
     it('should set element to default visibility', () => {
-      expect(service.getElementVisibility('1.2.0.0.0.0.0')).toBe(ElementVisibility.DEFAULT);
+      expect(service.getElementVisibility('1.2.0.0.0.0.0')).toBe(ElementVisibility.Default);
     });
   });
 
