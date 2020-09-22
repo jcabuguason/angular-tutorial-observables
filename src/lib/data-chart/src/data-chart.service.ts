@@ -116,8 +116,8 @@ export class DataChartService {
   findQualifierElementName(id: string, qualifierType: QualifierType) {
     const key = (type: QualifierType): string => {
       switch (type) {
-        case QualifierType.HOURLY:
-          return 'CHART.HOURLY';
+        case QualifierType.Hourly:
+          return 'CHART.Hourly';
       }
     };
     return `${this.configService.getFormattedNodeName(id, 3)}  (${this.translate.instant(key(qualifierType))})`;
@@ -131,7 +131,7 @@ export class DataChartService {
     if (chartObj.stations.length === 1) {
       return chartObj.stations[0].label;
     } else {
-      return chartObj.qualifierType === QualifierType.NONE
+      return chartObj.qualifierType === QualifierType.None
         ? this.configService.getFullFormattedHeader(chartObj.elements[0].id)
         : this.findQualifierElementName(chartObj.elements[0].id, chartObj.qualifierType);
     }
@@ -139,7 +139,7 @@ export class DataChartService {
 
   private determineSeriesName(chartObj: Chart, stationName: string, elementID: string): string {
     if (chartObj.stations.length === 1) {
-      return chartObj.qualifierType === QualifierType.NONE
+      return chartObj.qualifierType === QualifierType.None
         ? this.configService.buildFullNodeName(elementID)
         : this.findQualifierElementName(elementID, chartObj.qualifierType);
     } else {
@@ -228,9 +228,9 @@ export class DataChartService {
   private buildDateValue(obsDateTime, elementID: string, qualifierType: QualifierType): number {
     const chartDate = new Date(obsDateTime);
     switch (qualifierType) {
-      case QualifierType.NONE:
+      case QualifierType.None:
         break;
-      case QualifierType.HOURLY:
+      case QualifierType.Hourly:
         const reportHour = +elementID.split('.')[4];
         const hour = (chartDate.getUTCHours() + reportHour - this.minQualifierHourly) % 24;
         chartDate.setUTCHours(hour);
@@ -271,7 +271,7 @@ export class DataChartService {
           y: value,
           unit: elem.unit || '',
           qa: formatQAValue(qa),
-          ...(seriesType === SeriesType.BAR && {
+          ...(seriesType === SeriesType.Bar && {
             borderColor: 'white',
             groupPadding: 0.75,
             pointWidth: 10,
@@ -291,7 +291,7 @@ export class DataChartService {
   }
 
   private shouldAddQA(useQaColor: boolean, seriesType: SeriesType): boolean {
-    return useQaColor && seriesType !== SeriesType.BAR;
+    return useQaColor && seriesType !== SeriesType.Bar;
   }
 
   private sortByX = (s) => s.sort((a, b) => (a.x === b.x ? 0 : a.x < b.x ? -1 : 1));
@@ -306,10 +306,10 @@ export class DataChartService {
   private grabElementsFromObs(obs: DMSObs, givenID: string, qualifierType: QualifierType): ObsElement[] {
     let ids = [];
     switch (qualifierType) {
-      case QualifierType.NONE:
+      case QualifierType.None:
         ids = [givenID];
         break;
-      case QualifierType.HOURLY:
+      case QualifierType.Hourly:
         ids = this.qualifierHourlyValues.map((nodeValue) => updateNodeValue(givenID, nodeValue, 4));
         break;
     }
@@ -332,7 +332,7 @@ export class DataChartService {
           if (foundElems.length > 0) {
             // NOTE: This behaviour is a bit odd when working with flat-tables with renamed elements
             if (!values.includes(foundElems[0].unit)) {
-              const depth = chartObj.qualifierType === QualifierType.NONE ? 2 : 3;
+              const depth = chartObj.qualifierType === QualifierType.None ? 2 : 3;
               values.push(foundElems[0].unit);
               names.push({
                 unit: foundElems[0].unit,
@@ -376,11 +376,11 @@ export class DataChartService {
   // get the chart type for an element
   getSeriesType(id: string): SeriesType {
     if (id === '1.17.253.0.0.0.0' || id === '1.17.438.0.0.0.0') {
-      return SeriesType.AREA;
+      return SeriesType.Area;
     } else if (id.split('.')[1] === '11') {
-      return SeriesType.BAR;
+      return SeriesType.Bar;
     } else {
-      return SeriesType.LINE;
+      return SeriesType.Line;
     }
   }
 

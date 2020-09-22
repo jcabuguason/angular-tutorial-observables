@@ -1,14 +1,14 @@
 const givenOrDefault = (given, defaultValue = null) => (given == null ? defaultValue : given);
 
 export enum SeriesType {
-  LINE = 'spline',
-  BAR = 'column',
-  AREA = 'area',
+  Line = 'spline',
+  Bar = 'column',
+  Area = 'area',
 }
 
 export enum QualifierType {
-  NONE,
-  HOURLY,
+  None,
+  Hourly,
 }
 
 export class Station {
@@ -40,7 +40,7 @@ export class Element {
 
   constructor(given: { id: string; seriesType?: SeriesType; useQaColor?: boolean }) {
     this.id = given.id;
-    this.seriesType = givenOrDefault(given.seriesType, SeriesType.LINE);
+    this.seriesType = givenOrDefault(given.seriesType, SeriesType.Line);
     this.useQaColor = given.useQaColor;
   }
 }
@@ -59,7 +59,7 @@ export class Chart {
   }) {
     this.stations = given.stations;
     this.elements = given.elements;
-    this.qualifierType = givenOrDefault(given.qualifierType, QualifierType.NONE);
+    this.qualifierType = givenOrDefault(given.qualifierType, QualifierType.None);
     this.useQaColor = given.useQaColor;
   }
 }

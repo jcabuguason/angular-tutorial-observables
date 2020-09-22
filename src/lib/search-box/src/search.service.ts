@@ -86,10 +86,10 @@ export class SearchService {
     this.createShortcutButtons();
 
     this.hoursRangeParams = this.availableParams.filter(
-      (p) => p.getName() === ParameterName.HOURS_RANGE || p.getName() === ParameterName.HOURS_RANGE_DATETIME,
+      (p) => p.getName() === ParameterName.HoursRange || p.getName() === ParameterName.RelativeDatetime,
     );
     this.dateRangeParams = this.availableParams.filter(
-      (p) => p.getName() === ParameterName.FROM || p.getName() === ParameterName.TO,
+      (p) => p.getName() === ParameterName.From || p.getName() === ParameterName.To,
     );
     this.useDateAndHoursRange = !!this.hoursRangeParams.length && !!this.dateRangeParams.length;
     this.setSelectedRangeType('hoursRange');
@@ -136,7 +136,7 @@ export class SearchService {
       values
         .filter((val) => val != null && val !== '')
         .forEach((val) => {
-          if (parameter.getName() === ParameterName.SIZE) {
+          if (parameter.getName() === ParameterName.Size) {
             val = this.fixNumObs(val).toString();
           }
           parameter.addSelected(val);
@@ -212,7 +212,7 @@ export class SearchService {
     let startDate: Date;
     let endDate: Date;
     let numObs: number = this.defaultNumObs;
-    let hoursRangeDate: Date;
+    let relativeDate: Date;
 
     this.displayParams.forEach((p) => {
       const selected = p.getSelectedModels().map((model) => model.value);
@@ -223,7 +223,7 @@ export class SearchService {
       };
 
       switch (p.getName()) {
-        case ParameterName.STATION_ID:
+        case ParameterName.StationID:
           queryChunks.station.elements.push(
             ...selected.map((value) => ({
               elementID: this.determineStationElementID(value.replace(/\s+/g, '')),
@@ -232,7 +232,7 @@ export class SearchService {
             })),
           );
           break;
-        case ParameterName.STATION_NAME:
+        case ParameterName.StationName:
           queryChunks.station.elements.push(
             ...selected.map((value) => ({
               elementID: SearchableElement.STATION_NAME.id,
@@ -241,7 +241,7 @@ export class SearchService {
             })),
           );
           break;
-        case ParameterName.PROVINCE:
+        case ParameterName.Province:
           queryChunks.province.elements.push(
             ...selected.map((value) => ({
               elementID: SearchableElement.PROVINCE.id,
@@ -249,31 +249,31 @@ export class SearchService {
             })),
           );
           break;
-        case ParameterName.SIZE:
+        case ParameterName.Size:
           selected.forEach((s, index) => {
             numObs = this.fixNumObs(s);
             updateValue(s, index, String(numObs));
           });
           break;
-        case ParameterName.FROM:
+        case ParameterName.From:
           startDate = (p as SearchDatetime).getFullDatetime();
           break;
-        case ParameterName.TO:
+        case ParameterName.To:
           endDate = (p as SearchDatetime).getFullDatetime();
           break;
-        case ParameterName.HOURS_RANGE_DATETIME:
-          hoursRangeDate = (p as SearchDatetime).getFullDatetime();
+        case ParameterName.RelativeDatetime:
+          relativeDate = (p as SearchDatetime).getFullDatetime();
           break;
       }
     });
 
-    if (this.selectedRangeType === 'hoursRange' && hoursRangeDate != null) {
+    if (this.selectedRangeType === 'hoursRange' && relativeDate != null) {
       const hoursRange = this.hoursRangeParams.find(
-        (p) => p.getName() === ParameterName.HOURS_RANGE,
+        (p) => p.getName() === ParameterName.HoursRange,
       ) as SearchHoursRange;
       if (hoursRange != null) {
-        startDate = subtractHours(hoursRangeDate, hoursRange.hoursBefore);
-        endDate = addHours(hoursRangeDate, hoursRange.hoursAfter);
+        startDate = subtractHours(relativeDate, hoursRange.hoursBefore);
+        endDate = addHours(relativeDate, hoursRange.hoursAfter);
       }
     }
     return {
@@ -343,7 +343,7 @@ export class SearchService {
 
   /** Checks for any missing parameters and displays a message */
   hasValidParameters(): boolean {
-    const hoursRange = this.hoursRangeParams.find((p) => p.getName() === ParameterName.HOURS_RANGE) as SearchHoursRange;
+    const hoursRange = this.hoursRangeParams.find((p) => p.getName() === ParameterName.HoursRange) as SearchHoursRange;
     let negativeHoursRange = false;
     if (this.useDateAndHoursRange) {
       const removeParams = this.selectedRangeType === 'dateRange' ? this.hoursRangeParams : this.dateRangeParams;
@@ -353,7 +353,7 @@ export class SearchService {
     const emptyParams = this.findEmptyDisplayParameters().map((p) => p.getDisplayName());
     const missingParams = this.findMissingRequiredParameters().map((p) => p.getDisplayName());
     const checkboxes = this.availableParams.filter(
-      (param) => param.getType() === ParameterType.SEARCH_CHECKBOX && !param.isUnfilled(),
+      (param) => param.getType() === ParameterType.Checkbox && !param.isUnfilled(),
     ) as SearchCheckbox[];
     let valid = true;
 
@@ -407,11 +407,11 @@ export class SearchService {
   }
 
   private adjustDates(): boolean {
-    const findFilledDate = (name: ParameterName.FROM | ParameterName.TO): SearchDatetime =>
+    const findFilledDate = (name: ParameterName.From | ParameterName.To): SearchDatetime =>
       this.availableParams.find((param) => param.getName() === name && !param.isUnfilled()) as SearchDatetime;
 
-    const fromDate = findFilledDate(ParameterName.FROM);
-    const toDate = findFilledDate(ParameterName.TO);
+    const fromDate = findFilledDate(ParameterName.From);
+    const toDate = findFilledDate(ParameterName.To);
 
     const shouldAdjust = !!fromDate && !!toDate && isTimeBefore(toDate.getFullDatetime(), fromDate.getFullDatetime());
     if (shouldAdjust) {
@@ -438,8 +438,8 @@ export class SearchService {
         .map((p) => p.getSelectedModels())
         .reduce((allSelected, selected) => allSelected.concat(selected), []);
 
-    const organizations = getAllSelected(ParameterName.ORGANIZATION);
-    const networks = getAllSelected(ParameterName.NETWORK);
+    const organizations = getAllSelected(ParameterName.Organization);
+    const networks = getAllSelected(ParameterName.Network);
 
     return this.taxonomies
       .filter((tax) => organizations.length === 0 || matchingChoice(organizations, tax['organizationCode']))
@@ -449,25 +449,25 @@ export class SearchService {
 
   /** Parameters used to determine taxonomy */
   private isTaxonomyParam(param: SearchParameter): boolean {
-    return param.getName() === ParameterName.NETWORK || param.getName() === ParameterName.ORGANIZATION;
+    return param.getName() === ParameterName.Network || param.getName() === ParameterName.Organization;
   }
 
   /** Populate search box with information from specific URL parameters */
   private addRequestParams(qParams) {
     const matchingName = (param: SearchParameter, name: string) => param.getName() === name;
     const allRequestParams = this.urlService.getAllRequestParams(qParams, this.availableParams, this.shortcuts);
-    const useHoursRange = allRequestParams.some((obj) => matchingName(obj.param, ParameterName.HOURS_RANGE_DATETIME));
+    const useHoursRange = allRequestParams.some((obj) => matchingName(obj.param, ParameterName.RelativeDatetime));
     const paramsFilter = (param) =>
       useHoursRange
-        ? !matchingName(param, ParameterName.FROM) && !matchingName(param, ParameterName.TO)
-        : !matchingName(param, ParameterName.HOURS_RANGE) && !matchingName(param, ParameterName.HOURS_RANGE_DATETIME);
+        ? !matchingName(param, ParameterName.From) && !matchingName(param, ParameterName.To)
+        : !matchingName(param, ParameterName.HoursRange) && !matchingName(param, ParameterName.RelativeDatetime);
 
     allRequestParams
       .filter((obj) => paramsFilter(obj.param))
       .forEach((obj) => this.addSuggestedParameter(obj.param, obj.value));
 
-    if (useHoursRange && this.displayParams.find((p) => p.getName() === ParameterName.HOURS_RANGE) == null) {
-      this.addParameterByName(ParameterName.HOURS_RANGE);
+    if (useHoursRange && this.displayParams.find((p) => p.getName() === ParameterName.HoursRange) == null) {
+      this.addParameterByName(ParameterName.HoursRange);
     }
 
     this.setSelectedRangeType(useHoursRange ? 'hoursRange' : 'dateRange');

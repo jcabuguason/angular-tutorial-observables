@@ -2,14 +2,14 @@ import { Action } from '@ngrx/store';
 import { Chart } from './model/chart.model';
 
 export enum ChartActionType {
-  CLEAR = '[Chart] Clear All',
-  CREATE = '[Chart] Create new chart',
-  REMOVE = '[Chart] Remove chart',
-  EDIT = '[Chart] Edit',
+  Clear = '[Chart] Clear All',
+  Create = '[Chart] Create new chart',
+  Remove = '[Chart] Remove chart',
+  Edit = '[Chart] Edit',
 }
 
 export class ChartAction implements Action {
-  readonly type = ChartActionType.CREATE;
+  readonly type = ChartActionType.Create;
 
   constructor(public payload: Chart[]) {}
 }
@@ -17,13 +17,13 @@ export class ChartAction implements Action {
 export const initialState = [];
 
 export class ClearChartAction implements Action {
-  readonly type = ChartActionType.CLEAR;
+  readonly type = ChartActionType.Clear;
 
   constructor() {}
 }
 
 export class EditChartAction implements Action {
-  readonly type = ChartActionType.EDIT;
+  readonly type = ChartActionType.Edit;
 
   constructor(public payload, public index) {
     this.index = index;
@@ -31,7 +31,7 @@ export class EditChartAction implements Action {
 }
 
 export class RemoveChartAction implements Action {
-  readonly type = ChartActionType.REMOVE;
+  readonly type = ChartActionType.Remove;
 
   constructor(public payload) {}
 }
@@ -41,16 +41,16 @@ export function chartReducer(
   action: ChartAction | ClearChartAction | RemoveChartAction | EditChartAction,
 ) {
   switch (action.type) {
-    case ChartActionType.CREATE: {
+    case ChartActionType.Create: {
       return [...state, ...action.payload];
     }
-    case ChartActionType.CLEAR: {
+    case ChartActionType.Clear: {
       return initialState;
     }
-    case ChartActionType.REMOVE: {
+    case ChartActionType.Remove: {
       return [...state.slice(0, action.payload), ...state.slice(action.payload + 1)];
     }
-    case ChartActionType.EDIT: {
+    case ChartActionType.Edit: {
       const copy = state.slice();
       copy[action.index] = action.payload;
       return copy;

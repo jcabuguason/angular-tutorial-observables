@@ -506,13 +506,13 @@ export class DataGridService implements OnDestroy {
   private isIgnoredElement(elementID: string, isMetadata?: boolean): boolean {
     return (
       elementID == null ||
-      this.userConfigService.getElementVisibility(elementID, isMetadata) === ElementVisibility.NO_LOAD
+      this.userConfigService.getElementVisibility(elementID, isMetadata) === ElementVisibility.NoLoad
     );
   }
 
   private isHiddenElement(elementID: string, isMetadata?: boolean): boolean {
     // should return default even if use empty user config
-    return this.userConfigService.getElementVisibility(elementID, isMetadata) === ElementVisibility.HIDDEN;
+    return this.userConfigService.getElementVisibility(elementID, isMetadata) === ElementVisibility.Hidden;
   }
 
   /** Comparator used for sorting data element columns */

@@ -15,15 +15,15 @@ import {
 
 // Enum to dictate how an element should be displayed/loaded
 export enum ElementVisibility {
-  DEFAULT,
-  HIDDEN,
-  NO_LOAD,
+  Default,
+  Hidden,
+  NoLoad,
 }
 
 // Enum to support languages
 export enum Lang {
-  ENGLISH = 'en',
-  FRENCH = 'fr',
+  English = 'en',
+  French = 'fr',
 }
 
 export class UserConfig {

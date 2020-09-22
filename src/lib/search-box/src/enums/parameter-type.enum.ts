@@ -1,6 +1,6 @@
 export enum ParameterType {
-  SEARCH_PARAMETER,
-  SEARCH_DATETIME,
-  SEARCH_HOURS_RANGE,
-  SEARCH_CHECKBOX,
+  Default,
+  Datetime,
+  HoursRange,
+  Checkbox,
 }

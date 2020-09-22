@@ -42,11 +42,11 @@ class MockConfigService extends UserConfigService {
   getElementVisibility(elementID) {
     switch (elementID) {
       case noLoadElement:
-        return ElementVisibility.NO_LOAD;
+        return ElementVisibility.NoLoad;
       case hiddenElement:
-        return ElementVisibility.HIDDEN;
+        return ElementVisibility.Hidden;
       default:
-        return ElementVisibility.DEFAULT;
+        return ElementVisibility.Default;
     }
   }
   getMetaElementVisibility(elementID) {}

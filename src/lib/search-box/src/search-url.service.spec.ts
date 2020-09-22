@@ -12,23 +12,23 @@ import { ParameterName } from './enums/parameter-name.enum';
 describe('SearchURLService', () => {
   let urlService: SearchURLService;
 
-  const dateParam = new SearchDatetime({ name: ParameterName.FROM });
+  const dateParam = new SearchDatetime({ name: ParameterName.From });
   const hoursParam = new SearchHoursRange({
-    name: ParameterName.HOURS_RANGE,
+    name: ParameterName.HoursRange,
     urlNameBefore: 'hh_before',
     urlNameAfter: 'hh_after',
   });
-  const networkParam = new SearchParameter({ name: ParameterName.NETWORK });
+  const networkParam = new SearchParameter({ name: ParameterName.Network });
   const independentCheckbox = new SearchCheckbox({
-    name: ParameterName.CHECKBOX,
+    name: ParameterName.Checkbox,
     typeValue: 'exact',
     requiredParams: [],
   });
-  const stationParam = new SearchParameter({ name: ParameterName.STATION_ID, urlName: 'climid' });
+  const stationParam = new SearchParameter({ name: ParameterName.StationID, urlName: 'climid' });
   const displayParams = [dateParam, hoursParam, networkParam, independentCheckbox, stationParam];
 
   const shortcuts = [
-    new ShortcutModel('Shortcut1', [{ name: ParameterName.NETWORK, values: ['value1'] }]),
+    new ShortcutModel('Shortcut1', [{ name: ParameterName.Network, values: ['value1'] }]),
     new ShortcutModel('Shortcut2', [{ name: 'name2', values: ['value2'] }]),
   ];
 
@@ -74,12 +74,12 @@ describe('SearchURLService', () => {
     stationParam.selected = stationValues;
 
     const urlParams = [
-      { name: ParameterName.FROM, value: dateValue },
+      { name: ParameterName.From, value: dateValue },
       { name: 'hh_before', value: hoursValue.hh_before },
       { name: 'hh_after', value: hoursValue.hh_after },
-      { name: ParameterName.NETWORK, value: networkValues[0] },
-      { name: ParameterName.NETWORK, value: networkValues[1] },
-      { name: ParameterName.CHECKBOX, value: 'exact' },
+      { name: ParameterName.Network, value: networkValues[0] },
+      { name: ParameterName.Network, value: networkValues[1] },
+      { name: ParameterName.Checkbox, value: 'exact' },
       { name: 'climid', value: stationValues[0] },
     ];
 
@@ -105,15 +105,15 @@ describe('SearchURLService', () => {
     networkParam.selected = newNetworkValues;
 
     const dependentCheckbox = new SearchCheckbox({
-      name: ParameterName.CHECKBOX,
+      name: ParameterName.Checkbox,
       typeValue: 'exact',
       requiredParams: [networkParam],
     });
     dependentCheckbox.checked = true;
 
     const urlParams = [
-      { name: ParameterName.NETWORK, value: newNetworkValues[0] },
-      { name: ParameterName.NETWORK, value: newNetworkValues[1] },
+      { name: ParameterName.Network, value: newNetworkValues[0] },
+      { name: ParameterName.Network, value: newNetworkValues[1] },
     ];
 
     expect(urlService.createUrlParams([networkParam])).toEqual(urlParams);
@@ -124,7 +124,7 @@ describe('SearchURLService', () => {
     networkParam.selected.length = 0;
 
     const dependentCheckbox = new SearchCheckbox({
-      name: ParameterName.CHECKBOX,
+      name: ParameterName.Checkbox,
       typeValue: 'exact',
       requiredParams: [networkParam],
     });
@@ -141,10 +141,10 @@ describe('SearchURLService', () => {
   });
 
   it('check special parameters (date, hour range, query type)', () => {
-    expect(urlService.isSpecialUrlParam(ParameterName.FROM, displayParams)).toBeTruthy();
-    expect(urlService.isSpecialUrlParam(ParameterName.HOURS_RANGE, displayParams)).toBeTruthy();
-    expect(urlService.isSpecialUrlParam(ParameterName.NETWORK, displayParams)).toBeFalsy();
-    expect(urlService.isSpecialUrlParam(ParameterName.CHECKBOX, displayParams)).toBeTruthy();
+    expect(urlService.isSpecialUrlParam(ParameterName.From, displayParams)).toBeTruthy();
+    expect(urlService.isSpecialUrlParam(ParameterName.HoursRange, displayParams)).toBeTruthy();
+    expect(urlService.isSpecialUrlParam(ParameterName.Network, displayParams)).toBeFalsy();
+    expect(urlService.isSpecialUrlParam(ParameterName.Checkbox, displayParams)).toBeTruthy();
   });
 
   it('get shortcut parameter', () => {

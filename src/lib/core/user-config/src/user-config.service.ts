@@ -17,7 +17,7 @@ export class UserConfigService {
   private userConfig: UserConfig;
   private nodeInfo;
   // The language used in the config
-  private lang: Lang = Lang.ENGLISH;
+  private lang: Lang = Lang.English;
   // Locally available profiles (might be removed once MR is used)
   private profiles: UserConfigOptions[] = [];
   private nodeValueAt = (elementID, i) => elementID.split('.')[i - 1];
@@ -98,13 +98,13 @@ export class UserConfigService {
 
   getElementVisibility(elementID: string, isMetadata?: boolean): ElementVisibility {
     if (!this.isLoad(elementID, isMetadata)) {
-      return ElementVisibility.NO_LOAD;
+      return ElementVisibility.NoLoad;
     }
     if (!this.isVisible(elementID, isMetadata)) {
-      return ElementVisibility.HIDDEN;
+      return ElementVisibility.Hidden;
     }
 
-    return ElementVisibility.DEFAULT;
+    return ElementVisibility.Default;
   }
 
   isLoad(elementID: string, isMetadata?: boolean): boolean {

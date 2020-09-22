@@ -9,8 +9,8 @@ export interface AuthAction extends Action {
 }
 
 export enum AuthActionType {
-  LOGIN = '[Auth] Login',
-  LOGOUT = '[Auth] Logout',
+  Login = '[Auth] Login',
+  Logout = '[Auth] Logout',
 }
 
 const initialState: AuthResponse = {
@@ -23,9 +23,9 @@ const initialState: AuthResponse = {
 
 export function authReducer(state: AuthResponse = initialState, action: AuthAction) {
   switch (action.type) {
-    case AuthActionType.LOGIN:
+    case AuthActionType.Login:
       return action.payload;
-    case AuthActionType.LOGOUT:
+    case AuthActionType.Logout:
       return initialState;
     default:
       return state;
