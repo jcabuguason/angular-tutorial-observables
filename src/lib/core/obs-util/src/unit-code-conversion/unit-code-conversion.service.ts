@@ -25,7 +25,7 @@ export class UnitCodeConversionService {
     this.codeSubs = CodeSubstitution.codeSubstitutionResult;
   }
 
-  setPreferredUnits(element: ObsElement) {
+  setPreferredUnits(element: ObsElement, options?: any) {
     this.usePreferredUnits
       ? ((element.value = element.preferredValue), (element.unit = element.preferredUnit))
       : ((element.value = element.preciseValue), (element.unit = element.preciseUnit));

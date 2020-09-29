@@ -123,7 +123,7 @@ export class DataChartService {
     return `${this.configService.getFormattedNodeName(id, 3)}  (${this.translate.instant(key(qualifierType))})`;
   }
 
-  isMatchingObs(obs: DMSObs, station: Station): boolean {
+  protected isMatchingObs(obs: DMSObs, station: Station): boolean {
     return findObsIdentifier(obs, station.identifierID).toLowerCase() === station.value.toLowerCase();
   }
 
@@ -303,7 +303,7 @@ export class DataChartService {
       : element[property];
   }
 
-  private grabElementsFromObs(obs: DMSObs, givenID: string, qualifierType: QualifierType): ObsElement[] {
+  protected grabElementsFromObs(obs: DMSObs, givenID: string, qualifierType: QualifierType): ObsElement[] {
     let ids = [];
     switch (qualifierType) {
       case QualifierType.None:
@@ -317,7 +317,7 @@ export class DataChartService {
     return ids.map((id) => findAllElements(obs, id)).reduce((acc, val) => acc.concat(val), []);
   }
 
-  private buildYAxes(chartObj: Chart, observations: DMSObs[]) {
+  protected buildYAxes(chartObj: Chart, observations: DMSObs[]) {
     const elements: Element[] = chartObj.elements;
     const stations: Station[] = chartObj.stations;
     const names = [];
@@ -384,7 +384,7 @@ export class DataChartService {
     }
   }
 
-  createStationLabel(obs: DMSObs, defaultLabel: string = ''): string {
+  protected createStationLabel(obs: DMSObs, defaultLabel: string = ''): string {
     const shortID = findFirstValue(obs, TC_ID_ELEMENT) || findFirstValue(obs, ICAO_ID_ELEMENT);
     const stationObsLabel = [
       findFirstValue(obs, STATION_NAME_ELEMENT),

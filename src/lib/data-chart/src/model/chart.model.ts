@@ -31,6 +31,7 @@ export interface ElementOption {
   label: string;
   value: string;
   qualifierType: QualifierType;
+  showWarning?: boolean;
 }
 
 export class Element {
