@@ -36,7 +36,7 @@ describe('LockService', () => {
       locked_resources: ['1', '2'],
       type: 'number',
       user: 'dms',
-      timeout: "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+      timeout: `yyyy-MM-dd'T'HH:mm:ss.SSS'Z'`,
     };
 
     service
