@@ -167,7 +167,7 @@ describe('LockHeartbeatService', () => {
     expect(results.unsuccessful).toBe(0);
     expect(results.unauthorized).toBe(0);
 
-    acquireLock.and.returnValue(Observable.throw(new HttpErrorResponse({ status: 423 })));
+    acquireLock.and.returnValue(Observable.throwError(new HttpErrorResponse({ status: 423 })));
 
     tick(30);
     expect(lockService.acquireLock).toHaveBeenCalledTimes(8);
@@ -195,7 +195,7 @@ describe('LockHeartbeatService', () => {
     expect(results.unsuccessful).toBe(0);
     expect(results.unauthorized).toBe(0);
 
-    acquireLock.and.returnValue(Observable.throw(new HttpErrorResponse({ status: 401 })));
+    acquireLock.and.returnValue(Observable.throwError(new HttpErrorResponse({ status: 401 })));
 
     tick(30);
     expect(lockService.acquireLock).toHaveBeenCalledTimes(8);
