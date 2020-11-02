@@ -9,7 +9,7 @@ export abstract class DataColumnConfiguration {
 
   getIdentityHeaders(): any {
     return {
-      headerValueGetter: params => this.instantWrapper('IDENTITY'),
+      headerValueGetter: (params) => this.instantWrapper('IDENTITY'),
       groupId: 'identity',
       suppressPaste: true,
       children: this.buildIdentityChildren(),
@@ -22,7 +22,7 @@ export abstract class DataColumnConfiguration {
 
   buildStationHeader(): any {
     return {
-      headerValueGetter: params => this.instantWrapper('STATION'),
+      headerValueGetter: (params) => this.instantWrapper('STATION'),
       field: 'station',
       colId: 'station',
       width: 100,
@@ -34,7 +34,7 @@ export abstract class DataColumnConfiguration {
 
   buildDatetimeHeader(): any {
     return {
-      headerValueGetter: params => this.instantWrapper('INSTANCE_DATE'),
+      headerValueGetter: (params) => this.instantWrapper('INSTANCE_DATE'),
       field: 'obsDateTime',
       colId: 'obsDateTime',
       width: 220,
@@ -48,7 +48,7 @@ export abstract class DataColumnConfiguration {
 
   buildReceivedDatetimeHeader(): any {
     return {
-      headerValueGetter: params => this.instantWrapper('RECEIVED_DATE'),
+      headerValueGetter: (params) => this.instantWrapper('RECEIVED_DATE'),
       field: 'receivedDateTime',
       colId: 'receivedDateTime',
       width: 220,
@@ -60,7 +60,7 @@ export abstract class DataColumnConfiguration {
 
   buildRevisionHeader(): any {
     return {
-      headerValueGetter: params => this.instantWrapper('REV'),
+      headerValueGetter: (params) => this.instantWrapper('REV'),
       field: 'revision',
       colId: 'revision',
       pinned: true,
@@ -88,7 +88,7 @@ export abstract class DataColumnConfiguration {
 
   getRawGroupHeader(): any {
     return {
-      headerValueGetter: params => this.instantWrapper('RAW'),
+      headerValueGetter: (params) => this.instantWrapper('RAW'),
       groupId: 'raw',
       suppressPaste: true,
       children: [],
@@ -109,6 +109,9 @@ export abstract class DataColumnConfiguration {
       field: 'raw_header',
       width: 220,
       valueFormatter: removeLineBreaks,
+      filterParams: {
+        cellRenderer: removeLineBreaks,
+      },
     };
   }
 
@@ -119,6 +122,9 @@ export abstract class DataColumnConfiguration {
       width: 440,
       columnGroupShow: 'open',
       valueFormatter: removeLineBreaks,
+      filterParams: {
+        cellRenderer: removeLineBreaks,
+      },
     };
   }
 
@@ -140,7 +146,7 @@ export abstract class DataColumnConfiguration {
   }
 
   getContextMenuItems(gridService: DataGridService) {
-    return params => this.addContextMenuItems(params, gridService);
+    return (params) => this.addContextMenuItems(params, gridService);
   }
 
   addContextMenuItems(params, gridService): any[] {
@@ -158,7 +164,7 @@ export abstract class DataColumnConfiguration {
         action: () => gridService.displayMetadataTable(params.node.data),
       },
       this.buildChartContextItem(params, gridService),
-    ].filter(item => item != null);
+    ].filter((item) => item != null);
   }
 
   buildChartContextItem(params, gridService) {
@@ -214,9 +220,9 @@ export abstract class DataColumnConfiguration {
 
   getMainMenuItems(gridService: DataGridService) {
     const buildColumnChartOption = this.buildColumnChartOption;
-    const instWrap = label => this.instantWrapper(label);
-    return function(params) {
-      const menuItems = params.defaultItems.slice(0).filter(item => item !== 'toolPanel');
+    const instWrap = (label) => this.instantWrapper(label);
+    return function (params) {
+      const menuItems = params.defaultItems.slice(0).filter((item) => item !== 'toolPanel');
 
       menuItems.push(
         'separator',
@@ -232,12 +238,12 @@ export abstract class DataColumnConfiguration {
 
       menuItems.push('separator', {
         name: instWrap('COLUMN_STATS'),
-        action: function() {
+        action: function () {
           let sum = 0;
           let total = 0;
           let min: number;
           let max: number;
-          params.api.forEachNode(node => {
+          params.api.forEachNode((node) => {
             const cell = node.data[params.column.getId()];
             if (cell) {
               const value = Number(cell.value);
@@ -285,5 +291,5 @@ export abstract class DataColumnConfiguration {
   // TODO: Find nicer solution, step away from Col-Conf classes?
   // Needs to be overwritten by `instantWrapper = (key) =>  LanguageService.translator.instant(`GRID.${key}`);` in
   // app-level Col-Conf class...
-  instantWrapper = key => `key`;
+  instantWrapper = (key) => `key`;
 }
