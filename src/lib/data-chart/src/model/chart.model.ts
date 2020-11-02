@@ -1,7 +1,7 @@
 const givenOrDefault = (given, defaultValue = null) => (given == null ? defaultValue : given);
 
 export enum SeriesType {
-  Line = 'spline',
+  Line = 'line',
   Bar = 'column',
   Area = 'area',
 }
