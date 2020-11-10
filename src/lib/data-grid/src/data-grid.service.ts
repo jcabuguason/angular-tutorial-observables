@@ -262,33 +262,64 @@ export class DataGridService implements OnDestroy {
   // TODO: This function assumes a flat column config
   private sortColumns() {
     const configOrder = this.userConfigService.getElementOrder();
-    // workaround - parent might not have it's ID set
-    const getID = (col) => col.elementID || col.children[0].elementID;
 
-    let sortedMetaCols = [];
-    let sortedDataCols = [];
+    this.columnDefs = [this.identityHeader, ...this.sortMetadataCols(configOrder), ...this.sortDataCols(configOrder)];
 
-    configOrder.forEach((elementID) => {
-      const columns = this.columnDefs.filter((col) => getID(col) === elementID);
-      columns.some((col) => col.headerClass === 'meta')
-        ? sortedMetaCols.push(...columns)
-        : sortedDataCols.push(...columns);
-    });
-
-    const remainingMetaCol = (col) => col.headerClass === 'meta' && !configOrder.includes(getID(col));
-    const remainingDataCol = (col) =>
-      col.groupId !== 'identity' &&
-      col.groupId !== 'raw' &&
-      col.headerClass !== 'meta' &&
-      !configOrder.includes(getID(col));
-
-    sortedMetaCols = this.groupColumns(sortedMetaCols.concat(this.columnDefs.filter(remainingMetaCol)));
-    sortedDataCols = this.groupColumns(sortedDataCols.concat(this.columnDefs.filter(remainingDataCol)));
-
-    this.columnDefs = [this.identityHeader, ...sortedMetaCols, ...sortedDataCols];
     if (this.userConfigService.isLoadRawData()) {
       this.columnDefs.push(this.rawGroupHeader);
     }
+  }
+
+  private sortDataCols(elementOrder: string[]) {
+    const sortedDataCols = [];
+    const unsortedDataCols = this.columnDefs.filter(
+      (col) => col.groupId !== 'identity' && col.groupId !== 'raw' && col.headerClass !== 'meta',
+    );
+    // workaround - parent might not have it's ID set
+    const getID = (col) => col.elementID || col.children[0].elementID;
+
+    elementOrder.forEach((elementID) => {
+      const columns = unsortedDataCols.filter((col) => getID(col) === elementID);
+      sortedDataCols.push(...columns);
+    });
+
+    return this.groupColumns(
+      sortedDataCols.concat(unsortedDataCols.filter((col) => !elementOrder.includes(getID(col)))),
+    );
+  }
+
+  private sortMetadataCols(elementOrder: string[]) {
+    const metadataGroups = this.columnDefs.filter((col) => col.headerClass === 'meta');
+    const remainingCol = (col) => !elementOrder.includes(col.elementID);
+    const getID = (col) => col.elementID || col.children[0].elementID;
+
+    // there may be multiple metadata element groups (Identification, Quality Assessment Summary, etc.)
+    metadataGroups.forEach((group) => {
+      const unsortedColumns = group.children;
+      const sortedColumns = [];
+
+      elementOrder.forEach((elementID) => {
+        const matchingColumns = unsortedColumns.filter((col) => getID(col) === elementID);
+        sortedColumns.push(...matchingColumns);
+      });
+
+      group.children = this.groupColumns(sortedColumns.concat(unsortedColumns.filter(remainingCol)));
+    });
+
+    const sortedGroups = metadataGroups.sort((a, b) => {
+      const indexA = elementOrder.indexOf(getID(a));
+      const indexB = elementOrder.indexOf(getID(b));
+      // move the groups without column ordering to the end
+      if (indexA === -1) {
+        return 1;
+      } else if (indexB === -1) {
+        return -1;
+      }
+      // order groups based on column ordering
+      return indexA === indexB ? 0 : indexA < indexB ? -1 : 1;
+    });
+
+    return sortedGroups;
   }
 
   getMetadataTableInfo(nodeData) {
