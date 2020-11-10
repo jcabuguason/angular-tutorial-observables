@@ -45,6 +45,7 @@ describe('SearchParameter', () => {
     });
 
     it('should check if can add value (limited choice)', () => {
+      expect(paramRestricted.canAddSelected('dndValue')).toBeTruthy();
       expect(paramRestricted.canAddSelected('dndLabel')).toBeTruthy();
       expect(paramRestricted.canAddSelected('123')).toBeFalsy();
     });
@@ -61,7 +62,7 @@ describe('SearchParameter', () => {
     let param: SearchParameter;
 
     beforeEach(() => {
-      param = new SearchParameter({ name: 'param', choices: choices, defaultSelectedLabels: ['dndLabel'] });
+      param = new SearchParameter({ name: 'param', choices: choices, defaultSelectedValues: ['dndValue'] });
     });
 
     it('should use default values', () => {

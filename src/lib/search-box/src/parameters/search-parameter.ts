@@ -35,14 +35,14 @@ export class SearchParameter {
 
     this.updateChoices(this.choices);
 
-    this.setDefaultSelected(valueOrDefault(options.defaultSelectedLabels, []));
+    this.setDefaultSelected(valueOrDefault(options.defaultSelectedValues, []));
   }
 
   private setDefaultSelected(defaultValues: string[]) {
     this.defaultSelected = defaultValues
       .filter((value) => this.canAddSelected(value))
       .map((value) => {
-        const fixed = this.choices.find((val) => val.label.toLowerCase() === value.toLowerCase());
+        const fixed = this.choices.find((val) => val.value.toLowerCase() === value.toLowerCase());
         return fixed ? fixed.label : value;
       });
     this.selected = [...this.defaultSelected];
@@ -137,7 +137,7 @@ export class SearchParameter {
   addSelected(value: string) {
     value = this.cleanEntries([value]).shift();
     if (this.canAddSelected(value)) {
-      const fixed = this.choices.find((val) => val.label.toLowerCase() === value.toLowerCase());
+      const fixed = this.choices.find((val) => val.value.toLowerCase() === value.toLowerCase());
       if (fixed) {
         value = fixed.label;
       }
@@ -221,18 +221,13 @@ export class SearchParameter {
   }
 
   private findChoice(list: any[], value: string | ChoiceModel) {
-    const updatedValue = this.determineChoiceLabel(value).toLowerCase();
-    return list.find((val) => {
-      if (this.isChoiceModel(val)) {
-        return val.label.toLowerCase() === updatedValue;
-      } else {
-        return val.toLowerCase() === updatedValue;
-      }
-    });
-  }
+    const lowercaseLabel = this.isChoiceModel(value) ? String(value['label']) : String(value);
+    const lowercaseValue = this.isChoiceModel(value) ? String(value['value']) : String(value);
+    const isEquals = (a: string, b: string): boolean => a.toLowerCase() === b.toLowerCase();
+    const isMatch = (givenA: string, givenB): boolean =>
+      isEquals(givenA, lowercaseLabel) || isEquals(givenB, lowercaseValue);
 
-  private determineChoiceLabel(value: string | ChoiceModel): string {
-    return this.isChoiceModel(value) ? String(value['label']) : String(value);
+    return list.find((val) => (this.isChoiceModel(val) ? isMatch(val.label, val.value) : isMatch(val, val)));
   }
 
   cleanEntries = (arr: string[]): string[] =>
