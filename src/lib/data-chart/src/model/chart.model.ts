@@ -15,14 +15,14 @@ export class Station {
   label: string;
   value: string;
   identifierID?: string;
-  group?: any;
+  groups?: any[];
   stationInfo?: any;
 
-  constructor(given: { label: string; value: string; identifierID?: string; group?: any; stationInfo?: any }) {
+  constructor(given: { label: string; value: string; identifierID?: string; groups?: any[]; stationInfo?: any }) {
     this.label = given.label;
     this.value = given.value;
     this.identifierID = givenOrDefault(given.identifierID);
-    this.group = givenOrDefault(given.group);
+    this.groups = givenOrDefault(given.groups, []);
     this.stationInfo = givenOrDefault(given.stationInfo);
   }
 }
