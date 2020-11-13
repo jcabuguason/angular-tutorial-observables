@@ -849,4 +849,16 @@ describe('UserConfigService', () => {
       expect(service.isLoadRawHeader()).toBeFalsy();
     });
   });
+
+  describe('#sortTypeConfig', () => {
+    it('should have a sort type', () => {
+      const config: UserConfigOptions = {
+        profileName: { value: 'config', english: '', french: '' },
+        elementConfigs: [{ id: '1.2.3.4.5.6.7', sortType: 'asc' }],
+      };
+
+      service.loadConfig(config);
+      expect(service.getSortType('1.2.3.4.5.6.7')).toBe('asc');
+    });
+  });
 });

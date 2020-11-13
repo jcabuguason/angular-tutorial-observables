@@ -490,6 +490,8 @@ export class DataGridService implements OnDestroy {
       columnToAdd.hide = true;
     }
 
+    columnToAdd.sort = this.userConfigService.getSortType(element.elementID);
+
     this.columnConfiguration.createElementHeader(columnToAdd, headerID);
     this.columnsGenerated.push(headerID);
   }
@@ -522,6 +524,7 @@ export class DataGridService implements OnDestroy {
       hide: this.isHiddenElement(element.elementID, true),
       type: 'identity',
       elementID: element.elementID,
+      sort: this.userConfigService.getSortType(element.elementID),
     };
 
     if (parent.children === undefined) {

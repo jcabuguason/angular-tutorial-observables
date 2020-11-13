@@ -401,4 +401,11 @@ export class UserConfigService {
       .map((config) => config.displayFormat)
       .shift();
   }
+
+  getSortType(elementID: string): string {
+    return this.userConfig.elementConfigs
+      .filter((config) => config.elementID === elementID)
+      .map((config) => config.sortType)
+      .shift();
+  }
 }

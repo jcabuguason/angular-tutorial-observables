@@ -155,6 +155,7 @@ export class ElementConfig {
   elementDescription: LanguageLabel;
   availableDataFlags: string[];
   displayFormat: string;
+  sortType: string;
 
   private constructor(elementID: string) {
     this.nodeNames = [];
@@ -227,6 +228,11 @@ export class ElementConfig {
     // Configuring display format
     if (options?.displayFormat != null) {
       currentConfig.displayFormat = options.displayFormat;
+    }
+
+    // Configuring sort type
+    if (options?.sortType != null) {
+      currentConfig.sortType = options.sortType;
     }
   }
 }
