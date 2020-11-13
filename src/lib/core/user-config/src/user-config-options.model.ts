@@ -66,6 +66,7 @@ export interface ElementConfigOptions {
   precision?: string;
   nestingDepth?: string;
   showSubHeader?: SubHeaderConfigOptions;
+  sortType?: 'asc' | 'desc';
 }
 
 export interface LoadVisibleElements {
