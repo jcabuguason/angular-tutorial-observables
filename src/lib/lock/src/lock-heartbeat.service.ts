@@ -25,6 +25,7 @@ export class LockHeartbeatService {
   private type: string;
   private handleUnsuccessfulLock: () => void;
   private handleUnauthorizedLock: () => void;
+  private handleSuccessfulLock: () => void;
 
   constructor(
     @Inject(LOCK_CONFIG)
@@ -44,12 +45,14 @@ export class LockHeartbeatService {
     type: string,
     handleUnsuccessfulLock: () => void,
     handleUnauthorizedLock: () => void,
+    handleSuccessfulLock: () => void,
   ) {
     this.hasLock = false;
     this.resourceIDs = resourceIDs;
     this.type = type;
     this.handleUnsuccessfulLock = handleUnsuccessfulLock;
     this.handleUnauthorizedLock = handleUnauthorizedLock;
+    this.handleSuccessfulLock = handleSuccessfulLock;
     this.startHeartbeat();
     this.startWarningTimeout();
     this.startApplicationTimeout();
@@ -84,6 +87,7 @@ export class LockHeartbeatService {
       .subscribe(
         (response) => {
           this.hasLock = true;
+          this.handleSuccessfulLock();
         },
         (error: HttpErrorResponse) => {
           this.hasLock = false;
@@ -209,7 +213,7 @@ export class LockHeartbeatService {
       .afterClosed()
       .pipe(take(1))
       .subscribe(() => {
-        this.startLockHeartbeat(this.resourceIDs, this.type, this.handleUnsuccessfulLock, this.handleUnauthorizedLock);
+        this.startLockHeartbeat(this.resourceIDs, this.type, this.handleUnsuccessfulLock, this.handleUnauthorizedLock, this.handleSuccessfulLock);
       });
   }
 }

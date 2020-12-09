@@ -76,6 +76,7 @@ describe('LockHeartbeatService', () => {
     const results = {
       unsuccessful: 0,
       unauthorized: 0,
+      successful: 0,
     };
     spyOn(lockService, 'acquireLock').and.returnValue(responses.acquireLock);
     spyOn(lockService, 'releaseLock').and.returnValue(responses.releaseLock);
@@ -85,6 +86,7 @@ describe('LockHeartbeatService', () => {
       'metadata',
       () => results.unsuccessful++,
       () => results.unauthorized++,
+      () => results.successful++,
     );
 
     tick(29);
@@ -92,17 +94,20 @@ describe('LockHeartbeatService', () => {
     expect(lockService.releaseLock).toHaveBeenCalledTimes(0);
     expect(results.unsuccessful).toBe(0);
     expect(results.unauthorized).toBe(0);
+    expect(results.successful).toBe(6);
 
     tick(31);
     expect(lockService.acquireLock).toHaveBeenCalledTimes(12);
     expect(lockService.releaseLock).toHaveBeenCalledTimes(1);
     expect(results.unsuccessful).toBe(0);
     expect(results.unauthorized).toBe(0);
+    expect(results.successful).toBe(12);
 
     tick(60);
     expect(lockService.acquireLock).toHaveBeenCalledTimes(12);
     expect(results.unsuccessful).toBe(0);
     expect(results.unauthorized).toBe(0);
+    expect(results.successful).toBe(12);
 
     flush();
   }));
@@ -111,6 +116,7 @@ describe('LockHeartbeatService', () => {
     const results = {
       unsuccessful: 0,
       unauthorized: 0,
+      successful: 0,
     };
 
     spyOn(lockService, 'acquireLock').and.returnValue(responses.acquireLock);
@@ -121,6 +127,7 @@ describe('LockHeartbeatService', () => {
       'metadata',
       () => results.unsuccessful++,
       () => results.unauthorized++,
+      () => results.successful++,
     );
 
     tick(30);
@@ -128,6 +135,7 @@ describe('LockHeartbeatService', () => {
     expect(lockService.releaseLock).toHaveBeenCalledTimes(0);
     expect(results.unsuccessful).toBe(0);
     expect(results.unauthorized).toBe(0);
+    expect(results.successful).toBe(7);
 
     document.documentElement.click();
 
@@ -136,18 +144,21 @@ describe('LockHeartbeatService', () => {
     expect(lockService.releaseLock).toHaveBeenCalledTimes(0);
     expect(results.unsuccessful).toBe(0);
     expect(results.unauthorized).toBe(0);
+    expect(results.successful).toBe(13);
 
     tick(30);
     expect(lockService.acquireLock).toHaveBeenCalledTimes(18);
     expect(lockService.releaseLock).toHaveBeenCalledTimes(1);
     expect(results.unsuccessful).toBe(0);
     expect(results.unauthorized).toBe(0);
+    expect(results.successful).toBe(18);
   }));
 
   it('should lock the user', fakeAsync(() => {
     const results = {
       unsuccessful: 0,
       unauthorized: 0,
+      successful: 0,
     };
 
     const acquireLock = spyOn(lockService, 'acquireLock').and.returnValue(responses.acquireLock);
@@ -159,6 +170,7 @@ describe('LockHeartbeatService', () => {
       'metadata',
       () => results.unsuccessful++,
       () => results.unauthorized++,
+      () => results.successful++,
     );
 
     tick(30);
@@ -166,6 +178,7 @@ describe('LockHeartbeatService', () => {
     expect(lockService.releaseLock).toHaveBeenCalledTimes(0);
     expect(results.unsuccessful).toBe(0);
     expect(results.unauthorized).toBe(0);
+    expect(results.successful).toBe(7);
 
     acquireLock.and.returnValue(Observable.throwError(new HttpErrorResponse({ status: 423 })));
 
@@ -174,12 +187,14 @@ describe('LockHeartbeatService', () => {
     expect(lockService.releaseLock).toHaveBeenCalledTimes(1);
     expect(results.unsuccessful).toBe(1);
     expect(results.unauthorized).toBe(0);
+    expect(results.successful).toBe(7);
   }));
 
   it('should be unauthorized', fakeAsync(() => {
     const results = {
       unsuccessful: 0,
       unauthorized: 0,
+      successful: 0,
     };
 
     const acquireLock = spyOn(lockService, 'acquireLock').and.returnValue(responses.acquireLock);
@@ -189,11 +204,13 @@ describe('LockHeartbeatService', () => {
       'metadata',
       () => results.unsuccessful++,
       () => results.unauthorized++,
+      () => results.successful++,
     );
     tick(30);
     expect(lockService.acquireLock).toHaveBeenCalledTimes(7);
     expect(results.unsuccessful).toBe(0);
     expect(results.unauthorized).toBe(0);
+    expect(results.successful).toBe(7);
 
     acquireLock.and.returnValue(Observable.throwError(new HttpErrorResponse({ status: 401 })));
 
@@ -201,5 +218,6 @@ describe('LockHeartbeatService', () => {
     expect(lockService.acquireLock).toHaveBeenCalledTimes(8);
     expect(results.unsuccessful).toBe(0);
     expect(results.unauthorized).toBe(1);
+    expect(results.successful).toBe(7);
   }));
 });
