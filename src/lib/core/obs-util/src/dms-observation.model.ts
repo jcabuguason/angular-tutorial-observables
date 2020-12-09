@@ -50,15 +50,19 @@ export interface Author {
 
 export interface ObsElement {
   name: string;
+  elementID: string;
   value: string;
   valueNum?: number;
   unit: string;
-  elementID: string;
+  codeSrc?: string;
+  codeType?: string;
   type?: 'metadata' | 'element';
   dataType?: 'official' | 'derived';
   overallQASummary?: number;
   overallInstrumentSummary?: number;
   suppInfoDataFlags?: string[];
+  elementIndex?: string;
+  group?: string;
   indexName?: string;
   indexValue?: number;
   statusIndicatorQcRemarkEffectiveDate?: string;
