@@ -3,4 +3,5 @@ export enum ParameterType {
   Datetime,
   HoursRange,
   Checkbox,
+  Quick,
 }

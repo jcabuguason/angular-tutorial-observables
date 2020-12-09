@@ -3,6 +3,9 @@ export enum ParameterName {
   Network = 'network',
   Organization = 'organization',
   // used by search model sent to ES
+  QuickRangeOptions = 'quickRange',
+  QuickRangeFrom = 'quickFrom',
+  QuickRangeTo = 'quickTo',
   StationName = 'stationName',
   StationID = 'stationID',
   Province = 'province',

@@ -1,4 +1,6 @@
 import * as dateUtil from './date-util.class';
+import { TimeOperator } from './operator.enum';
+import { TimeUnit } from './time-unit.enum';
 
 describe('DateUtil', () => {
   it('should check valid date', () => {
@@ -32,30 +34,59 @@ describe('DateUtil', () => {
   it('subtracting hours', () => {
     const date1 = new Date('2018-11-04T06:00Z');
     const expectedDate1 = new Date('2018-11-03T06:00Z');
-    expect(dateUtil.subtractHours(date1, 24)).toEqual(expectedDate1);
+    expect(dateUtil.calculateDate({ date: date1, mode: TimeOperator.Subtract, unit: TimeUnit.Hours, amount: 24 })).toEqual(expectedDate1);
 
     const date2 = new Date('2019-03-10T06:00Z');
     const expectedDate2 = new Date('2019-03-09T06:00Z');
-    expect(dateUtil.subtractHours(date2, 24)).toEqual(expectedDate2);
+    expect(dateUtil.calculateDate({ date: date2, mode: TimeOperator.Subtract, unit: TimeUnit.Hours, amount: 24 })).toEqual(expectedDate2);
 
     const date3 = new Date('2019-01-01T05:00Z');
     const expectedDate3 = new Date('2019-01-01T00:00Z');
-    expect(dateUtil.subtractHours(date3, 5)).toEqual(expectedDate3);
+    expect(dateUtil.calculateDate({ date: date3, mode: TimeOperator.Subtract, unit: TimeUnit.Hours, amount: 5 })).toEqual(expectedDate3);
   });
 
   it('adding hours', () => {
     const date1 = new Date('2018-11-04T06:00Z');
     const expectedDate1 = new Date('2018-11-05T06:00Z');
-    expect(dateUtil.addHours(date1, 24)).toEqual(expectedDate1);
+    expect(dateUtil.calculateDate({ date: date1, mode: TimeOperator.Add, unit: TimeUnit.Hours, amount: 24 })).toEqual(expectedDate1);
 
     const date2 = new Date('2019-03-10T06:00Z');
     const expectedDate2 = new Date('2019-03-11T06:00Z');
-    expect(dateUtil.addHours(date2, 24)).toEqual(expectedDate2);
+    expect(dateUtil.calculateDate({ date: date2, mode: TimeOperator.Add, unit: TimeUnit.Hours, amount: 24 })).toEqual(expectedDate2);
 
     const date3 = new Date('2019-01-01T05:00Z');
     const expectedDate3 = new Date('2019-01-01T10:00Z');
-    expect(dateUtil.addHours(date3, 5)).toEqual(expectedDate3);
+    expect(dateUtil.calculateDate({ date: date3, mode: TimeOperator.Add, unit: TimeUnit.Hours, amount: 5 })).toEqual(expectedDate3);
   });
+
+  it('adding minutes', () => {
+    const date1 = new Date('2018-11-04T06:00Z');
+    const expectedDate1 = new Date('2018-11-04T06:30Z');
+    expect(dateUtil.calculateDate({ date: date1, mode: TimeOperator.Add, unit: TimeUnit.Minutes, amount: 30 })).toEqual(expectedDate1);
+
+    const date2 = new Date('2019-03-10T06:00Z');
+    const expectedDate2 = new Date('2019-03-10T07:00Z');
+    expect(dateUtil.calculateDate({ date: date2, mode: TimeOperator.Add, unit: TimeUnit.Minutes, amount: 60 })).toEqual(expectedDate2);
+
+    const date3 = new Date('2019-01-01T05:00Z');
+    const expectedDate3 = new Date('2019-01-01T08:00Z');
+    expect(dateUtil.calculateDate({ date: date3, mode: TimeOperator.Add, unit: TimeUnit.Minutes, amount: 180 })).toEqual(expectedDate3);
+  });
+
+  it('subtracting minutes', () => {
+    const date1 = new Date('2018-11-04T06:00Z');
+    const expectedDate1 = new Date('2018-11-04T05:30Z');
+    expect(dateUtil.calculateDate({ date: date1, mode: TimeOperator.Subtract, unit: TimeUnit.Minutes, amount: 30 })).toEqual(expectedDate1);
+
+    const date2 = new Date('2019-03-10T06:00Z');
+    const expectedDate2 = new Date('2019-03-10T05:00Z');
+    expect(dateUtil.calculateDate({ date: date2, mode: TimeOperator.Subtract, unit: TimeUnit.Minutes, amount: 60 })).toEqual(expectedDate2);
+
+    const date3 = new Date('2019-01-01T05:00Z');
+    const expectedDate3 = new Date('2019-01-01T02:00Z');
+    expect(dateUtil.calculateDate({ date: date3, mode: TimeOperator.Subtract, unit: TimeUnit.Minutes, amount: 180 })).toEqual(expectedDate3);
+  });
+
 
   describe('should format date', () => {
     it('given string input', () => {

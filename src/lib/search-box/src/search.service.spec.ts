@@ -16,6 +16,10 @@ import { ChoiceModel } from './model/choice.model';
 import { MessageService } from 'primeng/api';
 import { ESOperator } from 'msc-dms-commons-angular/core/elastic-search';
 import { ParameterName } from './enums/parameter-name.enum';
+import { TimeModelOptions } from './model/time-options.model';
+import { calculateDate, TimeUnit, TimeOperator } from 'msc-dms-commons-angular/shared/util';
+import { SearchQuick } from './parameters/search-quick';
+import { TabOption } from './enums/tab-option.enum';
 
 describe('SearchService', () => {
   let searchService: SearchService;
@@ -39,6 +43,9 @@ describe('SearchService', () => {
     relativeDate: null,
     provinceParam: null,
     sizeParam: null,
+    quickStartDateParam: null,
+    quickEndDateParam: null,
+    quickOptionsParam: null,
   };
 
   class MockUrlService {
@@ -63,6 +70,25 @@ describe('SearchService', () => {
     const networks: ChoiceModel[] = choiceModels(['ca', 'ra', 'dnd awos'].sort());
     const provinces: ChoiceModel[] = choiceModels(['AB', 'BC', 'MB']);
 
+    const quickArray = [
+      {
+        label: 'QUICK_MENU.LAST_15_MIN',
+        uriLabel: 'last15min',
+        timeSettings: {
+          unit: TimeUnit.Minutes,
+          value: 15,
+        },
+      },
+      {
+        label: 'QUICK_MENU.LAST_30_MIN',
+        uriLabel: 'last30min',
+        timeSettings: {
+          unit: TimeUnit.Minutes,
+          value: 30,
+        },
+      },
+    ];
+
     sParams = {
       organizationParam: new SearchParameter({
         name: ParameterName.Organization,
@@ -80,6 +106,13 @@ describe('SearchService', () => {
       endDateParam: new SearchDatetime({ name: ParameterName.To }),
       hoursParam: new SearchHoursRange({ name: ParameterName.HoursRange }),
       relativeDate: new SearchDatetime({ name: ParameterName.RelativeDatetime }),
+      quickStartDateParam: new SearchDatetime({ name: ParameterName.QuickRangeFrom }),
+      quickEndDateParam: new SearchDatetime({ name: ParameterName.QuickRangeTo }),
+      quickOptionsParam: new SearchQuick({
+        name: ParameterName.QuickRangeOptions,
+        quickList: quickArray,
+        numQuickCols: 3,
+      }),
       provinceParam: new SearchParameter({ name: ParameterName.Province, choices: provinces, restricted: true }),
       sizeParam: new SearchParameter({
         name: ParameterName.Size,
@@ -190,7 +223,7 @@ describe('SearchService', () => {
   it('should limit size on submit', () => {
     searchService.addSuggestedParameter(sParams.relativeDate, ['2018-01-03T12:00Z']);
     searchService.addSuggestedParameter(sParams.sizeParam);
-    searchService.setSelectedRangeType('hoursRange');
+    searchService.setSelectedRangeType(TabOption.Relative);
     sParams.sizeParam.selected = ['2000'];
 
     searchService.buildSearchModel();
@@ -199,8 +232,8 @@ describe('SearchService', () => {
 
   it('should adjust datetime in model if given hours range', () => {
     searchService.addSuggestedParameter(sParams.relativeDate, ['2018-01-03T12:00Z']);
-    searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: '12', hh_after: '36' }]);
-    searchService.setSelectedRangeType('hoursRange');
+    searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: 12, hh_after: 36 }]);
+    searchService.setSelectedRangeType(TabOption.Relative);
 
     const model = searchService.buildSearchModel();
     expect(model.from).toEqual(new Date('2018-01-03T00:00Z'));
@@ -211,7 +244,7 @@ describe('SearchService', () => {
     sParams.hoursParam.setDefaultHours(5, 6);
     searchService.addSuggestedParameter(sParams.relativeDate, ['2018-01-07T05:30Z']);
     searchService.addSuggestedParameter(sParams.hoursParam);
-    searchService.setSelectedRangeType('hoursRange');
+    searchService.setSelectedRangeType(TabOption.Relative);
 
     const model = searchService.buildSearchModel();
     expect(model.from).toEqual(new Date('2018-01-07T00:30Z'));
@@ -231,7 +264,7 @@ describe('SearchService', () => {
     // should be formatted differently, but for testing purposes urlService will return this back
     const params = [
       paramValueObj(sParams.relativeDate, ['2018-01-31T00:00Z']),
-      paramValueObj(sParams.hoursParam, [{ hh_before: '12', hh_after: '21' }]),
+      paramValueObj(sParams.hoursParam, [{ hh_before: 12, hh_after: 21 }]),
       paramValueObj(sParams.networkParam, ['dnd awos']),
       paramValueObj(sParams.stationIdParam, ['123', 'abc']),
       paramValueObj(sParams.sizeParam, ['100']),
@@ -239,7 +272,7 @@ describe('SearchService', () => {
     spyOn(searchService, 'submitSearch');
     spyOn(searchService, 'updateUrl');
 
-    searchService.searchByURLParameters(params);
+    searchService.searchByUrlParameters(params);
     expect(searchService.updateUrl).toHaveBeenCalledTimes(0);
     expect(searchService.submitSearch).toHaveBeenCalled();
     expect(searchService.displayParams).toEqual([
@@ -355,7 +388,7 @@ describe('SearchService', () => {
     sParams.relativeDate.formDatetime = '2018-01-30 05:00';
     sParams.hoursParam.formHoursBefore = 10;
     sParams.hoursParam.formHoursAfter = 20;
-    searchService.setSelectedRangeType('hoursRange');
+    searchService.setSelectedRangeType(TabOption.Relative);
 
     searchService.submitSearchForm();
     expect(sParams.sizeParam.getSelected()).toEqual(['10']);
@@ -406,7 +439,7 @@ describe('SearchService', () => {
     searchService.addSuggestedParameter(sParams.endDateParam, ['2018-02-01T00:00Z']);
     searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: 1, hh_after: 1 }]);
     searchService.addSuggestedParameter(sParams.relativeDate, ['2018-03-01T03:00Z']);
-    searchService.setSelectedRangeType('dateRange');
+    searchService.setSelectedRangeType(TabOption.Absolute);
 
     const model = searchService.buildSearchModel();
     expect(model.from).toEqual(new Date('2018-01-01T00:00Z'));
@@ -418,7 +451,7 @@ describe('SearchService', () => {
     searchService.addSuggestedParameter(sParams.endDateParam, ['2018-02-01T00:00Z']);
     searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: 1, hh_after: 1 }]);
     searchService.addSuggestedParameter(sParams.relativeDate, ['2018-03-01T03:00Z']);
-    searchService.setSelectedRangeType('hoursRange');
+    searchService.setSelectedRangeType(TabOption.Relative);
 
     const model = searchService.buildSearchModel();
     expect(model.from).toEqual(new Date('2018-03-01T02:00Z'));
@@ -428,7 +461,7 @@ describe('SearchService', () => {
   it('should adjust the "From" date to be before the "To" date on submit', () => {
     searchService.addSuggestedParameter(sParams.startDateParam, ['2018-02-03T00:00Z']);
     searchService.addSuggestedParameter(sParams.endDateParam, ['2018-02-02T00:00Z']);
-    searchService.setSelectedRangeType('dateRange');
+    searchService.setSelectedRangeType(TabOption.Absolute);
     searchService.submitSearch();
 
     const fromDate = searchService.availableParams.find(
@@ -444,7 +477,7 @@ describe('SearchService', () => {
 
   it('should allow searches with just "From" date', () => {
     searchService.addSuggestedParameter(sParams.startDateParam, ['2020-02-20T20:00Z']);
-    searchService.setSelectedRangeType('dateRange');
+    searchService.setSelectedRangeType(TabOption.Absolute);
     searchService.submitSearch();
 
     const fromDate = searchService.availableParams.find(
@@ -460,7 +493,7 @@ describe('SearchService', () => {
 
   it('should allow searches with just "To" date', () => {
     searchService.addSuggestedParameter(sParams.endDateParam, ['2020-02-20T20:00Z']);
-    searchService.setSelectedRangeType('dateRange');
+    searchService.setSelectedRangeType(TabOption.Absolute);
     searchService.submitSearch();
 
     const fromDate = searchService.availableParams.find(
@@ -472,5 +505,30 @@ describe('SearchService', () => {
 
     expect(fromDate.isUnfilled()).toBeTruthy();
     expect(toDate.getFullDatetime()).toEqual(new Date('2020-02-20T20:00Z'));
+  });
+
+  it('should update quick from/to parameters', () => {
+    const timeOptions: TimeModelOptions = {
+      value: 10,
+      unit: TimeUnit.Hours,
+    };
+    const uriLabel: string = 'last10hours';
+    const fromDate = searchService.availableParams.find(
+      (param) => param.getName() === ParameterName.QuickRangeFrom,
+    ) as SearchDatetime;
+    const toDate = searchService.availableParams.find(
+      (param) => param.getName() === ParameterName.QuickRangeTo,
+    ) as SearchDatetime;
+
+    searchService.updateQuickField(timeOptions, uriLabel);
+
+    //round to the nearest minute
+    const subtractedDate = calculateDate({ mode: TimeOperator.Subtract, unit: TimeUnit.Hours, amount: 10 });
+    subtractedDate.setUTCSeconds(0, 0);
+    const currentDate = new Date();
+    currentDate.setUTCSeconds(0, 0);
+
+    expect(fromDate.getFullDatetime()).toEqual(subtractedDate);
+    expect(toDate.getFullDatetime()).toEqual(currentDate);
   });
 });

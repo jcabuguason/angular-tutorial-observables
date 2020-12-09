@@ -2,9 +2,12 @@ import { Injectable } from '@angular/core';
 import { SearchParameter } from './parameters/search-parameter';
 import { SearchDatetime } from './parameters/search-datetime';
 import { SearchHoursRange } from './parameters/search-hours-range';
+import { SearchQuick } from './parameters/search-quick';
 import { ShortcutModel } from './model/shortcut.model';
 import { SearchCheckbox } from './parameters/search-checkbox';
 import { ParameterType } from './enums/parameter-type.enum';
+import { ParameterName } from './enums/parameter-name.enum';
+import { TimeModel } from './model/time.model';
 
 @Injectable()
 export class SearchURLService {
@@ -29,8 +32,17 @@ export class SearchURLService {
         const name = p.getUrlName();
         switch (p.getType()) {
           case ParameterType.Datetime:
-            const date = p as SearchDatetime;
-            addUrlParam(name, date.getDatetimeUrlFormat());
+            if (
+              p.getName() == ParameterName.To ||
+              p.getName() == ParameterName.From ||
+              p.getName() == ParameterName.RelativeDatetime
+            ) {
+              const date = p as SearchDatetime;
+              addUrlParam(name, date.getDatetimeUrlFormat());
+            } else if (p.getName() == ParameterName.QuickRangeFrom) {
+              const quickDate = p as SearchDatetime;
+              addUrlParam(quickDate.getUrlQuickName(), quickDate.getUrlQuickRange());
+            }
             break;
           case ParameterType.HoursRange:
             const hrs = p as SearchHoursRange;
@@ -50,7 +62,12 @@ export class SearchURLService {
   }
 
   /** Reads the URL parameters and returns a list of the corresponding SearchParameter with its values */
-  getAllRequestParams(qParams, availableParams: SearchParameter[], shortcuts: ShortcutModel[]) {
+  getAllRequestParams(
+    qParams,
+    availableParams: SearchParameter[],
+    shortcuts: ShortcutModel[],
+    btnHighlight?: boolean[],
+  ) {
     const paramValueObj = (name, value) =>
       this.paramValueObj(this.findParamByUrlName(availableParams, name), this.toArray(value));
     const getLabel = (param, values) =>
@@ -64,7 +81,7 @@ export class SearchURLService {
         ? Object.keys(qParams)
             .filter((key) => qParams[key] != null && !this.isSpecialUrlParam(key, availableParams))
             .map((key) => paramValueObj(key, qParams[key]))
-            .concat(this.getSpecialRequestParams(qParams, availableParams, shortcuts))
+            .concat(this.getSpecialRequestParams(qParams, availableParams, shortcuts, btnHighlight))
             .filter((obj) => obj.param != null && obj.value.length > 0)
         : [];
 
@@ -88,9 +105,14 @@ export class SearchURLService {
   }
 
   /** Parameters that may use a special format (date, hour range, query type, shortcuts) */
-  getSpecialRequestParams(qParams, availableParams: SearchParameter[], shortcuts: ShortcutModel[]) {
+  getSpecialRequestParams(
+    qParams,
+    availableParams: SearchParameter[],
+    shortcuts: ShortcutModel[],
+    btnHighlight?: boolean[],
+  ) {
     return [].concat(
-      this.getDateRequestParams(qParams, availableParams),
+      this.getDateRequestParams(qParams, availableParams, btnHighlight),
       this.getHourRangeRequestParams(qParams, availableParams),
       this.getCheckboxRequestParams(qParams, availableParams),
       this.getShortcutRequestParams(qParams, availableParams, shortcuts),
@@ -110,12 +132,35 @@ export class SearchURLService {
     );
   }
 
-  getDateRequestParams(qParams, availableParams: SearchParameter[]) {
+  getDateRequestParams(qParams, availableParams: SearchParameter[], btnHighlight?: boolean[]) {
     const paramValue = (param) => [this.firstValue(qParams[param.getUrlName()])];
-    return availableParams
-      .filter((p) => p.getType() === ParameterType.Datetime)
-      .map((p) => this.paramValueObj(p, paramValue(p)))
-      .filter((obj) => obj.value[0] != null);
+    const quickRangeFrom = availableParams.find((p) => p.getName() === ParameterName.QuickRangeFrom) as SearchDatetime;
+    const rangeName = quickRangeFrom?.getUrlQuickName();
+    const quickList = (availableParams.find((p) => p.getName() == ParameterName.QuickRangeOptions) as SearchQuick)
+      ?.quickList;
+
+    if (qParams.hasOwnProperty(rangeName) && quickList != null && btnHighlight != null) {
+      const quickRangeTo = availableParams.find((p) => p.getName() === ParameterName.QuickRangeTo) as SearchDatetime;
+      const rangeValue = qParams[rangeName]; // i.e. last30min
+      const result = quickList.find((p) => p.uriLabel == rangeValue);
+      const id = quickList.findIndex((p) => p.uriLabel == rangeValue);
+      const timeModel = new TimeModel(result.timeSettings);
+
+      btnHighlight[id] = true;
+
+      quickRangeFrom.setFullDatetime(timeModel.getDateBack());
+      quickRangeTo.setFullDatetime(timeModel.getDateForward());
+
+      return [
+        this.paramValueObj(quickRangeFrom, [quickRangeFrom.getDatetimeUrlFormat()]),
+        this.paramValueObj(quickRangeTo, [quickRangeTo.getDatetimeUrlFormat()]),
+      ];
+    } else {
+      return availableParams
+        .filter((p) => p.getType() === ParameterType.Datetime)
+        .map((p) => this.paramValueObj(p, paramValue(p)))
+        .filter((obj) => obj.value[0] != null);
+    }
   }
 
   getHourRangeRequestParams(qParams, availableParams: SearchParameter[]) {

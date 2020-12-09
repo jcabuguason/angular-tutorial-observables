@@ -15,6 +15,10 @@ export class SearchDatetime extends SearchParameter {
   startYear: number;
   endYear: number;
   currentYear: number = new Date().getFullYear();
+  calReadOnly: boolean;
+  hoursBack: number;
+  urlQuickName: string;
+  urlQuickRange: string;
   private defaultDatetime: string;
 
   constructor(options: DatetimeParameterOptions) {
@@ -24,6 +28,8 @@ export class SearchDatetime extends SearchParameter {
     this.setDefaultDatetime(options.defaultDatetime);
     this.startYear = valueOrDefault(options.startYear, 2000);
     this.endYear = valueOrDefault(options.endYear, this.currentYear);
+    this.calReadOnly = valueOrDefault(options.readOnly, false);
+    this.urlQuickName = valueOrDefault(options.urlQuickName, 'timeRange');
   }
 
   private setDefaultDatetime(date) {
@@ -71,6 +77,22 @@ export class SearchDatetime extends SearchParameter {
 
   setFullDatetime(date: string | Date) {
     this.datetime = this.formatSearchDate(date, { dateAndTimeSeparator: ' ' });
+  }
+
+  setHoursRange(hours: number) {
+    this.hoursBack = hours;
+  }
+
+  getUrlQuickName(): string {
+    return this.urlQuickName;
+  }
+
+  setUrlQuickRange(urlName: string) {
+    this.urlQuickRange = urlName;
+  }
+
+  getUrlQuickRange(): string {
+    return this.urlQuickRange;
   }
 
   applyFormValues() {
