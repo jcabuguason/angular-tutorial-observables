@@ -26,18 +26,6 @@ describe('SearchHoursRange', () => {
       expect(hoursParam.hoursAfter).toBeNull();
     });
 
-    it('should set hour to 0 if field is undefined', () => {
-      hoursParam.setHours(3, undefined);
-      expect(hoursParam.hoursBefore).toEqual(3);
-      expect(hoursParam.hoursAfter).toEqual(0);
-    });
-
-    it('should set hour to 0 if field is is NaN', () => {
-      hoursParam.setHours(3, 'abc');
-      expect(hoursParam.hoursBefore).toEqual(3);
-      expect(hoursParam.hoursAfter).toEqual(0);
-    });
-
     it('should remove hours', () => {
       hoursParam.hoursBefore = 1;
       hoursParam.hoursAfter = 1;
@@ -80,18 +68,6 @@ describe('SearchHoursRange', () => {
       hoursParam.addSelected({ hh_before: '', hh_after: '' });
       expect(hoursParam.hoursBefore).toBe(1);
       expect(hoursParam.hoursAfter).toBe(2);
-    });
-
-    it('should set hour to default if field is undefined', () => {
-      hoursParam.setHours(undefined, 4);
-      expect(hoursParam.hoursBefore).toEqual(1);
-      expect(hoursParam.hoursAfter).toEqual(4);
-    });
-
-    it('should set hour to default if field is is NaN', () => {
-      hoursParam.setHours('abc', 4);
-      expect(hoursParam.hoursBefore).toEqual(1);
-      expect(hoursParam.hoursAfter).toEqual(4);
     });
 
     it('should reset hours to default', () => {

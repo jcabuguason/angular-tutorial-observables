@@ -66,9 +66,8 @@ export class SearchHoursRange extends SearchParameter {
   }
 
   setHours(before, after) {
-    const hours = (value, defaultHour) => (isNaN(value) ? (!!defaultHour ? defaultHour : 0) : Number(value));
-    this.hoursBefore = hours(before, this.defaultBefore);
-    this.hoursAfter = hours(after, this.defaultAfter);
+    this.hoursBefore = before;
+    this.hoursAfter = after;
   }
 
   applyFormValues() {

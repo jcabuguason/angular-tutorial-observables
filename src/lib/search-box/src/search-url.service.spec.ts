@@ -8,6 +8,9 @@ import { ShortcutModel } from './model/shortcut.model';
 import { ChoiceModel } from './model/choice.model';
 import { SearchCheckbox } from './parameters/search-checkbox';
 import { ParameterName } from './enums/parameter-name.enum';
+import { calculateDate, formatDateToString, TimeUnit, TimeOperator } from 'msc-dms-commons-angular/shared/util';
+import { SearchQuick } from './parameters/search-quick';
+import { QuickModel } from './model/quick.model';
 
 describe('SearchURLService', () => {
   let urlService: SearchURLService;
@@ -25,6 +28,9 @@ describe('SearchURLService', () => {
     requiredParams: [],
   });
   const stationParam = new SearchParameter({ name: ParameterName.StationID, urlName: 'climid' });
+  const quickParamFrom = new SearchDatetime({ name: ParameterName.QuickRangeFrom });
+  const quickParamTo = new SearchDatetime({ name: ParameterName.QuickRangeTo });
+
   const displayParams = [dateParam, hoursParam, networkParam, independentCheckbox, stationParam];
 
   const shortcuts = [
@@ -41,6 +47,35 @@ describe('SearchURLService', () => {
     checkbox: 'exact',
     climid: '123456',
   };
+
+  const quickArray: QuickModel[] = [
+    {
+      label: 'QUICK_MENU.LAST_12_HOURS',
+      uriLabel: 'last12hours',
+      timeSettings: {
+        unit: TimeUnit.Hours,
+        value: 12,
+      },
+    },
+  ];
+  const quickOptions = new SearchQuick({
+    name: ParameterName.QuickRangeOptions,
+    displayName: 'SEARCH_BAR.QUICK_RANGE',
+    quickList: quickArray,
+    numQuickCols: 3,
+  });
+  const quickQuery = {
+    timeRange: 'last12hours',
+  };
+  const quickDisplayParam = [quickParamFrom, quickParamTo, quickOptions];
+  const quickRangeToSearch = [
+    {
+      param: quickParamFrom,
+      value: [formatDateToString(calculateDate({ mode: TimeOperator.Subtract, unit: TimeUnit.Hours, amount: 12 }))],
+    },
+    { param: quickParamTo, value: [formatDateToString(new Date())] },
+  ];
+  const btnHighlight = [true];
 
   const dateToSearch = { param: dateParam, value: [query.from] };
   const hourRangeToSearch = {
@@ -66,6 +101,9 @@ describe('SearchURLService', () => {
     const networkValues = ['ca', 'nc awos'];
     const stationValues = ['123456'];
 
+    const quickValue = 'last12hours';
+    quickParamFrom.setUrlQuickRange(quickValue);
+
     dateParam.datetime = dateValue.replace('T', ' ');
     hoursParam.hoursBefore = Number(hoursValue.hh_before);
     hoursParam.hoursAfter = Number(hoursValue.hh_after);
@@ -83,7 +121,10 @@ describe('SearchURLService', () => {
       { name: 'climid', value: stationValues[0] },
     ];
 
+    const quickUrlParams = [{ name: 'timeRange', value: quickValue }];
+
     expect(urlService.createUrlParams(displayParams)).toEqual(urlParams);
+    expect(urlService.createUrlParams(quickDisplayParam)).toEqual(quickUrlParams);
   });
 
   it('create url parameters with specified uri values (may be different than displayed search label)', () => {
@@ -141,6 +182,7 @@ describe('SearchURLService', () => {
   });
 
   it('check special parameters (date, hour range, query type)', () => {
+    expect(urlService.isSpecialUrlParam(ParameterName.QuickRangeFrom, quickDisplayParam)).toBeTruthy();
     expect(urlService.isSpecialUrlParam(ParameterName.From, displayParams)).toBeTruthy();
     expect(urlService.isSpecialUrlParam(ParameterName.HoursRange, displayParams)).toBeTruthy();
     expect(urlService.isSpecialUrlParam(ParameterName.Network, displayParams)).toBeFalsy();
@@ -161,6 +203,10 @@ describe('SearchURLService', () => {
 
   it('get checkbox parameter', () => {
     expect(urlService.getCheckboxRequestParams(query, displayParams)).toEqual([checkboxToSearch]);
+  });
+
+  it('get quick parameter', () => {
+    expect(urlService.getDateRequestParams(quickQuery, quickDisplayParam, btnHighlight)).toEqual(quickRangeToSearch);
   });
 
   it('get all parameters', () => {

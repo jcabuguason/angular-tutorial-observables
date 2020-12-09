@@ -9,6 +9,7 @@
     "NO_PARAMS": "At least one field is required to search",
     "QUERY_MISSING": "Additional fields are required to search with this query type",
     "NEGATIVE_HOURS": "The hours range fields cannot be negative values",
+    "FILL_BOTH_HOURS": "Please fill in both hour fields",
     "SELECT": "Select",
     "SELECTED_ITEMS": "items selected",
     "CLEAR": "Clear",
@@ -16,9 +17,21 @@
     "SELECT_DATE_PICKER": "Select Date Picker",
     "ASOLUTE_DATE_PICKER_LABEL": "Absolute",
     "RELATIVE_DATE_PICKER_LABEL": "Relative",
+    "QUICK_DATE_PICKER_LABEL": "Quick",
     "HOURS_BEFORE": "Hours Before",
     "HOURS_AFTER": "Hours After",
     "LOADING": "Loading..."
+  },
+  "QUICK_MENU": {
+    "TODAY": "Today",
+    "LAST_15_MIN": "Last 15 minutes",
+    "LAST_30_MIN": "Last 30 minutes",
+    "LAST_HOUR": "Last 1 hour",
+    "LAST_2_HOURS": "Last 2 hours",
+    "LAST_12_HOURS": "Last 12 hours",
+    "LAST_DAY": "Last 24 hours",
+    "LAST_2_DAYS": "Last 2 days",
+    "LAST_3_DAYS": "Last 3 days"
   },
   "GRID": {
     "VALUE": "Value",

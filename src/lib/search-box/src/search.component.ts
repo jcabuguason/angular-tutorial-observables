@@ -2,14 +2,16 @@ import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, AfterViewC
 import { TranslateService } from '@ngx-translate/core';
 import { SearchService } from './search.service';
 import { SearchParameter } from './parameters/search-parameter';
+import { SearchQuick } from './parameters/search-quick';
 import { MessageService } from 'primeng/api';
 import { NON_SELECTABLE } from './model/choice.model';
 import { ParameterType } from './enums/parameter-type.enum';
+import { ParameterName } from './enums/parameter-name.enum';
 
 @Component({
   selector: 'commons-search',
   templateUrl: './search.component.html',
-  styleUrls: ['./search.component.css'],
+  styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent implements OnInit, AfterViewChecked {
   // expanding container for entered search fields
@@ -31,6 +33,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   message;
   multiSelectDefaultLabel = '';
   multiSelectSelectedItemsLabel = '';
+  numQuickCols: string;
 
   private weekdays = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
   private months = [
@@ -61,6 +64,13 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     // use labels in current language in case nothing has been emitted by translate.onLangChange before they get created
     this.reloadLabels();
+    const quickOptions = this.searchService.quickRangeParams.find(
+      (p) => p.getName() === ParameterName.QuickRangeOptions,
+    ) as SearchQuick;
+
+    if (quickOptions != null) {
+      this.numQuickCols = 'repeat(' + quickOptions.numQuickCols + ', 1fr)';
+    }
 
     this.translate.onLangChange.subscribe(() => this.reloadLabels());
     this.searchService.searchConfigUpdated.subscribe(() => this.reloadLabels());
@@ -138,6 +148,13 @@ export class SearchComponent implements OnInit, AfterViewChecked {
     if (!!event.value) {
       this.searchService.onParameterValueChange(searchParam, event.value);
     }
+  }
+
+  getButtonClass(id: number) {
+    const quickOptions = this.searchService.quickRangeParams.find(
+      (p) => p.getName() === ParameterName.QuickRangeOptions,
+    ) as SearchQuick;
+    return { 'btn-highlight': quickOptions.btnHighlight[id] };
   }
 
   private adjustCalendar() {

@@ -1,4 +1,6 @@
 import { DateFormatOptions, DEFAULT_DATE_FORMAT } from './date-format-options.model';
+import { TimeUnit } from './time-unit.enum';
+import { TimeOperator } from './operator.enum';
 
 export function isValidDate(date: Date | string): boolean {
   return !!date && !isNaN(new Date(date).valueOf());
@@ -24,17 +26,15 @@ export function isTimeBefore(date1, date2): boolean {
   return compareTime(date1, date2) < 0;
 }
 
-/** Returns a new date with added hours */
-export function addHours(date: Date, hours: number): Date {
+function modifyHours(date: Date, hours: number): Date {
   const newDate = new Date(date);
   newDate.setUTCHours(date.getUTCHours() + hours);
   return newDate;
 }
 
-/** Returns a new date with subtracted hours */
-export function subtractHours(date: Date, hours: number): Date {
+function modifyMinutes(date: Date, minutes: number): Date {
   const newDate = new Date(date);
-  newDate.setUTCHours(date.getUTCHours() - hours);
+  newDate.setUTCMinutes(date.getUTCMinutes() + minutes);
   return newDate;
 }
 
@@ -42,6 +42,26 @@ export function subtractHours(date: Date, hours: number): Date {
 export function hoursDifference(date1: Date, date2: Date): number {
   const millisecondsDiff = Math.abs(date1.valueOf() - date2.valueOf());
   return millisecondsDiff / 1000 / 3600;
+}
+
+/** Returns back calculated date, subtracting/adding relative to the given date*/
+export function calculateDate({
+  date = new Date(),
+  mode,
+  unit,
+  amount,
+}: {
+  date?: Date;
+  mode: TimeOperator;
+  unit: TimeUnit;
+  amount: number;
+}): Date {
+  if (mode === TimeOperator.Subtract) {
+    amount *= -1;
+  }
+
+  const modifyFunc = unit === TimeUnit.Minutes ? modifyMinutes : modifyHours;
+  return modifyFunc.apply(this, [date, amount]);
 }
 
 /** Given a data URI that contains a YYYYMMDDHHMM identifier, return a Date */

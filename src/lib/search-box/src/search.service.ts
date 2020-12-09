@@ -14,13 +14,17 @@ import { SearchTaxonomy } from './search-taxonomy';
 
 import { SearchModel, SearchableElement } from './model/search.model';
 import { ShortcutModel } from './model/shortcut.model';
+import { TimeModel } from './model/time.model';
+import { TimeModelOptions } from './model/time-options.model';
+import { TabOption } from './enums/tab-option.enum';
 
 import { SEARCH_BOX_CONFIG, SearchBoxConfig } from './search-box.config';
 
 import { SearchURLService } from './search-url.service';
 import { MessageService } from 'primeng/api';
 import { Subject } from 'rxjs';
-import { subtractHours, addHours, isTimeBefore } from 'msc-dms-commons-angular/shared/util';
+import { calculateDate, isTimeBefore, TimeOperator, TimeUnit } from 'msc-dms-commons-angular/shared/util';
+import { SearchQuick } from './parameters/search-quick';
 
 @Injectable()
 export class SearchService {
@@ -52,12 +56,15 @@ export class SearchService {
   formRangeParams: SearchParameter[] = [];
   hoursRangeParams: SearchParameter[] = [];
   dateRangeParams: SearchParameter[] = [];
+  quickRangeParams: SearchParameter[] = [];
 
   useDateAndHoursRange = false;
+  useQuickRange = false;
   selectedRangeType;
   rangeTypes = [
-    { label: 'SEARCH_BAR.RELATIVE_DATE_PICKER_LABEL', value: 'hoursRange' },
-    { label: 'SEARCH_BAR.ASOLUTE_DATE_PICKER_LABEL', value: 'dateRange' },
+    { label: 'SEARCH_BAR.QUICK_DATE_PICKER_LABEL', value: TabOption.Quick },
+    { label: 'SEARCH_BAR.RELATIVE_DATE_PICKER_LABEL', value: TabOption.Relative },
+    { label: 'SEARCH_BAR.ASOLUTE_DATE_PICKER_LABEL', value: TabOption.Absolute },
   ];
 
   constructor(
@@ -91,8 +98,18 @@ export class SearchService {
     this.dateRangeParams = this.availableParams.filter(
       (p) => p.getName() === ParameterName.From || p.getName() === ParameterName.To,
     );
-    this.useDateAndHoursRange = !!this.hoursRangeParams.length && !!this.dateRangeParams.length;
-    this.setSelectedRangeType('hoursRange');
+    this.quickRangeParams = this.availableParams.filter(
+      (p) =>
+        p.getName() === ParameterName.QuickRangeOptions ||
+        p.getName() === ParameterName.QuickRangeFrom ||
+        p.getName() === ParameterName.QuickRangeTo,
+    );
+
+    //Default tab: Relative
+    this.useDateAndHoursRange =
+      !!this.hoursRangeParams.length && !!this.dateRangeParams.length && !!this.quickRangeParams.length;
+
+    this.setSelectedRangeType(TabOption.Relative);
 
     this.addDefaultParameters();
 
@@ -100,7 +117,7 @@ export class SearchService {
   }
 
   /** Runs search using URL query parameters */
-  searchByURLParameters(queryParams) {
+  searchByUrlParameters(queryParams) {
     this.displayForm = false;
     this.addRequestParams(queryParams);
     this.submitSearch(false);
@@ -264,18 +281,35 @@ export class SearchService {
         case ParameterName.RelativeDatetime:
           relativeDate = (p as SearchDatetime).getFullDatetime();
           break;
+        case ParameterName.QuickRangeFrom:
+          startDate = (p as SearchDatetime).getFullDatetime();
+          break;
+        case ParameterName.QuickRangeTo:
+          endDate = (p as SearchDatetime).getFullDatetime();
+          break;
       }
     });
 
-    if (this.selectedRangeType === 'hoursRange' && relativeDate != null) {
+    if (this.selectedRangeType === TabOption.Relative && relativeDate != null) {
       const hoursRange = this.hoursRangeParams.find(
         (p) => p.getName() === ParameterName.HoursRange,
       ) as SearchHoursRange;
       if (hoursRange != null) {
-        startDate = subtractHours(relativeDate, hoursRange.hoursBefore);
-        endDate = addHours(relativeDate, hoursRange.hoursAfter);
+        startDate = calculateDate({
+          date: relativeDate,
+          mode: TimeOperator.Subtract,
+          unit: TimeUnit.Hours,
+          amount: hoursRange.hoursBefore,
+        });
+        endDate = calculateDate({
+          date: relativeDate,
+          mode: TimeOperator.Add,
+          unit: TimeUnit.Hours,
+          amount: hoursRange.hoursAfter,
+        });
       }
     }
+
     return {
       taxonomy: this.determineTaxonomies(),
       from: startDate,
@@ -292,14 +326,27 @@ export class SearchService {
 
   openForm() {
     if (this.readOnlyBar) {
-      this.resetForm();
+      this.resetForm(false);
       this.displayParams.forEach((p) => p.populateFormValues());
       this.displayForm = true;
     }
   }
 
-  resetForm() {
+  resetForm(clearBtnHighlights: boolean) {
+    if (clearBtnHighlights) {
+      this.setButtonHighlight();
+    }
     this.availableParams.forEach((p) => p.resetAllFormValues(true));
+  }
+
+  setButtonHighlight(index?: number) {
+    const quickOptions = this.quickRangeParams.find(
+      (p) => p.getName() === ParameterName.QuickRangeOptions,
+    ) as SearchQuick;
+    quickOptions.btnHighlight.fill(false);
+    if (index != null) {
+      quickOptions.btnHighlight[index] = true;
+    }
   }
 
   submitSearchForm() {
@@ -313,9 +360,46 @@ export class SearchService {
     this.submitSearch();
   }
 
-  setSelectedRangeType(type: 'dateRange' | 'hoursRange') {
-    this.selectedRangeType = type === 'hoursRange' ? this.rangeTypes[0].value : this.rangeTypes[1].value;
-    this.formRangeParams = type === 'hoursRange' ? this.hoursRangeParams : this.dateRangeParams;
+  setSelectedRangeType(type: TabOption) {
+    switch (type) {
+      case TabOption.Quick:
+        this.selectedRangeType = this.rangeTypes[0].value;
+        this.formRangeParams = this.quickRangeParams;
+        break;
+      case TabOption.Relative:
+        this.selectedRangeType = this.rangeTypes[1].value;
+        this.formRangeParams = this.hoursRangeParams;
+        break;
+      case TabOption.Absolute:
+        this.selectedRangeType = this.rangeTypes[2].value;
+        this.formRangeParams = this.dateRangeParams;
+        break;
+    }
+  }
+
+  /** Gets called by buttons to update calendar quick field parameters */
+  updateQuickField(timeOptions: TimeModelOptions, uriLabel: string, index?: number) {
+    const fromDate = this.quickRangeParams.find((p) => p.getName() === ParameterName.QuickRangeFrom) as SearchDatetime;
+    const toDate = this.quickRangeParams.find((p) => p.getName() === ParameterName.QuickRangeTo) as SearchDatetime;
+    const timeModel = new TimeModel(timeOptions);
+    const startDate = timeModel.getDateBack();
+    const endDate = timeModel.getDateForward();
+    const quickOptions = this.quickRangeParams.find(
+      (p) => p.getName() === ParameterName.QuickRangeOptions,
+    ) as SearchQuick;
+
+    this.setButtonHighlight(index);
+
+    if (fromDate != null && toDate != null) {
+      fromDate.setUrlQuickRange(uriLabel);
+
+      fromDate.setFullDatetime(startDate);
+      toDate.setFullDatetime(endDate);
+
+      fromDate.populateFormValues();
+      toDate.populateFormValues();
+      this.useQuickRange = true;
+    }
   }
 
   onParameterValueChange(parameter: SearchParameter, newValue: any) {}
@@ -343,20 +427,31 @@ export class SearchService {
 
   /** Checks for any missing parameters and displays a message */
   hasValidParameters(): boolean {
+    const clearParams = (params: SearchParameter[]) => params.forEach((p) => this.removeDisplayParameter(p));
     const hoursRange = this.hoursRangeParams.find((p) => p.getName() === ParameterName.HoursRange) as SearchHoursRange;
     let negativeHoursRange = false;
+
     if (this.useDateAndHoursRange) {
-      const removeParams = this.selectedRangeType === 'dateRange' ? this.hoursRangeParams : this.dateRangeParams;
-      removeParams.forEach((p) => this.removeDisplayParameter(p));
       negativeHoursRange = hoursRange?.hoursBefore < 0 || hoursRange?.hoursAfter < 0;
     }
+
+    if (this.selectedRangeType === TabOption.Quick) {
+      clearParams(this.dateRangeParams);
+      clearParams(this.hoursRangeParams);
+    } else if (this.selectedRangeType === TabOption.Relative && this.useDateAndHoursRange) {
+      clearParams(this.dateRangeParams);
+      clearParams(this.quickRangeParams);
+    } else {
+      clearParams(this.hoursRangeParams);
+      clearParams(this.quickRangeParams);
+    }
+
     const emptyParams = this.findEmptyDisplayParameters().map((p) => p.getDisplayName());
     const missingParams = this.findMissingRequiredParameters().map((p) => p.getDisplayName());
     const checkboxes = this.availableParams.filter(
       (param) => param.getType() === ParameterType.Checkbox && !param.isUnfilled(),
     ) as SearchCheckbox[];
     let valid = true;
-
     this.messageService.clear();
 
     if (missingParams.length > 0) {
@@ -454,13 +549,18 @@ export class SearchService {
 
   /** Populate search box with information from specific URL parameters */
   private addRequestParams(qParams) {
-    const matchingName = (param: SearchParameter, name: string) => param.getName() === name;
-    const allRequestParams = this.urlService.getAllRequestParams(qParams, this.availableParams, this.shortcuts);
-    const useHoursRange = allRequestParams.some((obj) => matchingName(obj.param, ParameterName.RelativeDatetime));
-    const paramsFilter = (param) =>
-      useHoursRange
-        ? !matchingName(param, ParameterName.From) && !matchingName(param, ParameterName.To)
-        : !matchingName(param, ParameterName.HoursRange) && !matchingName(param, ParameterName.RelativeDatetime);
+    const hasMatchingName = (param: SearchParameter, name: string) => param.getName() === name;
+    const allRequestParams = this.urlService.getAllRequestParams(
+      qParams,
+      this.availableParams,
+      this.shortcuts,
+      (this.quickRangeParams.find((p) => p.getName() === ParameterName.QuickRangeOptions) as SearchQuick)?.btnHighlight,
+    );
+
+    const useHoursRange = allRequestParams.some((obj) => hasMatchingName(obj.param, ParameterName.RelativeDatetime));
+    const useQuickRange = allRequestParams.some((obj) => hasMatchingName(obj.param, ParameterName.QuickRangeFrom));
+
+    const paramsFilter = (param) => useHoursRange || !hasMatchingName(param, ParameterName.HoursRange);
 
     allRequestParams
       .filter((obj) => paramsFilter(obj.param))
@@ -470,7 +570,13 @@ export class SearchService {
       this.addParameterByName(ParameterName.HoursRange);
     }
 
-    this.setSelectedRangeType(useHoursRange ? 'hoursRange' : 'dateRange');
+    if (useHoursRange) {
+      this.setSelectedRangeType(TabOption.Relative);
+    } else if (useQuickRange) {
+      this.setSelectedRangeType(TabOption.Quick);
+    } else {
+      this.setSelectedRangeType(TabOption.Absolute);
+    }
   }
 
   /** Limits the number of observations to return from ES */

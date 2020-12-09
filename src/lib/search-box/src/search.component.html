@@ -167,7 +167,7 @@
             <ng-container *ngIf="p.getType() === paramType.HoursRange">
               <p-spinner
                 size="7"
-                placeholder="hrs before"
+                placeholder=""
                 [(ngModel)]="p.hoursBefore"
                 [min]="0"
                 [disabled]="searchService.readOnlyBar"
@@ -175,7 +175,7 @@
               </p-spinner>
               <p-spinner
                 size="7"
-                placeholder="hrs after"
+                placeholder=""
                 [(ngModel)]="p.hoursAfter"
                 [min]="0"
                 [disabled]="searchService.readOnlyBar"
@@ -360,6 +360,7 @@
     </ng-container>
 
     <ng-container *ngIf="!searchService.useDateAndHoursRange">
+      <ng-container *ngTemplateOutlet="quickParam; context: { param: p }"> </ng-container>
       <ng-container *ngTemplateOutlet="datetimeParam; context: { param: p }"> </ng-container>
       <ng-container *ngTemplateOutlet="hoursRangeParam; context: { param: p }"> </ng-container>
     </ng-container>
@@ -386,6 +387,7 @@
       tabindex="0"
       (keyup.enter)="searchService.submitSearchForm()"
     >
+      <ng-container *ngTemplateOutlet="quickParam; context: { param: p }"> </ng-container>
       <ng-container *ngTemplateOutlet="datetimeParam; context: { param: p }"> </ng-container>
       <ng-container *ngTemplateOutlet="hoursRangeParam; context: { param: p }"> </ng-container>
     </div>
@@ -399,7 +401,7 @@
       pButton
       type="button"
       label="{{ 'SEARCH_BAR.RESET' | translate }}"
-      (click)="searchService.resetForm()"
+      (click)="searchService.resetForm(true)"
       class="ui-button-secondary reset-button"
     ></button>
     <button
@@ -436,11 +438,11 @@
   <ng-container *ngIf="p.getType() === paramType.HoursRange">
     <div>
       <div>{{ 'SEARCH_BAR.HOURS_BEFORE' | translate }}</div>
-      <p-spinner size="7" placeholder="hrs before" [(ngModel)]="p.formHoursBefore" [min]="0"></p-spinner>
+      <p-spinner size="7" placeholder="" [(ngModel)]="p.formHoursBefore" [min]="0"></p-spinner>
     </div>
     <div>
       <div>{{ 'SEARCH_BAR.HOURS_AFTER' | translate }}</div>
-      <p-spinner size="7" placeholder="hrs after" [(ngModel)]="p.formHoursAfter" [min]="0"></p-spinner>
+      <p-spinner size="7" placeholder="" [(ngModel)]="p.formHoursAfter" [min]="0"></p-spinner>
     </div>
   </ng-container>
 </ng-template>
@@ -462,8 +464,24 @@
       [showIcon]="true"
       [monthNavigator]="true"
       [yearNavigator]="true"
+      [disabled]="p.calReadOnly"
       yearRange="{{ p.startYear }}:{{ p.endYear }}"
     >
     </p-calendar>
+  </ng-container>
+</ng-template>
+
+<br />
+<ng-template #quickParam let-p="param">
+  <ng-container *ngIf="p.getType() === paramType.Quick">
+    <div class="btn-group" [ngStyle]="{ 'grid-template-columns': numQuickCols }">
+      <ng-container *ngFor="let q of p.quickList; index as i">
+        <div id="button{{ i }}" [ngClass]="getButtonClass(i)">
+          <button (click)="searchService.updateQuickField(q.timeSettings, q.uriLabel, i)">
+            {{ q.label | translate }}
+          </button>
+        </div>
+      </ng-container>
+    </div>
   </ng-container>
 </ng-template>

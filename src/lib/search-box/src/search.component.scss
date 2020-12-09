@@ -22,11 +22,9 @@
 
 .hover-color-change:hover {
   background-color: #eff6fc;
-}
-
-.hover-color-change:hover .bar-icon {
-  background-color: #eff6fc;
-  color: #0099ff;
+  .bar-icon {
+    color: #0099ff;
+  }
 }
 
 .parameters-container {
@@ -35,12 +33,11 @@
   padding-left: 10px;
   width: 100%;
   border-left: 1px solid #ccc;
-}
-
-.parameters-container .selected-parameter {
-  display: inline-block;
-  margin: 0 5px 5px 0;
-  line-height: 19px;
+  .selected-parameter {
+    display: inline-block;
+    margin: 0 5px 5px 0;
+    line-height: 19px;
+  }
 }
 
 .all-selected-parameters {
@@ -56,24 +53,22 @@
   border-color: transparent;
   color: #373a3c;
   display: inline-block;
-}
-.bar-button.ui-button:hover {
-  background-color: transparent;
-  border-color: transparent;
-  color: #0099ff;
-}
-.bar-button.ui-button:focus {
-  box-shadow: none;
+  &:hover {
+    color: #0099ff;
+  }
+  &:focus {
+    box-shadow: none;
+  }
 }
 
 .search-parameter-suggestions {
   display: inline-block;
   padding: 2px;
-}
-.search-parameter-suggestions .ui-button {
-  height: 26px;
-  font-size: 15px;
-  padding: 0;
+  .ui-button {
+    height: 26px;
+    font-size: 15px;
+    padding: 0;
+  }
 }
 
 /* search category name in the bar */
@@ -157,8 +152,8 @@
 }
 
 /* needed to make X icon red */
-.ui-inputgroup .ui-button:last-child {
-  background-color: #d9534f !important;
+.ui-inputgroup .ui-button-danger {
+  background-color: #d9534f;
   border-color: #d9534f;
 }
 
@@ -195,15 +190,14 @@
   border-radius: 10px;
   margin-left: 5px;
   transition: 0.1s;
-}
-
-.clear-btn:hover,
-.clear-btn:active,
-.clear-btn:focus {
-  background: rgba(255, 0, 0, 0.125) !important;
-  border: none !important;
-  color: black !important;
-  box-shadow: none !important;
+  &:hover,
+  &:active,
+  &:focus {
+    background: rgba(255, 0, 0, 0.125) !important;
+    border: none !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
 }
 
 .selection-group {
@@ -212,4 +206,26 @@
 
 .date-picker-label {
   padding: 0.5em 1em;
+}
+
+.btn-group {
+  display: grid;
+  justify-items: center;
+  button {
+    border: none;
+    outline: none;
+    font-size: 15px;
+    background: none;
+    color: #116fbf;
+    &:hover {
+      background: #dadada;
+      color: #0a355c;
+      text-decoration: underline;
+    }
+  }
+}
+
+.btn-highlight {
+  background: #dadada;
+  color: #116fbf;
 }
