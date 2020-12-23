@@ -39,7 +39,11 @@ describe('DataChartService', () => {
     label: 'WINNIPEG, 502S001',
     value: '502S001',
   });
-  const defaultElement = new Element({ id: '1.5.66.2.60.7.0' });
+
+  const defaultElement = new Element({
+    id: '1.5.66.2.60.7.0',
+    seriesOption: { seriesType: SeriesType.Area, useQaColor: false },
+  });
   const defaultChart = new Chart({
     elements: [defaultElement],
     stations: [defaultStation],
@@ -83,7 +87,7 @@ describe('DataChartService', () => {
         elements: [
           new Element({
             id: '1.11.174.2.20.3.0',
-            seriesType: SeriesType.Area,
+            seriesOption: { seriesType: SeriesType.Area, useQaColor: false },
           }),
         ],
       }),
@@ -105,8 +109,23 @@ describe('DataChartService', () => {
 
   it('should make element the title with multiple stations', () => {
     const multiStations = new Chart({
-      elements: [defaultElement],
-      stations: [new Station({ label: 'TEST, 1, A', value: '1' }), new Station({ label: 'OTHER, 2, B', value: '2' })],
+      elements: [
+        new Element({
+          id: '1.5.66.2.60.7.0',
+        }),
+      ],
+      stations: [
+        new Station({
+          label: 'TEST, 1, A',
+          value: '1',
+          seriesOption: { seriesType: SeriesType.Area, useQaColor: false },
+        }),
+        new Station({
+          label: 'OTHER, 2, B',
+          value: '2',
+          seriesOption: { seriesType: SeriesType.Area, useQaColor: false },
+        }),
+      ],
     });
     const options = service.buildOptions(multiStations, hits, {});
     expect(options.title.text).toBe('mock 1.5.66.2.60.7.0');
@@ -114,7 +133,10 @@ describe('DataChartService', () => {
 
   it('should make station the title with single station', () => {
     const multiElementChart = new Chart({
-      elements: [defaultElement, new Element({ id: '1.19.265.8.67.14.0' })],
+      elements: [
+        defaultElement,
+        new Element({ id: '1.19.265.8.67.14.0', seriesOption: { seriesType: SeriesType.Area, useQaColor: false } }),
+      ],
       stations: [defaultStation],
     });
     const defaultOptions = service.buildOptions(defaultChart, hits, {});
@@ -130,7 +152,10 @@ describe('DataChartService', () => {
 
   it('should create two yAxis with two different elements of different values', () => {
     const multiElemDiffGroup = new Chart({
-      elements: [defaultElement, new Element({ id: '1.19.267.2.60.7.0' })],
+      elements: [
+        defaultElement,
+        new Element({ id: '1.19.267.2.60.7.0', seriesOption: { seriesType: SeriesType.Area, useQaColor: false } }),
+      ],
       stations: [defaultStation],
     });
     const options = service.buildOptions(multiElemDiffGroup, hits, {});
@@ -140,7 +165,10 @@ describe('DataChartService', () => {
 
   it('should create one yAxis with two different elements of the same value', () => {
     const multiElemSameGroupUnit = new Chart({
-      elements: [defaultElement, new Element({ id: '1.2.11.1.1.1.0' })],
+      elements: [
+        defaultElement,
+        new Element({ id: '1.2.11.1.1.1.0', seriesOption: { seriesType: SeriesType.Area, useQaColor: false } }),
+      ],
       stations: [defaultStation],
     });
     const options = service.buildOptions(multiElemSameGroupUnit, hits, {});
@@ -150,7 +178,7 @@ describe('DataChartService', () => {
 
   it('should display no data message for elements with no data', () => {
     const badChart = new Chart({
-      elements: [new Element({ id: 'dummy-elem' })],
+      elements: [new Element({ id: 'dummy-elem', seriesOption: { seriesType: SeriesType.Area, useQaColor: false } })],
       stations: [defaultStation],
     });
     const options = service.buildOptions(badChart, hits, {});
@@ -161,7 +189,7 @@ describe('DataChartService', () => {
   it('should create a longitudinal chart for hourly qualifiers', () => {
     const placeholderID = '8.7.98.0.0.0.0';
     const hourlyChart = new Chart({
-      elements: [new Element({ id: placeholderID })],
+      elements: [new Element({ id: placeholderID, seriesOption: { seriesType: SeriesType.Area, useQaColor: false } })],
       stations: [
         new Station({
           label: 'Data from report',

@@ -25,7 +25,7 @@ import {
   updateNodeValue,
 } from 'msc-dms-commons-angular/core/obs-util';
 import { Subject, BehaviorSubject } from 'rxjs';
-import { Chart, Element, SeriesType, Station, QualifierType } from './model/chart.model';
+import { Chart, Element, SeriesType, Station, QualifierType, SeriesOption } from './model/chart.model';
 import { DataChartOptions } from './model/options.model';
 
 @Injectable()
@@ -158,6 +158,7 @@ export class DataChartService {
     for (const element of elements) {
       for (const station of stations) {
         const sensor = {};
+        const seriesOptions: SeriesOption = isSingleStation ? element.seriesOption : station.seriesOption;
         let stationName = '';
         for (const obs of sortedObs.filter((ob) => this.isMatchingObs(ob, station))) {
           const foundElems = this.grabElementsFromObs(obs, element.id, chartObj.qualifierType);
@@ -168,14 +169,14 @@ export class DataChartService {
             yTypes,
             options,
             chartObj.qualifierType,
-            element.seriesType,
-            element.useQaColor,
+            seriesOptions.seriesType,
+            seriesOptions.useQaColor,
           );
           if (!isSingleStation && !stationName) {
             stationName = this.createStationLabel(obs, station.label);
           }
         }
-        const seriesType = element.seriesType || this.getSeriesType(element.id);
+        const seriesType = seriesOptions.seriesType || this.getSeriesType(element.id);
         const name = this.determineSeriesName(chartObj, stationName, element.id);
         this.buildSeries(series, sensor, name, yTypes, seriesType, options);
       }
