@@ -74,6 +74,12 @@ check_commits:
     - if [[ $fail_stage == "true" ]]; then exit 1; fi
   allow_failure: true
   rules:
+    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "develop"'
+      when: never
+    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "release"'
+      when: never
+    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "master"'
+      when: never
     - if: '$CI_MERGE_REQUEST_ID'
 
 build_commons:
@@ -90,7 +96,6 @@ build_commons:
     expire_in: 2 weeks
   cache:
     key: '$cache_key'
-    untracked: true
     paths:
       - node_modules/
   rules:
