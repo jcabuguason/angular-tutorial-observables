@@ -1,0 +1,160 @@
+# NOTE: When using this template, there are extra variables that need to be added to the main file
+#   app_orig_url: replace-with-app-name-here
+#   app_build_url: ${CI_COMMIT_REF_NAME}/replace-with-app-name-here
+
+variables:
+  branch_name: ${CI_COMMIT_REF_NAME}
+  build_number: ${CI_PIPELINE_ID}
+  ansible_dir: /apps/mcweb/ansible
+  cache_dir: /home/gitlab-runner/cache/${CI_PROJECT_PATH}
+  cache_key: ${CI_MERGE_REQUEST_PROJECT_ID}_${CI_MERGE_REQUEST_IID}
+  target_branch: ${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}
+
+stages:
+  - check_commits
+  - build
+  - test
+  - deploy
+
+check_commits:
+  stage: check_commits
+  script:
+    # Get the "new" commits found on the current branch (compares the target and source branch).
+    # NOTE: gitlab-ci can only get up to the latest 50 commits using git log (adding --max-count=100 or higher does not seem to work either)
+    - git fetch origin
+    - all_commits=`git log origin/${target_branch}..origin/${branch_name} --format='(commit = %h) subject = >>%s<< | raw body = >>%B<< (END)'`
+    # Check number of commits
+    - num_commits=`echo $all_commits | grep -o "commit =" | wc -l`
+    - >
+      if [[ $num_commits == 1 ]]; then 
+        exit 0
+      elif [[ $num_commits == 50 ]]; then
+        echo "NOT ALL COMMITS MAY BE CHECKED!! Gitlab-ci can only get the latest 50 commits."
+        echo "Please check the full list of commits in the merge request or check if it will use the correct squashed commit message."
+        fail_stage=true
+      fi
+    # Change delimiter (IFS) to new line
+    - IFS_BAK=$IFS
+    - IFS=$'\n'
+    # Check and print any commits that are multi-line or have long subjects
+    - curr_commit=""
+    - curr_commit_lines=0
+    - subject_char_limit=72
+    - >
+      for line in $all_commits; do
+        curr_commit_lines=$((curr_commit_lines+1))
+
+        if [[ $curr_commit_lines == 1 ]]; then
+          curr_commit="${line}"
+        else
+          curr_commit="${curr_commit}\n ${line}"
+        fi
+
+        if [[ $line =~ "subject =" ]]; then
+          subject_length=`echo $line | sed -n 's/.*subject = >>\([^<<]*\).*/\1/p' | wc -m`
+          subject_length=$((subject_length-1))
+                
+          if [[ $subject_length -gt $subject_char_limit ]]; then
+            echo "Long commit subject found (limit is ${subject_char_limit} characters, found ${subject_length}):"
+            echo " $line"
+            fail_stage=true
+          fi
+        fi
+
+        if [[ $line =~ "<< (END)" ]]; then
+          if [[ $curr_commit_lines -gt 2 ]]; then
+            echo "Multi-line commit message found. Please check if the merge request will use the correct squashed commit message:"
+            echo -e " $curr_commit"
+            fail_stage=true
+          fi          
+          curr_commit=""
+          curr_commit_lines=0
+        fi
+      done
+    - IFS=$IFS_BAK
+    # Force stage to fail
+    - if [[ $fail_stage == "true" ]]; then exit 1; fi
+  allow_failure: true
+  rules:
+    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "develop"'
+      when: never
+    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "release"'
+      when: never
+    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "master"'
+      when: never
+    - if: '$CI_MERGE_REQUEST_ID'
+
+build_app:
+  stage: build
+  script:
+    - build_dir=`pwd`
+    - str=`cat package.json`
+    - app_commons_version="$(node -pe "JSON.parse(\`$str\`)['dependencies']['msc-dms-commons-angular'].replace('~','')")"
+    - ansible-playbook ${ansible_dir}/build/pull_commons.yml --extra-vars "build_dir=$build_dir branch_name=$branch_name commons_version=$app_commons_version"
+    - ansible-playbook ${ansible_dir}/build/build_app.yml --extra-vars "build_dir=$build_dir build_number=$build_number orig_url=$app_orig_url new_url=$app_build_url commons_version=$app_commons_version"
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 day
+  cache:
+    key: '$cache_key'
+    paths:
+      - node_modules/
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID'
+
+test_app:
+  stage: test
+  script:
+    - ng test --watch=false --browsers=ChromeHeadless
+  allow_failure: true
+  cache:
+    key: '$cache_key'
+    paths:
+      - node_modules/
+    policy: pull
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID'
+
+deploy_review:
+  stage: deploy
+  environment:
+    name: dms-dev-v101/${CI_COMMIT_REF_NAME}
+    url: http://dms-dev-v101.to.on.ec.gc.ca/services/${CI_COMMIT_REF_NAME}/${app_orig_url}
+    on_stop: stop_review
+  dependencies:
+    - build_app
+  script:
+    - build_dir=`pwd`
+    - ansible-playbook ${ansible_dir}/deploy/setup_deploy_app.yml --extra-vars "build_dir=$build_dir new_url=$app_build_url"
+    - ansible-playbook ${ansible_dir}/deploy/deploy_app.yml --extra-vars "build_dir=$build_dir new_url=$app_build_url"
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "release"'
+      when: never
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
+      when: never
+    - if: '$CI_MERGE_REQUEST_ID'
+
+stop_review:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none # do not check out code after branch is deleted
+  when: manual
+  environment:
+    name: dms-dev-v101/${CI_COMMIT_REF_NAME}
+    action: stop
+  dependencies: [] # artifacts from previous stages not required
+  script:
+    - ansible-playbook ${ansible_dir}/remove/remove_app.yml --extra-vars "new_url=$app_build_url branch_name=$branch_name"
+    - >
+      if [ $(find ${cache_dir} -type d -name ${cache_key}* | wc -l) != "0" ]; then 
+        rm -rf ${cache_dir}/${cache_key}*
+      else 
+        echo "${cache_dir}/${cache_key} not found"
+      fi
+  only: # stop_review allows 'only' but not 'rules'
+    - merge_requests
+  except:
+    variables:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "release"
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
