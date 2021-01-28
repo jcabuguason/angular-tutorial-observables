@@ -64,7 +64,7 @@ export class SearchService {
   rangeTypes = [
     { label: 'SEARCH_BAR.QUICK_DATE_PICKER_LABEL', value: TabOption.Quick },
     { label: 'SEARCH_BAR.RELATIVE_DATE_PICKER_LABEL', value: TabOption.Relative },
-    { label: 'SEARCH_BAR.ASOLUTE_DATE_PICKER_LABEL', value: TabOption.Absolute },
+    { label: 'SEARCH_BAR.ABSOLUTE_DATE_PICKER_LABEL', value: TabOption.Absolute },
   ];
 
   constructor(

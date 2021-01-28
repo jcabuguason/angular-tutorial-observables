@@ -41,5 +41,5 @@ export class InstrumentRendererComponent implements ICellRendererAngularComp {
     }
   }
 
-  label = (summary): string => this.translate.instant(instrumentTranslationKey(summary));
+  label = (summary): string => this.translate.instant(instrumentTranslationKey(summary, 'description'));
 }
