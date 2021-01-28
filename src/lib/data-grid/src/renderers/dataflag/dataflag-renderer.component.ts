@@ -1,13 +1,17 @@
 import { Component, Input } from '@angular/core';
-
+import { TranslateService } from '@ngx-translate/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
+import { dataFlagTranslationKey } from 'msc-dms-commons-angular/core/obs-util';
 
 @Component({
   selector: 'commons-df-renderer',
-  template: ` <span title="DataFlag" [ngClass]="{ 'faded df badge': dataFlag !== 'N/A' }">{{ dataFlag }}</span> `,
+  template: `
+    <span title="{{ label(dataFlag) }}" [ngClass]="{ 'faded df badge': dataFlag !== 'N/A' }">{{ dataFlag }}</span>
+  `,
   styleUrls: ['../general-renderer.component.css'],
 })
 export class DataFlagRendererComponent implements ICellRendererAngularComp {
+  constructor(public translate: TranslateService) {}
   @Input() dataFlag: string;
 
   agInit(params: any): void {
@@ -24,4 +28,6 @@ export class DataFlagRendererComponent implements ICellRendererAngularComp {
   refresh(): boolean {
     return false;
   }
+
+  label = (dataFlag: string) => this.translate.instant(dataFlagTranslationKey(dataFlag, 'label'));
 }

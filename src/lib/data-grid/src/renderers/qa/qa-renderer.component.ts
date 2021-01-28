@@ -11,6 +11,7 @@ import { qaTranslationKey } from 'msc-dms-commons-angular/core/obs-util';
 export class QaRendererComponent implements ICellRendererAngularComp {
   constructor(public translate: TranslateService) {}
   // Used if the component is called in another template
+  @Input() showDescription: boolean;
   @Input() qa: string;
 
   // Used if the component is set up as the column's renderer framework
@@ -24,5 +25,11 @@ export class QaRendererComponent implements ICellRendererAngularComp {
     return false;
   }
 
-  label = (qa: string) => this.translate.instant(qaTranslationKey(qa));
+  title = (qa: string) => {
+    return this.showDescription
+      ? `${this.translate.instant(qaTranslationKey(qa, 'label'))}: ${this.translate.instant(
+          qaTranslationKey(qa, 'description'),
+        )}`
+      : `${this.translate.instant(qaTranslationKey(qa, 'label'))}`;
+  };
 }

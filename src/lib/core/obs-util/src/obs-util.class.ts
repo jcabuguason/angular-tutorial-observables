@@ -142,46 +142,171 @@ export function formatQAValue(qa: number): string {
   return String(qa);
 }
 
-export function qaTranslationKey(qa: number | string): string {
-  switch (Number(qa)) {
-    case -10:
-      return 'QA.SUPRESSED';
-    case -1:
-      return 'QA.MISSING';
+export function dataFlagTranslationKey(dataFlag: number | string, type?: 'label' | 'description'): string {
+  let key: string;
+
+  switch (Number(dataFlag)) {
     case 0:
-      return 'QA.ERROR';
+      key = 'DATA_FLAG.RESERVED';
+      break;
+    case 1:
+      key = 'DATA_FLAG.DERIVED';
+      break;
+    case 2:
+      key = 'DATA_FLAG.ESTIMATED';
+      break;
+    case 3:
+      key = 'DATA_FLAG.ADJUSTED';
+      break;
+    case 4:
+      key = 'DATA_FLAG.INCOMPLETE';
+      break;
+    case 5:
+      key = 'DATA_FLAG.TRACE';
+      break;
+    case 6:
+      key = 'DATA_FLAG.MULTIPLE';
+      break;
+    case 7:
+      key = 'DATA_FLAG.INTERPOLATED';
+      break;
+    case 8:
+      key = 'DATA_FLAG.ACCUMULATED';
+      break;
+    case 9:
+      key = 'DATA_FLAG.PRECIP_UNCERTAIN';
+      break;
     case 10:
-      return 'QA.DOUBTFUL';
-    case 15:
-      return 'QA.SUSPECT';
-    case 20:
-      return 'QA.INCONSISTENT';
-    case 100:
-      return 'QA.ACCEPTED';
-    case 101:
-      return 'QA.NO_QA_TEST';
-    case 110:
-      return 'QA.NO_OPTIMIZED_RANGE_TEST';
+      key = 'DATA_FLAG.EST_ACCUM';
+      break;
+    case 11:
+      key = 'DATA_FLAG.POSSIBLE_PRECIP';
+      break;
+    case 12:
+      key = 'DATA_FLAG.TEMP_ABV_0';
+      break;
+    case 13:
+      key = 'DATA_FLAG.TEMP_BLW_0';
+      break;
     default:
-      return 'N/A';
+      return 'N/A.FLAG';
   }
+  return getKeyType(key, type);
 }
 
-export function instrumentTranslationKey(summary: number | string): string {
+export function qofTranslationKey(flag: number | string, type?: 'label' | 'description'): string {
+  let key: string;
+  switch (Number(flag)) {
+    case 0:
+      key = 'QA_OVERRIDE.NO_OVERRIDE';
+      break;
+    case 1:
+      key = 'QA_OVERRIDE.SAM_OVERRIDE';
+      break;
+    case 2:
+      key = 'QA_OVERRIDE.SAA_OVERRIDE';
+      break;
+    case 3:
+      key = 'QA_OVERRIDE.SEM_OVERRIDE';
+      break;
+    case 4:
+      key = 'QA_OVERRIDE.SEA_OVERRIDE';
+      break;
+    case 5:
+      key = 'QA_OVERRIDE.ASM_OVERRIDE';
+      break;
+    case 6:
+      key = 'QA_OVERRIDE.ASA_OVERRIDE';
+      break;
+    default:
+      return 'N/A.FLAG';
+  }
+  return getKeyType(key, type);
+}
+
+export function vofTranslationKey(flag: number | string, type?: 'label' | 'description'): string {
+  let key: string;
+  switch (Number(flag)) {
+    case 0:
+      key = 'VALUE_OVERRIDE.RESERVED';
+      break;
+    case 1:
+      key = 'VALUE_OVERRIDE.CORRECTED_MANUALLY';
+      break;
+    case 2:
+      key = 'VALUE_OVERRIDE.CORRECTED_AUTOMATICALLY';
+      break;
+    case 3:
+      key = 'VALUE_OVERRIDE.ESTIMATED_MANUALLY';
+      break;
+    case 4:
+      key = 'VALUE_OVERRIDE.ESTIMATED_AUTOMATICALLY';
+      break;
+    default:
+      return 'N/A.FLAG';
+  }
+  return getKeyType(key, type);
+}
+
+export function qaTranslationKey(flag: number | string, type?: 'label' | 'description'): string {
+  let key: string;
+  switch (Number(flag)) {
+    case -10:
+      key = 'QA.SUPPRESSED';
+      break;
+    case -1:
+      key = 'QA.MISSING';
+      break;
+    case 0:
+      key = 'QA.ERROR';
+      break;
+    case 10:
+      key = 'QA.DOUBTFUL';
+      break;
+    case 15:
+      key = 'QA.SUSPECT';
+      break;
+    case 20:
+      key = 'QA.INCONSISTENT';
+      break;
+    case 100:
+      key = 'QA.ACCEPTED';
+      break;
+    case 101:
+      key = 'QA.NOT_PERFORMED';
+      break;
+    case 110:
+      key = 'QA.UNAVAILABLE';
+      break;
+    default:
+      key = 'N/A';
+      break;
+  }
+  return getKeyType(key, type);
+}
+
+export function instrumentTranslationKey(summary: number | string, type?: 'label' | 'description'): string {
+  let key: string;
   switch (Number(summary)) {
     case 195:
-      return 'INSTRUMENT.UNEXPECTED';
+      key = 'INSTRUMENT.UNEXPECTED';
+      break;
     case 199:
-      return 'INSTRUMENT.MISSING';
+      key = 'INSTRUMENT.MISSING';
+      break;
     case 200:
-      return 'INSTRUMENT.ALARM';
+      key = 'INSTRUMENT.ALARM';
+      break;
     case 210:
-      return 'INSTRUMENT.WARNING';
+      key = 'INSTRUMENT.WARNING';
+      break;
     case 300:
-      return 'INSTRUMENT.NORMAL';
+      key = 'INSTRUMENT.NORMAL';
+      break;
     default:
-      return '';
+      return 'N/A.FLAG';
   }
+  return getKeyType(key, type);
 }
 
 export function formatElementToColumn(elementID: string): string {
@@ -258,4 +383,15 @@ export function updateNodeValue(
 
 export function grabIndexValue(element: ObsElement): number {
   return element.dataType === 'official' ? 0 : element.indexValue;
+}
+
+function getKeyType(key: string, type?: string) {
+  switch (type) {
+    case 'label':
+      return `${key}.LABEL`;
+    case 'description':
+      return `${key}.DESCRIPTION`;
+    default:
+      return key;
+  }
 }

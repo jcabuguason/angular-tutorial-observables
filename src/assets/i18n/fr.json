@@ -9,12 +9,13 @@
     "NO_PARAMS": "Au moins un champ est requis pour la recherche",
     "QUERY_MISSING": "Des champs supplémentaires sont requis pour effectuer une recherche avec ce type de requête",
     "NEGATIVE_HOURS": "Les champs d'heures ne peuvent pas être des valeurs négatives",
+    "FILL_BOTH_HOURS": "Veuillez remplir les deux champs d'heure",
     "SELECT": "Sélectionner",
     "SELECTED_ITEMS": "éléments sélectionnés",
     "CLEAR": "Effacer",
     "TODAY": "Aujourd'hui",
     "SELECT_DATE_PICKER": "Sélectionneur de date",
-    "ASOLUTE_DATE_PICKER_LABEL": "Absolu",
+    "ABSOLUTE_DATE_PICKER_LABEL": "Absolu",
     "RELATIVE_DATE_PICKER_LABEL": "Relatif",
     "QUICK_DATE_PICKER_LABEL": "Rapide",
     "HOURS_BEFORE": "Heures Avant",
@@ -184,23 +185,32 @@
     "NOVEMBER_SHORT": "Nov",
     "DECEMBER_SHORT": "Déc"
   },
-  "QA": {
-    "SUPRESSED": "Supprimé",
-    "MISSING": "Manquant",
-    "ERROR": "Erreur",
-    "DOUBTFUL": "Douteux",
-    "SUSPECT": "Suspect",
-    "INCONSISTENT": "Inconsistant",
-    "ACCEPTED": "Accepté/Passé",
-    "NO_QA_TEST": "Le(s) test(s) de Qa non exécuté",
-    "NO_OPTIMIZED_RANGE_TEST": "Test d'intervalle optimisée non exécuté"
-  },
   "INSTRUMENT": {
-    "UNEXPECTED": "Format Inattendu",
-    "MISSING": "Manquant",
-    "ALARM": "Alarme - Problème",
-    "WARNING": "Avertissement - Problème Possible",
-    "NORMAL": "Accepté"
+    "UNEXPECTED": {
+      "FLAG": "195",
+      "LABEL": "Inattendu",
+      "DESCRIPTION": "Type de Format de Données Inattendu"
+    },
+    "MISSING": {
+      "FLAG": "199",
+      "LABEL": "Manquant",
+      "DESCRIPTION": "Manquant - Aucune Valeur Disponible"
+    },
+    "ALARM": {
+      "FLAG": "200",
+      "LABEL": "Alarm",
+      "DESCRIPTION": "Alarme - Problème d'instrumentation"
+    },
+    "WARNING": {
+      "FLAG": "210",
+      "LABEL": "Avertissement",
+      "DESCRIPTION": "Avertissement - Problème potentiel avec l'instrumentation"
+    },
+    "NORMAL": {
+      "FLAG": "300",
+      "LABEL": "Accepté",
+      "DESCRIPTION": "Réussi à tous les tests d'instruments"
+    }
   },
   "OBS": {
     "LAYER": "Couche",
@@ -226,5 +236,193 @@
     "DATE_MODIFIED": "Date de modification",
     "BUILD": "Build",
     "COMMONS_VERSION": "Version de Commons"
+  },
+  "DATA_FLAG": {
+    "RESERVED": {
+      "FLAG": "0",
+      "LABEL": "Réservé",
+      "DESCRIPTION": "Réservé"
+    },
+    "DERIVED": {
+      "FLAG": "1",
+      "LABEL": "Dérivé",
+      "DESCRIPTION": "La valeur a été reformulée ou dérivée mathématiquement avec des entrées complètes (ARKEON flag D)"
+    },
+    "ESTIMATED": {
+      "FLAG": "2",
+      "LABEL": "Estimé",
+      "DESCRIPTION": "Valeur rapportée reçue sous forme d'estimation (ARKEON flag E)"
+    },
+    "ADJUSTED": {
+      "FLAG": "3",
+      "LABEL": "Ajusté",
+      "DESCRIPTION": "Valeur rapportée le résultat d'un ajustement (ex: précipitations sous capture, vitesse du vent extrapolée à 10m, etc.)"
+    },
+    "INCOMPLETE": {
+      "FLAG": "4",
+      "LABEL": "Incomplet",
+      "DESCRIPTION": "La valeur a été reformulée ou dérivée mathématiquement avec des entrées incomplètes - la dérivation d'élément contient au moins une valeur manquante (ARKEON flag I)"
+    },
+    "TRACE": {
+      "FLAG": "5",
+      "LABEL": "Trace",
+      "DESCRIPTION": "Trace. La valeur est zéro (ARKEON flag T)"
+    },
+    "MULTIPLE": {
+      "FLAG": "6",
+      "LABEL": "Plusieurs",
+      "DESCRIPTION": "Plus d'une occurrence (ARKEON flag S)"
+    },
+    "INTERPOLATED": {
+      "FLAG": "7",
+      "LABEL": "Interpolé",
+      "DESCRIPTION": "La valeur a été dérivée avec des entrées incomplètes - Entrées manquantes interpolées dans les contraintes d'exhaustivité (ARKEON flag E)"
+    },
+    "ACCUMULATED": {
+      "FLAG": "8",
+      "LABEL": "Accumulated",
+      "DESCRIPTION": "Montant accumulé (ARKEON flag A)"
+    },
+    "PRECIP_UNCERTAIN": {
+      "FLAG": "9",
+      "LABEL": "Precip_uncertain",
+      "DESCRIPTION": "Il y a eu des précipitations, dont la quantité est incertaine; la valeur est 0 (ARKEON flag C)"
+    },
+    "EST_ACCUM": {
+      "FLAG": "10",
+      "LABEL": "Est_accum",
+      "DESCRIPTION": "Accumulé et estimé (ARKEON flag F)"
+    },
+    "POSSIBLE_PRECIP": {
+      "FLAG": "11",
+      "LABEL": "Possible_precip",
+      "DESCRIPTION": "Des précipitations peuvent avoir eu lieu ou non; la valeur est 0 ou 0.1 (ARKEON flag L)"
+    },
+    "TEMP_ABV_0": {
+      "FLAG": "12",
+      "LABEL": "Temp_abv_0",
+      "DESCRIPTION": "Température manquante, mais connue pour être AU-DESSUS du point de congélation (ARKEON flag N)"
+    },
+    "TEMP_BLW_0": {
+      "FLAG": "13",
+      "LABEL": "Temp_blw_0",
+      "DESCRIPTION": "Température manquante, mais connue pour être INFÉRIEURE au point de congélation (ARKEON flag Y)"
+    }
+  },
+  "N/A": {
+    "FLAG": "N/A",
+    "LABEL": "N/A",
+    "DESCRIPTION": "Non Applicable"
+  },
+  "VALUE_OVERRIDE": {
+    "RESERVED": {
+      "FLAG": "0",
+      "LABEL": "Réservé",
+      "DESCRIPTION": "Réservé"
+    },
+    "CORRECTED_MANUALLY": {
+      "FLAG": "1",
+      "LABEL": "Corrigé manuellement",
+      "DESCRIPTION": "Corrigé manuellement"
+    },
+    "CORRECTED_AUTOMATICALLY": {
+      "FLAG": "2",
+      "LABEL": "Corrigé automatiquement",
+      "DESCRIPTION": "Corrigé automatiquement"
+    },
+    "ESTIMATED_MANUALLY": {
+      "FLAG": "3",
+      "LABEL": "Estimé manuellement",
+      "DESCRIPTION": "Estimé manuellement"
+    },
+    "ESTIMATED_AUTOMATICALLY": {
+      "FLAG": "4",
+      "LABEL": "Estimé automatiquement",
+      "DESCRIPTION": "Estimé automatiquement"
+    }
+  },
+  "QA_OVERRIDE": {
+    "NO_OVERRIDE": {
+      "FLAG": "0",
+      "LABEL": "Pas de remplacement",
+      "DESCRIPTION": "Pas de remplacement"
+    },
+    "SAM_OVERRIDE": {
+      "FLAG": "1",
+      "LABEL": "Suspect à la dérogation manuelle acceptable",
+      "DESCRIPTION": "Manuel suspect à acceptable"
+    },
+    "SAA_OVERRIDE": {
+      "FLAG": "2",
+      "LABEL": "Suspect de neutralisation automatique acceptable",
+      "DESCRIPTION": "Suspect de neutralisation automatique acceptable"
+    },
+    "SEM_OVERRIDE": {
+      "FLAG": "3",
+      "LABEL": "Suspect à la dérogation manuelle d'erreur",
+      "DESCRIPTION": "Suspect à la dérogation manuelle d'erreur"
+    },
+    "SEA_OVERRIDE": {
+      "FLAG": "4",
+      "LABEL": "Suspect de neutralisation automatique d'erreur",
+      "DESCRIPTION": "Suspect de neutralisation automatique d'erreur"
+    },
+    "ASM_OVERRIDE": {
+      "FLAG": "5",
+      "LABEL": "Acceptable de suspecter une dérogation manuelle",
+      "DESCRIPTION": "Acceptable de suspecter une dérogation manuelle"
+    },
+    "ASA_OVERRIDE": {
+      "FLAG": "6",
+      "LABEL": "Acceptable de suspecter un remplacement automatique",
+      "DESCRIPTION": "Acceptable de suspecter un remplacement automatique"
+    }
+  },
+  "QA": {
+    "SUPPRESSED": {
+      "FLAG": "-10",
+      "LABEL": "Réprimer",
+      "DESCRIPTION": "Le fournisseur de données a indiqué que la valeur ne doit pas être utilisée ou publiée en raison de problèmes d'instrumentation ou d'environnement qui ont compromis les données."
+    },
+    "MISSING": {
+      "FLAG": "-1",
+      "LABEL": "Manquant",
+      "DESCRIPTION": "Il n'y a aucune valeur disponible."
+    },
+    "ERROR": {
+      "FLAG": "0",
+      "LABEL": "Erreur",
+      "DESCRIPTION": "La valeur est physiquement impossible, au-delà de la capacité du capteur à détecter, ou identifiée comme incorrecte."
+    },
+    "DOUBTFUL": {
+      "FLAG": "10",
+      "LABEL": "Douteux",
+      "DESCRIPTION": "La valeur est physiquement possible mais est statistiquement improbable: égale ou supérieure aux valeurs extrêmes attendues."
+    },
+    "SUSPECT": {
+      "FLAG": "15",
+      "LABEL": "Mise En Garde",
+      "DESCRIPTION": "La valeur est physiquement possible mais est identifiée comme incertaine."
+    },
+    "INCONSISTENT": {
+      "FLAG": "20",
+      "LABEL": "Incohérent",
+      "DESCRIPTION": "La valeur est incohérente par rapport à une variable prédictive mesurée indépendamment. Il n'est pas possible de déterminer si la valeur ou la variable de prédiction est suspecte."
+    },
+    "ACCEPTED": {
+      "FLAG": "100",
+      "LABEL": "Accepté/Passé",
+      "DESCRIPTION": "La valeur a réussi tous les tests d'évaluation de la qualité applicables ou a été vérifiée comme étant acceptable."
+    },
+    "NOT_PERFORMED": {
+      "FLAG": "101",
+      "LABEL": "Le(s) test(s) de Qa non exécuté",
+      "DESCRIPTION": "Aucun test Qa effectué."
+    },
+    "UNAVAILABLE": {
+      "FLAG": "110",
+      "LABEL": "Test d'intervalle optimisée non exécuté",
+      "DESCRIPTION": "Le test de plage optimisée n'a pas été effectué car la valeur de l'élément associé n'est pas disponible."
+    }
   }
 }
