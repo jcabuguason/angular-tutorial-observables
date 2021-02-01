@@ -375,6 +375,7 @@ export class DataGridService implements OnDestroy {
 
     const newNode: object = {
       headerName: headerName,
+      headerClass: headerName === '' ? 'blank-header' : 'filled-header',
       nodeNumber: nodeNumber,
       comparator: this.comparator,
     };
@@ -399,7 +400,6 @@ export class DataGridService implements OnDestroy {
   private makeDefaultColumn(node) {
     const columnToAdd = this.columnBoilerplate(node, this.userConfigService.getDefaultTag());
     node.children.unshift(columnToAdd);
-    node.elementID = undefined;
     return columnToAdd;
   }
 
@@ -480,6 +480,8 @@ export class DataGridService implements OnDestroy {
       // Avoid overwritting layered/official columns
       if (workingNode.children.length) {
         columnToAdd = this.makeDefaultColumn(workingNode);
+      } else if (nestingDepth === startIndex) {
+        columnToAdd.headerClass = 'flat-header';
       }
     }
 
@@ -616,6 +618,10 @@ export class DataGridService implements OnDestroy {
   }
 
   private groupColumns(columns) {
+    if (this.userConfigService.getAllElementGroups().length === 0) {
+      return columns;
+    }
+
     const groupedColumns = [];
     const createGroup = (configGroup: ElementGroup) => ({
       headerName: configGroup.groupName.getName(),
@@ -636,6 +642,11 @@ export class DataGridService implements OnDestroy {
         groupDef = createGroup(configGroup);
         groupedColumns.push(groupDef);
       }
+
+      if (curCol.headerClass === 'flat-header') {
+        curCol.headerClass = 'filled-header';
+      }
+
       groupDef.children.push(curCol);
     }
 

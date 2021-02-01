@@ -23,6 +23,7 @@ import { TabOption } from './enums/tab-option.enum';
 
 describe('SearchService', () => {
   let searchService: SearchService;
+  let urlService: SearchURLService;
 
   const nameValueObj = (name, value) => ({ name: name, value: value });
   const paramValueObj = (param, value) => ({ param: param, value: value });
@@ -50,13 +51,9 @@ describe('SearchService', () => {
 
   class MockUrlService {
     createUrlParams(params, shortcut?) {
-      const all = [];
-      if (shortcut != null) {
-        all.push(nameValueObj('shortcut', ['shortcutLabel']));
-      } else {
-        params.forEach((p) => all.push(...p.selected.map(() => nameValueObj('paramName', ['param Values']))));
-      }
-      return all;
+      return shortcut == null
+        ? [nameValueObj('paramName', ['paramValue'])]
+        : [nameValueObj('shortcut', ['shortcutLabel'])];
     }
     getAllRequestParams(qParams, availableParams, shortcuts) {
       // should be formatted differently, but for testing purposes urlService will return this back
@@ -148,6 +145,7 @@ describe('SearchService', () => {
     });
 
     searchService = TestBed.inject(SearchService);
+    urlService = TestBed.inject(SearchURLService);
   });
 
   it('should check if parameter was already added', () => {
@@ -297,18 +295,11 @@ describe('SearchService', () => {
     searchService.addSuggestedParameter(sParams.endDateParam, ['2018-02-01T00:00Z']);
     searchService.addSuggestedParameter(sParams.provinceParam, ['AB']);
 
-    const expectedHttpParams: HttpParams = new HttpParams({
-      fromObject: {
-        network: ['ca', 'dnd awos'],
-        stationName: ['station name'],
-        startDate: ['2018-01-01T00:00'],
-        endDate: ['2018-02-01T00:00'],
-        province: ['AB'],
-      },
-    });
+    const mockParams = {};
+    urlService.createUrlParams([]).forEach((param) => (mockParams[param.name] = param.value));
+
     const expectedModel: SearchModel = {
       taxonomy: [caIndex, dndAwosIndex],
-
       query: [
         {
           operator: ESOperator.Or,
@@ -333,10 +324,13 @@ describe('SearchService', () => {
       from: new Date('2018-01-01T00:00Z'),
       to: new Date('2018-02-01T00:00Z'),
       size: 300,
-      httpParams: expectedHttpParams,
+      httpParams: new HttpParams({ fromObject: mockParams }),
     };
 
-    expect(searchService.buildSearchModel()).toEqual(expectedModel);
+    const model = searchService.buildSearchModel();
+    Object.keys(model).forEach((key) => {
+      expect(model[key].toString()).toEqual(expectedModel[key].toString());
+    });
   });
 
   it('differentiate between station ids', () => {

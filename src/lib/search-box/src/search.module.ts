@@ -21,7 +21,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';
 import { MessagesModule } from 'primeng/messages';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { SpinnerModule } from 'primeng/spinner';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { MessageService } from 'primeng/api';
 import { SelectButtonModule } from 'primeng/selectbutton';
 
@@ -45,7 +45,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     MenuModule,
     MessagesModule,
     MultiSelectModule,
-    SpinnerModule,
+    InputNumberModule,
     SelectButtonModule,
   ],
   providers: [SearchService, SearchURLService, MessageService],

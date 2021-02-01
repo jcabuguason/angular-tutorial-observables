@@ -7,7 +7,8 @@ describe('ValueFormatterService', () => {
   let service: ValueFormatterService;
 
   const originalLatitude = '50.11151';
-  const formattedLatitude = `50\xB0 06' 41.436" NORTH`;
+  const formattedLatitude = `50\xB0 06' 41.436" N`;
+  const formattedLatitudeKey = `50\xB0 06' 41.436" DIRECTION.NORTH_SHORT`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -24,7 +25,9 @@ describe('ValueFormatterService', () => {
       unit: 'unitless',
     };
     service.setFormattedValue(latitudeElement, ValueFormats.DegreesMinutesSeconds);
-    expect(latitudeElement.formattedValue).toEqual(formattedLatitude);
+
+    const value = latitudeElement.formattedValue;
+    expect(value.startsWith(formattedLatitude) || value === formattedLatitudeKey).toBeTruthy();
   });
 
   describe('using grid params', () => {
@@ -59,7 +62,8 @@ describe('ValueFormatterService', () => {
 
     it('should get the formatted value', () => {
       service.useFormattedValue = true;
-      expect(service.getFormattedValueFromGrid(gridParams)).toBe(formattedLatitude);
+      const value = service.getFormattedValueFromGrid(gridParams);
+      expect(value === formattedLatitude || value === formattedLatitudeKey).toBeTruthy();
     });
 
     it('should get the unformatted value using grid params', () => {

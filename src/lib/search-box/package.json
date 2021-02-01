@@ -15,7 +15,7 @@
         "primeng/menu": "primeng/menu",
         "primeng/messages": "primeng/messages",
         "primeng/multiselect": "primeng/multiselect",
-        "primeng/spinner": "primeng/spinner",
+        "primeng/inputnumber": "primeng/inputnumber",
         "primeng/selectbutton": "primeng/selectbutton",
         "primeng/components/common/messageservice": "primeng/components/common/messageservice",
         "@ngx-translate/core": "@ngx-translate/core"

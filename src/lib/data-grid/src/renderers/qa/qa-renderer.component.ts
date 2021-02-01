@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { ICellRendererAngularComp } from 'ag-grid-angular';
+import { ICellRendererAngularComp } from '@ag-grid-community/angular';
 import { qaTranslationKey } from 'msc-dms-commons-angular/core/obs-util';
 
 @Component({

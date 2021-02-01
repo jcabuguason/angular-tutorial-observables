@@ -61,10 +61,6 @@ describe('LockHeartbeatService', () => {
         },
         { provide: LOCK_CONFIG, useValue: config },
       ],
-    }).overrideModule(BrowserDynamicTestingModule, {
-      set: {
-        entryComponents: [TextDialogComponent],
-      },
     });
 
     const injector = getTestBed();

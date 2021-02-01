@@ -87,14 +87,20 @@ describe('ObsUtil', () => {
     // confirmed results with: https://www.latlong.net/lat-long-dms.html, https://www.fcc.gov/media/radio/dms-decimal
     it('should convert latitude element', () => {
       const lat = 50.11151;
-      const expectedLat = `50\xB0 06' 41.436" NORTH`;
-      expect(obsUtil.convertDDToDMS(lat, true)).toBe(expectedLat);
+      const expectedLat = `50\xB0 06' 41.436" N`;
+      const expectedLatKey = `50\xB0 06' 41.436" DIRECTION.NORTH_SHORT`;
+
+      const value = obsUtil.convertDDToDMS(lat, true);
+      expect(value.startsWith(expectedLat) || value === expectedLatKey).toBeTruthy();
     });
 
     it('should convert longitude element', () => {
       const long = -127.94;
-      const expectedLong = `127\xB0 56' 24.000" WEST`;
-      expect(obsUtil.convertDDToDMS(long, false)).toBe(expectedLong);
+      const expectedLong = `127\xB0 56' 24.000" W`;
+      const expectedLongKey = `127\xB0 56' 24.000" DIRECTION.WEST_SHORT`;
+
+      const value = obsUtil.convertDDToDMS(long, false);
+      expect(value.startsWith(expectedLong) || value === expectedLongKey).toBeTruthy();
     });
   });
 });
