@@ -460,6 +460,7 @@ export class SearchService {
         summary: 'SEARCH_BAR.MISSING_REQUIRED',
         data: missingParams,
         sticky: true,
+        severity: 'error',
       });
       valid = false;
     } else if (checkboxes.length > 0) {
@@ -470,6 +471,7 @@ export class SearchService {
             summary: 'SEARCH_BAR.QUERY_MISSING',
             data: checkbox.requiredParams.map((box) => box.getDisplayName()),
             sticky: true,
+            severity: 'error',
           });
           valid = false;
         }
@@ -480,6 +482,7 @@ export class SearchService {
         summary: 'SEARCH_BAR.UNFILLED_FIELD',
         data: emptyParams,
         sticky: true,
+        severity: 'error',
       });
       valid = false;
     } else if (this.isEmptySearch()) {
@@ -487,6 +490,7 @@ export class SearchService {
         key: 'search-messages',
         summary: 'SEARCH_BAR.NO_PARAMS',
         sticky: true,
+        severity: 'error',
       });
       valid = false;
     } else if (negativeHoursRange) {
@@ -494,6 +498,7 @@ export class SearchService {
         key: 'search-messages',
         summary: 'SEARCH_BAR.NEGATIVE_HOURS',
         sticky: true,
+        severity: 'error',
       });
       valid = false;
     }

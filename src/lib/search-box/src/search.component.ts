@@ -20,6 +20,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   readonly collapseIcon = 'fas fa-caret-up';
   readonly defaultHeight: number = 41;
   readonly defaultContainerHeight: string = '41px';
+  private maxHeightDifference = 2; // Only show expand/collapse button if there is more than 2px difference
 
   showExpandButton = true;
   expandButtonIcon = this.expandIcon;
@@ -34,22 +35,6 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   multiSelectDefaultLabel = '';
   multiSelectSelectedItemsLabel = '';
   numQuickCols: string;
-
-  private weekdays = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
-  private months = [
-    'JANUARY',
-    'FEBRUARY',
-    'MARCH',
-    'APRIL',
-    'MAY',
-    'JUNE',
-    'JULY',
-    'AUGUST',
-    'SEPTEMBER',
-    'OCTOBER',
-    'NOVEMBER',
-    'DECEMBER',
-  ];
 
   constructor(
     public translate: TranslateService,
@@ -83,7 +68,7 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   checkOverflow() {
     const container = this.containerElement.nativeElement;
     if (container != null) {
-      this.showExpandButton = this.defaultHeight < container.scrollHeight;
+      this.showExpandButton = this.defaultHeight + this.maxHeightDifference < container.scrollHeight;
     }
     this.changeDectector.detectChanges();
   }
@@ -157,32 +142,10 @@ export class SearchComponent implements OnInit, AfterViewChecked {
     return { 'btn-highlight': quickOptions.btnHighlight[id] };
   }
 
-  private adjustCalendar() {
-    const weekdaysShort = this.instantArray(
-      'DATES',
-      this.weekdays.map((day) => `${day}_SHORT`),
-    );
-    this.calendarLocale = {
-      firstDayOfWeek: 0,
-      dayNames: this.instantArray('DATES', this.weekdays),
-      dayNamesShort: weekdaysShort,
-      dayNamesMin: weekdaysShort.map((day) => day.substr(0, 2)),
-      monthNames: this.instantArray('DATES', this.months),
-      monthNamesShort: this.instantArray(
-        'DATES',
-        this.months.map((month) => `${month}_SHORT`),
-      ),
-      today: this.translate.instant('SEARCH_BAR.TODAY'),
-      clear: this.translate.instant('SEARCH_BAR.CLEAR'),
-    };
-  }
-
   private adjustMultiSelectLabels() {
     this.multiSelectDefaultLabel = this.translate.instant('SEARCH_BAR.SELECT');
     this.multiSelectSelectedItemsLabel = this.translate.instant('SEARCH_BAR.SELECTED_ITEMS');
   }
-
-  private instantArray = (header, keys) => keys.map((key) => this.translate.instant(`${header}.${key}`));
 
   // Need to reload for multiSelectSelectedItemsLabel to update properly
   private reload(): void {
@@ -193,7 +156,6 @@ export class SearchComponent implements OnInit, AfterViewChecked {
   private reloadLabels(): void {
     this.adjustMultiSelectLabels();
     this.adjustMultiSelectChoices();
-    this.adjustCalendar();
     this.reload();
   }
 }

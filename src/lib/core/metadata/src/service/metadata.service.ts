@@ -24,7 +24,7 @@ export class MetadataService {
   constructor(
     @Inject(METADATA_CONFIG)
     private config: MetadataConfig,
-    private http: HttpClient
+    private http: HttpClient,
   ) {
     this.instanceLinks = {};
   }
@@ -33,14 +33,14 @@ export class MetadataService {
     return this.http
       .get(
         `${this.config.endpoint}?url=/metadata/${taxonomy}/definition-xml-2.0/${version}?format=json`,
-        this.httpOptions
+        this.httpOptions,
       )
       .pipe(
-        map(response => {
+        map((response) => {
           const definition = MDDefinitionParser.parse(response);
           this.linksFromDefinition(definition.elements);
           return definition;
-        })
+        }),
       );
   }
 
@@ -50,9 +50,9 @@ export class MetadataService {
     return this.http
       .get(
         `${this.config.endpoint}?url=/metadata/${taxonomy}/instance-xml-2.0/${id}/?${versionParam}&format=json`,
-        this.httpOptions
+        this.httpOptions,
       )
-      .pipe(map(response => MDInstanceDefinitionParser.parse(response)));
+      .pipe(map((response) => MDInstanceDefinitionParser.parse(response)));
   }
 
   /**
@@ -63,11 +63,10 @@ export class MetadataService {
    * @param id the URI identifiers of the metadata instance
    */
   writeFullInstance(taxonomy: string, outgoing: OutgoingMetadataInstance, id: string) {
-    const otherOptions = Object.assign({ responseType: 'text' }, this.httpOptions);
     return this.http.post(
       `${this.config.endpoint}?url=/metadata/${taxonomy}/instance-xml-2.0/${id}?format=json&override=true`,
       outgoing,
-      otherOptions
+      { ...this.httpOptions, responseType: 'text' },
     );
   }
 
@@ -79,11 +78,11 @@ export class MetadataService {
     return this.http
       .get<InstanceResponse>(
         `${this.config.endpoint}?url=/metadata/instances?extended=true&dataset=${taxonomy}`,
-        this.httpOptions
+        this.httpOptions,
       )
       .toPromise()
-      .then(response => response.instances)
-      .catch(error => {
+      .then((response) => response.instances)
+      .catch((error) => {
         return [] as InstanceInfo[];
       });
   }
@@ -93,9 +92,9 @@ export class MetadataService {
     return this.http
       .get<{ definitions: MetadataInstanceHistory[] }>(
         `${this.config.endpoint}?url=/metadata/definitions?dataset=all`,
-        this.httpOptions
+        this.httpOptions,
       )
-      .pipe(map(response => response.definitions));
+      .pipe(map((response) => response.definitions));
   }
 
   getDefinitionHistory(uri: string): Observable<MetadataDefinitionHistory[]> {
@@ -107,15 +106,15 @@ export class MetadataService {
     return this.http
       .get<{ definitions: MetadataInstanceHistory }>(
         `${this.config.endpoint}?url=/metadata/definitions?dataset=${taxonomy}`,
-        this.httpOptions
+        this.httpOptions,
       )
       .toPromise()
-      .then(response => response.definitions[0]);
+      .then((response) => response.definitions[0]);
   }
 
   getDefinitionName(definition: Promise<MetadataDefinitionList>, isEnglish: boolean): Promise<string> {
     const lang = this.langString(isEnglish);
-    return definition.then(def => (def == null ? '' : def[`name_${lang}`] || def.uri));
+    return definition.then((def) => (def == null ? '' : def[`name_${lang}`] || def.uri));
   }
 
   getInstanceHistory(uri: string): Observable<MetadataInstanceHistory[]> {
@@ -130,7 +129,7 @@ export class MetadataService {
   getInstanceByUri(taxonomy: string, id: string): Promise<InstanceInfo> {
     const uri = `${taxonomy}/instance-xml-2.0`;
     const fullUri = `/metadata/${uri}/${id}`;
-    return this.loadInstanceLinks(uri).then(instances => instances.find(inst => inst.uri === fullUri));
+    return this.loadInstanceLinks(uri).then((instances) => instances.find((inst) => inst.uri === fullUri));
   }
 
   getInstanceName(info: InstanceInfo, isEnglish: boolean): string {
@@ -144,7 +143,7 @@ export class MetadataService {
   }
 
   getPromisedInstanceName(promisedInfo: Promise<InstanceInfo>, isEnglish: boolean): Promise<string> {
-    return promisedInfo.then(info => this.getInstanceName(info, isEnglish));
+    return promisedInfo.then((info) => this.getInstanceName(info, isEnglish));
   }
 
   private linksFromDefinition(elements: MDElement[]) {

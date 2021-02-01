@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Location } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -22,7 +22,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';
 import { MessagesModule } from 'primeng/messages';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { SpinnerModule } from 'primeng/spinner';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { SearchURLService } from './search-url.service';
 import { MockUrlService } from './mock-services';
@@ -39,53 +39,55 @@ describe('SearchComponent', () => {
   let fixture: ComponentFixture<SearchComponent>;
   let searchService: SearchService;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-        BrowserAnimationsModule,
-        AccordionModule,
-        AutoCompleteModule,
-        ButtonModule,
-        CalendarModule,
-        CheckboxModule,
-        ChipsModule,
-        DialogModule,
-        DropdownModule,
-        ToastModule,
-        InputTextModule,
-        MenuModule,
-        MessagesModule,
-        MultiSelectModule,
-        SpinnerModule,
-        SelectButtonModule,
-        HttpClientTestingModule,
-        RouterTestingModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (httpClient) =>
-              new CombinedHttpLoader(httpClient, '0', [{ prefix: '../../../assets/i18n/', suffix: '.json' }]),
-            deps: [HttpClient],
-          },
-        }),
-      ],
-      declarations: [SearchComponent],
-      providers: [
-        TranslateService,
-        SearchService,
-        MessageService,
-        { provide: SEARCH_BOX_CONFIG, useValue: { searchList: [] } },
-        { provide: SearchURLService, useClass: MockUrlService },
-      ],
-    })
-      .compileComponents()
-      .then(() => {
-        fixture = TestBed.createComponent(SearchComponent);
-        searchComponent = fixture.componentInstance;
-        searchService = fixture.debugElement.injector.get(SearchService);
-      });
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          FormsModule,
+          BrowserAnimationsModule,
+          AccordionModule,
+          AutoCompleteModule,
+          ButtonModule,
+          CalendarModule,
+          CheckboxModule,
+          ChipsModule,
+          DialogModule,
+          DropdownModule,
+          ToastModule,
+          InputTextModule,
+          MenuModule,
+          MessagesModule,
+          MultiSelectModule,
+          InputNumberModule,
+          SelectButtonModule,
+          HttpClientTestingModule,
+          RouterTestingModule,
+          TranslateModule.forRoot({
+            loader: {
+              provide: TranslateLoader,
+              useFactory: (httpClient) =>
+                new CombinedHttpLoader(httpClient, '0', [{ prefix: '../../../assets/i18n/', suffix: '.json' }]),
+              deps: [HttpClient],
+            },
+          }),
+        ],
+        declarations: [SearchComponent],
+        providers: [
+          TranslateService,
+          SearchService,
+          MessageService,
+          { provide: SEARCH_BOX_CONFIG, useValue: { searchList: [] } },
+          { provide: SearchURLService, useClass: MockUrlService },
+        ],
+      })
+        .compileComponents()
+        .then(() => {
+          fixture = TestBed.createComponent(SearchComponent);
+          searchComponent = fixture.componentInstance;
+          searchService = fixture.debugElement.injector.get(SearchService);
+        });
+    }),
+  );
 
   it('should create', () => {
     expect(searchComponent).toBeDefined();

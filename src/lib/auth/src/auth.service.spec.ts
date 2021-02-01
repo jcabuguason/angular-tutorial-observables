@@ -52,7 +52,8 @@ describe('AuthService', () => {
     expect(req.request.method).toBe('POST');
     req.flush(dummyResponse);
 
-    expect(store.dispatch).toHaveBeenCalledWith({ type: AuthActionType.Login, payload: dummyResponse });
+    const action = { type: AuthActionType.Login, payload: dummyResponse };
+    expect(store.dispatch).toHaveBeenCalledWith(action);
   });
 
   it('should send logout request', () => {

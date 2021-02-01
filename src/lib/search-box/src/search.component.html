@@ -45,8 +45,8 @@
           [ngClass]="{ 'disabled-parameter': searchService.readOnlyBar }"
         >
           <!-- editable search parameters -->
-          <div class="ui-inputgroup" *ngIf="p.getType() === paramType.Default">
-            <span class="ui-inputgroup-addon">{{ p.getDisplayName() | translate }}</span>
+          <div class="p-inputgroup" *ngIf="p.getType() === paramType.Default">
+            <span class="p-inputgroup-addon">{{ p.getDisplayName() | translate }}</span>
 
             <ng-container *ngIf="p.getType() === paramType.Default">
               <ng-container *ngIf="p.getChoices().length === 0 || searchService.readOnlyBar; else hasChoices">
@@ -88,7 +88,7 @@
                   pButton
                   type="button"
                   icon="fas fa-times"
-                  class="ui-button-danger"
+                  class="p-button-danger"
                   (click)="searchService.removeDisplayParameter(p); checkOverflow()"
                 ></button>
               </ng-container>
@@ -154,33 +154,35 @@
                   pButton
                   type="button"
                   icon="fas fa-times"
-                  class="ui-button-danger"
+                  class="p-button-danger"
                   (click)="searchService.removeDisplayParameter(p); checkOverflow()"
                 ></button>
               </ng-template>
             </ng-container>
           </div>
 
-          <div class="ui-inputgroup" *ngIf="p.getType() !== paramType.Default">
-            <span class="ui-inputgroup-addon">{{ p.getDisplayName() | translate }}</span>
+          <div class="p-inputgroup" *ngIf="p.getType() !== paramType.Default">
+            <span class="p-inputgroup-addon">{{ p.getDisplayName() | translate }}</span>
 
             <ng-container *ngIf="p.getType() === paramType.HoursRange">
-              <p-spinner
+              <p-inputNumber
                 size="7"
                 placeholder=""
                 [(ngModel)]="p.hoursBefore"
                 [min]="0"
                 [disabled]="searchService.readOnlyBar"
+                [showButtons]="true"
               >
-              </p-spinner>
-              <p-spinner
+              </p-inputNumber>
+              <p-inputNumber
                 size="7"
                 placeholder=""
                 [(ngModel)]="p.hoursAfter"
                 [min]="0"
                 [disabled]="searchService.readOnlyBar"
+                [showButtons]="true"
               >
-              </p-spinner>
+              </p-inputNumber>
             </ng-container>
 
             <ng-container *ngIf="p.getType() === paramType.Datetime">
@@ -190,7 +192,6 @@
                 [showTime]="p.includeTime"
                 placeholder="{{ p.getPlaceholder() | translate }}"
                 [defaultDate]="currentDate"
-                [locale]="calendarLocale"
                 [disabled]="searchService.readOnlyBar"
                 dataType="string"
                 dateFormat="yy-mm-dd"
@@ -209,7 +210,7 @@
               pButton
               type="button"
               icon="fas fa-times"
-              class="ui-button-danger"
+              class="p-button-danger"
               (click)="searchService.removeDisplayParameter(p); checkOverflow()"
             ></button>
           </div>
@@ -375,9 +376,7 @@
       (onChange)="onRangeTypeChange($event)"
     >
       <ng-template let-item>
-        <div class="date-picker-label">
-          <span>{{ item.label | translate }}</span>
-        </div>
+        <span>{{ item.label | translate }}</span>
       </ng-template>
     </p-selectButton>
 
@@ -402,7 +401,7 @@
       type="button"
       label="{{ 'SEARCH_BAR.RESET' | translate }}"
       (click)="searchService.resetForm(true)"
-      class="ui-button-secondary reset-button"
+      class="p-button-secondary reset-button"
     ></button>
     <button
       pButton
@@ -421,11 +420,11 @@
 </div>
 
 <ng-template #toastMessages>
-  <p-toast key="search-messages" position="center">
+  <p-toast key="search-messages" position="center" [styleClass]="'search-message'">
     <ng-template let-message pTemplate="message">
-      <div>
-        <i class="fas fa-exclamation-triangle message-icon"></i>
-        <p>{{ message.summary | translate }}</p>
+      <span class="fas fa-exclamation-triangle message-icon"></span>
+      <div class="p-toast-message-text-content">
+        <span>{{ message.summary | translate }}</span>
         <ul>
           <li *ngFor="let field of message.data">{{ field | translate }}</li>
         </ul>
@@ -438,11 +437,23 @@
   <ng-container *ngIf="p.getType() === paramType.HoursRange">
     <div>
       <div>{{ 'SEARCH_BAR.HOURS_BEFORE' | translate }}</div>
-      <p-spinner size="7" placeholder="" [(ngModel)]="p.formHoursBefore" [min]="0"></p-spinner>
+      <p-inputNumber
+        size="7"
+        placeholder=""
+        [(ngModel)]="p.formHoursBefore"
+        [min]="0"
+        [showButtons]="true"
+      ></p-inputNumber>
     </div>
     <div>
       <div>{{ 'SEARCH_BAR.HOURS_AFTER' | translate }}</div>
-      <p-spinner size="7" placeholder="" [(ngModel)]="p.formHoursAfter" [min]="0"></p-spinner>
+      <p-inputNumber
+        size="7"
+        placeholder=""
+        [(ngModel)]="p.formHoursAfter"
+        [min]="0"
+        [showButtons]="true"
+      ></p-inputNumber>
     </div>
   </ng-container>
 </ng-template>
@@ -456,7 +467,6 @@
       [defaultDate]="currentDate"
       placeholder="{{ p.getPlaceholder() | translate }}"
       appendTo="body"
-      [locale]="calendarLocale"
       dataType="string"
       dateFormat="yy-mm-dd"
       selectOtherMonths="true"
