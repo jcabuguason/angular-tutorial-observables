@@ -185,6 +185,8 @@ export class DataChartService {
   }
 
   private buildSeries(series, sensor, name, yTypes, type, options: DataChartOptions) {
+    this.verifyFauxOfficials(sensor);
+
     const custom = options.customOptions;
     series.push(
       ...Object.keys(sensor).map((key, index) => ({
@@ -195,10 +197,44 @@ export class DataChartService {
         type: type,
         zIndex: sensor[key]['isOfficial'] ? 1 : 0,
         isSensor: sensor[key]['isSensor'],
-        visible: sensor[key]['isSensor'] && !!custom ? custom.showSensors : true,
+        visible: !sensor[key]['isSensor'] || !!custom?.showSensors, // must be true/false, not undefined
         turboThreshold: 1500,
       })),
     );
+  }
+
+  // Handling Official and Sensors in the charts is incredibly funky...
+  // "Official" here only refers to an element in the XML which has nested elements and an 'official' qualifier.
+  // "Sensor" here is only the elements with a `group="index" name="sensor_index"` qualifier in the XML, ignoring
+  // elements with the index qualifier.
+  // The "Sensors Toggle" on the apps is supposed to toggle the visibility for the sensor_index elements,
+  // which are normally nested within an "Official" element, but not always...
+  // This hacky function will mark the lowest value "sensor_index" as the "official" when the "official" doesn't exist
+  private verifyFauxOfficials(sensor) {
+    let minSensorIndex: number;
+
+    for (let index in sensor) {
+      // Stop this when...
+      // This is an element without the `group="index"` qualifier (has a null-ish index in the sensor object)
+      // or we find an Official element in the sensor object
+      // or we find non-`sensor_index` elements with the `group="index"` qualifier
+      if (index == null || !!sensor[index]['isOfficial'] || !sensor[index]['isSensor']) {
+        return;
+      }
+
+      // Keep track of the lowest index qualifier value...
+      // Note, '0' is used for the Official element from ES, but that's being ignored above
+      if (minSensorIndex == null || +index < minSensorIndex) {
+        minSensorIndex = +index;
+      }
+    }
+
+    // Re-write the lowest sensor index value for an element without an Official as the Official
+    // The 'isSensor' needs to be removed too to handle the 'sensor toggle' visibility
+    if (minSensorIndex != null) {
+      sensor[minSensorIndex]['isOfficial'] = true;
+      sensor[minSensorIndex]['isSensor'] = false;
+    }
   }
 
   private getQAColor(sensorQA: Number): string {
