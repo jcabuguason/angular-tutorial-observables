@@ -242,16 +242,6 @@
   [blockScroll]="true"
   [focusOnShow]="false"
 >
-  <!-- <p-accordion>
-    <p-accordionTab header="Shortcuts" [selected]="true">
-      <div class="shortcut-tab">
-        <div *ngFor = "let s of searchService.shortcutButtons" class="shortcut-button">
-          <button pButton type="button" label="{{s.label}}" (click)="s.command()"></button>
-        </div>
-      </div>
-    </p-accordionTab>
-
-    <p-accordionTab header="Basic Search"> -->
   <div
     *ngFor="let p of searchService.availableParams; index as i"
     class="selected-parameter"
@@ -392,9 +382,6 @@
     </div>
   </div>
 
-  <!-- </p-accordionTab>
-  </p-accordion> -->
-
   <p-footer>
     <button
       pButton
@@ -411,27 +398,19 @@
       class="submit-button"
     ></button>
   </p-footer>
-
-  <ng-container *ngTemplateOutlet="toastMessages"></ng-container>
 </p-dialog>
 
-<div *ngIf="!searchService.displayForm">
-  <ng-container *ngTemplateOutlet="toastMessages"></ng-container>
-</div>
-
-<ng-template #toastMessages>
-  <p-toast key="search-messages" position="center" [styleClass]="'search-message'">
-    <ng-template let-message pTemplate="message">
-      <span class="fas fa-exclamation-triangle message-icon"></span>
-      <div class="p-toast-message-text-content">
-        <span>{{ message.summary | translate }}</span>
-        <ul>
-          <li *ngFor="let field of message.data">{{ field | translate }}</li>
-        </ul>
-      </div>
-    </ng-template>
-  </p-toast>
-</ng-template>
+<p-toast key="search-messages" position="center" [styleClass]="'search-message'">
+  <ng-template let-message pTemplate="message">
+    <span class="fas fa-exclamation-triangle message-icon"></span>
+    <div class="p-toast-message-text-content">
+      <span>{{ message.summary | translate }}</span>
+      <ul>
+        <li *ngFor="let field of message.data">{{ field | translate }}</li>
+      </ul>
+    </div>
+  </ng-template>
+</p-toast>
 
 <ng-template #hoursRangeParam let-p="param">
   <ng-container *ngIf="p.getType() === paramType.HoursRange">
@@ -481,7 +460,6 @@
   </ng-container>
 </ng-template>
 
-<br />
 <ng-template #quickParam let-p="param">
   <ng-container *ngIf="p.getType() === paramType.Quick">
     <div class="btn-group" [ngStyle]="{ 'grid-template-columns': numQuickCols }">
