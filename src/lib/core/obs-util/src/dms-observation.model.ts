@@ -65,6 +65,8 @@ export interface ObsElement {
   group?: string;
   indexName?: string;
   indexValue?: number;
+  origName?: string;
+  origValue?: string;
   statusIndicatorQcRemarkEffectiveDate?: string;
   statusIndicatorQcRemark?: string;
   statusIndicatorQcRemarkAccount?: string;
