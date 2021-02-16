@@ -1,18 +1,47 @@
-.wrapper {
-  font-family: Roboto, Helvetica Neue, sans-serif;
-  display: grid;
-  grid-template-columns: 2em auto;
+.help-panel {
   margin: 5px 15px;
+  font-size: 16px;
+  font-family: sans-serif;
 }
 
-.dev-item {
-  grid-column: span 2;
+.main-info {
+  display: grid;
+  grid-template-columns: min-content auto;
+  gap: 0.25em 0.5em;
+  align-items: center;
+}
+
+.main-info > i {
+  font-size: 24px;
+}
+
+.main-info > a {
+  align-self: center;
+}
+
+.list-icon {
+  /* 
+  Makes the icon next to 'list' items appear at the top, not the center
+  Centering the icon looked pretty good to me, but it doesn't match what was originall done
+  */
+  align-self: baseline;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+
+.dev-info {
   font-size: smaller;
   color: #777;
-  padding-top: 0.5em;
+  margin-top: 1em;
 }
 
-.text-item {
-  display: grid;
-  align-items: center;
+.icon {
+  /* Important used to avoid overwriting every state from Prime button */
+  color: inherit !important;
+  background: none !important;
+  box-shadow: none !important;
 }
