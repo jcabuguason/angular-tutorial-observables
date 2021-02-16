@@ -1,38 +1,44 @@
-<button mat-icon-button [matMenuTriggerFor]="helpMenu" matTooltip="{{ 'HELP_MENU.TOOLTIP' | translate }}">
-  <i class="material-icons">help</i>
-</button>
-<mat-menu #helpMenu="matMenu" [overlapTrigger]="false">
-  <div class="wrapper">
-    <ng-container *ngIf="!!helpMenuInfo.contactEmail">
-      <i class="material-icons">email</i>
-      <a class="text-item" href="mailto:{{ helpMenuInfo.contactEmail }}">{{ 'HELP_MENU.CONTACT' | translate }}</a>
-    </ng-container>
-    <ng-container *ngIf="!!helpMenuInfo.documentationLink">
-      <i class="material-icons">folder</i>
-      <a class="text-item" href="{{ helpMenuInfo.documentationLink }}" target="_blank">{{
-        'HELP_MENU.DOCUMENTATION' | translate
-      }}</a>
-    </ng-container>
-    <ng-container *ngIf="!!helpMenuInfo.releaseNotesLink">
-      <i class="material-icons">book</i>
-      <a class="text-item" href="{{ helpMenuInfo.releaseNotesLink }}" target="_blank">{{
-        'HELP_MENU.RELEASE_NOTES' | translate
-      }}</a>
-    </ng-container>
-    <ng-container>
-      <i class="material-icons">info</i>
-      <div class="text-item">
-        <div *ngIf="!!helpMenuInfo.version">{{ 'HELP_MENU.VERSION' | translate }}: {{ helpMenuInfo.version }}</div>
-        <div *ngIf="!!helpMenuInfo.dateModified">
-          {{ 'HELP_MENU.DATE_MODIFIED' | translate }}: {{ helpMenuInfo.dateModified }}
+<p-overlayPanel #helpPanel [appendTo]="'body'">
+  <div class="help-panel">
+    <div class="main-info">
+      <ng-container *ngIf="!!helpMenuInfo.contactEmail">
+        <i class="fas fa-envelope"></i>
+        <a href="mailto:{{ helpMenuInfo.contactEmail }}">{{ 'HELP_MENU.CONTACT' | translate }}</a>
+      </ng-container>
+      <ng-container *ngIf="!!helpMenuInfo.documentationLink">
+        <i class="fas fa-folder"></i>
+        <a href="{{ helpMenuInfo.documentationLink }}" target="_blank">{{ 'HELP_MENU.DOCUMENTATION' | translate }}</a>
+      </ng-container>
+      <ng-container *ngIf="!!helpMenuInfo.releaseNotesLink">
+        <i class="fas fa-book"></i>
+        <a href="{{ helpMenuInfo.releaseNotesLink }}" target="_blank">{{ 'HELP_MENU.RELEASE_NOTES' | translate }}</a>
+      </ng-container>
+      <ng-container>
+        <i class="fas fa-info-circle list-icon"></i>
+        <div class="list">
+          <div *ngIf="!!helpMenuInfo.version">{{ 'HELP_MENU.VERSION' | translate }}: {{ helpMenuInfo.version }}</div>
+          <div *ngIf="!!helpMenuInfo.dateModified">
+            {{ 'HELP_MENU.DATE_MODIFIED' | translate }}: {{ helpMenuInfo.dateModified }}
+          </div>
         </div>
-      </div>
-    </ng-container>
-    <div *ngIf="!!helpMenuInfo.buildNumber" class="dev-item">
-      {{ 'HELP_MENU.BUILD' | translate }}: {{ helpMenuInfo.buildNumber }}
+      </ng-container>
     </div>
-    <div *ngIf="!!helpMenuInfo.commonsVersion" class="dev-item">
-      {{ 'HELP_MENU.COMMONS_VERSION' | translate }}: {{ helpMenuInfo.commonsVersion }}
+
+    <div class="list dev-info">
+      <div *ngIf="!!helpMenuInfo.buildNumber">{{ 'HELP_MENU.BUILD' | translate }}: {{ helpMenuInfo.buildNumber }}</div>
+      <div *ngIf="!!helpMenuInfo.commonsVersion">
+        {{ 'HELP_MENU.COMMONS_VERSION' | translate }}: {{ helpMenuInfo.commonsVersion }}
+      </div>
     </div>
   </div>
-</mat-menu>
+</p-overlayPanel>
+
+<button
+  pButton
+  type="button"
+  icon="fas fa-question-circle"
+  class="p-button-text icon"
+  (click)="helpPanel.toggle($event)"
+  pTooltip="{{ 'HELP_MENU.TOOLTIP' | translate }}"
+  tooltipPosition="top"
+></button>
