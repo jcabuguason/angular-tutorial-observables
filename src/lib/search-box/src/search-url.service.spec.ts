@@ -80,7 +80,7 @@ describe('SearchURLService', () => {
   const dateToSearch = { param: dateParam, value: [query.from] };
   const hourRangeToSearch = {
     param: hoursParam,
-    value: [{ hh_before: '1', hh_after: '2' }],
+    value: [{ hh_before: 1, hh_after: 2 }],
   };
   const networkToSearch = { param: networkParam, value: [query.network] };
   const shortcutToSearch = { param: networkParam, value: ['value1'] };

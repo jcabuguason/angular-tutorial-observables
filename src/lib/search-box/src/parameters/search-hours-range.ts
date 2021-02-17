@@ -84,7 +84,7 @@ export class SearchHoursRange extends SearchParameter {
 
   private checkUnfilled(checkForm = false): boolean {
     return checkForm
-      ? this.isEmpty(this.formHoursBefore) && this.isEmpty(this.formHoursAfter)
+      ? this.isEmpty(this.formHoursBefore) || this.isEmpty(this.formHoursAfter)
       : this.isEmpty(this.hoursBefore) && this.isEmpty(this.hoursAfter);
   }
 }

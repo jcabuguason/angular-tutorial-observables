@@ -171,22 +171,22 @@ export class SearchURLService {
     if (hourRange == null) {
       return [];
     }
-
     const beforeName = hourRange.getUrlNameBefore();
     const afterName = hourRange.getUrlNameAfter();
 
-    const beforeValue = qParams[beforeName];
-    const afterValue = qParams[afterName];
-    let hours;
+    const grabRangeValue = (name: string) => {
+      const numValue = parseInt(qParams[name]);
+      return !!numValue || numValue === 0 ? numValue : null;
+    };
 
-    if (beforeValue != null || afterValue != null) {
-      hours = {
-        [beforeName]: this.firstValue(beforeValue),
-        [afterName]: this.firstValue(afterValue),
-      };
-    }
-
-    return hours != null ? [this.paramValueObj(hourRange, [hours])] : [];
+    return [
+      this.paramValueObj(hourRange, [
+        {
+          [beforeName]: grabRangeValue(beforeName),
+          [afterName]: grabRangeValue(afterName),
+        },
+      ]),
+    ];
   }
 
   getCheckboxRequestParams(qParams, availableParams: SearchParameter[]) {
