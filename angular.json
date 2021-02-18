@@ -45,6 +45,11 @@
                 }
               ]
             }
+          },
+          "stylePreprocessorOptions": {
+            "includePaths": [
+              "src/lib/styles/mixins/"
+            ]
           }
         },
         "serve": {

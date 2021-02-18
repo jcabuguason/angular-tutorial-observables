@@ -57,7 +57,7 @@ describe('DataChartService', () => {
           loader: {
             provide: TranslateLoader,
             useFactory: (httpClient) =>
-              new CombinedHttpLoader(httpClient, '0', [{ prefix: '../../../assets/i18n/', suffix: '.json' }]),
+              new CombinedHttpLoader(httpClient, '0', [{ prefix: '../../assets/i18n/', suffix: '.json' }]),
             deps: [HttpClient],
           },
         }),

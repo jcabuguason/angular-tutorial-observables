@@ -1,0 +1,202 @@
+<p-dialog
+  (onShow)="initializeOptions()"
+  appendTo="body"
+  header="{{ 'CHART.CHARTING_OPTIONS' | translate }}"
+  [(visible)]="chartFormService.display"
+  [modal]="true"
+  [blockScroll]="true"
+  [focusOnShow]="false"
+  [style]="{ width: '550px' }"
+>
+  <span class="form-description">{{ 'CHART.FORM_OVERVIEW' | translate }}</span>
+  <h4>{{ 'CHART.STATIONS' | translate }}</h4>
+  <div class="selection-group">
+    <p-multiSelect
+      [panelStyleClass]="determineDropdownClass(chartOption.Station)"
+      appendTo="body"
+      [options]="chartFormService.formattedStations"
+      [optionLabel]="'label'"
+      [(ngModel)]="chartFormService.chosenStations"
+      defaultLabel="{{ 'CHART.SELECT_STATIONS' | translate }}"
+      (onChange)="handleDropdownSelection($event.value, chartOption.Station)"
+      scrollHeight="400px"
+      maxSelectedLabels="1"
+      selectedItemsLabel="{0} {{ 'CHART.SELECTED_ITEMS' | translate }}"
+      [resetFilterOnHide]="true"
+      [showToggleAll]="false"
+    >
+      <ng-template let-stn pTemplate="item">
+        <ng-container *ngIf="configOptions.checkForEquivElem; else stationNoEquivCheck">
+          <div class="select-option">
+            <i
+              *ngIf="stn.stationInfo.elementWarning"
+              class="fas fa-exclamation-triangle"
+              title="{{ 'CHART.NO_EQUIV_NETWORK' | translate }}"
+            ></i>
+            {{ stn.label }}
+          </div>
+        </ng-container>
+
+        <ng-template #stationNoEquivCheck>
+          <div class="select-option">{{ stn.label }}</div>
+        </ng-template>
+      </ng-template>
+    </p-multiSelect>
+
+    <button
+      *ngIf="chartFormService.chosenStations.length"
+      pButton
+      type="button"
+      icon="fas fa-times"
+      class="clear-btn"
+      (click)="clearStations()"
+    ></button>
+  </div>
+  <h4>{{ 'CHART.ELEMENTS' | translate }}</h4>
+  <div class="selection-group">
+    <p-multiSelect
+      [panelStyleClass]="determineDropdownClass(chartOption.Element)"
+      styleClass="element-multiselect"
+      appendTo="body"
+      [options]="chartFormService.formattedElements"
+      [optionLabel]="'label'"
+      [(ngModel)]="chartFormService.chosenElements"
+      defaultLabel="{{ 'CHART.SELECT_ELEMENTS' | translate }}"
+      scrollHeight="400px"
+      (onChange)="handleDropdownSelection($event.value, chartOption.Element)"
+      maxSelectedLabels="1"
+      selectedItemsLabel="{0} {{ 'CHART.SELECTED_ITEMS' | translate }}"
+      [resetFilterOnHide]="true"
+      [showToggleAll]="false"
+    >
+      <ng-template let-elem pTemplate="item">
+        <ng-container *ngIf="configOptions.checkForEquivElem; else noEquivCheck">
+          <div class="select-option">
+            <i
+              *ngIf="elem.showWarning"
+              class="fas fa-exclamation-triangle"
+              title="{{ 'CHART.NO_EQUIV_NETWORK' | translate }}"
+            ></i>
+            {{ elem.label }}
+          </div>
+        </ng-container>
+
+        <ng-template #noEquivCheck>
+          <ng-container *ngIf="configOptions.styleDropdown; else noStyleDropdown">
+            <div class="multi-elements" [ngClass]="styleElementDropdown(elem.qualifierType)">
+              {{ elem.label }}
+            </div>
+          </ng-container>
+
+          <ng-template #noStyleDropdown>
+            <div class="select-option">{{ elem.label }}</div>
+          </ng-template>
+        </ng-template>
+      </ng-template>
+    </p-multiSelect>
+
+    <button
+      *ngIf="chartFormService.chosenElements.length"
+      pButton
+      type="button"
+      icon="fas fa-times"
+      class="clear-btn"
+      (click)="clearElements()"
+    ></button>
+  </div>
+
+  <div class="elem-options" *ngIf="chartFormService.chosenElements.length">
+    <div class="options-checkbox">
+      <p-checkbox
+        label="{{ 'CHART.EXTRA_OPTIONS' | translate }}"
+        [(ngModel)]="chartFormService.showSeriesOptions"
+        binary="true"
+      ></p-checkbox>
+    </div>
+    <div *ngIf="chartFormService.showSeriesOptions">
+      <div class="grid-wrapper">
+        <div class="grid-item grid-header">{{ 'CHART.NAME' | translate }}</div>
+        <div class="grid-item grid-header">{{ 'CHART.TYPE' | translate }}</div>
+        <div class="grid-item grid-header">{{ 'CHART.HIGHLIGHT_QA' | translate }}</div>
+
+        <ng-container *ngFor="let series of chartFormService.getChosenSeries()">
+          <div class="grid-item grid-text">
+            {{ series.label }}
+          </div>
+          <div class="grid-item">
+            <p-selectButton
+              [options]="seriesTypes"
+              (onChange)="checkWarnings()"
+              [(ngModel)]="series.seriesOption.seriesType"
+            >
+              <ng-template let-item>
+                <span> {{ item.label | translate }}</span>
+              </ng-template>
+            </p-selectButton>
+          </div>
+          <div class="grid-item">
+            <p-checkbox
+              binary="true"
+              checked="true"
+              (onChange)="checkWarnings()"
+              [(ngModel)]="series.seriesOption.useQaColor"
+            >
+            </p-checkbox>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <ul *ngIf="hasWarnings()" class="warnings">
+    <li *ngIf="illegibleWarning">
+      {{ 'CHART.MUTIPLE_SERIES_QA_WARNING' | translate }}
+    </li>
+    <li *ngIf="displayBarQaWarning">
+      {{ 'CHART.BAR_CHART_QA_WARNING' | translate }}
+    </li>
+    <li *ngIf="baseStationWarning">{{ 'CHART.UNSELECTED_BASE_STATION_WARNING' | translate }}</li>
+    <li *ngIf="neighbourElementWarning">{{ 'CHART.NEIGHBOUR_ELEMENT_WARNING' | translate }}</li>
+  </ul>
+
+  <p-footer class="footer-buttons">
+    <button
+      pButton
+      type="button"
+      label="{{ 'CHART.RESET' | translate }}"
+      class="p-button-secondary reset-button"
+      (click)="reset()"
+    ></button>
+
+    <ng-container *ngIf="configOptions.hasPredefinedCharts">
+      <button
+        *ngIf="canBuildPredefinedCharts()"
+        pButton
+        type="button"
+        class="styled-button"
+        label="{{ 'CHART.PREDEFINED_CHARTS' | translate }}"
+        (click)="chartFormService.createPredefinedCharts()"
+      ></button>
+    </ng-container>
+
+    <button
+      pButton
+      type="button"
+      label="{{ 'CHART.CREATE_CHART' | translate }}"
+      class="submit-button styled-button"
+      (click)="submit()"
+    ></button>
+  </p-footer>
+</p-dialog>
+
+<p-toast key="chart-form-messages" position="center" styleClass="chart-message">
+  <ng-template let-message pTemplate="message">
+    <span class="fas fa-exclamation-triangle message-icon"></span>
+    <div class="p-toast-message-text-content">
+      <span>{{ message.summary | translate }}</span>
+      <ul>
+        <li *ngFor="let field of message.data">{{ field | translate }}</li>
+      </ul>
+    </div>
+  </ng-template>
+</p-toast>

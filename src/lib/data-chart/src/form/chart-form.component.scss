@@ -1,0 +1,97 @@
+//@import 'form';
+@import '../../../styles/mixins/form';
+
+h4 {
+  margin-bottom: 5px;
+}
+
+.p-inputgroup {
+  font-family: 'Roboto', 'Trebuchet MS', Arial, Helvetica, sans-serif;
+  font-size: 15px;
+}
+
+.message-icon {
+  font-size: 2em;
+  margin: 5px 2px;
+}
+
+.select-option {
+  display: inline-block;
+}
+
+.p-button-secondary.reset-button {
+  float: left;
+}
+
+.disabled {
+  background-color: #e3e7ed;
+}
+
+.elem-options {
+  padding-top: 1em;
+}
+
+.selection-group {
+  display: flex;
+}
+
+.selection-group .p-multiselect {
+  height: inherit;
+  max-width: 450px;
+}
+
+.clear-btn {
+  @include clear-button;
+}
+
+.form-description {
+  @include form-description;
+}
+
+.warnings {
+  background-color: #ffffab;
+  border: 1px solid #ffee9b;
+  border-radius: 15px;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+.footer-buttons {
+  text-align: right;
+}
+
+.grid-wrapper {
+  display: grid;
+  grid-template-columns: auto max-content max-content;
+  margin: 0.5em;
+  background-color: #fff;
+  color: #444;
+  overflow-y: auto;
+  max-height: 150px;
+}
+
+.grid-item {
+  border-bottom: 1px solid #444;
+  text-align: center;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid-text {
+  justify-content: left;
+  text-align: left;
+}
+
+.grid-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #ddd;
+  text-align: center;
+}
+
+.options-checkbox {
+  padding: 0.5em;
+}
