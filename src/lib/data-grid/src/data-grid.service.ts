@@ -39,9 +39,7 @@ export class DataGridService implements OnDestroy {
   };
   public reloadRequested = new Subject();
   public sortRequested = new Subject();
-  public chartRequested = new Subject();
   public chartFormRequested: Subject<{ station?: string; element?: string }> = new Subject();
-  public chartEditRequested = new Subject();
   public recenterObs = new Subject();
   private columnConfiguration: ElementColumnConfiguration;
   private identityHeader;
@@ -63,9 +61,7 @@ export class DataGridService implements OnDestroy {
   ngOnDestroy() {
     this.reloadRequested.unsubscribe();
     this.sortRequested.unsubscribe();
-    this.chartRequested.unsubscribe();
     this.chartFormRequested.unsubscribe();
-    this.chartEditRequested.unsubscribe();
     this.recenterObs.unsubscribe();
   }
 
@@ -111,14 +107,6 @@ export class DataGridService implements OnDestroy {
 
   reloadGrid() {
     this.reloadRequested.next();
-  }
-
-  createChart(param: any) {
-    this.chartRequested.next(param);
-  }
-
-  editChart(param: any) {
-    this.chartEditRequested.next(param);
   }
 
   requestFilledChartForm(param: { station?: string; element?: string }) {

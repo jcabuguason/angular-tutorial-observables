@@ -3,3 +3,7 @@ export * from './data-chart.service';
 export * from './data-chart.reducer';
 export * from './model/chart.model';
 export * from './model/options.model';
+export * from './form/chart-form.component';
+export * from './form/chart-form.module';
+export * from './form/chart-form.service';
+export * from './form/model/chart-form-config.model';

@@ -1,0 +1,30 @@
+@mixin form-description {
+  display: block;
+  min-width: 15em;
+  word-wrap: break-word;
+  font-style: italic;
+  color: #707070;
+}
+
+@mixin message-icon {
+  font-size: 2em;
+  margin: 5px 2px;
+}
+
+@mixin clear-button {
+  border: 0;
+  color: black;
+  background: none;
+  border-radius: 10px;
+  margin-left: 5px;
+  transition: 0.1s;
+
+  &:hover,
+  &:active,
+  &:focus {
+    background: rgba(255, 0, 0, 0.125) !important;
+    border: none !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+}
