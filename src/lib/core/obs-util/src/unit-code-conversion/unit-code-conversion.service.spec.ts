@@ -41,6 +41,25 @@ describe('UnitCodeConversionService', () => {
     });
 
     service = getTestBed().inject(UnitCodeConversionService);
+
+    service.codeSubs = {
+      airmet_sigmet: {
+        compass_direction: [
+          {
+            textValue: 'East',
+            codeValue: 'E',
+            en: 'Going east',
+            fr: "Vers l'est",
+          },
+          {
+            textValue: 'West',
+            codeValue: 'W',
+            en: 'Going west',
+            fr: "Vers l'ouest",
+          },
+        ],
+      },
+    };
   });
 
   it('should return same value due to non-number element value', () => {
@@ -88,11 +107,15 @@ describe('UnitCodeConversionService', () => {
   });
 
   it('should return converted code value', () => {
-    expect(service.codeSubstitution('E', 'airmet_sigmet', 'compass_direction').codeValue).toBe('E');
-    expect(service.codeSubstitution('E', 'airmet_sigmet', 'compass_direction').en).toBe('East');
+    // From codeValue
+    expect(service.findMatchingCode('E', 'airmet_sigmet', 'compass_direction', 'codeValue').textValue).toBe('East');
+    // From textValue
+    expect(service.findMatchingCode('East', 'airmet_sigmet', 'compass_direction', 'textValue').codeValue).toBe('E');
+    // Without specifying 'from' value (text as default)
+    expect(service.findMatchingCode('East', 'airmet_sigmet', 'compass_direction').en).toBe('Going east');
   });
 
   it('should return same code value since conversion was invalid', () => {
-    expect(service.codeSubstitution('Indiana', 'airmet_sigmet', 'compass_direction')).toBeUndefined();
+    expect(service.findMatchingCode('Indiana', 'airmet_sigmet', 'compass_direction')).toBeUndefined();
   });
 });

@@ -8,12 +8,10 @@ import { ObsElement } from '../dms-observation.model';
 
 import { Observable } from 'rxjs';
 
-import CodeSubstitution from './codes';
-
 @Injectable()
 export class UnitCodeConversionService {
   public unitConvs: Observable<UnitConversionResult>;
-  private codeSubs: CodeSources;
+  public codeSubs: CodeSources;
   public usePreferredUnits = false;
 
   constructor(
@@ -22,7 +20,8 @@ export class UnitCodeConversionService {
     private http: HttpClient,
   ) {
     this.unitConvs = this.http.get<any>(`${this.config.endpoint}/units.json`);
-    this.codeSubs = CodeSubstitution.codeSubstitutionResult;
+    // Old static codes file removed. Either use client-provided list (i.e. MIDAS) or grab from Core
+    // this.codeSubs = this.http.get<any>(`${this.config.endpoint}/codes.json`);
   }
 
   setPreferredUnits(element: ObsElement, options?: any) {
@@ -31,15 +30,20 @@ export class UnitCodeConversionService {
       : ((element.value = element.preciseValue), (element.unit = element.preciseUnit));
   }
 
-  codeSubstitution(value: string, codeSrc: string, codeTyp: string): CodeResult {
-    return this.subsList(codeSrc, codeTyp).find((curr) => curr['textValue'] === value);
+  findMatchingCode(
+    value: string,
+    codeSrc: string,
+    codeTyp: string,
+    fromValue: 'textValue' | 'codeValue' = 'textValue',
+  ): CodeResult {
+    return this.getCodesFromSrcType(codeSrc, codeTyp).find((curr) => curr[fromValue] === value);
   }
 
-  private subsList(codeSrc: string, codeTyp: string): CodeResult[] {
-    return this.validCodeSubstitution(codeSrc, codeTyp) ? this.codeSubs[codeSrc][codeTyp] : [];
+  getCodesFromSrcType(codeSrc: string, codeTyp: string): CodeResult[] {
+    return this.isValidCodeSub(codeSrc, codeTyp) ? this.codeSubs[codeSrc][codeTyp] : [];
   }
 
-  private validCodeSubstitution(codeSrc: string, codeTyp: string): boolean {
+  private isValidCodeSub(codeSrc: string, codeTyp: string): boolean {
     return this.codeSubs.hasOwnProperty(codeSrc) && this.codeSubs[codeSrc].hasOwnProperty(codeTyp);
   }
 
