@@ -6,6 +6,8 @@ import { ElasticSearchService } from './elastic-search.service';
 import { ELASTIC_SEARCH_CONFIG, ElasticSearchConfig } from './elastic-search.config';
 import { ESSortType } from './enum/es-sort-type.enum';
 import { ESOperator } from './enum/es-operator.enum';
+import { ESTemplate } from './enum/es-template.enum';
+import { ESAggregateKey } from './enum/es-aggregate-key.enum';
 
 describe('ElasticSearchService', () => {
   const VERSION = 'v2.0';
@@ -160,6 +162,43 @@ describe('ElasticSearchService', () => {
           r.params.get('size') === '1' &&
           r.params.get('fields') === 'identifier,1_7_8_9' &&
           r.params.get('sortFields') === `${ESSortType.GeoDistanceAsc},${ESSortType.ObservationDateTimeAsc}`,
+      );
+      expect(req.request.method).toBe('GET');
+      req.flush(dummyObs);
+    });
+
+    it('should search with aggregations', () => {
+      const dummyObs = {
+        hello: 'world',
+      };
+
+      service
+        .performSearch(VERSION, 'testNetwork', {
+          size: 1,
+          longitude: 0,
+          latitude: 0,
+          sortFields: [ESSortType.GeoDistanceAsc],
+          distance: '200km',
+          fields: ['identifier'],
+          aggregateKey: ESAggregateKey.TaxonomyWithPrimaryID,
+          aggregateSize: 5,
+          template: ESTemplate.QueryStringTemplate,
+        })
+        .subscribe((response) => {
+          expect(response).toEqual(dummyObs);
+        });
+
+      const req = httpMock.expectOne(
+        (r) =>
+          r.params.get('size') === '1' &&
+          r.params.get('longitude') === '0' &&
+          r.params.get('latitude') === '0' &&
+          r.params.get('distance') === '200km' &&
+          r.params.get('fields') === 'identifier' &&
+          r.params.get('sortFields') === ESSortType.GeoDistanceAsc &&
+          r.params.get('aggregateKey') === ESAggregateKey.TaxonomyWithPrimaryID &&
+          r.params.get('aggregateSize') === '5' &&
+          r.params.get('template') === ESTemplate.QueryStringTemplate,
       );
       expect(req.request.method).toBe('GET');
       req.flush(dummyObs);
