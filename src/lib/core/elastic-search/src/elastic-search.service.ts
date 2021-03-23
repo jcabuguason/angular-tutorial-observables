@@ -10,8 +10,8 @@ import { ESQueryChunk } from './model/es-query-chunk.model';
 import { ESOperator } from './enum/es-operator.enum';
 import { URIComponentEncoder } from './uri-component-encoder';
 
-// List of available indicies availble at <server>:9200/_cat/indices
-// http://dw-dev1-host01.cmc.ec.gc.ca:9200/_cat/indices
+// List of available indicies availble at <server>:8180/search/listAliases
+// http://dw-dev1-host01.cmc.ec.gc.ca:8180/search/listAliases
 @Injectable()
 export class ElasticSearchService {
   private commonHeaders: HttpHeaders;
@@ -73,6 +73,15 @@ export class ElasticSearchService {
     }
     if (parameters.fields != null) {
       params = params.set('fields', parameters.fields.join(','));
+    }
+    if (parameters.aggregateKey != null) {
+      params = params.set('aggregateKey', parameters.aggregateKey);
+    }
+    if (parameters.aggregateSize != null) {
+      params = params.set('aggregateSize', String(parameters.aggregateSize));
+    }
+    if (parameters.template != null) {
+      params = params.set('template', parameters.template);
     }
     return params;
   }
