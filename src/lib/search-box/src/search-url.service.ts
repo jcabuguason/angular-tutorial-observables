@@ -75,7 +75,6 @@ export class SearchURLService {
         const choice = param.findChoiceByUri(val);
         return choice ? choice.label : val;
       });
-
     const requested =
       qParams != null
         ? Object.keys(qParams)
@@ -95,7 +94,6 @@ export class SearchURLService {
       }
     });
     sorted.push(...requested.filter((p) => !sorted.includes(p)));
-
     return sorted;
   }
 
@@ -133,12 +131,19 @@ export class SearchURLService {
   }
 
   getDateRequestParams(qParams, availableParams: SearchParameter[], btnHighlight?: boolean[]) {
-    const paramValue = (param) => [this.firstValue(qParams[param.getUrlName()])];
+    //can read obs_datetime but does not produce it
+    const paramValue = (param) => {
+      if (this.firstValue(qParams['obs_datetime']) != null && param.getUrlName() === 'obsDatetime') {
+        return [this.firstValue(qParams['obs_datetime'])];
+      } else {
+        return [this.firstValue(qParams[param.getUrlName()])];
+      }
+    };
+
     const quickRangeFrom = availableParams.find((p) => p.getName() === ParameterName.QuickRangeFrom) as SearchDatetime;
     const rangeName = quickRangeFrom?.getUrlQuickName();
     const quickList = (availableParams.find((p) => p.getName() == ParameterName.QuickRangeOptions) as SearchQuick)
       ?.quickList;
-
     if (qParams.hasOwnProperty(rangeName) && quickList != null && btnHighlight != null) {
       const quickRangeTo = availableParams.find((p) => p.getName() === ParameterName.QuickRangeTo) as SearchDatetime;
       const rangeValue = qParams[rangeName]; // i.e. last30min
@@ -174,8 +179,16 @@ export class SearchURLService {
     const beforeName = hourRange.getUrlNameBefore();
     const afterName = hourRange.getUrlNameAfter();
 
+    //Still able to read hh_before and hh_after url but should no longer produce them
     const grabRangeValue = (name: string) => {
-      const numValue = parseInt(qParams[name]);
+      let numValue;
+      if (qParams['hh_before'] != null && name === 'hoursBefore') {
+        numValue = parseInt(qParams['hh_before']);
+      } else if (qParams['hh_after'] != null && name === 'hoursAfter') {
+        numValue = parseInt(qParams['hh_after']);
+      } else {
+        numValue = parseInt(qParams[name]);
+      }
       return !!numValue || numValue === 0 ? numValue : null;
     };
 

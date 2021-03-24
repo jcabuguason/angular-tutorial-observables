@@ -33,12 +33,12 @@ export class SearchHoursRange extends SearchParameter {
 
   // at least 1 field needs to be filled, the other will be set to a default or 0 if undefined/null
   canAddSelected(value) {
-    return !this.isEmpty(value.hh_before) || !this.isEmpty(value.hh_after);
+    return !this.isEmpty(value.hoursBefore) || !this.isEmpty(value.hoursAfter);
   }
 
   addSelected(value) {
     if (this.canAddSelected(value)) {
-      this.setHours(value.hh_before, value.hh_after);
+      this.setHours(value.hoursBefore, value.hoursAfter);
     }
   }
 

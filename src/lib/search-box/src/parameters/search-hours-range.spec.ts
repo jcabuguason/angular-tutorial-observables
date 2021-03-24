@@ -9,19 +9,19 @@ describe('SearchHoursRange', () => {
     });
 
     it('should add specified hours', () => {
-      hoursParam.addSelected({ hh_before: 1, hh_after: 2 });
+      hoursParam.addSelected({ hoursBefore: 1, hoursAfter: 2 });
       expect(hoursParam.hoursBefore).toEqual(1);
       expect(hoursParam.hoursAfter).toEqual(2);
     });
 
-    it('should not add hours if both hh_before and hh_after are undefined', () => {
+    it('should not add hours if both hoursBefore and hoursAfter are undefined', () => {
       hoursParam.addSelected({});
       expect(hoursParam.hoursBefore).toBeNull();
       expect(hoursParam.hoursAfter).toBeNull();
     });
 
-    it('should not add hours if both hh_before and hh_after are empty', () => {
-      hoursParam.addSelected({ hh_before: '', hh_after: '' });
+    it('should not add hours if both hoursBefore and hoursAfter are empty', () => {
+      hoursParam.addSelected({ hoursBefore: '', hoursAfter: '' });
       expect(hoursParam.hoursBefore).toBeNull();
       expect(hoursParam.hoursAfter).toBeNull();
     });
@@ -53,19 +53,19 @@ describe('SearchHoursRange', () => {
     });
 
     it('should add specified hours', () => {
-      hoursParam.addSelected({ hh_before: 5, hh_after: 6 });
+      hoursParam.addSelected({ hoursBefore: 5, hoursAfter: 6 });
       expect(hoursParam.hoursBefore).toEqual(5);
       expect(hoursParam.hoursAfter).toEqual(6);
     });
 
-    it('should use default if both hh_before and hh_after are undefined', () => {
+    it('should use default if both hoursBefore and hoursAfter are undefined', () => {
       hoursParam.addSelected({});
       expect(hoursParam.hoursBefore).toBe(1);
       expect(hoursParam.hoursAfter).toBe(2);
     });
 
-    it('should use default if both hh_before and hh_after are empty', () => {
-      hoursParam.addSelected({ hh_before: '', hh_after: '' });
+    it('should use default if both hoursBefore and hoursAfter are empty', () => {
+      hoursParam.addSelected({ hoursBefore: '', hoursAfter: '' });
       expect(hoursParam.hoursBefore).toBe(1);
       expect(hoursParam.hoursAfter).toBe(2);
     });
