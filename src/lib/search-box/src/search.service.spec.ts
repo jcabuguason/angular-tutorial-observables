@@ -201,7 +201,7 @@ describe('SearchService', () => {
 
   it('should add date and hours range with values', () => {
     const dateValue = '2018-01-31T00:00Z';
-    const hoursValue = { hh_before: 1, hh_after: 2 };
+    const hoursValue = { hoursBefore: 1, hoursAfter: 2 };
 
     searchService.addSuggestedParameter(sParams.relativeDate, [dateValue]);
     searchService.addSuggestedParameter(sParams.hoursParam, [hoursValue]);
@@ -230,7 +230,7 @@ describe('SearchService', () => {
 
   it('should adjust datetime in model if given hours range', () => {
     searchService.addSuggestedParameter(sParams.relativeDate, ['2018-01-03T12:00Z']);
-    searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: 12, hh_after: 36 }]);
+    searchService.addSuggestedParameter(sParams.hoursParam, [{ hoursBefore: 12, hoursAfter: 36 }]);
     searchService.setSelectedRangeType(TabOption.Relative);
 
     const model = searchService.buildSearchModel();
@@ -262,7 +262,7 @@ describe('SearchService', () => {
     // should be formatted differently, but for testing purposes urlService will return this back
     const params = [
       paramValueObj(sParams.relativeDate, ['2018-01-31T00:00Z']),
-      paramValueObj(sParams.hoursParam, [{ hh_before: 12, hh_after: 21 }]),
+      paramValueObj(sParams.hoursParam, [{ hoursBefore: 12, hoursAfter: 21 }]),
       paramValueObj(sParams.networkParam, ['dnd awos']),
       paramValueObj(sParams.stationIdParam, ['123', 'abc']),
       paramValueObj(sParams.sizeParam, ['100']),
@@ -368,7 +368,7 @@ describe('SearchService', () => {
     searchService.readOnlyBar = true;
     searchService.addSuggestedParameter(sParams.provinceParam, ['BC']);
     searchService.addSuggestedParameter(sParams.relativeDate, ['2018-01-01 00:10']);
-    searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: 1, hh_after: 2 }]);
+    searchService.addSuggestedParameter(sParams.hoursParam, [{ hoursBefore: 1, hoursAfter: 2 }]);
     searchService.openForm();
 
     expect(sParams.provinceParam.formSelected).toEqual(['BC']);
@@ -431,7 +431,7 @@ describe('SearchService', () => {
   it('should use datetime on submit', () => {
     searchService.addSuggestedParameter(sParams.startDateParam, ['2018-01-01T00:00Z']);
     searchService.addSuggestedParameter(sParams.endDateParam, ['2018-02-01T00:00Z']);
-    searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: 1, hh_after: 1 }]);
+    searchService.addSuggestedParameter(sParams.hoursParam, [{ hoursBefore: 1, hoursAfter: 1 }]);
     searchService.addSuggestedParameter(sParams.relativeDate, ['2018-03-01T03:00Z']);
     searchService.setSelectedRangeType(TabOption.Absolute);
 
@@ -443,7 +443,7 @@ describe('SearchService', () => {
   it('should use hour ranges on submit', () => {
     searchService.addSuggestedParameter(sParams.startDateParam, ['2018-01-01T00:00Z']);
     searchService.addSuggestedParameter(sParams.endDateParam, ['2018-02-01T00:00Z']);
-    searchService.addSuggestedParameter(sParams.hoursParam, [{ hh_before: 1, hh_after: 1 }]);
+    searchService.addSuggestedParameter(sParams.hoursParam, [{ hoursBefore: 1, hoursAfter: 1 }]);
     searchService.addSuggestedParameter(sParams.relativeDate, ['2018-03-01T03:00Z']);
     searchService.setSelectedRangeType(TabOption.Relative);
 

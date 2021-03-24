@@ -18,8 +18,8 @@ describe('SearchURLService', () => {
   const dateParam = new SearchDatetime({ name: ParameterName.From });
   const hoursParam = new SearchHoursRange({
     name: ParameterName.HoursRange,
-    urlNameBefore: 'hh_before',
-    urlNameAfter: 'hh_after',
+    urlNameBefore: 'hoursBefore',
+    urlNameAfter: 'hoursAfter',
   });
   const networkParam = new SearchParameter({ name: ParameterName.Network });
   const independentCheckbox = new SearchCheckbox({
@@ -40,8 +40,8 @@ describe('SearchURLService', () => {
 
   const query = {
     from: '2018-01-31T01:20',
-    hh_before: '1',
-    hh_after: '2',
+    hoursBefore: '1',
+    hoursAfter: '2',
     network: 'nc awos',
     shortcut: 'Shortcut1',
     checkbox: 'exact',
@@ -80,7 +80,7 @@ describe('SearchURLService', () => {
   const dateToSearch = { param: dateParam, value: [query.from] };
   const hourRangeToSearch = {
     param: hoursParam,
-    value: [{ hh_before: 1, hh_after: 2 }],
+    value: [{ hoursBefore: 1, hoursAfter: 2 }],
   };
   const networkToSearch = { param: networkParam, value: [query.network] };
   const shortcutToSearch = { param: networkParam, value: ['value1'] };
@@ -97,7 +97,7 @@ describe('SearchURLService', () => {
 
   it('create url parameters (no shortcut)', () => {
     const dateValue = '2018-02-27T01:00';
-    const hoursValue = { hh_before: 10, hh_after: 20 };
+    const hoursValue = { hoursBefore: 10, hoursAfter: 20 };
     const networkValues = ['ca', 'nc awos'];
     const stationValues = ['123456'];
 
@@ -105,16 +105,16 @@ describe('SearchURLService', () => {
     quickParamFrom.setUrlQuickRange(quickValue);
 
     dateParam.datetime = dateValue.replace('T', ' ');
-    hoursParam.hoursBefore = Number(hoursValue.hh_before);
-    hoursParam.hoursAfter = Number(hoursValue.hh_after);
+    hoursParam.hoursBefore = Number(hoursValue.hoursBefore);
+    hoursParam.hoursAfter = Number(hoursValue.hoursAfter);
     networkParam.selected = networkValues;
     independentCheckbox.checked = true;
     stationParam.selected = stationValues;
 
     const urlParams = [
       { name: ParameterName.From, value: dateValue },
-      { name: 'hh_before', value: hoursValue.hh_before },
-      { name: 'hh_after', value: hoursValue.hh_after },
+      { name: 'hoursBefore', value: hoursValue.hoursBefore },
+      { name: 'hoursAfter', value: hoursValue.hoursAfter },
       { name: ParameterName.Network, value: networkValues[0] },
       { name: ParameterName.Network, value: networkValues[1] },
       { name: ParameterName.Checkbox, value: 'exact' },
