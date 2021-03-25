@@ -112,6 +112,10 @@ export function formatDateToString(date: Date | string, options: DateFormatOptio
     const minutes = options.includeMinutes ? padZero(dateInstance.getUTCMinutes()) : '';
     const seconds = options.includeMinutes && options.includeSeconds ? padZero(dateInstance.getUTCSeconds()) : '';
     formattedTime = [hours, minutes, seconds].filter((val) => !!val).join(options.timeSeparator);
+    if (options.includeMinutes && options.includeSeconds && options.includeMilliseconds) {
+      const milliseconds = dateInstance.getUTCMilliseconds().toString().padStart(3, '0');
+      formattedTime = `${formattedTime}${options.millisecondsSeparator}${milliseconds}`;
+    }
 
     dateAndTimeSeparator = options.dateAndTimeSeparator;
 
