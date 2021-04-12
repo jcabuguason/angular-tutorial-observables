@@ -19,7 +19,7 @@ check_commits:
   script:
     # Get the "new" commits found on the current branch (compares the target and source branch).
     # NOTE: gitlab-ci can only get up to the latest 50 commits using git log (adding --max-count=100 or higher does not seem to work either)
-    - git fetch origin
+    - git fetch origin --prune
     - all_commits=`git log origin/${target_branch}..origin/${branch_name} --format='(commit = %h) subject = >>%s<< | raw body = >>%B<< (END)'`
     # Check number of commits
     - num_commits=`echo $all_commits | grep -o "commit =" | wc -l`
