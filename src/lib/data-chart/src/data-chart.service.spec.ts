@@ -185,7 +185,6 @@ describe('DataChartService', () => {
     expect(options.lang.noData).toBe('CHART.NO_DATA: <li>mock dummy-elem</li>');
   });
 
-  // TODO: Needs flat-json sample report
   it('should create a longitudinal chart for hourly qualifiers', () => {
     const placeholderID = '8.7.98.0.0.0.0';
     const hourlyChart = new Chart({
@@ -193,15 +192,14 @@ describe('DataChartService', () => {
       stations: [
         new Station({
           label: 'Data from report',
-          value: '46251',
+          value: '46204',
           identifierID: '8.7.80.0.0.0.0',
         }),
       ],
       qualifierType: QualifierType.Hourly,
     });
-    const reportHits = [require('../../../assets/sample-data/flat_report_fake.json')];
+    const reportHits = require('../../../assets/sample-data/flat_report.json').hits.hits.map((h) => h._source);
     const options = service.buildOptions(hourlyChart, reportHits, {});
-
     const actualIDs = service.qualifierHourlyValues.map((nodeValue) => updateNodeValue(placeholderID, nodeValue, 4));
     const hasMatchingElem = (id) => !!findFirstValue(reportHits[0], id);
 
@@ -210,6 +208,7 @@ describe('DataChartService', () => {
     actualIDs.forEach((id) => expect(hasMatchingElem(id)).toBeTruthy());
     expect(options.series.length).toBe(1);
 
-    expect(options.series[0].data.length).toBe(24);
+    // 4 of the 24 hourly elements have a MSNG value, so 20 series points are expected
+    expect(options.series[0].data.length).toBe(20);
   });
 });

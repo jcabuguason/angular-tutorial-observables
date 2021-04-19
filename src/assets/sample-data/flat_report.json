@@ -1,0 +1,1072 @@
+{
+  "took": 12,
+  "timed_out": false,
+  "_shards": { "total": 8, "successful": 8, "skipped": 6, "failed": 0 },
+  "hits": {
+    "max_score": null,
+    "hits": [
+      {
+        "_index": "dms_v2_data_idx+dms+system+metrics+reports+metrics-1.0-json",
+        "_type": "_doc",
+        "_id": "dms:system:metrics:reports:metrics-1.0-json:product-json-1.0:202104060000:marine_daily_report:dms:9100888:elasticsearch",
+        "_score": null,
+        "_source": {
+          "obsDateTime": "2021-04-06T00:00:00.000Z",
+          "8_7_97_0_93_0_0": [
+            {
+              "elementID": "8.7.97.0.93.0.0",
+              "unit": "°",
+              "valueNum": 51.3914,
+              "name": "latitude",
+              "type": "element",
+              "value": "51.3914",
+              "group": "identification"
+            }
+          ],
+          "8_7_97_0_107_0_0": [
+            {
+              "elementID": "8.7.97.0.107.0.0",
+              "unit": "°",
+              "name": "latitude",
+              "type": "element",
+              "value": "MSNG",
+              "group": "identification"
+            }
+          ],
+          "8_7_849_0_0_0_0": [
+            {
+              "elementID": "8.7.849.0.0.0.0",
+              "unit": "unitless",
+              "name": "deployment_region",
+              "type": "metadata",
+              "value": "West",
+              "group": "identification"
+            }
+          ],
+          "8_29_856_0_96_0_0": [
+            {
+              "elementID": "8.29.856.0.96.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "On Schedule",
+              "group": "payload"
+            }
+          ],
+          "taxonomy": "dms/system/metrics/reports/metrics-1.0-json/product-json-1.0",
+          "8_40_406_0_0_0_0": [
+            {
+              "elementID": "8.40.406.0.0.0.0",
+              "unit": "datetime",
+              "valueNum": 2.0210406e11,
+              "name": "start_date_time",
+              "type": "metadata",
+              "value": "202104060000",
+              "group": "report_statistics"
+            }
+          ],
+          "8_29_828_0_0_0_0": [
+            {
+              "elementID": "8.29.828.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 0,
+              "name": "late_count",
+              "type": "element",
+              "value": "0",
+              "group": "payload"
+            }
+          ],
+          "8_41_207_0_0_0_0": [
+            {
+              "elementID": "8.41.207.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 20,
+              "name": "mean_sea_level_pressure",
+              "type": "element",
+              "value": "20",
+              "group": "element_count"
+            }
+          ],
+          "8_7_97_0_105_0_0": [
+            {
+              "elementID": "8.7.97.0.105.0.0",
+              "unit": "°",
+              "valueNum": 51.39196666666667,
+              "name": "latitude",
+              "type": "element",
+              "value": "51.39196666666667",
+              "group": "identification"
+            }
+          ],
+          "8_7_97_0_91_0_0": [
+            {
+              "elementID": "8.7.97.0.91.0.0",
+              "unit": "°",
+              "valueNum": 51.391983333333336,
+              "name": "latitude",
+              "type": "element",
+              "value": "51.391983333333336",
+              "group": "identification"
+            }
+          ],
+          "taxonomyWithPrimaryID": "dms/system/metrics/reports/metrics-1.0-json/product-json-1.0/marine_daily_report",
+          "8_29_856_0_102_0_0": [
+            {
+              "elementID": "8.29.856.0.102.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "On Schedule",
+              "group": "payload"
+            }
+          ],
+          "8_29_856_0_88_0_0": [
+            {
+              "elementID": "8.29.856.0.88.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "On Schedule",
+              "group": "payload"
+            }
+          ],
+          "8_7_98_0_103_0_0": [
+            {
+              "elementID": "8.7.98.0.103.0.0",
+              "unit": "°",
+              "valueNum": -128.76513333333332,
+              "name": "longitude",
+              "type": "element",
+              "value": "-128.76513333333332",
+              "group": "identification"
+            }
+          ],
+          "8_7_97_0_87_0_0": [
+            {
+              "elementID": "8.7.97.0.87.0.0",
+              "unit": "°",
+              "valueNum": 51.39223333333333,
+              "name": "latitude",
+              "type": "element",
+              "value": "51.39223333333333",
+              "group": "identification"
+            }
+          ],
+          "identifier": "marine_daily_report",
+          "8_7_97_0_109_0_0": [
+            {
+              "elementID": "8.7.97.0.109.0.0",
+              "unit": "°",
+              "name": "latitude",
+              "type": "element",
+              "value": "MSNG",
+              "group": "identification"
+            }
+          ],
+          "8_7_97_0_95_0_0": [
+            {
+              "elementID": "8.7.97.0.95.0.0",
+              "unit": "°",
+              "valueNum": 51.391533333333335,
+              "name": "latitude",
+              "type": "element",
+              "value": "51.391533333333335",
+              "group": "identification"
+            }
+          ],
+          "8_41_836_0_0_0_0": [
+            {
+              "elementID": "8.41.836.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 20,
+              "name": "wind_speed_and_direction",
+              "type": "element",
+              "value": "20",
+              "group": "element_count"
+            }
+          ],
+          "8_7_97_0_100_0_0": [
+            {
+              "elementID": "8.7.97.0.100.0.0",
+              "unit": "°",
+              "valueNum": 51.39243333333334,
+              "name": "latitude",
+              "type": "element",
+              "value": "51.39243333333334",
+              "group": "identification"
+            }
+          ],
+          "8_29_856_0_98_0_0": [
+            {
+              "elementID": "8.29.856.0.98.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "On Schedule",
+              "group": "payload"
+            }
+          ],
+          "8_7_98_0_96_0_0": [
+            {
+              "elementID": "8.7.98.0.96.0.0",
+              "unit": "°",
+              "valueNum": -128.7667,
+              "name": "longitude",
+              "type": "element",
+              "value": "-128.7667",
+              "group": "identification"
+            }
+          ],
+          "8_29_830_0_0_0_0": [
+            {
+              "elementID": "8.29.830.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 20,
+              "name": "complete_count",
+              "type": "element",
+              "value": "20",
+              "group": "payload"
+            }
+          ],
+          "receivedDateTime": "2021-04-07T00:02:27.209Z",
+          "8_2_860_0_0_0_0": [
+            {
+              "elementID": "8.2.860.0.0.0.0",
+              "unit": "datetime",
+              "name": "last_observation_datetime",
+              "type": "element",
+              "value": "2021-04-06T20:18",
+              "group": "diagnostics"
+            }
+          ],
+          "authorName": "MSC-DMS-PG-MAF-Reports",
+          "8_7_97_0_89_0_0": [
+            {
+              "elementID": "8.7.97.0.89.0.0",
+              "unit": "°",
+              "valueNum": 51.392183333333335,
+              "name": "latitude",
+              "type": "element",
+              "value": "51.392183333333335",
+              "group": "identification"
+            }
+          ],
+          "8_2_859_0_0_0_0": [
+            {
+              "elementID": "8.2.859.0.0.0.0",
+              "unit": "unitless",
+              "name": "buoy_status",
+              "type": "element",
+              "value": "OK",
+              "group": "diagnostics"
+            }
+          ],
+          "8_29_856_0_86_0_0": [
+            {
+              "elementID": "8.29.856.0.86.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "On Schedule",
+              "group": "payload"
+            }
+          ],
+          "8_7_98_0_105_0_0": [
+            {
+              "elementID": "8.7.98.0.105.0.0",
+              "unit": "°",
+              "valueNum": -128.76531666666668,
+              "name": "longitude",
+              "type": "element",
+              "value": "-128.76531666666668",
+              "group": "identification"
+            }
+          ],
+          "8_29_856_0_104_0_0": [
+            {
+              "elementID": "8.29.856.0.104.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "On Schedule",
+              "group": "payload"
+            }
+          ],
+          "8_7_97_0_102_0_0": [
+            {
+              "elementID": "8.7.97.0.102.0.0",
+              "unit": "°",
+              "valueNum": 51.3925,
+              "name": "latitude",
+              "type": "element",
+              "value": "51.3925",
+              "group": "identification"
+            }
+          ],
+          "8_7_801_0_0_0_0": [
+            {
+              "elementID": "8.7.801.0.0.0.0",
+              "unit": "unitless",
+              "name": "report_name",
+              "type": "metadata",
+              "value": "marine_daily_report",
+              "group": "identification"
+            }
+          ],
+          "8_7_97_0_98_0_0": [
+            {
+              "elementID": "8.7.97.0.98.0.0",
+              "unit": "°",
+              "valueNum": 51.3926,
+              "name": "latitude",
+              "type": "element",
+              "value": "51.3926",
+              "group": "identification"
+            }
+          ],
+          "authorBuild": "build.11101",
+          "8_7_98_0_94_0_0": [
+            {
+              "elementID": "8.7.98.0.94.0.0",
+              "unit": "°",
+              "valueNum": -128.76588333333333,
+              "name": "longitude",
+              "type": "element",
+              "value": "-128.76588333333333",
+              "group": "identification"
+            }
+          ],
+          "8_7_98_0_108_0_0": [
+            {
+              "elementID": "8.7.98.0.108.0.0",
+              "unit": "°",
+              "name": "longitude",
+              "type": "element",
+              "value": "MSNG",
+              "group": "identification"
+            }
+          ],
+          "8_29_856_0_107_0_0": [
+            {
+              "elementID": "8.29.856.0.107.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "Missing",
+              "group": "payload"
+            }
+          ],
+          "8_7_80_0_0_0_0": [
+            {
+              "elementID": "8.7.80.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 46204,
+              "name": "station_identifier",
+              "type": "metadata",
+              "value": "46204",
+              "group": "identification"
+            }
+          ],
+          "identity": "/data/dms/system/metrics/reports/metrics-1.0-json/product-json-1.0/202104060000/marine_daily_report/dms/9100888/elasticsearch/202104070002/orig_v2400",
+          "8_29_856_0_92_0_0": [
+            {
+              "elementID": "8.29.856.0.92.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "On Schedule",
+              "group": "payload"
+            }
+          ],
+          "8_40_407_0_0_0_0": [
+            {
+              "elementID": "8.40.407.0.0.0.0",
+              "unit": "datetime",
+              "valueNum": 2.02104062359e11,
+              "name": "end_date_time",
+              "type": "metadata",
+              "value": "202104062359",
+              "group": "report_statistics"
+            }
+          ],
+          "8_7_98_0_88_0_0": [
+            {
+              "elementID": "8.7.98.0.88.0.0",
+              "unit": "°",
+              "valueNum": -128.7649,
+              "name": "longitude",
+              "type": "element",
+              "value": "-128.7649",
+              "group": "identification"
+            }
+          ],
+          "8_2_858_0_0_0_0": [
+            {
+              "elementID": "8.2.858.0.0.0.0",
+              "unit": "km",
+              "valueNum": 0,
+              "name": "distance_outside_geofence",
+              "type": "element",
+              "value": "0.0",
+              "group": "diagnostics"
+            }
+          ],
+          "8_7_98_0_92_0_0": [
+            {
+              "elementID": "8.7.98.0.92.0.0",
+              "unit": "°",
+              "valueNum": -128.76491666666666,
+              "name": "longitude",
+              "type": "element",
+              "value": "-128.76491666666666",
+              "group": "identification"
+            }
+          ],
+          "8_7_98_0_97_0_0": [
+            {
+              "elementID": "8.7.98.0.97.0.0",
+              "unit": "°",
+              "name": "longitude",
+              "type": "element",
+              "value": "MSNG",
+              "group": "identification"
+            }
+          ],
+          "8_29_856_0_109_0_0": [
+            {
+              "elementID": "8.29.856.0.109.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "Missing",
+              "group": "payload"
+            }
+          ],
+          "8_7_97_0_104_0_0": [
+            {
+              "elementID": "8.7.97.0.104.0.0",
+              "unit": "°",
+              "valueNum": 51.39236666666667,
+              "name": "latitude",
+              "type": "element",
+              "value": "51.39236666666667",
+              "group": "identification"
+            }
+          ],
+          "8_7_83_0_0_0_0": [
+            {
+              "elementID": "8.7.83.0.0.0.0",
+              "unit": "unitless",
+              "name": "station_name",
+              "type": "metadata",
+              "value": "WEST SEA OTTER",
+              "group": "identification"
+            }
+          ],
+          "8_7_97_0_96_0_0": [
+            {
+              "elementID": "8.7.97.0.96.0.0",
+              "unit": "°",
+              "valueNum": 51.39188333333333,
+              "name": "latitude",
+              "type": "element",
+              "value": "51.39188333333333",
+              "group": "identification"
+            }
+          ],
+          "8_29_856_0_94_0_0": [
+            {
+              "elementID": "8.29.856.0.94.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "On Schedule",
+              "group": "payload"
+            }
+          ],
+          "8_7_98_0_101_0_0": [
+            {
+              "elementID": "8.7.98.0.101.0.0",
+              "unit": "°",
+              "valueNum": -128.76501666666667,
+              "name": "longitude",
+              "type": "element",
+              "value": "-128.76501666666667",
+              "group": "identification"
+            }
+          ],
+          "8_29_711_0_0_0_0": [
+            {
+              "elementID": "8.29.711.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 4,
+              "name": "missing_count",
+              "type": "element",
+              "value": "4",
+              "group": "payload"
+            }
+          ],
+          "8_29_856_0_100_0_0": [
+            {
+              "elementID": "8.29.856.0.100.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "On Schedule",
+              "group": "payload"
+            }
+          ],
+          "8_7_98_0_86_0_0": [
+            {
+              "elementID": "8.7.98.0.86.0.0",
+              "unit": "°",
+              "valueNum": -128.76546666666667,
+              "name": "longitude",
+              "type": "element",
+              "value": "-128.76546666666667",
+              "group": "identification"
+            }
+          ],
+          "8_7_98_0_99_0_0": [
+            {
+              "elementID": "8.7.98.0.99.0.0",
+              "unit": "°",
+              "valueNum": -128.7653,
+              "name": "longitude",
+              "type": "element",
+              "value": "-128.7653",
+              "group": "identification"
+            }
+          ],
+          "8_7_98_0_104_0_0": [
+            {
+              "elementID": "8.7.98.0.104.0.0",
+              "unit": "°",
+              "valueNum": -128.76516666666666,
+              "name": "longitude",
+              "type": "element",
+              "value": "-128.76516666666666",
+              "group": "identification"
+            }
+          ],
+          "8_7_862_0_0_0_0": [
+            {
+              "elementID": "8.7.862.0.0.0.0",
+              "unit": "°",
+              "valueNum": -128.767,
+              "name": "anchor_longitude",
+              "type": "metadata",
+              "value": "-128.767000",
+              "group": "identification"
+            }
+          ],
+          "8_29_856_0_95_0_0": [
+            {
+              "elementID": "8.29.856.0.95.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "On Schedule",
+              "group": "payload"
+            }
+          ],
+          "8_7_98_0_90_0_0": [
+            {
+              "elementID": "8.7.98.0.90.0.0",
+              "unit": "°",
+              "valueNum": -128.76476666666667,
+              "name": "longitude",
+              "type": "element",
+              "value": "-128.76476666666667",
+              "group": "identification"
+            }
+          ],
+          "8_41_265_0_0_0_0": [
+            {
+              "elementID": "8.41.265.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 20,
+              "name": "air_temperature",
+              "type": "element",
+              "value": "20",
+              "group": "element_count"
+            }
+          ],
+          "8_29_856_0_101_0_0": [
+            {
+              "elementID": "8.29.856.0.101.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "On Schedule",
+              "group": "payload"
+            }
+          ],
+          "8_7_97_0_92_0_0": [
+            {
+              "elementID": "8.7.97.0.92.0.0",
+              "unit": "°",
+              "valueNum": 51.391616666666664,
+              "name": "latitude",
+              "type": "element",
+              "value": "51.391616666666664",
+              "group": "identification"
+            }
+          ],
+          "8_29_856_0_87_0_0": [
+            {
+              "elementID": "8.29.856.0.87.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "On Schedule",
+              "group": "payload"
+            }
+          ],
+          "8_40_802_0_0_0_0": [
+            {
+              "elementID": "8.40.802.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 24,
+              "name": "reported_hours",
+              "type": "metadata",
+              "value": "24",
+              "group": "report_statistics"
+            }
+          ],
+          "8_7_97_0_86_0_0": [
+            {
+              "elementID": "8.7.97.0.86.0.0",
+              "unit": "°",
+              "valueNum": 51.39235,
+              "name": "latitude",
+              "type": "element",
+              "value": "51.39235",
+              "group": "identification"
+            }
+          ],
+          "8_7_119_0_0_0_0": [
+            {
+              "elementID": "8.7.119.0.0.0.0",
+              "unit": "unitless",
+              "name": "observation_source",
+              "type": "metadata",
+              "value": "MSC Marine",
+              "group": "identification"
+            }
+          ],
+          "8_7_97_0_106_0_0": [
+            {
+              "elementID": "8.7.97.0.106.0.0",
+              "unit": "°",
+              "valueNum": 51.39156666666667,
+              "name": "latitude",
+              "type": "element",
+              "value": "51.39156666666667",
+              "group": "identification"
+            }
+          ],
+          "jsonVersion": 2,
+          "8_29_856_0_97_0_0": [
+            {
+              "elementID": "8.29.856.0.97.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "Missing",
+              "group": "payload"
+            }
+          ],
+          "8_39_857_0_0_0_0": [
+            {
+              "elementID": "8.39.857.0.0.0.0",
+              "unit": "n.mi",
+              "valueNum": 4,
+              "name": "geofence_radius",
+              "type": "metadata",
+              "value": "4.0",
+              "group": "station_configuration"
+            }
+          ],
+          "authorVersion": "2.5",
+          "8_7_86_0_0_0_0": [
+            {
+              "elementID": "8.7.86.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 9100888,
+              "name": "msc_identifier",
+              "type": "metadata",
+              "value": "9100888",
+              "group": "identification"
+            }
+          ],
+          "indexDateTime": "2021-04-07T00:03:23.451Z",
+          "8_7_98_0_106_0_0": [
+            {
+              "elementID": "8.7.98.0.106.0.0",
+              "unit": "°",
+              "valueNum": -128.76576666666668,
+              "name": "longitude",
+              "type": "element",
+              "value": "-128.76576666666668",
+              "group": "identification"
+            }
+          ],
+          "8_7_98_0_89_0_0": [
+            {
+              "elementID": "8.7.98.0.89.0.0",
+              "unit": "°",
+              "valueNum": -128.76473333333334,
+              "name": "longitude",
+              "type": "element",
+              "value": "-128.76473333333334",
+              "group": "identification"
+            }
+          ],
+          "primaryID": "marine_daily_report",
+          "8_29_856_0_105_0_0": [
+            {
+              "elementID": "8.29.856.0.105.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "On Schedule",
+              "group": "payload"
+            }
+          ],
+          "8_7_82_0_0_0_0": [
+            {
+              "elementID": "8.7.82.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 46204,
+              "name": "wmo_identifier",
+              "type": "metadata",
+              "value": "46204",
+              "group": "identification"
+            }
+          ],
+          "8_29_829_0_0_0_0": [
+            {
+              "elementID": "8.29.829.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 20,
+              "name": "received_on_time_count",
+              "type": "element",
+              "value": "20",
+              "group": "payload"
+            }
+          ],
+          "8_29_856_0_99_0_0": [
+            {
+              "elementID": "8.29.856.0.99.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "On Schedule",
+              "group": "payload"
+            }
+          ],
+          "8_29_856_0_103_0_0": [
+            {
+              "elementID": "8.29.856.0.103.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "On Schedule",
+              "group": "payload"
+            }
+          ],
+          "8_7_97_0_108_0_0": [
+            {
+              "elementID": "8.7.97.0.108.0.0",
+              "unit": "°",
+              "name": "latitude",
+              "type": "element",
+              "value": "MSNG",
+              "group": "identification"
+            }
+          ],
+          "8_7_97_0_88_0_0": [
+            {
+              "elementID": "8.7.97.0.88.0.0",
+              "unit": "°",
+              "valueNum": 51.392266666666664,
+              "name": "latitude",
+              "type": "element",
+              "value": "51.392266666666664",
+              "group": "identification"
+            }
+          ],
+          "8_7_97_0_94_0_0": [
+            {
+              "elementID": "8.7.97.0.94.0.0",
+              "unit": "°",
+              "valueNum": 51.3914,
+              "name": "latitude",
+              "type": "element",
+              "value": "51.3914",
+              "group": "identification"
+            }
+          ],
+          "8_7_98_0_95_0_0": [
+            {
+              "elementID": "8.7.98.0.95.0.0",
+              "unit": "°",
+              "valueNum": -128.76631666666665,
+              "name": "longitude",
+              "type": "element",
+              "value": "-128.76631666666665",
+              "group": "identification"
+            }
+          ],
+          "8_7_98_0_109_0_0": [
+            {
+              "elementID": "8.7.98.0.109.0.0",
+              "unit": "°",
+              "name": "longitude",
+              "type": "element",
+              "value": "MSNG",
+              "group": "identification"
+            }
+          ],
+          "8_29_856_0_90_0_0": [
+            {
+              "elementID": "8.29.856.0.90.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "On Schedule",
+              "group": "payload"
+            }
+          ],
+          "8_29_856_0_91_0_0": [
+            {
+              "elementID": "8.29.856.0.91.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "On Schedule",
+              "group": "payload"
+            }
+          ],
+          "8_29_827_0_0_0_0": [
+            {
+              "elementID": "8.29.827.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 0,
+              "name": "incomplete_count",
+              "type": "element",
+              "value": "0",
+              "group": "payload"
+            }
+          ],
+          "8_41_277_0_0_0_0": [
+            {
+              "elementID": "8.41.277.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 20,
+              "name": "sea_surface_temperature",
+              "type": "element",
+              "value": "20",
+              "group": "element_count"
+            }
+          ],
+          "8_7_98_0_100_0_0": [
+            {
+              "elementID": "8.7.98.0.100.0.0",
+              "unit": "°",
+              "valueNum": -128.76506666666666,
+              "name": "longitude",
+              "type": "element",
+              "value": "-128.76506666666666",
+              "group": "identification"
+            }
+          ],
+          "8_7_98_0_87_0_0": [
+            {
+              "elementID": "8.7.98.0.87.0.0",
+              "unit": "°",
+              "valueNum": -128.76495,
+              "name": "longitude",
+              "type": "element",
+              "value": "-128.76495",
+              "group": "identification"
+            }
+          ],
+          "8_7_861_0_0_0_0": [
+            {
+              "elementID": "8.7.861.0.0.0.0",
+              "unit": "°",
+              "valueNum": 51.384,
+              "name": "anchor_latitude",
+              "type": "metadata",
+              "value": "51.384000",
+              "group": "identification"
+            }
+          ],
+          "8_7_97_0_99_0_0": [
+            {
+              "elementID": "8.7.97.0.99.0.0",
+              "unit": "°",
+              "valueNum": 51.392583333333334,
+              "name": "latitude",
+              "type": "element",
+              "value": "51.392583333333334",
+              "group": "identification"
+            }
+          ],
+          "8_7_98_0_93_0_0": [
+            {
+              "elementID": "8.7.98.0.93.0.0",
+              "unit": "°",
+              "valueNum": -128.76533333333333,
+              "name": "longitude",
+              "type": "element",
+              "value": "-128.76533333333333",
+              "group": "identification"
+            }
+          ],
+          "8_29_856_0_106_0_0": [
+            {
+              "elementID": "8.29.856.0.106.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "On Schedule",
+              "group": "payload"
+            }
+          ],
+          "8_7_98_0_107_0_0": [
+            {
+              "elementID": "8.7.98.0.107.0.0",
+              "unit": "°",
+              "name": "longitude",
+              "type": "element",
+              "value": "MSNG",
+              "group": "identification"
+            }
+          ],
+          "8_7_97_0_101_0_0": [
+            {
+              "elementID": "8.7.97.0.101.0.0",
+              "unit": "°",
+              "valueNum": 51.39235,
+              "name": "latitude",
+              "type": "element",
+              "value": "51.39235",
+              "group": "identification"
+            }
+          ],
+          "parentIdentity": "/data/dms-system-trigger-dms-cron-1.0-ascii-raw-ascii-1.0-20210407000000000-dms-pg-maf-reports-marine",
+          "8_29_856_0_93_0_0": [
+            {
+              "elementID": "8.29.856.0.93.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "On Schedule",
+              "group": "payload"
+            }
+          ],
+          "8_29_856_0_89_0_0": [
+            {
+              "elementID": "8.29.856.0.89.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "On Schedule",
+              "group": "payload"
+            }
+          ],
+          "8_7_98_0_98_0_0": [
+            {
+              "elementID": "8.7.98.0.98.0.0",
+              "unit": "°",
+              "valueNum": -128.76548333333332,
+              "name": "longitude",
+              "type": "element",
+              "value": "-128.76548333333332",
+              "group": "identification"
+            }
+          ],
+          "8_7_98_0_102_0_0": [
+            {
+              "elementID": "8.7.98.0.102.0.0",
+              "unit": "°",
+              "valueNum": -128.76511666666667,
+              "name": "longitude",
+              "type": "element",
+              "value": "-128.76511666666667",
+              "group": "identification"
+            }
+          ],
+          "8_7_97_0_90_0_0": [
+            {
+              "elementID": "8.7.97.0.90.0.0",
+              "unit": "°",
+              "valueNum": 51.39216666666667,
+              "name": "latitude",
+              "type": "element",
+              "value": "51.39216666666667",
+              "group": "identification"
+            }
+          ],
+          "8_7_97_0_103_0_0": [
+            {
+              "elementID": "8.7.97.0.103.0.0",
+              "unit": "°",
+              "valueNum": 51.392516666666666,
+              "name": "latitude",
+              "type": "element",
+              "value": "51.392516666666666",
+              "group": "identification"
+            }
+          ],
+          "8_29_856_0_108_0_0": [
+            {
+              "elementID": "8.29.856.0.108.0.0",
+              "unit": "unitless",
+              "name": "payload_status",
+              "type": "element",
+              "value": "Missing",
+              "group": "payload"
+            }
+          ],
+          "8_7_97_0_97_0_0": [
+            {
+              "elementID": "8.7.97.0.97.0.0",
+              "unit": "°",
+              "name": "latitude",
+              "type": "element",
+              "value": "MSNG",
+              "group": "identification"
+            }
+          ],
+          "8_7_98_0_91_0_0": [
+            {
+              "elementID": "8.7.98.0.91.0.0",
+              "unit": "°",
+              "valueNum": -128.76473333333334,
+              "name": "longitude",
+              "type": "element",
+              "value": "-128.76473333333334",
+              "group": "identification"
+            }
+          ],
+          "8_41_540_0_0_0_0": [
+            {
+              "elementID": "8.41.540.0.0.0.0",
+              "unit": "unitless",
+              "valueNum": 20,
+              "name": "wave_height",
+              "type": "element",
+              "value": "20",
+              "group": "element_count"
+            }
+          ]
+        },
+        "sort": [1617667200000]
+      }
+    ]
+  }
+}
