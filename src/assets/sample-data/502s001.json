@@ -339,11 +339,11 @@
               "unit": "mm",
               "valueNum": 223.7927,
               "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts",
-              "index": { "name": "sensor_index", "value": 1 },
               "elementIndex": "33.1",
               "type": "element",
               "value": "223.7927",
               "indexValue": 1,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -351,11 +351,11 @@
               "unit": "mm",
               "valueNum": 231.8634,
               "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts",
-              "index": { "name": "sensor_index", "value": 2 },
               "elementIndex": "33.2",
               "type": "element",
               "value": "231.8634",
               "indexValue": 2,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -363,11 +363,11 @@
               "unit": "mm",
               "valueNum": 228.9523,
               "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts",
-              "index": { "name": "sensor_index", "value": 3 },
               "elementIndex": "33.3",
               "type": "element",
               "value": "228.9523",
               "indexValue": 3,
+              "indexName": "sensor_index",
               "group": "precipitation"
             }
           ],
@@ -448,11 +448,11 @@
               "elementID": "1.2.x.0.0.0.0",
               "unit": "unitless",
               "name": "deactivated_sensor_label",
-              "index": { "name": "sensor_index", "value": 1 },
               "elementIndex": "1",
               "overallQASummary": 100,
               "type": "element",
               "value": "MSNG",
+              "indexName": "sensor_index",
               "indexValue": 1,
               "group": "diagnostics"
             },
@@ -460,11 +460,11 @@
               "elementID": "1.2.x.0.0.0.0",
               "unit": "unitless",
               "name": "deactivated_sensor_label",
-              "index": { "name": "sensor_index", "value": 2 },
               "elementIndex": "2",
               "overallQASummary": 100,
               "type": "element",
               "value": "MSNG",
+              "indexName": "sensor_index",
               "indexValue": 2,
               "group": "diagnostics"
             },
@@ -472,11 +472,11 @@
               "elementID": "1.2.x.0.0.0.0",
               "unit": "unitless",
               "name": "deactivated_sensor_label",
-              "index": { "name": "sensor_index", "value": 3 },
               "elementIndex": "3",
               "overallQASummary": 100,
               "type": "element",
               "value": "MSNG",
+              "indexName": "sensor_index",
               "indexValue": 3,
               "group": "diagnostics"
             },
@@ -484,11 +484,11 @@
               "elementID": "1.2.x.0.0.0.0",
               "unit": "unitless",
               "name": "deactivated_sensor_label",
-              "index": { "name": "sensor_index", "value": 4 },
               "elementIndex": "4",
               "overallQASummary": 100,
               "type": "element",
               "value": "MSNG",
+              "indexName": "sensor_index",
               "indexValue": 4,
               "group": "diagnostics"
             },
@@ -496,11 +496,11 @@
               "elementID": "1.2.x.0.0.0.0",
               "unit": "unitless",
               "name": "deactivated_sensor_label",
-              "index": { "name": "sensor_index", "value": 5 },
               "elementIndex": "5",
               "overallQASummary": 100,
               "type": "element",
               "value": "MSNG",
+              "indexName": "sensor_index",
               "indexValue": 5,
               "group": "diagnostics"
             },
@@ -508,11 +508,11 @@
               "elementID": "1.2.x.0.0.0.0",
               "unit": "unitless",
               "name": "deactivated_sensor_label",
-              "index": { "name": "sensor_index", "value": 6 },
               "elementIndex": "6",
               "overallQASummary": 100,
               "type": "element",
               "value": "MSNG",
+              "indexName": "sensor_index",
               "indexValue": 6,
               "group": "diagnostics"
             }
@@ -804,22 +804,22 @@
               "unit": "cm",
               "valueNum": 0.306778,
               "name": "avg_snw_dpth_pst5mts",
-              "index": { "name": "sensor_index", "value": 1 },
               "elementIndex": "37.1",
               "type": "element",
               "value": "0.306778",
               "indexValue": 1,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
               "elementID": "1.11.174.2.5.3.0",
               "unit": "cm",
               "name": "avg_snw_dpth_pst5mts",
-              "index": { "name": "sensor_index", "value": 2 },
               "elementIndex": "37.2",
               "type": "element",
               "value": "MSNG",
               "indexValue": 2,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -827,11 +827,11 @@
               "unit": "cm",
               "valueNum": 0.738953,
               "name": "avg_snw_dpth_pst5mts",
-              "index": { "name": "sensor_index", "value": 3 },
               "elementIndex": "37.3",
               "type": "element",
               "value": "0.738953",
               "indexValue": 3,
+              "indexName": "sensor_index",
               "group": "precipitation"
             }
           ],
@@ -887,11 +887,11 @@
               "unit": "mm",
               "valueNum": 223.7847,
               "name": "cumulative_precipitation_gauge_weight_unfiltered",
-              "index": { "name": "sensor_index", "value": 1 },
               "elementIndex": "32.1",
               "type": "element",
               "value": "223.7847",
               "indexValue": 1,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -899,11 +899,11 @@
               "unit": "mm",
               "valueNum": 231.843,
               "name": "cumulative_precipitation_gauge_weight_unfiltered",
-              "index": { "name": "sensor_index", "value": 2 },
               "elementIndex": "32.2",
               "type": "element",
               "value": "231.843",
               "indexValue": 2,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -911,11 +911,11 @@
               "unit": "mm",
               "valueNum": 228.9528,
               "name": "cumulative_precipitation_gauge_weight_unfiltered",
-              "index": { "name": "sensor_index", "value": 3 },
               "elementIndex": "32.3",
               "type": "element",
               "value": "228.9528",
               "indexValue": 3,
+              "indexName": "sensor_index",
               "group": "precipitation"
             }
           ],
@@ -1362,11 +1362,11 @@
               "unit": "mm",
               "valueNum": 223.8494,
               "name": "precipitation_gauge_reference_value",
-              "index": { "name": "sensor_index", "value": 1 },
               "elementIndex": "35.1",
               "type": "element",
               "value": "223.8494",
               "indexValue": 1,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -1374,11 +1374,11 @@
               "unit": "mm",
               "valueNum": 231.809,
               "name": "precipitation_gauge_reference_value",
-              "index": { "name": "sensor_index", "value": 2 },
               "elementIndex": "35.2",
               "type": "element",
               "value": "231.809",
               "indexValue": 2,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -1386,11 +1386,11 @@
               "unit": "mm",
               "valueNum": 228.915,
               "name": "precipitation_gauge_reference_value",
-              "index": { "name": "sensor_index", "value": 3 },
               "elementIndex": "35.3",
               "type": "element",
               "value": "228.915",
               "indexValue": 3,
+              "indexName": "sensor_index",
               "group": "precipitation"
             }
           ],
@@ -1471,22 +1471,22 @@
               "unit": "cm",
               "valueNum": 0.314514,
               "name": "snw_dpth",
-              "index": { "name": "sensor_index", "value": 1 },
               "elementIndex": "36.1",
               "type": "element",
               "value": "0.314514",
               "indexValue": 1,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
               "elementID": "1.11.174.2.1.1.0",
               "unit": "cm",
               "name": "snw_dpth",
-              "index": { "name": "sensor_index", "value": 2 },
               "elementIndex": "36.2",
               "type": "element",
               "value": "MSNG",
               "indexValue": 2,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -1494,11 +1494,11 @@
               "unit": "cm",
               "valueNum": 0.777924,
               "name": "snw_dpth",
-              "index": { "name": "sensor_index", "value": 3 },
               "elementIndex": "36.3",
               "type": "element",
               "value": "0.777924",
               "indexValue": 3,
+              "indexName": "sensor_index",
               "group": "precipitation"
             }
           ],
@@ -1855,11 +1855,11 @@
               "unit": "mm",
               "valueNum": 223.7376,
               "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts",
-              "index": { "name": "sensor_index", "value": 1 },
               "elementIndex": "34.1",
               "type": "element",
               "value": "223.7376",
               "indexValue": 1,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -1867,11 +1867,11 @@
               "unit": "mm",
               "valueNum": 232.0103,
               "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts",
-              "index": { "name": "sensor_index", "value": 2 },
               "elementIndex": "34.2",
               "type": "element",
               "value": "232.0103",
               "indexValue": 2,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -1879,11 +1879,11 @@
               "unit": "mm",
               "valueNum": 228.9447,
               "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts",
-              "index": { "name": "sensor_index", "value": 3 },
               "elementIndex": "34.3",
               "type": "element",
               "value": "228.9447",
               "indexValue": 3,
+              "indexName": "sensor_index",
               "group": "precipitation"
             }
           ],
@@ -2269,11 +2269,11 @@
               "unit": "mm",
               "valueNum": 223.8125,
               "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts",
-              "index": { "name": "sensor_index", "value": 1 },
               "elementIndex": "33.1",
               "type": "element",
               "value": "223.8125",
               "indexValue": 1,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -2281,11 +2281,11 @@
               "unit": "mm",
               "valueNum": 231.8629,
               "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts",
-              "index": { "name": "sensor_index", "value": 2 },
               "elementIndex": "33.2",
               "type": "element",
               "value": "231.8629",
               "indexValue": 2,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -2293,11 +2293,11 @@
               "unit": "mm",
               "valueNum": 228.9621,
               "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts",
-              "index": { "name": "sensor_index", "value": 3 },
               "elementIndex": "33.3",
               "type": "element",
               "value": "228.9621",
               "indexValue": 3,
+              "indexName": "sensor_index",
               "group": "precipitation"
             }
           ],
@@ -2378,11 +2378,11 @@
               "elementID": "1.2.x.0.0.0.0",
               "unit": "unitless",
               "name": "deactivated_sensor_label",
-              "index": { "name": "sensor_index", "value": 1 },
               "elementIndex": "1",
               "overallQASummary": 100,
               "type": "element",
               "value": "MSNG",
+              "indexName": "sensor_index",
               "indexValue": 1,
               "group": "diagnostics"
             },
@@ -2390,11 +2390,11 @@
               "elementID": "1.2.x.0.0.0.0",
               "unit": "unitless",
               "name": "deactivated_sensor_label",
-              "index": { "name": "sensor_index", "value": 2 },
               "elementIndex": "2",
               "overallQASummary": 100,
               "type": "element",
               "value": "MSNG",
+              "indexName": "sensor_index",
               "indexValue": 2,
               "group": "diagnostics"
             },
@@ -2402,11 +2402,11 @@
               "elementID": "1.2.x.0.0.0.0",
               "unit": "unitless",
               "name": "deactivated_sensor_label",
-              "index": { "name": "sensor_index", "value": 3 },
               "elementIndex": "3",
               "overallQASummary": 100,
               "type": "element",
               "value": "MSNG",
+              "indexName": "sensor_index",
               "indexValue": 3,
               "group": "diagnostics"
             },
@@ -2414,11 +2414,11 @@
               "elementID": "1.2.x.0.0.0.0",
               "unit": "unitless",
               "name": "deactivated_sensor_label",
-              "index": { "name": "sensor_index", "value": 4 },
               "elementIndex": "4",
               "overallQASummary": 100,
               "type": "element",
               "value": "MSNG",
+              "indexName": "sensor_index",
               "indexValue": 4,
               "group": "diagnostics"
             },
@@ -2426,11 +2426,11 @@
               "elementID": "1.2.x.0.0.0.0",
               "unit": "unitless",
               "name": "deactivated_sensor_label",
-              "index": { "name": "sensor_index", "value": 5 },
               "elementIndex": "5",
               "overallQASummary": 100,
               "type": "element",
               "value": "MSNG",
+              "indexName": "sensor_index",
               "indexValue": 5,
               "group": "diagnostics"
             },
@@ -2438,11 +2438,11 @@
               "elementID": "1.2.x.0.0.0.0",
               "unit": "unitless",
               "name": "deactivated_sensor_label",
-              "index": { "name": "sensor_index", "value": 6 },
               "elementIndex": "6",
               "overallQASummary": 100,
               "type": "element",
               "value": "MSNG",
+              "indexName": "sensor_index",
               "indexValue": 6,
               "group": "diagnostics"
             }
@@ -2734,22 +2734,22 @@
               "unit": "cm",
               "valueNum": 0.293366,
               "name": "avg_snw_dpth_pst5mts",
-              "index": { "name": "sensor_index", "value": 1 },
               "elementIndex": "37.1",
               "type": "element",
               "value": "0.293366",
               "indexValue": 1,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
               "elementID": "1.11.174.2.5.3.0",
               "unit": "cm",
               "name": "avg_snw_dpth_pst5mts",
-              "index": { "name": "sensor_index", "value": 2 },
               "elementIndex": "37.2",
               "type": "element",
               "value": "MSNG",
               "indexValue": 2,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -2757,11 +2757,11 @@
               "unit": "cm",
               "valueNum": 0.771027,
               "name": "avg_snw_dpth_pst5mts",
-              "index": { "name": "sensor_index", "value": 3 },
               "elementIndex": "37.3",
               "type": "element",
               "value": "0.771027",
               "indexValue": 3,
+              "indexName": "sensor_index",
               "group": "precipitation"
             }
           ],
@@ -2817,11 +2817,11 @@
               "unit": "mm",
               "valueNum": 223.7839,
               "name": "cumulative_precipitation_gauge_weight_unfiltered",
-              "index": { "name": "sensor_index", "value": 1 },
               "elementIndex": "32.1",
               "type": "element",
               "value": "223.7839",
               "indexValue": 1,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -2829,11 +2829,11 @@
               "unit": "mm",
               "valueNum": 231.8674,
               "name": "cumulative_precipitation_gauge_weight_unfiltered",
-              "index": { "name": "sensor_index", "value": 2 },
               "elementIndex": "32.2",
               "type": "element",
               "value": "231.8674",
               "indexValue": 2,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -2841,11 +2841,11 @@
               "unit": "mm",
               "valueNum": 228.9448,
               "name": "cumulative_precipitation_gauge_weight_unfiltered",
-              "index": { "name": "sensor_index", "value": 3 },
               "elementIndex": "32.3",
               "type": "element",
               "value": "228.9448",
               "indexValue": 3,
+              "indexName": "sensor_index",
               "group": "precipitation"
             }
           ],
@@ -3292,11 +3292,11 @@
               "unit": "mm",
               "valueNum": 223.8494,
               "name": "precipitation_gauge_reference_value",
-              "index": { "name": "sensor_index", "value": 1 },
               "elementIndex": "35.1",
               "type": "element",
               "value": "223.8494",
               "indexValue": 1,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -3304,11 +3304,11 @@
               "unit": "mm",
               "valueNum": 231.809,
               "name": "precipitation_gauge_reference_value",
-              "index": { "name": "sensor_index", "value": 2 },
               "elementIndex": "35.2",
               "type": "element",
               "value": "231.809",
               "indexValue": 2,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -3316,11 +3316,11 @@
               "unit": "mm",
               "valueNum": 228.915,
               "name": "precipitation_gauge_reference_value",
-              "index": { "name": "sensor_index", "value": 3 },
               "elementIndex": "35.3",
               "type": "element",
               "value": "228.915",
               "indexValue": 3,
+              "indexName": "sensor_index",
               "group": "precipitation"
             }
           ],
@@ -3401,22 +3401,22 @@
               "unit": "cm",
               "valueNum": 0.261078,
               "name": "snw_dpth",
-              "index": { "name": "sensor_index", "value": 1 },
               "elementIndex": "36.1",
               "type": "element",
               "value": "0.261078",
               "indexValue": 1,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
               "elementID": "1.11.174.2.1.1.0",
               "unit": "cm",
               "name": "snw_dpth",
-              "index": { "name": "sensor_index", "value": 2 },
               "elementIndex": "36.2",
               "type": "element",
               "value": "MSNG",
               "indexValue": 2,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -3424,11 +3424,11 @@
               "unit": "cm",
               "valueNum": 0.75145,
               "name": "snw_dpth",
-              "index": { "name": "sensor_index", "value": 3 },
               "elementIndex": "36.3",
               "type": "element",
               "value": "0.75145",
               "indexValue": 3,
+              "indexName": "sensor_index",
               "group": "precipitation"
             }
           ],
@@ -3774,11 +3774,11 @@
               "unit": "mm",
               "valueNum": 223.7376,
               "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts",
-              "index": { "name": "sensor_index", "value": 1 },
               "elementIndex": "34.1",
               "type": "element",
               "value": "223.7376",
               "indexValue": 1,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -3786,11 +3786,11 @@
               "unit": "mm",
               "valueNum": 232.0103,
               "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts",
-              "index": { "name": "sensor_index", "value": 2 },
               "elementIndex": "34.2",
               "type": "element",
               "value": "232.0103",
               "indexValue": 2,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -3798,11 +3798,11 @@
               "unit": "mm",
               "valueNum": 228.9447,
               "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts",
-              "index": { "name": "sensor_index", "value": 3 },
               "elementIndex": "34.3",
               "type": "element",
               "value": "228.9447",
               "indexValue": 3,
+              "indexName": "sensor_index",
               "group": "precipitation"
             }
           ],
@@ -4188,11 +4188,11 @@
               "unit": "mm",
               "valueNum": 223.7905,
               "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts",
-              "index": { "name": "sensor_index", "value": 1 },
               "elementIndex": "33.1",
               "type": "element",
               "value": "223.7905",
               "indexValue": 1,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -4200,11 +4200,11 @@
               "unit": "mm",
               "valueNum": 231.8763,
               "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts",
-              "index": { "name": "sensor_index", "value": 2 },
               "elementIndex": "33.2",
               "type": "element",
               "value": "231.8763",
               "indexValue": 2,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -4212,11 +4212,11 @@
               "unit": "mm",
               "valueNum": 228.9512,
               "name": "avg_cum_pcpn_gag_wt_unfltrd_pst5mts",
-              "index": { "name": "sensor_index", "value": 3 },
               "elementIndex": "33.3",
               "type": "element",
               "value": "228.9512",
               "indexValue": 3,
+              "indexName": "sensor_index",
               "group": "precipitation"
             }
           ],
@@ -4297,11 +4297,11 @@
               "elementID": "1.2.x.0.0.0.0",
               "unit": "unitless",
               "name": "deactivated_sensor_label",
-              "index": { "name": "sensor_index", "value": 1 },
               "elementIndex": "1",
               "overallQASummary": 100,
               "type": "element",
               "value": "MSNG",
+              "indexName": "sensor_index",
               "indexValue": 1,
               "group": "diagnostics"
             },
@@ -4309,11 +4309,11 @@
               "elementID": "1.2.x.0.0.0.0",
               "unit": "unitless",
               "name": "deactivated_sensor_label",
-              "index": { "name": "sensor_index", "value": 2 },
               "elementIndex": "2",
               "overallQASummary": 100,
               "type": "element",
               "value": "MSNG",
+              "indexName": "sensor_index",
               "indexValue": 2,
               "group": "diagnostics"
             },
@@ -4321,11 +4321,11 @@
               "elementID": "1.2.x.0.0.0.0",
               "unit": "unitless",
               "name": "deactivated_sensor_label",
-              "index": { "name": "sensor_index", "value": 3 },
               "elementIndex": "3",
               "overallQASummary": 100,
               "type": "element",
               "value": "MSNG",
+              "indexName": "sensor_index",
               "indexValue": 3,
               "group": "diagnostics"
             },
@@ -4333,11 +4333,11 @@
               "elementID": "1.2.x.0.0.0.0",
               "unit": "unitless",
               "name": "deactivated_sensor_label",
-              "index": { "name": "sensor_index", "value": 4 },
               "elementIndex": "4",
               "overallQASummary": 100,
               "type": "element",
               "value": "MSNG",
+              "indexName": "sensor_index",
               "indexValue": 4,
               "group": "diagnostics"
             },
@@ -4345,11 +4345,11 @@
               "elementID": "1.2.x.0.0.0.0",
               "unit": "unitless",
               "name": "deactivated_sensor_label",
-              "index": { "name": "sensor_index", "value": 5 },
               "elementIndex": "5",
               "overallQASummary": 100,
               "type": "element",
               "value": "MSNG",
+              "indexName": "sensor_index",
               "indexValue": 5,
               "group": "diagnostics"
             },
@@ -4357,11 +4357,11 @@
               "elementID": "1.2.x.0.0.0.0",
               "unit": "unitless",
               "name": "deactivated_sensor_label",
-              "index": { "name": "sensor_index", "value": 6 },
               "elementIndex": "6",
               "overallQASummary": 100,
               "type": "element",
               "value": "MSNG",
+              "indexName": "sensor_index",
               "indexValue": 6,
               "group": "diagnostics"
             }
@@ -4653,22 +4653,22 @@
               "unit": "cm",
               "valueNum": 0.304688,
               "name": "avg_snw_dpth_pst5mts",
-              "index": { "name": "sensor_index", "value": 1 },
               "elementIndex": "37.1",
               "type": "element",
               "value": "0.304688",
               "indexValue": 1,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
               "elementID": "1.11.174.2.5.3.0",
               "unit": "cm",
               "name": "avg_snw_dpth_pst5mts",
-              "index": { "name": "sensor_index", "value": 2 },
               "elementIndex": "37.2",
               "type": "element",
               "value": "MSNG",
               "indexValue": 2,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -4676,11 +4676,11 @@
               "unit": "cm",
               "valueNum": 0.747299,
               "name": "avg_snw_dpth_pst5mts",
-              "index": { "name": "sensor_index", "value": 3 },
               "elementIndex": "37.3",
               "type": "element",
               "value": "0.747299",
               "indexValue": 3,
+              "indexName": "sensor_index",
               "group": "precipitation"
             }
           ],
@@ -4736,11 +4736,11 @@
               "unit": "mm",
               "valueNum": 223.7808,
               "name": "cumulative_precipitation_gauge_weight_unfiltered",
-              "index": { "name": "sensor_index", "value": 1 },
               "elementIndex": "32.1",
               "type": "element",
               "value": "223.7808",
               "indexValue": 1,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -4748,11 +4748,11 @@
               "unit": "mm",
               "valueNum": 231.8607,
               "name": "cumulative_precipitation_gauge_weight_unfiltered",
-              "index": { "name": "sensor_index", "value": 2 },
               "elementIndex": "32.2",
               "type": "element",
               "value": "231.8607",
               "indexValue": 2,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -4760,11 +4760,11 @@
               "unit": "mm",
               "valueNum": 228.9178,
               "name": "cumulative_precipitation_gauge_weight_unfiltered",
-              "index": { "name": "sensor_index", "value": 3 },
               "elementIndex": "32.3",
               "type": "element",
               "value": "228.9178",
               "indexValue": 3,
+              "indexName": "sensor_index",
               "group": "precipitation"
             }
           ],
@@ -5211,11 +5211,11 @@
               "unit": "mm",
               "valueNum": 223.8494,
               "name": "precipitation_gauge_reference_value",
-              "index": { "name": "sensor_index", "value": 1 },
               "elementIndex": "35.1",
               "type": "element",
               "value": "223.8494",
               "indexValue": 1,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -5223,11 +5223,11 @@
               "unit": "mm",
               "valueNum": 231.809,
               "name": "precipitation_gauge_reference_value",
-              "index": { "name": "sensor_index", "value": 2 },
               "elementIndex": "35.2",
               "type": "element",
               "value": "231.809",
               "indexValue": 2,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -5235,11 +5235,11 @@
               "unit": "mm",
               "valueNum": 228.915,
               "name": "precipitation_gauge_reference_value",
-              "index": { "name": "sensor_index", "value": 3 },
               "elementIndex": "35.3",
               "type": "element",
               "value": "228.915",
               "indexValue": 3,
+              "indexName": "sensor_index",
               "group": "precipitation"
             }
           ],
@@ -5320,22 +5320,22 @@
               "unit": "cm",
               "valueNum": 0.303192,
               "name": "snw_dpth",
-              "index": { "name": "sensor_index", "value": 1 },
               "elementIndex": "36.1",
               "type": "element",
               "value": "0.303192",
               "indexValue": 1,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
               "elementID": "1.11.174.2.1.1.0",
               "unit": "cm",
               "name": "snw_dpth",
-              "index": { "name": "sensor_index", "value": 2 },
               "elementIndex": "36.2",
               "type": "element",
               "value": "MSNG",
               "indexValue": 2,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -5343,11 +5343,11 @@
               "unit": "cm",
               "valueNum": 0.72551,
               "name": "snw_dpth",
-              "index": { "name": "sensor_index", "value": 3 },
               "elementIndex": "36.3",
               "type": "element",
               "value": "0.72551",
               "indexValue": 3,
+              "indexName": "sensor_index",
               "group": "precipitation"
             }
           ],
@@ -5704,11 +5704,11 @@
               "unit": "mm",
               "valueNum": 223.7376,
               "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts",
-              "index": { "name": "sensor_index", "value": 1 },
               "elementIndex": "34.1",
               "type": "element",
               "value": "223.7376",
               "indexValue": 1,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -5716,11 +5716,11 @@
               "unit": "mm",
               "valueNum": 232.0103,
               "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts",
-              "index": { "name": "sensor_index", "value": 2 },
               "elementIndex": "34.2",
               "type": "element",
               "value": "232.0103",
               "indexValue": 2,
+              "indexName": "sensor_index",
               "group": "precipitation"
             },
             {
@@ -5728,11 +5728,11 @@
               "unit": "mm",
               "valueNum": 228.9447,
               "name": "avg_cum_pcpn_gag_wt_fltrd_pst5mts",
-              "index": { "name": "sensor_index", "value": 3 },
               "elementIndex": "34.3",
               "type": "element",
               "value": "228.9447",
               "indexValue": 3,
+              "indexName": "sensor_index",
               "group": "precipitation"
             }
           ],
