@@ -481,9 +481,14 @@ export class DataGridService implements OnDestroy {
     }
 
     columnToAdd.sort = this.userConfigService.getSortType(element.elementID);
+    this.addElementColumnProperties(columnToAdd);
 
     this.columnConfiguration.createElementHeader(columnToAdd, headerID);
     this.columnsGenerated.push(headerID);
+  }
+
+  addElementColumnProperties(column: any) {
+    // empty, but allow apps to overwrite this
   }
 
   private buildMetadataColumn(

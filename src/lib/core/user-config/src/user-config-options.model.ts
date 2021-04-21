@@ -76,6 +76,12 @@ export interface LoadVisibleElements {
   excludeAsMetadata?: string[];
 }
 
+export interface ToggleOptions {
+  qaSummaryToggles?: string;
+  instrumentToggles?: string;
+  formatToggle?: string;
+}
+
 export interface UserConfigOptions {
   profileName: LanguageLabelOptions;
   childConfig?: string;
@@ -87,6 +93,7 @@ export interface UserConfigOptions {
   allVisibleElements?: LoadVisibleElements;
   loadPreferredUnits?: string;
   loadPreferredFormats?: string;
+  toggleConfigs?: ToggleOptions;
   hiddenQaFlags?: string[];
   hiddenInstrumentValues?: string[];
   rawData?: RawDataOptions;

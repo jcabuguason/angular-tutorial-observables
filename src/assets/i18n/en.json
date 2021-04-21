@@ -1,4 +1,19 @@
 {
+  "PROVINCES": {
+    "ALBERTA": "Alberta",
+    "BRITISH_COLUMBIA": "British Columbia",
+    "MANITOBA": "Manitoba",
+    "NEW_BRUNSWICK": "New Brunswick",
+    "NEWFOUNDLAND_AND_LABRADOR": "Newfoundland and Labrador",
+    "NOVA_SCOTIA": "Nova Scotia",
+    "NORTHWEST_TERRITORIES": "Northwest Territories",
+    "NUNAVUT": "Nunavut",
+    "ONTARIO": "Ontario",
+    "PRINCE_EDWARD_ISLAND": "Prince Edward Island",
+    "QUEBEC": "Quebec",
+    "SASKATCHEWAN": "Saskatchewan",
+    "YUKON": "Yukon"
+  },
   "SEARCH_BAR": {
     "SEARCH": "Search",
     "RESET": "Reset",
@@ -34,7 +49,6 @@
     "LAST_3_DAYS": "Last 3 days"
   },
   "GRID": {
-    "VALUE": "Value",
     "UNIT": "Unit",
     "QA_SUMMARY": "QA Summary",
     "IDENTITY": "Identity",
@@ -127,6 +141,25 @@
     "ctrlC": "Ctrl+C",
     "paste": "Paste",
     "ctrlV": "Ctrl+V"
+  },
+  "RAW_DATA": {
+    "RAW_DATA": "Raw Data",
+    "NO_RAW_DATA": "No raw data to display...",
+    "RAW_DATA_FOR": "Raw Data for",
+    "STACI_LINK": "StaCI Link",
+    "MESSAGE_POSITION": "Message Position",
+    "YES": "Y",
+    "NO": "N",
+    "POSITION_SHORT": "#",
+    "POSITION_FULL": "Position",
+    "SUPPRESSED_SHORT": "Sup",
+    "SUPPRESSED_FULL": "Suppressed",
+    "ACTIVE_SHORT": "Act",
+    "ACTIVE_FULL": "Active",
+    "INACTIVE": "Inactive",
+    "DESCRIPTION": "Description",
+    "VALUE": "Value",
+    "NO_DATA_WARNING": "The raw data for this observation was not found"
   },
   "CHART": {
     "DATE_TIME": "Date and Time (UTC)",
