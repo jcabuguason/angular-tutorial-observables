@@ -24,9 +24,7 @@ export class TimeModel {
     this.unitType = units;
   }
 
-  getDateBack(): Date {
-    let startDate = new Date();
-
+  getDateBack(startDate: Date = new Date()): Date {
     if (this.startOfDay) {
       startDate.setUTCHours(0, 0, 0, 0);
       return startDate;
@@ -35,9 +33,7 @@ export class TimeModel {
     }
   }
 
-  getDateForward(): Date {
-    let endDate = new Date();
-
+  getDateForward(endDate: Date = new Date()): Date {
     if (this.endOfDay) {
       endDate.setUTCHours(23, 59, 59, 999);
       return endDate;
@@ -48,6 +44,7 @@ export class TimeModel {
 
   private findDate(date: Date, operator: TimeOperator): Date {
     date = calculateDate({
+      date,
       mode: operator,
       unit: this.unitType,
       amount: operator === TimeOperator.Subtract ? this.value : 0,

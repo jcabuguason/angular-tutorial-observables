@@ -1,0 +1,58 @@
+<div *ngIf="data == null; else table" class="no-raw-data">
+  <h3>{{ 'RAW_DATA.NO_RAW_DATA' | translate }}</h3>
+</div>
+
+<ng-template #table class="raw-container">
+  <div class="title-bar">
+    <div class="raw-title">
+      <div>{{ 'RAW_DATA.RAW_DATA_FOR' | translate }} {{ buildStationTitle() }}</div>
+      <a href="{{ getStaciLink() }}" target="_blank" translate class="raw-link">RAW_DATA.STACI_LINK</a>
+    </div>
+  </div>
+
+  <commons-legacy-raw-data
+    *ngIf="useLegacyTable; else jsonTable"
+    [rawMessage]="data.rawMessage"
+  ></commons-legacy-raw-data>
+
+  <ng-template #jsonTable>
+    <p-table [value]="dataSource" styleClass="raw-table">
+      <ng-template pTemplate="header">
+        <tr>
+          <th pTooltip="{{ getTooltip('position') }}" tooltipPosition="bottom">
+            {{ 'RAW_DATA.POSITION_SHORT' | translate }}
+          </th>
+          <th pTooltip="{{ getTooltip('suppressed') }}" tooltipPosition="bottom">
+            {{ 'RAW_DATA.SUPPRESSED_SHORT' | translate }}
+          </th>
+          <th pTooltip="{{ getTooltip('active') }}" tooltipPosition="bottom">
+            {{ 'RAW_DATA.ACTIVE_SHORT' | translate }}
+          </th>
+          <th>{{ 'RAW_DATA.DESCRIPTION' | translate }}</th>
+          <th>{{ 'RAW_DATA.VALUE' | translate }}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-element>
+        <tr [ngClass]="pickHighlight(element)">
+          <td>{{ element.position }}</td>
+          <td>{{ formatBooleanValue(element.suppressed) }}</td>
+          <td>{{ formatBooleanValue(element.active) }}</td>
+          <td>{{ element.description }}</td>
+          <td>{{ element.value }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </ng-template>
+
+  <hr class="raw-divider" />
+  <div class="raw-legend">
+    <span>
+      <span class="warning-box suppressed"></span>
+      <span class="raw-legend-label">{{ 'RAW_DATA.SUPPRESSED_FULL' | translate }}</span>
+    </span>
+    <span>
+      <span class="warning-box inactive"></span>
+      <span class="raw-legend-label">{{ 'RAW_DATA.INACTIVE' | translate }}</span>
+    </span>
+  </div>
+</ng-template>

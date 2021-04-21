@@ -1,4 +1,19 @@
 {
+  "PROVINCES": {
+    "ALBERTA": "Alberta",
+    "BRITISH_COLUMBIA": "Colombie-Britannique",
+    "MANITOBA": "Manitoba",
+    "NEW_BRUNSWICK": "Nouveau-Brunswick",
+    "NEWFOUNDLAND_AND_LABRADOR": "Terre-Neuve-et-Labrador",
+    "NOVA_SCOTIA": "Nouvelle-Écosse",
+    "NORTHWEST_TERRITORIES": "Territoires du Nord-Ouest",
+    "NUNAVUT": "Nunavut",
+    "ONTARIO": "Ontario",
+    "PRINCE_EDWARD_ISLAND": "Île-du-Prince-Édouard",
+    "QUEBEC": "Québec",
+    "SASKATCHEWAN": "Saskatchewan",
+    "YUKON": "Yukon"
+  },
   "SEARCH_BAR": {
     "SEARCH": "Recherche",
     "RESET": "Réinitialiser",
@@ -34,7 +49,6 @@
     "LAST_3_DAYS": "3 Derniers Jours"
   },
   "GRID": {
-    "VALUE": "Valeur",
     "UNIT": "Unité",
     "QA_SUMMARY": "Sommaire QA",
     "IDENTITY": "Identité",
@@ -127,6 +141,25 @@
     "ctrlC": "Ctrl+C",
     "paste": "Coller",
     "ctrlV": "Ctrl+V"
+  },
+  "RAW_DATA": {
+    "RAW_DATA": "Données brutes",
+    "NO_RAW_DATA": "Aucune donnée brute à afficher...",
+    "RAW_DATA_FOR": "Données brutes pour",
+    "STACI_LINK": "Lien ICSta",
+    "MESSAGE_POSITION": "Position du message",
+    "YES": "O",
+    "NO": "N",
+    "POSITION_SHORT": "#",
+    "POSITION_FULL": "Position",
+    "SUPPRESSED_SHORT": "Sup",
+    "SUPPRESSED_FULL": "Supprimé",
+    "ACTIVE_SHORT": "Act",
+    "ACTIVE_FULL": "Actif",
+    "INACTIVE": "Inactif",
+    "DESCRIPTION": "Description",
+    "VALUE": "Valeur",
+    "NO_DATA_WARNING": "Les données brutes pour cette observation n'ont pas été trouvées"
   },
   "CHART": {
     "DATE_TIME": "Date et heure (UTC)",

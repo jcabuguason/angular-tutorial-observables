@@ -1,0 +1,14 @@
+{
+  "ngPackage": {
+    "lib": {
+      "umdModuleIds": {
+        "msc-dms-commons-angular/core/metadata": "msc-dms-commons-angular/core/metadata",
+        "msc-dms-commons-angular/shared/language": "msc-dms-commons-angular/shared/language",
+        "@ngx-translate/core": "@ngx-translate/core"
+      }
+    }
+  },
+  "peerDependencies": {
+    "@ngx-translate/core": "^9.0.0"
+  }
+}
