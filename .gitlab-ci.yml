@@ -230,3 +230,9 @@ build_deploy_triton:
   before_script:
     - git clone https://triton-deploy-token:${TRITON_TOKEN}@dms-gitlab.cmc.ec.gc.ca/DMS/MSC-MCWeb-App-Triton.git -b develop
     - app_name="Triton"
+
+build_deploy_discoverii:
+  extends: .build_deploy_app_template
+  before_script:
+    - git clone https://discoverii-deploy-token:${DISCOVERII_TOKEN}@dms-gitlab.cmc.ec.gc.ca/DMS/MSC-MCWeb-App-Discoverii.git -b develop
+    - app_name="Discoverii"
