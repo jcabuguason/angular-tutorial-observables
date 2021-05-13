@@ -5,6 +5,6 @@
     "registry": "http://dms-zeus.cmc.ec.gc.ca/nexus/repository/npm-private/"
   },
   "peerDependencies": {
-    "primeng": "^7.1.2"
+    "primeng": "^11.4.0"
   }
 }
