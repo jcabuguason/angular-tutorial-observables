@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable, throwError as observableThrowError } from 
 import { catchError, first, publishLast, refCount, tap } from 'rxjs/operators';
 import { MRMappingConfig, MR_MAPPING_CONFIG } from './mr-mapping.config';
 import { NodeLookups } from './node.const';
-import { ElementVisibility, Lang, SubHeaderConfig, UserConfig, ElementGroup } from './user-config.model';
+import { ElementVisibility, Lang, SubHeaderConfig, UserConfig, ElementGroup, ElementConfig } from './user-config.model';
 import { UserConfigOptions } from './user-config-options.model';
 
 @Injectable()

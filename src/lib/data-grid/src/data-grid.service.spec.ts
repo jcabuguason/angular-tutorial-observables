@@ -1,21 +1,18 @@
+import { HttpClient } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Injectable } from '@angular/core';
-import { TestBed, getTestBed } from '@angular/core/testing';
-
+import { getTestBed, TestBed } from '@angular/core/testing';
+import { MatDialog } from '@angular/material/dialog';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ObsElement, UnitCodeConversionService, ValueFormatterService } from 'msc-dms-commons-angular/core/obs-util';
+import { ElementVisibility, MR_MAPPING_CONFIG, UserConfigService } from 'msc-dms-commons-angular/core/user-config';
+import { CombinedHttpLoader } from 'msc-dms-commons-angular/shared/language';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/map';
-
-import { DataGridService } from './data-grid.service';
 import { VUColumnConfiguration } from './column-configuration/vu-column-configuration.class';
-import { UserConfigService, ElementVisibility, MR_MAPPING_CONFIG } from 'msc-dms-commons-angular/core/user-config';
-import { MatDialog } from '@angular/material/dialog';
+import { DataGridService } from './data-grid.service';
 import { StationInfoComponent } from './station-info/station-info.component';
-import { UnitCodeConversionService, ObsElement, ValueFormatterService } from 'msc-dms-commons-angular/core/obs-util';
-
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { CombinedHttpLoader } from 'msc-dms-commons-angular/shared/language';
-import { HttpClient } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 const noLoadElement = '1.19.265.7.1.1.0';
 const hiddenElement = '1.24.314.7.10.4.6';
@@ -84,14 +81,6 @@ describe('DataGridService', () => {
     });
 
     service = getTestBed().inject(DataGridService);
-  });
-
-  it('should set column configurations', () => {
-    const getName = () => service.getColumnConfiguration().constructor.name;
-    expect(getName()).toBe('DefaultColumnConfiguration');
-
-    service.setColumnConfiguration(new VUColumnConfiguration());
-    expect(getName()).toBe('VUColumnConfiguration');
   });
 
   it('should add a single obs', () => {

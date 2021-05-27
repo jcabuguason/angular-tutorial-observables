@@ -1,3 +1,5 @@
+import { HttpParams } from '@angular/common/http';
+import { ESQueryChunk, ESSortType } from 'msc-dms-commons-angular/core/elastic-search';
 import {
   ICAO_ID_ELEMENT,
   MSC_ID_ELEMENT,
@@ -6,8 +8,6 @@ import {
   TC_ID_ELEMENT,
   WMO_ID_ELEMENT,
 } from 'msc-dms-commons-angular/core/obs-util';
-import { HttpParams } from '@angular/common/http';
-import { ESSortType, ESQueryChunk } from 'msc-dms-commons-angular/core/elastic-search';
 
 export interface SearchModel {
   // information to send to ES
@@ -21,6 +21,9 @@ export interface SearchModel {
   trackTotalHits?: boolean;
   // HttpParams created from the search parameters
   httpParams?: HttpParams;
+  // for metadata query performance, only specified elements should be returned
+  elementsToReturn?: string[];
+  isMetadata?: boolean;
 }
 
 // Searchable metadataElements

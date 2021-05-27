@@ -1,150 +1,68 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { ElementGroup, ElementVisibility, UserConfigService } from 'msc-dms-commons-angular/core/user-config';
 import {
+  decodeRawMessage,
   DMSObs,
+  findFirstValue,
+  findRevision,
+  getFormattedMetadata,
+  getIndexLabelTranslationKey,
+  grabDataElements,
+  grabIndexValue,
+  grabMetadataElements,
   ObsElement,
   STATION_NAME_ELEMENT,
   STATION_NAME_FIELD,
   UnitCodeConversionService,
   ValueFormatterService,
-  decodeRawMessage,
-  findFirstValue,
-  findRevision,
-  getFormattedMetadata,
-  getIndexLabelTranslationKey,
-  grabIndexValue,
-  grabDataElements,
-  grabMetadataElements,
 } from 'msc-dms-commons-angular/core/obs-util';
+import { ElementVisibility, UserConfigService } from 'msc-dms-commons-angular/core/user-config';
 import { Subject } from 'rxjs';
 import { ColumnConfigurationContainer } from './column-configuration/column-configuration-container.model';
-import { DefaultColumnConfiguration } from './column-configuration/default-column-configuration.class';
-import { ElementColumnConfiguration } from './column-configuration/element-column-configuration.interface';
-import { FULL_CONFIG } from './default-grid-configs';
+import { GridService } from './grid.service';
 import { StationInfoComponent } from './station-info/station-info.component';
 
 @Injectable()
-export class DataGridService implements OnDestroy {
-  public columnsGenerated: string[] = [];
-  public rowData: object[] = [];
-  public columnDefs: any[];
-  public columnTypes = { identity: {} };
-  public defaultColDef = {
-    filter: true,
-    resizable: true,
-    sortable: true,
-    menuTabs: ['generalMenuTab', 'filterMenuTab'],
-  };
-  public reloadRequested = new Subject();
-  public sortRequested = new Subject();
+export class DataGridService extends GridService {
   public chartFormRequested: Subject<{ station?: string; element?: string }> = new Subject();
   public recenterObs = new Subject();
-  private columnConfiguration: ElementColumnConfiguration;
   private identityHeader;
   private rawGroupHeader;
   private elementsFound: string[] = [];
 
   constructor(
-    public translate: TranslateService,
-    public userConfigService: UserConfigService,
     public unitService: UnitCodeConversionService,
     public dialog: MatDialog,
-    public valueFormatterService: ValueFormatterService,
+    protected translate: TranslateService,
+    protected userConfigService: UserConfigService,
+    protected valueFormatterService: ValueFormatterService,
   ) {
-    userConfigService.loadConfig(FULL_CONFIG);
-    this.columnConfiguration = new DefaultColumnConfiguration();
+    super(translate, userConfigService, valueFormatterService);
     this.resetHeader();
   }
 
   ngOnDestroy() {
-    this.reloadRequested.unsubscribe();
-    this.sortRequested.unsubscribe();
+    super.ngOnDestroy();
     this.chartFormRequested.unsubscribe();
     this.recenterObs.unsubscribe();
-  }
-
-  getColumnConfiguration(): ElementColumnConfiguration {
-    return this.columnConfiguration;
   }
 
   getElementsFound(): string[] {
     return this.elementsFound;
   }
 
-  setColumnConfiguration(columnConfig: ElementColumnConfiguration) {
-    this.columnConfiguration = columnConfig;
-    this.resetHeader();
-  }
-
-  addRowData(obs: object) {
-    this.addAllData([obs]);
-  }
-
   addAllData(obs: object[]) {
-    this.rowData.push(...obs.map((data) => this.convertToRowObject(<DMSObs>data)));
-    this.adjustColumns();
-    this.reloadGrid();
-  }
-
-  setData(obs: object[]) {
-    this.wipeRecords();
-    this.addAllData(obs);
-  }
-
-  removeAllData() {
-    this.wipeRecords();
-    this.reloadGrid();
+    super.addAllData(obs.map((data) => this.convertToRowObject(<DMSObs>data)));
   }
 
   wipeRecords() {
-    this.rowData = [];
-    this.columnsGenerated = [];
     this.elementsFound = [];
-    this.resetHeader();
-  }
-
-  reloadGrid() {
-    this.reloadRequested.next();
+    super.wipeRecords();
   }
 
   requestFilledChartForm(param: { station?: string; element?: string }) {
     this.chartFormRequested.next(param);
-  }
-
-  requestSortModelChange(param: any) {
-    this.sortRequested.next(param);
-  }
-
-  getContextMenuItems() {
-    return this.columnConfiguration.getContextMenuItems(this);
-  }
-
-  getMainMenuItems() {
-    return this.columnConfiguration.getMainMenuItems(this);
-  }
-
-  expandAllColumns(columnApi, expand: boolean) {
-    const groupIds = [];
-    const getGroupIds = (colGroup) => {
-      if (colGroup.children) {
-        const allChildrenDisplayed = colGroup.children.length === colGroup.displayedChildren.length;
-        // Mark groups who's children don't match the given expand/collapse command
-        if (expand ? !allChildrenDisplayed : allChildrenDisplayed) {
-          groupIds.push(colGroup.groupId);
-        }
-        colGroup.children.forEach((child) => getGroupIds(child));
-      }
-      return colGroup;
-    };
-
-    columnApi
-      .getAllDisplayedColumnGroups()
-      .filter((col) => col.groupId !== 'identity' && col.groupId !== 'raw' && col.headerClass !== 'meta')
-      .forEach((col) => getGroupIds(col));
-
-    groupIds.forEach((id) => columnApi.setColumnGroupOpened(id, expand));
   }
 
   flattenObsIdentities(obs: DMSObs) {
@@ -189,7 +107,7 @@ export class DataGridService implements OnDestroy {
         const headerID = ColumnConfigurationContainer.findHeaderID(element);
         this.buildElementColumn(element, headerID);
         this.updateElementValue(element);
-        const elementData = this.columnConfiguration.createElementData(element, headerID);
+        const elementData = super.getColumnConfiguration().createElementData(element, headerID);
         Object.keys(elementData).forEach((key) => (result[key] = elementData[key]));
       }
     };
@@ -221,19 +139,7 @@ export class DataGridService implements OnDestroy {
     };
   }
 
-  adjustColumns() {
-    if (!this.rowData.length) {
-      return;
-    }
-
-    if (this.columnConfiguration.allowBlankDataColumns) {
-      this.addEmptyDataColumns();
-    }
-
-    this.sortColumns();
-  }
-
-  private addEmptyDataColumns() {
+  addEmptyColumns() {
     const isMetadata = (id) => this.userConfigService.loadAsMetadata(id);
 
     this.userConfigService
@@ -248,7 +154,7 @@ export class DataGridService implements OnDestroy {
   }
 
   // TODO: This function assumes a flat column config
-  private sortColumns() {
+  sortColumns() {
     const configOrder = this.userConfigService.getElementOrder();
 
     this.columnDefs = [this.identityHeader, ...this.sortMetadataCols(configOrder), ...this.sortDataCols(configOrder)];
@@ -331,10 +237,10 @@ export class DataGridService implements OnDestroy {
     });
   }
 
-  private resetHeader() {
-    this.identityHeader = this.columnConfiguration.getIdentityHeaders();
+  resetHeader() {
+    this.identityHeader = super.getColumnConfiguration().getIdentityHeaders();
     this.rawGroupHeader = null;
-    this.columnDefs = [];
+    super.resetHeader();
     this.columnDefs.push(this.identityHeader);
   }
 
@@ -432,7 +338,7 @@ export class DataGridService implements OnDestroy {
       // workaround - field signifies a bottom-level column:
       // this column needs to go from a bottom-level to a default with siblings
       if (!!workingNode.field) {
-        this.columnConfiguration.createElementHeader(this.makeDefaultColumn(workingNode), workingNode.field);
+        super.getColumnConfiguration().createElementHeader(this.makeDefaultColumn(workingNode), workingNode.field);
         workingNode.field = undefined;
       }
       currentNodes = workingNode.children;
@@ -459,7 +365,7 @@ export class DataGridService implements OnDestroy {
       }
       if (!!elementIndexValue) {
         columnToAdd.columnGroupShow = 'open';
-        workingNode.openByDefault = this.columnConfiguration.expandNestedDataColumns;
+        workingNode.openByDefault = super.getColumnConfiguration().expandNestedDataColumns;
       }
 
       workingNode.children.push(columnToAdd);
@@ -483,7 +389,7 @@ export class DataGridService implements OnDestroy {
     columnToAdd.sort = this.userConfigService.getSortType(element.elementID);
     this.addElementColumnProperties(columnToAdd);
 
-    this.columnConfiguration.createElementHeader(columnToAdd, headerID);
+    super.getColumnConfiguration().createElementHeader(columnToAdd, headerID);
     this.columnsGenerated.push(headerID);
   }
 
@@ -528,7 +434,7 @@ export class DataGridService implements OnDestroy {
     }
     parent.children.push(header);
 
-    this.columnConfiguration.createElementHeader(header, headerID);
+    super.getColumnConfiguration().createElementHeader(header, headerID);
     this.columnsGenerated.push(headerID);
   }
 
@@ -582,15 +488,15 @@ export class DataGridService implements OnDestroy {
 
   private buildRawColumn(rawMessage: string) {
     if (this.rawGroupHeader == null) {
-      this.rawGroupHeader = this.columnConfiguration.getRawGroupHeader();
+      this.rawGroupHeader = super.getColumnConfiguration().getRawGroupHeader();
       if (this.userConfigService.isLoadRawHeader()) {
-        this.rawGroupHeader.children.push(this.columnConfiguration.getRawHeader());
+        this.rawGroupHeader.children.push(super.getColumnConfiguration().getRawHeader());
       }
       this.columnDefs.push(this.rawGroupHeader);
     }
 
     if (!!rawMessage) {
-      const rawMessageHeader = this.columnConfiguration.getRawMessageHeader();
+      const rawMessageHeader = super.getColumnConfiguration().getRawMessageHeader();
       const children = this.rawGroupHeader.children.map((child) => child.field);
       if (!children.includes(rawMessageHeader.field)) {
         this.rawGroupHeader.children.push(rawMessageHeader);
@@ -608,41 +514,5 @@ export class DataGridService implements OnDestroy {
       element,
       this.userConfigService.getElementDisplayFormat(element.elementID),
     );
-  }
-
-  private groupColumns(columns) {
-    if (this.userConfigService.getAllElementGroups().length === 0) {
-      return columns;
-    }
-
-    const groupedColumns = [];
-    const createGroup = (configGroup: ElementGroup) => ({
-      headerName: configGroup.groupName.getName(),
-      headerTooltip: configGroup.groupDescription.getName(),
-      groupId: configGroup.groupID,
-      children: [],
-    });
-
-    for (const curCol of columns) {
-      const configGroup: ElementGroup = this.userConfigService.getElementGroup(curCol.elementID);
-      if (configGroup == null) {
-        groupedColumns.push(curCol);
-        continue;
-      }
-
-      let groupDef = groupedColumns.find((col) => col.groupId === configGroup.groupID);
-      if (groupDef == null) {
-        groupDef = createGroup(configGroup);
-        groupedColumns.push(groupDef);
-      }
-
-      if (curCol.headerClass === 'flat-header') {
-        curCol.headerClass = 'filled-header';
-      }
-
-      groupDef.children.push(curCol);
-    }
-
-    return groupedColumns;
   }
 }

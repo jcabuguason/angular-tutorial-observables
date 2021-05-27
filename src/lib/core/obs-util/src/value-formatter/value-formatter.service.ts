@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ObsElement } from '../dms-observation.model';
 import { convertDDToDMS } from '../obs-util.class';
-import { ValueFormats } from './value-formatter.model';
+import { BOOLEAN_CHECKMARK, ValueFormats } from './value-formatter.model';
 
 @Injectable()
 export class ValueFormatterService {
@@ -10,14 +10,19 @@ export class ValueFormatterService {
   constructor() {}
 
   // should be called after unit conversion
-  setFormattedValue(element: ObsElement, displayFormat: string) {
+  setFormattedValue(element: ObsElement | any, displayFormat: string, headerName: string = null) {
     element.displayFormat = displayFormat;
 
     const numericValue = Number(element.value);
     const convertToDMS = element.displayFormat === ValueFormats.DegreesMinutesSeconds && !isNaN(numericValue);
-    element.formattedValue = convertToDMS
-      ? convertDDToDMS(numericValue, this.isLatitude(element.elementID))
-      : element.value;
+
+    if (convertToDMS) {
+      element.formattedValue = convertDDToDMS(numericValue, this.isLatitude((element as ObsElement).elementID));
+    } else if (element.displayFormat === ValueFormats.BooleanMatchHeader) {
+      element.formattedValue = element.value === headerName ? BOOLEAN_CHECKMARK : '';
+    } else {
+      element.formattedValue = element.value;
+    }
   }
 
   // gets the formatted value from the grid params
