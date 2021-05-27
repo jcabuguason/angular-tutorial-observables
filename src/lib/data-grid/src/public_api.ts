@@ -1,5 +1,6 @@
 export * from './data-grid.module';
 export * from './data-grid.service';
+export * from './grid.service';
 export * from './column-configuration/data-column-configuration.abstract';
 export * from './column-configuration/column-configuration-container.model';
 export * from './column-configuration/element-column-configuration.interface';

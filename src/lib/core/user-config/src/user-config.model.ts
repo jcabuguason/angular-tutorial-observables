@@ -165,7 +165,8 @@ export class ElementConfig {
   public static updateConfig(configs: ElementConfig[], options: ElementConfigOptions): void {
     let currentConfig = configs.find((config) => config.elementID === options.id);
 
-    if (!currentConfig) {
+    // if headers are different for the same ID (multiplicity), then still push the element config
+    if (!currentConfig || options.rename.english !== currentConfig.elementName.englishLabel) {
       currentConfig = new ElementConfig(options.id);
       configs.push(currentConfig);
     }

@@ -1,4 +1,4 @@
-import { DataGridService } from '../data-grid.service';
+import { GridService } from '../grid.service';
 
 export interface ElementColumnConfiguration {
   // True iff elements not in the user config should not be able to be toggled on
@@ -18,10 +18,10 @@ export interface ElementColumnConfiguration {
 
   getIdentityHeaders();
 
-  getContextMenuItems(gridService: DataGridService);
+  getContextMenuItems(gridService: GridService);
 
   // TODO: Get rid of gridService here once the chart select UI changes
-  getMainMenuItems(gridService: DataGridService);
+  getMainMenuItems(gridService: GridService);
 
   getRawGroupHeader();
 
