@@ -200,6 +200,8 @@
                 selectOtherMonths="true"
                 [showOnFocus]="false"
                 [showIcon]="!searchService.readOnlyBar"
+                [minDate]="p.minDate"
+                [maxDate]="p.maxDate"
                 [monthNavigator]="true"
                 [yearNavigator]="true"
                 yearRange="{{ p.startYear }}:{{ p.endYear }}"
@@ -458,6 +460,8 @@
       [monthNavigator]="true"
       [yearNavigator]="true"
       [disabled]="p.calReadOnly"
+      [minDate]="p.minDate"
+      [maxDate]="p.maxDate"
       yearRange="{{ p.startYear }}:{{ p.endYear }}"
     >
     </p-calendar>
