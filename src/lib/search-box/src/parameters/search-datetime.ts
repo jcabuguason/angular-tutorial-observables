@@ -14,6 +14,8 @@ export class SearchDatetime extends SearchParameter {
   includeTime: boolean;
   startYear: number;
   endYear: number;
+  minDate: Date;
+  maxDate: Date;
   currentYear: number = new Date().getFullYear();
   calReadOnly: boolean;
   hoursBack: number;
@@ -28,6 +30,8 @@ export class SearchDatetime extends SearchParameter {
     this.setDefaultDatetime(options.defaultDatetime);
     this.startYear = valueOrDefault(options.startYear, 2000);
     this.endYear = valueOrDefault(options.endYear, this.currentYear);
+    this.minDate = valueOrDefault(options.minDate, null);
+    this.maxDate = valueOrDefault(options.maxDate, null);
     this.calReadOnly = valueOrDefault(options.readOnly, false);
     this.urlQuickName = valueOrDefault(options.urlQuickName, 'timeRange');
   }

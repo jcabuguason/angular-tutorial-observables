@@ -27,6 +27,8 @@ export interface DatetimeParameterOptions extends ParameterOptions {
   defaultDatetime?: string | Date;
   startYear?: number;
   endYear?: number;
+  minDate?: Date;
+  maxDate?: Date;
   readOnly?: boolean;
   urlQuickName?: string;
 }
